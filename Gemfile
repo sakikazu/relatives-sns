@@ -8,10 +8,10 @@ gem 'rails', '3.0.6'
 gem 'mysql2'
 gem 'jquery-rails'
 gem 'authlogic'
-gem 'jpmobile', :require => 'action_pack'
+gem 'jpmobile', '1.0.0.pre.4', :require => 'action_pack'
 gem 'paperclip'
 gem 'calendar_date_select'
-gem 'will_paginate'
+gem 'will_paginate', "~> 3.0.pre2"
 gem 'exifr'
 
 # Use unicorn as the web server
