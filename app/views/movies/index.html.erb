@@ -1,0 +1,19 @@
+<h3 class="normal"><%= link_to '新規作成 (動画準備の解説あり)', new_movie_path %></h3>
+
+<div id="movie">
+<%= will_paginate @movies %>
+<% @movies.each do |movie| -%>
+  <div class="once_movie">
+    <div class="title"><%= link_to "#{movie.title}(#{movie.movie_comments.size})", movie %></div>
+    <%= image_tag movie.thumb(:thumb) if movie.thumb? %>
+    <p class="bar">
+      作成者：<%= movie.user.dispname %><br />
+      作成日時：<%= movie.created_at.to_s(:short2) if movie.created_at %><br />
+      最終コメント日時：<%= movie.movie_comments.last.created_at.to_s(:short2) if movie.movie_comments.last && movie.movie_comments.last.created_at %><br />
+    </p>
+    <%= link_to '編集する', edit_movie_path(movie) if editable(@current_user, movie.user) %>
+    <%= link_to '削除する', movie, :confirm => '本当に削除してもよろしいですか？', :method => :delete if editable(@current_user, movie.user) %>
+  </div>
+<% end -%>
+<%= will_paginate @movies %>
+</div>

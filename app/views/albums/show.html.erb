@@ -1,0 +1,108 @@
+<%= stylesheet_link_tag 'uploadify' %>
+<%= javascript_include_tag 'uploadify/jquery.uploadify.v2.1.0.min' %>
+<%= javascript_include_tag 'uploadify/swfobject' %>
+
+<script type="text/javascript">// <![CDATA[
+  j$(document).ready(function() {
+    //uploadify
+    j$('#uploadify').uploadify({
+      'uploader' : '<%= "/javascripts/uploadify/" %>uploadify.swf',
+      'script' : '/album_photos/create',
+      'scriptData' : {'album_id':<%= @album.id %>, 'user_id': <%= current_user.id %>},
+      'cancelImg' : '/javascripts/uploadify/cancel.png',
+      'queueID' : 'fileQueue',
+      'auto' : true,
+      'multi' : true,
+      'buttonText' : 'Select files', //### todo 日本語は文字化けしちゃったので、画像作ってそれにしたい
+      //'buttonImg'      : '/_images/browse-files.png',
+      '_http_accept': 'text/html',  //406error対策とかあったらがやっぱエラーになった
+      'onAllComplete': function (evt, data){
+        alert('ファイルのアップロードが完了しました。');
+        location.reload();
+        <%#= remote_function(:url => {:controller => :albums, :action => :upload_complete, :id => @album.id},
+          :complete => "alert(\" ファイルのアップロードが完了しました。\");location.reload()")
+          #:complete => "alert(data['filesUploaded']+\" ファイルのアップロードが完了しました。\");location.reload()")
+        %>
+      },
+
+    });
+
+    j$('#album_id').bind('change', function(){
+      j$('#uploadify').fileUploadSettings('scriptData','&album_id='+j$(this).val());
+    });
+    j$('#user_id').bind('change', function(){
+      j$('#uploadify').fileUploadSettings('scriptData','&user_id='+j$(this).val());
+    });
+
+    //colorbox
+    j$("a[rel='colorbox']").colorbox({
+      slideshow:true,
+      slideshowSpeed:8000,
+      slideshowAuto: false,
+      slideshowStart: "★開始する(8秒送り)",
+      slideshowStop: "★停止する",
+      width:"900px",
+      height:"750px",
+      current: "{current} / {total}",
+      escKey:false,
+      arrowKey:false
+    });
+
+  });
+// ]]></script>
+
+<%= link_to '一覧へ戻る', albums_path %>
+<br />
+<br />
+<div id="album_info">
+  <div class="bar">
+    <span class="title"><%= "#{@album.title} （写真数：#{@album_photos.size}）" %></span>
+    <span class="right">
+      作成者：<%= @album.user.dispname %><br />
+      作成日時：<%= @album.created_at.to_s(:long) if @album.created_at %>
+    </span>
+  </div>
+  <div class="content"><%= br auto_link(@album.description) %></div>
+</div>
+
+
+<h3 class="normal">写真をアップロードする (複数ファイル選択可能)</h3>
+<div id="fileQueue"></div>
+<%= hidden_field_tag :user_id %>
+<%= hidden_field_tag :album_id %>
+<%= file_field_tag :uploadify %><br />
+
+<% if @album_photos.size > 0 -%>
+  <h3 class="normal">写真を並び替える</h3>
+  <% [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3]].each do |n, i| -%>
+    <% if @sort == i -%>
+      <%= "<b style='color:red'>★ #{n} ★</b>".html_safe %> |
+    <% else -%>
+      <%= link_to n, :action => :show, :sort => i %> |
+    <% end -%>
+  <% end -%>
+
+  <h3 class="normal">写真をクリックするとスライドショーが開始されます</h3>
+<% end -%>
+
+<div id="photo">
+<% @album_photos.each do |p| -%>
+  <div class="once_photo">
+    <div class="bar">
+      <%= "#{p.title} (コメント数：#{p.album_photo_comments.size}）" %>
+    </div>
+    <%= link_to(image_tag(p.attach(:thumb)), {:controller => :album_photos, :action => :slideshow, :id => p.id}, {:rel => 'colorbox'}) if p.attach? %>
+    <div class="info">
+      投稿者：<%= p.user.dispname %><br />
+      投稿日時：<%= p.created_at.to_s(:short2) if p.created_at %><br />
+      撮影日時：<%= p.exif_at.to_s(:short2) if p.exif_at %><br />
+      最新コメント日時：<%= p.last_comment_at.to_s(:short2) if p.last_comment_at %><br />
+
+      <% if editable(current_user, p.user) -%>
+        <%= link_to '編集', edit_album_photo_path(p) %> | 
+        <%= link_to '削除', p, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+      <% end -%>
+    </div>
+  </div>
+<% end -%>
+</div>

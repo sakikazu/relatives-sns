@@ -1,0 +1,11 @@
+<% @album_photo.album_photo_comments.each do |co| -%>
+  <div class="once_comment">
+    <div class="bar">
+      <span class="name"><%= co.user.dispname %></span><span class="time">投稿日時：<%= co.created_at.to_s(:long) %></span>
+    </div>
+    <div class="content">
+      <div class="text"><%= br auto_link(co.content) %></div>
+    </div>
+    <%= link_to "削除する", :remote => true, :url => {:controller => :album_photos, :action => :destroy_comment, :id => co.id}, :update => "comments", :confirm => "本当に削除してもよろしいですか？" if editable(@current_user, co.user) %>
+  </div>
+<% end -%>

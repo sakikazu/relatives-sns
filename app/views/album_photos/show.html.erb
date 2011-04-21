@@ -1,0 +1,48 @@
+<p>
+  <b>User:</b>
+  <%=h @album_photo.user_id %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%=h @album_photo.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @album_photo.description %>
+</p>
+
+<p>
+  <b>Album:</b>
+  <%=h @album_photo.album_id %>
+</p>
+
+<p>
+  <b>Filename:</b>
+  <%=h @album_photo.filename %>
+</p>
+
+<p>
+  <b>Minetype:</b>
+  <%=h @album_photo.minetype %>
+</p>
+
+<p>
+  <b>Filesize:</b>
+  <%=h @album_photo.filesize %>
+</p>
+
+<p>
+  <b>Exif at:</b>
+  <%=h @album_photo.exif_at %>
+</p>
+
+<p>
+  <b>Last comment at:</b>
+  <%=h @album_photo.last_comment_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_album_photo_path(@album_photo) %> |
+<%= link_to 'Back', album_photos_path %>

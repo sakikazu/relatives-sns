@@ -1,0 +1,29 @@
+<div id="mutter">
+つぶやき総数: <%= @mutters.total_entries %>
+<%= will_paginate @mutters %>
+<br />
+<table class='data'>
+<% @mutters.each do |m| -%>
+  <tr>
+    <td class='time'><%= m.created_at.to_s(:long_br) %></td>
+    <td class='name'><%= link_to m.user.dispname, {:action => "user", :user_id => m.user.id}, {:title => m.user.dispname(User::FULLNAME)} %></td>
+    <td class='content'><%= auto_link(m.content) %></td>
+    <td class='image'><%= link_to(image_tag(m.image(:thumb)), m.image(:large), {:class => 'colorbox'}) if m.image? %></td>
+    <td class='delete'><%= link_to("削除", m, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, m.user) %></td>
+  </tr>
+<% end %>
+</table>
+<%= will_paginate @mutters %>
+</div>
+
+<div class="right_side_bar">
+  <div id="mutter_by_user">
+    <p class="title">メンバー</p>
+    ()内はつぶやき数
+    <ul>
+    <% @users.each do |user| -%>
+      <li><%= link_to user.dispname(User::FULLNAME), :action => :user, :user_id => user.id %>(<%= user.mutters.size%>)</li>
+    <% end -%>
+    </ul>
+  </div>
+</div>

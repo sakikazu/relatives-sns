@@ -6,13 +6,16 @@ gem 'rails', '3.0.6'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2'
+gem 'rspec-rails'
 gem 'jquery-rails'
 gem 'authlogic'
 gem 'jpmobile', '1.0.0.pre.4', :require => 'action_pack'
-gem 'paperclip'
-gem 'calendar_date_select'
+gem 'paperclip', '2.3.10'
+gem 'flash_cookie_session'
+#gem 'calendar_date_select', :git => 'git://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
 gem 'will_paginate', "~> 3.0.pre2"
 gem 'exifr'
+gem 'rails3_acts_as_paranoid'
 
 # Use unicorn as the web server
 # gem 'unicorn'

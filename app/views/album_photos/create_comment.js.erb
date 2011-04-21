@@ -1,0 +1,6 @@
+if(j$('#album_photo_comment_content').val() != ''){
+  j$('#album_photo_comment_content').val('');
+  j$('#comments').html(
+    '<%= escape_javascript(render "comments") %>'
+  );
+}

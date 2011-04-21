@@ -1,0 +1,5 @@
+<%= will_paginate @uhs %>
+<% @uhs.each do |up| -%>
+  <%= render :partial => "update_history", :locals => {:up => up} %>
+<% end -%>
+<%= will_paginate @uhs %>

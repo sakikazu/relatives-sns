@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head>
+		<meta charset="utf-8" />
+		<title>The Footer Plugin</title>
+		
+		<meta name="Author" content="Icewares - sz" />
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>		
+		<script src="jquery.footer.js" type="text/javascript" ></script>
+		
+		<style type="text/css">	
+			body {
+				margin: 0;
+				padding: 0;
+			}
+			#menu{
+				position:fixed;
+				background-color:#777777;
+				right:20px;
+				top:260px;
+				-moz-opacity:0.8;
+				opacity:0.8;
+				filter: alpha(opacity = 80);
+				padding:10px;
+				border:2px solid #000000;
+				width:550px;
+				height:150px;
+				z-index:1000;
+				-moz-border-radius:5px;
+				-webkit-border-radius:5px;
+			}
+			#menuShadow{
+				position:fixed;
+				background-color:#000000;
+				right:30px;
+				top:270px;
+				width:574px;
+				height:174px;
+				z-index:800;
+				-moz-opacity:0.9;
+				opacity:0.9;
+				filter: alpha(opacity = 90);
+				-moz-border-radius:5px;
+				-webkit-border-radius:5px;
+			}
+			#menu div{
+				padding: 3px;
+				border: 1px solid #000000;
+				margin: 2px;
+				float:left;
+				background-color:#000000;
+			}
+			#menu > span{
+				font-family:Helvetica;
+				font-size:18px;
+				color:#ffffff;
+				font-weight:bolder;
+			}
+			#menu div span{
+				color:#ffffff;
+				font-family:Helvetica;
+			}
+			#wrapper{
+				width: 100%;
+			}
+			#footer{
+				height: 60px;
+				width: 100%;
+				background-color:#C6E746;
+			}
+			#footer span{
+				font-size: 30px;
+			}
+			#content{
+				height: 300px;
+				background-color:#D26C6C;
+			}
+			#content span{
+				font-size: 120px;
+			}
+		</style>
+		
+    </head>
+    <body>
+    	<div id="menuShadow"></div>
+		<div id="menu">
+			<span>Change the page size to view the plugin working.</span><br/>
+			<div>
+				<span>Add div#content height</span><br/>
+				<button id="p1">Add 1 pixel</button><br/>
+				<button id="p10">Add 10 pixel</button><br/>
+				<button id="p100">Add 100 pixel</button><br/>
+			</div>
+			<div>
+				<span>Remove div#content height</span><br/>
+				<button id="m1">Remove 1 pixel</button><br/>
+				<button id="m10">Remove 10 pixel</button><br/>
+				<button id="m100">Remove 100 pixel</button><br/>
+			</div>
+			<div>
+				<span>Change div#footer size</span><br/>
+				<button id="fp">Add 10 pixel</button><br/>
+				<button id="fm">Remove 10 pixel</button><br/>
+			</div>
+		</div>    	
+        <div id="wrapper">
+			<div id="content">
+				<span>I'm the div#content!</span>
+        	</div>
+		</div>
+		<div id="footer">
+			<span>I'm the div#footer!</span>
+		</div>
+    </body>
+	
+	<script type="text/javascript">
+				
+		$(document).ready(function(){
+
+			$("#p1").bind("click", function(){
+				$("#content").height($("#content").height() + 1 );
+			});
+			$("#p10").bind("click", function(){
+				$("#content").height($("#content").height() + 10 );
+			});
+			$("#p100").bind("click", function(){
+				$("#content").height($("#content").height() + 100 );
+			});
+			
+			$("#m1").bind("click", function(){
+				$("#content").height($("#content").height() - 1 );
+			});
+			$("#m10").bind("click", function(){
+				$("#content").height($("#content").height() - 10 );
+			});
+			$("#m100").bind("click", function(){
+				$("#content").height($("#content").height() - 100 );
+			});
+			$("#fp").bind("click",function(){
+				var h = $("#footer").css("height");
+				$("#footer").css("height", ( parseInt(h) + 10 ) + "px" );
+			});
+			$("#fm").bind("click",function(){
+				var h = $("#footer").css("height");
+				if (parseInt(h) > 40) {
+					$("#footer").css("height", ( parseInt(h) - 10 ) + "px");
+				}
+			});
+
+			$("#footer").footer();
+		});
+	</script>
+</html>

@@ -1,0 +1,19 @@
+<%= link_to '一覧に戻る', albums_path %>
+
+<h1>編集</h1>
+
+<% form_for(@album) do |f| %>
+
+  <%= f.label :title, "タイトル" %><br />
+  <%= f.text_field(:title) %><br /><br />
+
+  <%= f.label :description, "説明" %><br />
+  <%= f.text_area(:description) %><br /><br />
+
+  <%= f.label :use1_id, "アルバムトップに表示する写真" %><br />
+  <%= f.select(:use1_id, @album.album_photos.map{|p| ["#{p.id}(#{p.title})", p.id]}) %><br /><br />
+
+  <p>
+    <%= f.submit '更新する' %>
+  </p>
+<% end %>

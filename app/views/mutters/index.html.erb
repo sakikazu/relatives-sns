@@ -1,0 +1,96 @@
+<script type="text/javascript">
+j$(document).ready(function(){
+  j$('#show_more').click(function(){
+    j$('#hide_range').toggle(300, function(){
+      if (j$('#hide_range').is(":visible")) {
+        j$('#show_more').text('隠す');
+      }else {
+        j$('#show_more').text('もっと見る');
+      }
+    });
+  });
+});
+</script>
+
+<div id="mutter">
+  <%# remote_form_for @mutter, :html => {:multipart => true}, :update => "mutter_data", :condition => "j$('#mutter_content').val() != ''", :complete => "j$('#mutter_content').val('');" do |f| -%>
+  <div id="form">
+  <% form_for @mutter, :html => {:multipart => true, :class => "jqtransform"} do |f| -%>
+    <table><tr>
+    <td>
+    <b style="font-family:'HGP創英角ﾎﾟｯﾌﾟ体';font-size:160%" id="mutter_logo">今なんしょって？</b><br />
+    <%= f.text_area :content, :size => "80x2" %>
+    <%= f.file_field :image %>
+    </td>
+    <td>
+    <%= f.hidden_field :user_id %>
+    <%= f.submit "投稿する" %>
+    </td>
+    </tr></table>
+  <% end -%>
+  </div>
+  <div id="mutter_data">
+    <%= render :partial => "list", :locals => {:mutters => @mutters} %>
+  </div>
+
+  <div id="show_more" style="">もっと見る</div>
+  <div style="text-align:right;margin-top:5px"><%= link_to "むしろすべて見る", :action => :all %></div>
+</div>
+
+<div class="right_side_bar">
+  <p class="title">― 日齢 ― 生まれて何日？</p>
+  <div id="nichirei">
+  <% if @nichirei -%>
+    <div class="main"><%= @nichirei %>日</div>
+    <% @nichirei_future.each do |n| -%>
+      <%= "#{n[0]}日: #{n[1].strftime("%Y/%m/%d")}" %><br />
+    <% end -%>
+  <% else -%>
+    ※生年月日を登録している人のみ
+  <% end -%>
+  </div>
+  <p class="title">みんなの誕生記念日</p>
+  <div id="kinenbi">
+    <table>
+    <% @kinen.each do |k| -%>
+      <tr>
+        <td><%= "#{k[:name]}さん" %></td>
+        <td><b>
+        <% if k[:count] == 0 -%>
+          本日
+        <% else -%>
+          <%= "あと#{k[:count]}日で" %>
+        <% end -%>
+        </b></td>
+        <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
+      </tr>
+    <% end -%> 
+    </table>
+    <div style="margin-top:5px;text-align:center">(生年月日を登録している人のみ)</div>
+  </div>
+    
+  <div id="update_history">
+    <p class="title">みんなの新着情報</p>
+    <div class="list">
+    <% @updates.each do |up| -%>
+      <%= render :partial => "update_history", :locals => {:up => up} %>
+    <% end -%>
+    </div>
+    <b><%= link_to "すべて見る", :action => :update_history_all %></b>
+  </div>
+
+  <div id="current_login_user">
+    <p class="title">みんなのログイン情報(直近10人分)</p>
+    <table>
+    <% @users.each do |user| -%>
+      <tr><td><%= user.current_login_at.to_s(:short) if user.current_login_at %></td><td><%= user.dispname(User::FULLNICK) %></td></tr>
+    <% end -%>
+    </table>
+  </div>
+</div>
+<div style="clear: both"></div>
+<ul>
+<li><%= link_to "sqlbuddy", "http://182.163.58.103/sqlbuddy/#page=home" %></li>
+<li><%= link_to "phpMyAdmin", "http://182.163.58.103/phpmyadmin/index.php?db=adan&target=db_structure.php&token=957d66fdcf377401bfc14c9f9ef8f0ec" %></li>
+<li><%= link_to "old_a-dan", "http://182.163.58.103/a-dan" %></li>
+</ul>

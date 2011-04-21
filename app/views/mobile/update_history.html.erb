@@ -1,0 +1,45 @@
+<div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">みんなの更新情報</div>
+<br />
+<div style="font-size:small">
+  <div style="font-weight:bold;color: rgb(0, 128, 0);">★更新内容はパソコンから見れます★</div><br />
+<% @updates.each do |up| -%>
+<div class="onece">
+  <div style="background-color:#E1E1E1"><%= up.created_at.to_s(:short) if up.created_at %></div>
+  <%= up.user.dispname %>が 
+  <% case up.action_type
+     when UpdateHistory::ALBUM_CREATE -%>
+    <b>[アルバム]<%= up.assetable.title%></b>
+    を作成しました
+  <% when UpdateHistory::ALBUM_COMMENT -%>
+    <b>[アルバム]<%= up.assetable.title%></b>
+    にコメントしました
+  <% when UpdateHistory::ALBUMPHOTO_CREATE -%>
+    <b>[アルバム]<%= up.assetable.title%></b>
+    に写真を追加しました
+  <% when UpdateHistory::ALBUMPHOTO_COMMENT -%>
+    <b>[アルバム]<%= up.assetable.title%></b>
+    の写真にコメントしました
+  <% when UpdateHistory::BOARD_CREATE -%>
+    <b>[掲示板]<%= up.assetable.title%></b>
+    を作成しました
+  <% when UpdateHistory::BOARD_COMMENT -%>
+    <b>[掲示板]<%= up.assetable.title%></b>
+    にコメントしました
+  <% when UpdateHistory::MOVIE_CREATE -%>
+    <b>[動画]<%= up.assetable.title%></b>
+    を作成しました
+  <% when UpdateHistory::MOVIE_COMMENT -%>
+    <b>[動画]<%= up.assetable.title%></b>
+    にコメントしました
+  <% when UpdateHistory::BLOG_CREATE -%>
+    <b>[日記]<%= up.assetable.title%></b>
+    を作成しました
+  <% when UpdateHistory::BLOG_COMMENT -%>
+    <b>[日記]<%= up.assetable.title%></b>
+    にコメントしました
+  <% end -%>
+  <br /><br />
+</div>
+<% end -%>
+<br /><br />
+<%= will_paginate @updates, :prev_label => '前へ', :next_label => '次へ' %>

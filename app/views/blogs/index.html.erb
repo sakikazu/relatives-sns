@@ -1,0 +1,35 @@
+<%= link_to '自分の日記へ', blogs_path %> | <%= link_to '日記を書く', new_blog_path %>
+
+<h3 class="normal"><%= @user ? @user.dispname : "自分" %>の日記</h3>
+
+<div id="blog">
+<%= will_paginate @blogs %>
+<%= "まだ日記がありません" if @blogs.size == 0 %>
+<% @blogs.each do |blog| -%>
+  <div class="once_blog">
+    <p class="bar">
+      <span class="title"><%= link_to "#{blog.title}(#{blog.blog_comments.size})", blog %></span>
+      <span class="time">投稿日時<br /><%= blog.created_at.to_s(:long) if blog.created_at %></span>
+    </p>
+    <div class="content">
+      <% blog.blog_images.each do |image| -%>
+        <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => "colorbox"} if image.image? %>
+      <% end -%>
+      <p class="text">(本文抜粋)<%= truncate(blog.content, :length => 100) %></p>
+      <%= link_to '編集する', edit_blog_path(blog) if editable(@current_user, blog.user) %>
+      <%= link_to '削除する', blog, :confirm => '本当に削除してもよろしいですか？', :method => :delete if editable(@current_user, blog.user) %>
+    </div>
+  </div>
+<% end -%>
+<%= will_paginate @blogs %>
+</div>
+
+<div class="right_side_bar">
+  <p class="title">みんなの日記(更新日順)</p>
+  <% @blog_count_by_user.each do |user, cnt, created_at| -%>
+    <div class="blog">
+      <div class="name"><%= link_to "#{user.dispname}(#{cnt})", blogs_path(:username => user.login) %></div>
+      <div class="updated">最終更新日：<%= created_at.strftime("%Y/%m/%d %H:%M:%S") %></div>
+    </div>
+  <% end -%>
+</div>

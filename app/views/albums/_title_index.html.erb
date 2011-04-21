@@ -1,0 +1,39 @@
+<script type="text/javascript">
+j$(document).ready(function(){
+  j$('#show').click(function(){
+    j$('#title_index_area').toggle(50, function(){
+      if (j$('#title_index_area').is(":visible")) {
+        j$('#show').text('非表示');
+      }else {
+        j$('#show').text('再表示');
+      }
+    });
+  });
+});
+</script>
+
+<div id="show" style="font-size:130%; color:red; font-weight:bold; margin: 5px 2px; cursor: pointer">非表示</div>
+<div id="title_index_area">
+  <table class="tablesorter_like">
+  <tr>
+    <th>タイトル</th>
+    <th>写真数</th>
+    <th>作成者</th>
+    <th>作成日時</th>
+    <th>最新アップ日時</th>
+    <th>最新コメント日時</th>
+    <th>ダウンロード</th>
+  </tr>
+  <% @albums.each_with_index do |album, idx| %>
+  <tr<%= " class='odd'" if idx%2==1 %>>
+    <td><%= link_to album.title, album %></td>
+    <td><%= @photo_count[album.id] || "0" %></td>
+    <td><%= album.user.dispname %></td>
+    <td><%= album.created_at.to_s(:short2) if album.created_at %></td>
+    <td><%= album.sort_at.to_s(:short2) if album.sort_at %></td>
+    <td><%= @last_comment_at[album.id].to_s(:short2) if @last_comment_at[album.id] %></td>
+    <td><%= link_to "ダウンロードする", :action => :download, :id => album.id %></td>
+  </tr>
+  <% end %>
+  </table>
+</div>

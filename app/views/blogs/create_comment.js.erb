@@ -1,0 +1,6 @@
+if(j$('#comment').val() != ''){
+  j$('#comment').val('');
+  j$('#comments').html(
+    '<%= escape_javascript(render "comments") %>'
+  );
+}

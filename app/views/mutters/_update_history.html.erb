@@ -1,0 +1,7 @@
+<div class="once">
+  <%= up.updated_at.to_s(:short) if up.updated_at %><span class="name"><%= up.user.dispname %></span><br />
+  <% ai = action_info(up) -%>
+  <b>[<%= ai[:content_name] %>]<%= ai[:link] %></b>
+  <br /><%= ai[:info] %>
+  <hr />
+</div>
