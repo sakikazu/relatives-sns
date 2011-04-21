@@ -1,0 +1,43 @@
+<IfModule mod_headers.c>
+  # 1 MONTH
+  <FilesMatch "\.(ico|pdf|flv)$">
+    Header set Cache-Control "max-age=2592000, public"
+  </FilesMatch>
+
+  # 1 MONTH
+  <FilesMatch "\.(jpg|jpeg|png|gif|swf|JPG)$">
+    Header set Cache-Control "max-age=2592000, public"
+  </FilesMatch>
+
+  # 1 DAYS
+  <FilesMatch "\.(xml|txt|css|js)$">
+    Header set Cache-Control "max-age=86400, proxy-revalidate"
+  </FilesMatch>
+</IfModule>
+
+
+#◎結局本番環境ではExpiresが有効になってないし（Overwriteができてない？）、また、ローカルで有効でも、リクエスト飛んでるし・・・
+### epires設定（mod_expiresがhttpd.confで有効になっていること）###
+<IfModule mod_expires.c>
+	ExpiresActive On
+
+#★この２つ不要？
+	ExpiresByType application/xml "modification plus 1 hours"
+	ExpiresByType text/xml "modification plus 1 hours"
+
+	ExpiresByType text/css "access plus 7 days"
+	ExpiresByType application/x-javascript "access plus 7 days"
+	ExpiresByType image/jpeg "access plus 7 days"
+	ExpiresByType image/png "access plus 7 days"
+</IfModule>
+
+### gzip設定
+<IfModule deflate_module>
+	SetOutputFilter DEFLATE
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4\.0[678] no-gzip
+	BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+	SetEnvIfNoCase Request_URI\.(?:gif|jpe?g|png)$ no-gzip dont-vary
+	Header append Vary User-Agent env=!dont-vary
+</IfModule>
+
