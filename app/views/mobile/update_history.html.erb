@@ -4,7 +4,7 @@
   <div style="font-weight:bold;color: rgb(0, 128, 0);">★更新内容はパソコンから見れます★</div><br />
 <% @updates.each do |up| -%>
 <div class="onece">
-  <div style="background-color:#E1E1E1"><%= up.created_at.to_s(:short) if up.created_at %></div>
+  <div style="background-color:#E1E1E1"><%= up.updated_at.to_s(:short) if up.updated_at %></div>
   <%= up.user.dispname %>が 
   <% case up.action_type
      when UpdateHistory::ALBUM_CREATE -%>
