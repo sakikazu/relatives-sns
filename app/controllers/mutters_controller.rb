@@ -41,7 +41,7 @@ class MuttersController < ApplicationController
     @mutter = Mutter.new(:user_id => current_user.id)
     @mutters = Mutter.all(:order => "id DESC", :limit => 30)
     @users = User.find(:all, :order => "current_login_at DESC", :limit => 10)
-    @updates = UpdateHistory.find(:all, :order => "updated_at DESC", :limit => 10)
+    @updates = UpdateHistory.sort_updated.find(:all, :limit => 10)
 
     ###日齢
     mybirth = current_user.user_ext.birth_day
@@ -122,7 +122,7 @@ class MuttersController < ApplicationController
   end
 
   def update_history_all
-    @uhs = UpdateHistory.paginate(:page => params[:page], :per_page => 50, :order => "updated_at DESC")
+    @uhs = UpdateHistory.sort_updated.paginate(:page => params[:page], :per_page => 50)
   end
 
 end

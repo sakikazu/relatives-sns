@@ -29,7 +29,7 @@ class MobileController < ApplicationController
   end
 
   def update_history
-    @updates = UpdateHistory.paginate(:page => params[:page], :per_page => 15, :order => "id DESC")
+    @updates = UpdateHistory.sort_updated.paginate(:page => params[:page], :per_page => 15)
   end
 
 private

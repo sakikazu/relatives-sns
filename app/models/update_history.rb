@@ -2,6 +2,8 @@ class UpdateHistory < ActiveRecord::Base
   belongs_to :user
   belongs_to :assetable, :polymorphic => true
 
+  scope :sort_updated, order('updated_at DESC')
+
   #action_type
   ALBUM_CREATE = 1
   ALBUM_COMMENT = 2
