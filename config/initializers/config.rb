@@ -11,10 +11,10 @@ Time::DATE_FORMATS[:short_br2] = "%m/%d<br />%H:%M"
 Time::DATE_FORMATS[:date] = "%Y/%m/%d"
 Time::DATE_FORMATS[:time] = "%H:%M:%S"
 
-# paperclip
-Paperclip::Attachment.interpolations[:album] = proc do |attachment, style|
+# paperclip for use model ..file save path
+Paperclip.interpolates(:album) do |attachment, style|
   attachment.instance.album_id
 end
-Paperclip::Attachment.interpolations[:board] = proc do |attachment, style|
+Paperclip.interpolates(:board) do |attachment, style|
   attachment.instance.board_id
 end
