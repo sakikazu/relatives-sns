@@ -13,7 +13,7 @@ class MuttersController < ApplicationController
     @mutters.each do |obj|
       @contents << {:title => "[#{obj.created_at.to_s(:short3)}] つぶやき(#{obj.user.dispname})", :description => obj.content, :created_at => obj.created_at}
     end
-    @uhs = UpdateHistory.find(:all, :limit => 5, :order => "id DESC")
+    @uhs = UpdateHistory.sort_updated.find(:all, :limit => 5)
     @uhs.each do |obj|
       ai = UpdateHistory::ACTION_INFO[obj.action_type]
       @contents << {:title => "[#{obj.created_at.to_s(:short3)}] [#{ai[:content_name]}]#{obj.user.dispname}が「#{obj.assetable.title}」#{ai[:info]}", :description => obj.assetable.title, :created_at => obj.created_at}
