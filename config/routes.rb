@@ -76,6 +76,7 @@ ADanRails3::Application.routes.draw do
       get :update_history_all
       get :all
       get :search
+      get :album_info
     end
   end
 

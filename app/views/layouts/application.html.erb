@@ -38,7 +38,14 @@
         gradientPosition:25,
         gradientLength:20
       });
-      j$('#coin-slider').coinslider({ height: 230, width: 650, navigation: false, links: false, delay: 10000 });
+
+      jQuery(".carousel-demo2").sliderkit({
+        shownavitems:6,
+        scroll:1,
+        mousewheel:true,
+        circular:true,
+        start:1
+      });
 
       j$("#new_board_info").tipTip({
         content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
@@ -65,7 +72,9 @@
   </script>
 
   <%= javascript_include_tag 'jquery-fonteffect-1.0.0.min' %>
-  <%= javascript_include_tag 'coin-slider/coin-slider.min' %>
+  <%= javascript_include_tag 'jquery.sliderkit.1.5.1.pack' %>
+  <%= javascript_include_tag 'jquery.mousewheel.min' %>
+  <%= stylesheet_link_tag 'sliderkit/sliderkit-core' %>
   <%= stylesheet_link_tag 'jqtransformplugin/jqtransform' %>
   <%= javascript_include_tag 'jquery.jqtransform' %>
   <%= stylesheet_link_tag 'tipTip' %>
@@ -77,23 +86,30 @@
 
 <div id="container">
 <% if controller.controller_name == "mutters" and controller.action_name == "index" -%>
-<div style="height:230px;margin-bottom:2px">
-  <div id='coin-slider' style="float:left">
-    <% Dir.glob("#{Rails.root}/public/images/top/*.jpg").each do |jpg| -%>
-      <%= image_tag "/images/top/#{File::basename(jpg)}" %>
-    <% end -%>
-  </div>
-  <div style="float:left;margin-left: 30px">
-    <%= render :partial => "layouts/top" %>
-    <br /><br />
-    <div style="color:gray;font-weight:bold;line-height:23px">
-      あなたがアクション(日記、コメントなど)すれば<br />
-      他の人が楽しめてアクションしたくなります。<br />
-      そのアクションによって、またあなたも楽しめるでしょう。<br />
-      そういう循環ができたら最高です。
+
+  <div class="sliderkit carousel-demo2">
+    <div class="sliderkit-nav">
+      <div class="sliderkit-nav-clip">
+        <ul>
+          <% @album_thumbs.each do |thumb| -%>
+            <li><%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title), {:controller => :mutters, :action => :album_info, :photo_id => thumb.id}, {:class => "colorbox", :title => "上のリンク先からアルバムが見れます"} %></li>
+          <% end -%>
+        </ul>
+      </div>
+      <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-prev"><a href="#" title="Scroll to the left"><span>Previous</span></a></div>
+      <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-next"><a href="#" title="Scroll to the right"><span>Next</span></a></div>
     </div>
   </div>
-</div>
+
+  <div style="float:left;margin: 0px 0px 15px 30px">
+    <%= render :partial => "layouts/top" %>
+  </div>
+  <div style="float:right;margin: 10px 10px 0px 0px;color:gray;font-weight:bold;line-height:23px">
+    あなたがアクション(日記、コメントなど)すれば<br />
+    他の人が楽しめてアクションしたくなります。<br />
+    そのアクションによって、またあなたも楽しめるでしょう。<br />
+    そういう循環ができたら最高です。
+  </div>
 <% else -%>
   <div style="float:left;margin-left: 15px">
     <%= render :partial => "layouts/top" %>
@@ -103,6 +119,7 @@
   </div>
 <% end -%>
 <div class="clear-both"></div>
+
 
 <ul class="win7">
   <li class="win7red"><%= link_to "トップ", root_path %></li>

@@ -139,7 +139,35 @@ body {
   margin-bottom: 30px;
 }
 
-/* mutter */
+/*---------------------------------
+ *  mutter
+ *---------------------------------*/
+
+.carousel-demo2{width:1070px;height:150px;}
+
+/* Navbar */
+.carousel-demo2 .sliderkit-nav{left:0;bottom:0;width:1050px;height:115px;padding:10px;background:white;}
+.carousel-demo2 .sliderkit-nav-clip ul li{float:left;margin:0 10px 0 0;}
+.carousel-demo2 .sliderkit-nav-clip ul li a{display:block;width:150px;height:115px;overflow:hidden;margin:0;opacity:1;}
+.carousel-demo2 .sliderkit-nav-clip ul li a:hover{opacity:1;}
+
+/* Navbar buttons */
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-btn{position:absolute;top:0;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-btn span{display:none;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-btn a{display:block;width:15px;height:130px;background:transparent url("./sliderkit/arrows-h.png") no-repeat center 0;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-prev{left:20px;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-next{right:20px;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-prev a{background-position:-89px center;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-next a{background-position:-108px center;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-prev a:hover,
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-prev a:focus{background-position:-126px center;}
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-next a:hover,
+.carousel-demo2 .sliderkit-nav .sliderkit-nav-next a:focus{background-position:-145px center;}
+
+/* Buttons > Disable */
+.carousel-demo2 .sliderkit-nav .sliderkit-btn-disable{opacity:0.3/*can be set to any value until 1*/;cursor:default;}
+
+
 #mutter{
   width: 700px;
   /*margin: 0px auto 30px;*/

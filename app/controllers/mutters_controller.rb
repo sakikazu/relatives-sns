@@ -48,6 +48,7 @@ class MuttersController < ApplicationController
     @mutters = Mutter.all(:order => "id DESC", :limit => 30)
     @users = User.find(:all, :order => "current_login_at DESC", :limit => 10)
     @updates = UpdateHistory.sort_updated.find(:all, :limit => 10)
+    @album_thumbs = Album.rnd_photos
 
     ###日齢
     mybirth = current_user.user_ext.birth_day
@@ -101,6 +102,10 @@ class MuttersController < ApplicationController
     end
   end
 
+  def album_info
+    @photo = AlbumPhoto.find(params[:photo_id])
+    render :layout => false
+  end
 
   def create
     mutter = Mutter.new(params[:mutter])

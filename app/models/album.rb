@@ -14,4 +14,12 @@ class Album < ActiveRecord::Base
     albums = Album.all.map{|a| a.sort_at = (buf[a.id] || a.created_at); a}
     albums.sort{|a,b| b.sort_at <=> a.sort_at}
   end
+
+  #各アルバムからランダムに一つずつ写真を選択する
+  def self.rnd_photos
+    Album.all.map do |al|
+      photos = al.album_photos 
+      photos[rand(photos.size)]
+    end
+  end
 end
