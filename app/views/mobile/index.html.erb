@@ -1,5 +1,3 @@
-<div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">みんなのつぶやき</div>
-<br />
 <div style="font-size:small">
 <% form_for @mutter, :url => {:controller => "mobile", :action => :create}, :html => {:multipart => true} do |f| -%>
   <div style="font-weight:bold;color:rgb(0, 128, 0">つぶやく(絵文字はまだ使えません)</div>
@@ -9,10 +7,6 @@
   <%= f.hidden_field :user_id %>
   <%= f.submit "投稿する" %>
 <% end -%>
-
-<br />
-<%= link_to "みんなの更新情報", :controller => "mobile", :action => :update_history %><br />
-
 <br />
 <% @mutters.each do |m| -%>
   <div style="background-color:#E1E1E1">

@@ -2,6 +2,8 @@ class BlogsController < ApplicationController
   before_filter :require_user
   before_filter :page_title
 
+  mobile_filter :hankaku=>true
+
   # GET /blogs
   # GET /blogs.xml
   def index
@@ -24,6 +26,40 @@ class BlogsController < ApplicationController
       format.html # index.html.erb
       format.xml  { render :xml => @blogs }
     end
+  end
+
+  def index_mobile
+    if params[:username] && (params[:username] != current_user.login)
+      @user = User.find_by_login(params[:username])
+      @blogs = Blog.paginate(:conditions => {:user_id => @user.id}, :page => params[:page], :per_page => 5, :order => "id DESC")
+    else
+      @blogs = Blog.paginate(:conditions => {:user_id => current_user.id}, :page => params[:page], :per_page => 5, :order => "id DESC")
+    end
+    @content_title = (@user ? @user.dispname : "自分") + "の日記"
+
+    set_header
+    render :action => :index_mobile, :layout => "mobile"
+  end
+
+  def everyone_mobile
+    @content_title = "みんなの日記(更新日順)"
+    @blog_count_by_user = []
+    tmp1 = Blog.count(:group => :user_id)
+    tmp2 = Blog.maximum(:created_at, :group => :user_id, :order => "created_at DESC")
+    tmp2.each do |user_id, val|
+      user = User.find_by_id(user_id)
+      @blog_count_by_user << [user, tmp1[user_id], val]
+    end
+
+    set_header
+    render :action => :everyone_mobile, :layout => "mobile"
+  end
+
+  def show_mobile
+    @blog = Blog.find(params[:id])
+    @content_title = @blog.user.dispname + "の日記"
+    set_header
+    render :action => :show_mobile, :layout => "mobile"
   end
 
   # GET /blogs/1

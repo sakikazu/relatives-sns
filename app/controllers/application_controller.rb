@@ -52,4 +52,10 @@ class ApplicationController < ActionController::Base
         redirect_to pa
       end
     end
+
+    def set_header
+      if request.mobile?
+        headers['Content-Type'] = 'application/xhtml+xml;charset=Shift_JIS'
+      end
+    end
 end

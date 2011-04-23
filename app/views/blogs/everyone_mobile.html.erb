@@ -1,0 +1,4 @@
+  <% @blog_count_by_user.each do |user, cnt, created_at| -%>
+    <%= link_to "#{user.dispname}(#{cnt})", :action => :index_mobile, :username => user.login %><br />
+    最終更新日：<%= created_at.strftime("%Y/%m/%d %H:%M:%S") %><br />
+  <% end -%>

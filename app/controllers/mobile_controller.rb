@@ -10,6 +10,7 @@ class MobileController < ApplicationController
   layout "mobile"
 
   def index
+    @content_title = "みんなのつぶやき"
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
     @mutters = Mutter.paginate(:page => params[:page], :per_page => 7, :order => "id DESC")
@@ -29,12 +30,7 @@ class MobileController < ApplicationController
   end
 
   def update_history
+    @content_title = "みんなの更新情報"
     @updates = UpdateHistory.sort_updated.paginate(:page => params[:page], :per_page => 15)
   end
-
-private
-  def set_header
-    headers['Content-Type'] = 'application/xhtml+xml;charset=Shift_JIS'
-  end
-
 end

@@ -1,0 +1,25 @@
+<%= link_to '自分の日記', :action => :index_mobile %> | <%= link_to 'みんなの日記', :action => :everyone_mobile %> | <%= link_to '日記を書く', new_blog_path %>
+<br /><br />
+<div id="blog">
+<br />
+<%= "まだ日記がありません" if @blogs.size == 0 %>
+<% @blogs.each do |blog| -%>
+  <div class="once_blog">
+    <div style="background-color:#E1E1E1">
+      <span class="title"><%= link_to "#{blog.title}(#{blog.blog_comments.size})", :action => :show_mobile, :id => blog.id %></span><br />
+      <span class="time">投稿日時: <%= blog.created_at.to_s(:long) if blog.created_at %></span>
+    </div>
+
+    <div class="content">
+      <% blog.blog_images.each do |image| -%>
+        <%= image_tag(image.image(:thumb)) if image.image? %>
+      <% end -%>
+      <p class="text">(本文抜粋)<%= truncate(blog.content, :length => 100) %></p>
+      <%= link_to '編集する', edit_blog_path(blog) if editable(@current_user, blog.user) %>
+      <%= link_to '削除する', blog, :confirm => '本当に削除してもよろしいですか？', :method => :delete if editable(@current_user, blog.user) %>
+      <br /><br />
+    </div>
+  </div>
+<% end -%>
+<%= will_paginate @blogs %>
+</div>
