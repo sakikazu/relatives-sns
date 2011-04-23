@@ -2,6 +2,12 @@ class MuttersController < ApplicationController
   before_filter :redirect_if_mobile
   before_filter :require_user, :except => :rss
 
+  def search
+    str = params[:search_text]
+    @mutters = Mutter.where('content like :q', :q => "%#{str}%").order('id DESC').limit(30)
+    @action_flg = !params[:action_flg]
+  end
+
   def rss
     @site_title = "AdanHP"
     @site_url = root_url

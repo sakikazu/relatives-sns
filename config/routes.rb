@@ -71,6 +71,7 @@ ADanRails3::Application.routes.draw do
     collection do
       get :update_history_all
       get :all
+      get :search
     end
   end
 

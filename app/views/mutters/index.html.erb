@@ -15,7 +15,7 @@ j$(document).ready(function(){
 <div id="mutter">
   <%# remote_form_for @mutter, :html => {:multipart => true}, :update => "mutter_data", :condition => "j$('#mutter_content').val() != ''", :complete => "j$('#mutter_content').val('');" do |f| -%>
   <div id="form">
-  <% form_for @mutter, :html => {:multipart => true, :class => "jqtransform"} do |f| -%>
+  <%= form_for @mutter, :html => {:multipart => true, :class => "jqtransform"} do |f| -%>
     <table><tr>
     <td>
     <b style="font-family:'HGP創英角ﾎﾟｯﾌﾟ体';font-size:160%" id="mutter_logo">今なんしょって？</b><br />
@@ -29,6 +29,15 @@ j$(document).ready(function(){
     </tr></table>
   <% end -%>
   </div>
+
+  <div id="form_search">
+  <%= form_tag search_mutters_path, {:remote => true, :method => :get} do %>
+    <%= text_field_tag :search_text %>
+    <%= submit_tag "発言内容から検索する" %>
+  <% end %>
+  </div>
+
+
   <div id="mutter_data">
     <%= render :partial => "list", :locals => {:mutters => @mutters} %>
   </div>

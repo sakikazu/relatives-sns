@@ -1,3 +1,10 @@
+<% if @action_flg %>
+  <%= form_tag search_mutters_path, {:remote => true, :method => :get} do %>
+    <%= hidden_field_tag :action_flg, true %>
+    <%= submit_tag "すべて表示する" %>
+  <% end -%>
+<% end -%>
+
 <table class='data'>
 <% cnt = 0 -%>
 <% mutters.each do |m| %>
