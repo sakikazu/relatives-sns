@@ -22,7 +22,7 @@ class MuttersController < ApplicationController
     @uhs = UpdateHistory.sort_updated.find(:all, :limit => 5)
     @uhs.each do |obj|
       ai = UpdateHistory::ACTION_INFO[obj.action_type]
-      @contents << {:title => "[#{obj.created_at.to_s(:short3)}] [#{ai[:content_name]}]#{obj.user.dispname}が「#{obj.assetable.title}」#{ai[:info]}", :description => obj.assetable.title, :created_at => obj.created_at}
+      @contents << {:title => "[#{obj.updated_at.to_s(:short3)}] [#{ai[:content_name]}]#{obj.user.dispname}が「#{obj.assetable.title}」#{ai[:info]}", :description => obj.assetable.title, :updated_at => obj.updated_at}
     end
 
     respond_to do |format|
