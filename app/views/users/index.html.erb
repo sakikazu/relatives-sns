@@ -22,6 +22,7 @@
     <th>画像</th>
     <th>血液型</th>
     <th>性別</th>
+    <th>年齢</th>
     <th>誕生日</th>
     <th>関係する11兄弟</th>
     <th>最終ログイン時間</th>
@@ -41,6 +42,7 @@
     <td><%= link_to image_tag(user.user_ext.image(:small)), user.user_ext.image(:large), {:class => "colorbox"} if user.user_ext.image? %></td>
     <td><%= user.user_ext.blood_name %></td>
     <td><%= user.user_ext.sex_name %></td>
+    <td><%= user.user_ext.age %></td>
     <td><%= user.user_ext.birth_day.to_s(:date) if user.user_ext.birth_day %></td>
     <td><%= user.user_ext.root11_name %></td>
     <td><%= user.current_login_at.to_s(:long) if user.current_login_at %></td>

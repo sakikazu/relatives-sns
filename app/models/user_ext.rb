@@ -45,5 +45,8 @@ class UserExt < ActiveRecord::Base
     Hash[*SEX_LIST.flatten.reverse][self.sex]
   end
 
+  def age
+    ((Date.today - birth_day) / 365).to_i if birth_day.present?
+  end
 
 end
