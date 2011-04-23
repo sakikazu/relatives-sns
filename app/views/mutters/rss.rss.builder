@@ -16,7 +16,7 @@ xml.rss("version"    => "2.0",
         xml.link         @site_url
         xml.guid         @site_url
         xml.description  content[:description]
-        xml.pubDate      content[:created_at].to_formatted_s(:rfc822)
+        xml.pubDate      content[:updated_at].to_formatted_s(:rfc822)
         xml.dc :creator, @author
       end
     end
