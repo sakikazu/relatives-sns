@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   has_many :mutters
   has_one :user_ext
 
+  after_save :rel_save
+
   #role
   ADMIN = 0
   SUB_ADMIN = 1
@@ -42,7 +44,7 @@ class User < ActiveRecord::Base
     return name
   end
 
-  def after_save
+  def rel_save
     self.user_ext ||= UserExt.create
   end
 end

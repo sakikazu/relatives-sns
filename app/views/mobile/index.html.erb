@@ -1,5 +1,5 @@
 <div style="font-size:small">
-<% form_for @mutter, :url => {:controller => "mobile", :action => :create}, :html => {:multipart => true} do |f| -%>
+<%= form_for @mutter, :url => {:controller => "mobile", :action => :create}, :html => {:multipart => true} do |f| -%>
   <div style="font-weight:bold;color:rgb(0, 128, 0">つぶやく(絵文字はまだ使えません)</div>
   <%= f.text_area :content, :size => "15x2" %><br /><br />
   <div style="font-weight:bold;color:rgb(0, 128, 0;">画像(最近の携帯のみ)</div>
@@ -16,11 +16,11 @@
     <%#= link_to(image_tag(m.image(:thumb)), m.image(:large)) %><br />
     <%= image_tag(m.image(:thumb)) %><br />
   <% end -%>
-  <br /><%= auto_link(m.content) %><br />
+  <br /><%= auto_link(m.content).html_safe %><br />
 <%# sakikazu memo F906i 調査。:method～がルーティングに反映しないし、:confirmも無効になった %>
   <%= link_to("削除", {:action => :destroy, :id => m.id}) if editable(current_user, m.user) %>
 <% end -%>
 
 <br /><br />
-<%= will_paginate @mutters, :prev_label => '前へ', :next_label => '次へ' %>
+<%= will_paginate @mutters, :previous_label => '前へ', :next_label => '次へ' %>
 </div>

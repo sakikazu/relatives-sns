@@ -45,9 +45,9 @@ class MuttersController < ApplicationController
   def index
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
-    @mutters = Mutter.all(:order => "id DESC", :limit => 30)
-    @users = User.find(:all, :order => "current_login_at DESC", :limit => 10)
-    @updates = UpdateHistory.sort_updated.find(:all, :limit => 10)
+    @mutters = Mutter.includes(:user).order("id DESC").limit(30)
+    @users = User.includes(:user_ext).order("current_login_at DESC").limit(10)
+    @updates = UpdateHistory.includes(:user).sort_updated.limit(10)
     @album_thumbs = Album.rnd_photos
 
     ###日齢
@@ -69,7 +69,7 @@ class MuttersController < ApplicationController
     kinenbirth_array = [20 => '二十歳', 60 => '還暦', 77 => '喜寿', 88 => '米寿', 99 => '白寿']
     kinenday_array = [10000,20000,30000,40000]
 
-    UserExt.find(:all, :conditions => "birth_day is not NULL").each do |ue|
+    UserExt.includes(:user).where("birth_day is not NULL").each do |ue|
       birday_tmp = Date.new(Date.today.year, ue.birth_day.month, ue.birth_day.day)
     
       ##--年齢--##

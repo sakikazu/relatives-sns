@@ -1,6 +1,7 @@
 class Mutter < ActiveRecord::Base
   belongs_to :user
 
+  before_save :trans_space
   validates_presence_of :content
 
   MUTTER_DATA_VISIBLE = 12
@@ -14,7 +15,7 @@ class Mutter < ActiveRecord::Base
     :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/uploads/#{content_name}/:id/:style/:basename.:extension"
 
-  def before_save
+  def trans_space
     #auto_linkでURLの後に全角スペースが入るとリンクが延長されてしまうため、半角スペースに変換
     self.content.gsub!("　", " ")
   end
