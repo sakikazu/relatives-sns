@@ -1,8 +1,8 @@
 <div style="width:850px;height:550px">
   <div style="text-align:center">
-    <%= image_tag @photo.attach(:large) %><br />
-    <div style="margin:20px auto 10px;text-align:center;font-size:18px;color:gray">
-      アルバムタイトル：<%= link_to @photo.album.title, @photo.album %>
+    <div style="margin:20px;font-size:18px;color:gray">
+      アルバム：<%= link_to @photo.album.title, @photo.album %>
     </div>
+    <%= image_tag @photo.attach(:large) %><br />
   </div>
 </div>
