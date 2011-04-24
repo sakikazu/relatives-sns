@@ -7,7 +7,7 @@
 
 <table class='data'>
 <% cnt = 0 -%>
-<% mutters.each do |m| %>
+<% @mutters.each do |m| %>
   <% if cnt == Mutter::MUTTER_DATA_VISIBLE -%>
     </table>
     <table class='data' id='hide_range' style='display:none'>

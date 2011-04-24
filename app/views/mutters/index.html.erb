@@ -39,7 +39,7 @@ j$(document).ready(function(){
 
 
   <div id="mutter_data">
-    <%= render :partial => "list", :locals => {:mutters => @mutters} %>
+    <%= render :partial => "list" %>
   </div>
 
   <div id="show_more" style="">もっと見る</div>
@@ -81,9 +81,7 @@ j$(document).ready(function(){
   <div id="update_history">
     <p class="title">みんなの新着情報</p>
     <div class="list">
-    <% @updates.each do |up| -%>
-      <%= render :partial => "update_history", :locals => {:up => up} %>
-    <% end -%>
+      <%= render :partial => "update_history" %>
     </div>
     <b><%= link_to "すべて見る", :action => :update_history_all %></b>
   </div>
