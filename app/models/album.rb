@@ -15,11 +15,8 @@ class Album < ActiveRecord::Base
     albums.sort{|a,b| b.sort_at <=> a.sort_at}
   end
 
-  #各アルバムからランダムに一つずつ写真を選択する
+  #全写真からただランダムに抽出する
   def self.rnd_photos
-    Album.all.map do |al|
-      photos = al.album_photos 
-      photos[rand(photos.size)]
-    end
+    AlbumPhoto.includes(:album).order("RAND()").limit(30)
   end
 end

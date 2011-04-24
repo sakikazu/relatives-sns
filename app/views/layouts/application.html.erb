@@ -92,7 +92,11 @@
       <div class="sliderkit-nav-clip">
         <ul>
           <% @album_thumbs.each do |thumb| -%>
-            <li><%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title), {:controller => :mutters, :action => :album_info, :photo_id => thumb.id}, {:class => "colorbox", :title => "上のリンク先からアルバムが見れます"} %></li>
+            <li>
+              <%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title),
+              {:controller => :mutters, :action => :album_info, :photo_id => thumb.id},
+              {:class => "colorbox", :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
+            </li>
           <% end -%>
         </ul>
       </div>
