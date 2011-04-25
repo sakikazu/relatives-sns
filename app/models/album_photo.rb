@@ -13,4 +13,8 @@ class AlbumPhoto < ActiveRecord::Base
     :url => "/uploads/#{content_name}/:album/:id/:style/:basename.:extension",
     :path => ":rails_root/public/uploads/#{content_name}/:album/:id/:style/:basename.:extension"
 
+  #全写真からただランダムに抽出する
+  def self.rnd_photos
+    self.includes(:album).order("RAND()").limit(30)
+  end
 end

@@ -48,7 +48,7 @@ class MuttersController < ApplicationController
     @mutters = Mutter.includes(:user).order("id DESC").limit(30)
     @users = User.includes(:user_ext).order("current_login_at DESC").limit(10)
     @updates = UpdateHistory.includes(:user).sort_updated.limit(10)
-    @album_thumbs = Album.rnd_photos
+    @album_thumbs = AlbumPhoto.rnd_photos
 
     ###日齢
     mybirth = current_user.user_ext.birth_day
