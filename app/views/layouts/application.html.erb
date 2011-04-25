@@ -92,6 +92,15 @@
 <div id="container">
 <% if controller.controller_name == "mutters" and controller.action_name == "index" -%>
 
+  <div style="float:left;margin: 5px 0px 10px 30px">
+    <%= render :partial => "layouts/top" %>
+  </div>
+  <div style="float:right;margin: 10px 30px 0px 0px;color:gray;font-weight:bold;line-height:23px">
+    あなたがアクション(日記、コメントなど)すれば<br />
+    他の人が楽しめてアクションしたくなります。<br />
+    そのアクションによって、またあなたも楽しめるでしょう。<br />
+    そういうサイクルができたら最高です。
+  </div>
   <div class="sliderkit carousel-demo2">
     <div class="sliderkit-nav">
       <div class="sliderkit-nav-clip">
@@ -108,16 +117,6 @@
       <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-prev"><a href="#" title="Scroll to the left"><span>Previous</span></a></div>
       <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-next"><a href="#" title="Scroll to the right"><span>Next</span></a></div>
     </div>
-  </div>
-
-  <div style="float:left;margin: 0px 0px 15px 30px">
-    <%= render :partial => "layouts/top" %>
-  </div>
-  <div style="float:right;margin: 10px 10px 0px 0px;color:gray;font-weight:bold;line-height:23px">
-    あなたがアクション(日記、コメントなど)すれば<br />
-    他の人が楽しめてアクションしたくなります。<br />
-    そのアクションによって、またあなたも楽しめるでしょう。<br />
-    そういう循環ができたら最高です。
   </div>
 <% else -%>
   <div style="float:left;margin-left: 15px">
