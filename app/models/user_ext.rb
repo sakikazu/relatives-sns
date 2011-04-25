@@ -8,6 +8,10 @@ class UserExt < ActiveRecord::Base
       :thumb => "250x250>",
       :large => "800x800>"
     },
+    :convert_options => {
+      :small => ['-quality 70', '-strip'],
+      :thumb => ['-quality 80', '-strip'],
+    },
     :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/uploads/#{content_name}/:id/:style/:basename.:extension"
 

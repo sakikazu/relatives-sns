@@ -17,6 +17,7 @@ class Movie < ActiveRecord::Base
       :thumb => "250x250>",
       :large => "600x600>"
     },
+    :convert_options => { :thumb => ['-quality 80', '-strip']}, #50じゃノイズきつい
     :url => "/uploads/#{content_name}/:id/thumb/:style/:basename.:extension",
     :path => ":rails_root/public/uploads/#{content_name}/:id/thumb/:style/:basename.:extension"
 
