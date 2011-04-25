@@ -559,8 +559,12 @@ body {
   font-weight: bold;
   font-size: 130%;
 }
+#slideshow .content{
+  text-align: center;
+}
 #slideshow .content .text{
-  padding: 12px;
+  text-align: left;
+  padding: 20px;
   background-color: #F2EEE8;
 }
 

@@ -23,6 +23,11 @@
   <script>
     j$(document).ready(function(){
       j$(".colorbox").colorbox();
+      j$(".colorbox_top").colorbox({
+        width:"900px",
+        height:"750px",
+      });
+
       j$("form.jqtransform").jqTransform();
       j$("#content_logo").FontEffect({
         gradient:true,
@@ -94,8 +99,8 @@
           <% @album_thumbs.each do |thumb| -%>
             <li>
               <%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title),
-              {:controller => :mutters, :action => :album_info, :photo_id => thumb.id},
-              {:class => "colorbox", :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
+              {:controller => :album_photos, :action => :slideshow, :id => thumb.id, :top => 1},
+              {:class => "colorbox_top", :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
             </li>
           <% end -%>
         </ul>

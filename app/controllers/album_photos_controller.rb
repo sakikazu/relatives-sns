@@ -101,9 +101,15 @@ class AlbumPhotosController < ApplicationController
   end
 
   def slideshow
+    @from_top_flg = true if params[:top].present?
     @album_photo = AlbumPhoto.find(params[:id])
     @album_photo_comment = AlbumPhotoComment.new(:user_id => current_user.id, :album_photo_id => @album_photo.id)
     render :layout => false
+  end
+
+  def update_from_slideshow
+    @album_photo = AlbumPhoto.find(params[:id])
+    @album_photo.update_attributes(params[:album_photo])
   end
 
   def create_comment

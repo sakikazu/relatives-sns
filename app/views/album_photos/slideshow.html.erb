@@ -1,21 +1,26 @@
-<div id="slideshow">
-  <div id="top"></div>
-  <p class="bar">
-    <span class="title">
-      <%= "#{@album_photo.title} " %>
-      <%= link_to "(コメント数：#{@album_photo.album_photo_comments.size}）", "#comment_area" %>
-    </span>
-    <span class="right">
-      投稿者：<%= @album_photo.user.dispname %><br />
-      投稿日時：<%= @album_photo.created_at.to_s(:short2) if @album_photo.created_at %>
-    </span>
-  </p>
-  <div class="content">
-    <%= image_tag(@album_photo.attach(:large)) if @album_photo.attach? %>
-    <br />
-    <%= link_to "元画像", @album_photo.attach(:original) if @album_photo.attach? %>
-    <p class="text"><%= br auto_link(@album_photo.description) %></p>
+<% if @from_top_flg %>
+  <div style="background-color:lightgray">
+  <% if editable(current_user, @album_photo.user) %>
+    <%= form_for @album_photo, :url => update_from_slideshow_album_photo_path, :remote => true do |f| %>
+      タイトル<br />
+      <%= f.text_field :title %><br />
+      写真の説明<br />
+      <%= f.text_area :description, :size => "60x4" %><br />
+      <%= submit_tag "編集する" %>※この画像のアップロード者のみ可能
+    <% end -%>
+    <div id="info"></div>
+    <hr />
+  <% end -%>
   </div>
+  <div style="text-align:center">
+    <div style="margin:20px;font-size:18px;color:gray">
+      アルバム：<%= link_to @album_photo.album.title, @album_photo.album %>
+    </div>
+  </div>
+<% end -%>
+
+<div id="slideshow">
+  <%= render :partial => "slidecontent" %>
 </div>
 
 
@@ -34,5 +39,4 @@
   <%= submit_tag "投稿する" %>
 <% end -%>
 <br /><br />
-
 </div>

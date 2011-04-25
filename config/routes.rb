@@ -13,6 +13,7 @@ ADanRails3::Application.routes.draw do
   resources :album_photos do
     member do
       get :slideshow
+      put :update_from_slideshow
     end
   end
 

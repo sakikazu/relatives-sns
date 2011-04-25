@@ -1,0 +1,18 @@
+  <div id="top"></div>
+  <p class="bar">
+    <span class="title">
+      <%= "#{@album_photo.title} " %>
+      <%= link_to "(コメント数：#{@album_photo.album_photo_comments.size}）", "#comment_area" %>
+    </span>
+    <span class="right">
+      投稿者：<%= @album_photo.user.dispname %><br />
+      投稿日時：<%= @album_photo.created_at.to_s(:short2) if @album_photo.created_at %>
+    </span>
+  </p>
+  <div class="content">
+    <%= image_tag(@album_photo.attach(:large)) if @album_photo.attach? %>
+    <br />
+    <%= link_to "元画像", @album_photo.attach(:original) if @album_photo.attach? %>
+    <p class="text"><%= br auto_link(@album_photo.description) %></p>
+  </div>
+
