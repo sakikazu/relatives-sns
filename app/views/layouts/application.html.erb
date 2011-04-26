@@ -7,35 +7,35 @@
   <title>A団HP | <%= "#{@page_title || controller.controller_name} > #{controller.action_name}" %></title>
   <link href="/images/favicon.ico" type="image/x-icon" rel="icon" />
 
-  <%= stylesheet_link_tag 'scaffold' %>
-  <%= stylesheet_link_tag 'main' %>
+  <%= stylesheet_link_tag 'scaffold', 'main', :cache => true %>
+  <%= stylesheet_link_tag 'colorbox/colorbox', 'win7navi', 'sliderkit/sliderkit-core', 'jqtransformplugin/jqtransform', 'tipTip' %>
+
   <%= javascript_include_tag 'jquery.min' %>
   <%= javascript_include_tag 'rails' %>
-  <%#= javascript_include_tag :defaults, :cache => true %>
-  <%#= javascript_include_tag "jquery-1.4.2.min" %>
+  <%= javascript_include_tag 'jquery.colorbox-min', 'jquery-fonteffect-1.0.0.min',
+      'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.jqtransform', 'jquery.tipTip.minified','win7navi' %>
 
   <% javascript_tag do %>
     jQuery.noConflict(); // jQueryのコンフリクトを避ける機能をオンにする。
     var j$ = jQuery; // jQueryをj$()に書き換える。
   <% end %>
-  <%= stylesheet_link_tag 'colorbox/colorbox' %>
-  <%= javascript_include_tag "jquery.colorbox-min" %>
+
   <script>
-    j$(document).ready(function(){
-      j$(".colorbox").colorbox();
-      j$(".colorbox_top").colorbox({
+    jQuery(document).ready(function(){
+      jQuery(".colorbox").colorbox();
+      jQuery(".colorbox_top").colorbox({
         width:"900px",
         height:"750px",
       });
 
-      j$("form.jqtransform").jqTransform();
-      j$("#content_logo").FontEffect({
+      jQuery("form.jqtransform").jqTransform();
+      jQuery("#content_logo").FontEffect({
         gradient:true,
         gradientColor:"#D8D8D8",
         mirror:true,
         mirrorColor:"#298d79"
       });
-      j$("#mutter_logo").FontEffect({
+      jQuery("#mutter_logo").FontEffect({
         //outline:true,
         shadow:true,
         gradient:true,
@@ -52,7 +52,7 @@
         start:1
       });
 
-      j$("#new_board_info").tipTip({
+      jQuery("#new_board_info").tipTip({
         content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
         defaultPosition: "right",
         maxWidth: "auto",
@@ -61,8 +61,6 @@
     });
   </script>
 
-  <%= stylesheet_link_tag 'win7navi' %>
-  <%= javascript_include_tag 'win7navi' %>
   <%#= calendar_date_select_includes %>
   <script type="text/javascript">
     //calendar_date_select日本語化
@@ -75,15 +73,6 @@
     //Date.weekdays = $w("日 月 火 水 木 金 土");
     //Date.months = $w("1 2 3 4 5 6 7 8 9 10 11 12" );
   </script>
-
-  <%= javascript_include_tag 'jquery-fonteffect-1.0.0.min' %>
-  <%= javascript_include_tag 'jquery.sliderkit.1.5.1.pack' %>
-  <%= javascript_include_tag 'jquery.mousewheel.min' %>
-  <%= stylesheet_link_tag 'sliderkit/sliderkit-core' %>
-  <%= stylesheet_link_tag 'jqtransformplugin/jqtransform' %>
-  <%= javascript_include_tag 'jquery.jqtransform' %>
-  <%= stylesheet_link_tag 'tipTip' %>
-  <%= javascript_include_tag 'jquery.tipTip.minified' %>
 
   <%= csrf_meta_tag %>
 </head>
