@@ -9,26 +9,30 @@
     Header set Cache-Control "max-age=2592000, public"
   </FilesMatch>
 
-  # 1 DAYS
+  # 1 MONTH
   <FilesMatch "\.(xml|txt|css|js)$">
-    Header set Cache-Control "max-age=86400, proxy-revalidate"
+    Header set Cache-Control "max-age=2592000, proxy-revalidate"
   </FilesMatch>
 </IfModule>
 
+  ### ref
+  # 1 DAYS
+  # 86400
 
-#◎結局本番環境ではExpiresが有効になってないし（Overwriteができてない？）、また、ローカルで有効でも、リクエスト飛んでるし・・・
-### epires設定（mod_expiresがhttpd.confで有効になっていること）###
+
+### Expires設定（mod_expiresがhttpd.confで有効になっていること）###
 <IfModule mod_expires.c>
 	ExpiresActive On
 
 #★この２つ不要？
-	ExpiresByType application/xml "modification plus 1 hours"
-	ExpiresByType text/xml "modification plus 1 hours"
+	ExpiresByType application/xml "modification plus 1 days"
+	ExpiresByType text/xml "modification plus 1 days"
 
-	ExpiresByType text/css "access plus 7 days"
-	ExpiresByType application/x-javascript "access plus 7 days"
-	ExpiresByType image/jpeg "access plus 7 days"
-	ExpiresByType image/png "access plus 7 days"
+	ExpiresByType text/css "access plus 1 years"
+	ExpiresByType application/x-javascript "access plus 1 years"
+	ExpiresByType image/jpeg "access plus 1 years"
+	ExpiresByType image/gif "access plus 1 years"
+	ExpiresByType image/png "access plus 1 years"
 </IfModule>
 
 ### gzip設定
