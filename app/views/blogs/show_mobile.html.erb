@@ -1,30 +1,43 @@
-<%= link_to '自分の日記へ', blogs_path %> |
-<%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.login) unless @blog.user == current_user %>
+<%= link_to '自分の日記へ', :action => :index_mobile %> |
+<%= link_to "#{@blog.user.dispname}の日記一覧を見る", index_mobile_blogs_path(:username => @blog.user.login) unless @blog.user == current_user %>
 
 <div id="show_blog">
   <p class="bar">
-    <div style="background-color:#E1E1E1">
-      <%= @blog.title %>
-      投稿日時：<%= @blog.created_at.to_s(:long) if @blog.created_at %>
+    <div style="text-align:center;background-color:#FF924D;color:#ffffff;font-size:medium">日記：<%= @blog.title %></div>
+      <div style="text-align:right;color: rgb(0, 128, 0);">
+        投稿日時：<%= @blog.created_at.to_s(:long) if @blog.created_at %>
+      </div>
     </div>
   </p>
-  <div class="content">
+  <br />
+  <div style="background-color:#E4F2F5">
+    <br />
     <% @blog.blog_images.each do |image| -%>
       <%= image_tag(image.image(:thumb)) if image.image? %>
     <% end -%>
     <p class="text"><%= br auto_link(@blog.content) %></p>
+    <br />
   </div>
-  <%= link_to '編集する', edit_blog_path(@blog) if editable(@current_user, @blog.user) %>
+  <%= link_to '編集する', :action => :edit_mobile, :id => @blog.id if editable(@current_user, @blog.user) %>
 </div>
 
 <br />
 <br />
-<div style="background-color:#E1E1E1">コメント</div>
+<div style="text-align:center;background-color:#FF924D;color:#ffffff;font-size:medium">コメント</div>
 <div id="comments">
-  <%= render :partial => "comments" %>
-</div>
+  <% @blog.blog_comments.each do |co| -%>
+    <br />
+    <div style="background-color:#E1E1E1">
+      <span><%= co.user.dispname %></span><span style="margin-left:20px">投稿日時：<%= co.created_at.to_s(:long) %></span>
+    </div>
+    <div class="content">
+      <div class="text"><%= br auto_link(co.content) %></div>
+    </div>
+    <%= link_to "削除する", :action => :destroy_comment_confirm_mobile, :id => co.id if editable(@current_user, co.user) %><br />
+  <% end -%>
 
-<h3 class="normal">新規コメント</h3>
+<br />
+<div style="text-align:center;background-color:#FF924D;color:#ffffff;font-size:medium">新規コメント</div>
 <div id="comment_form">
 <%= form_tag url_for(:action => :create_comment, :blog_id => @blog.id) do %>
   <%= text_area_tag :comment, nil, :size => "60x5" %><br />

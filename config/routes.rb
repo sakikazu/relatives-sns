@@ -40,6 +40,8 @@ ADanRails3::Application.routes.draw do
 
   match "/blogs/destroy_comment/:id" => "blogs#destroy_comment", :as => :destroy_comment
   match "/blogs/destroy_image/:id" => "blogs#destroy_image", :as => :destroy_image
+#sakikazu memo ↓これを下でmemberでやろうとしてもできなかった。全然わからん
+  match "/blogs/destroy_mobile/:id" => "blogs#destroy_mobile", :as => :destroy_mobile
 ## できない・・・
   #resources :blogs, :collection => {:create_comment => :post}, :membar => {:destroy_comment => :delete}
   resources :blogs do
@@ -48,6 +50,10 @@ ADanRails3::Application.routes.draw do
       get :index_mobile
       get :everyone_mobile
       get :show_mobile
+      get :new_mobile
+      get :edit_mobile
+      get :destroy_comment_confirm_mobile
+      get :destroy_confirm_mobile
     end
   end
 

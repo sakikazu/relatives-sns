@@ -4,7 +4,8 @@ class MobileController < ApplicationController
   ## jpmobile memo
   #JpmobileではControllerにmobile_filterを指定することで DoCoMo、Au、SoftBankの絵文字を透過的に扱うことができる。
   #また、半角・全角の自動変換を用いる場合は 「 :hankaku=>true」
-  mobile_filter :hankaku=>true
+  ###update mobile_filter → hankaku_filter
+  hankaku_filter
   after_filter :set_header
 
   layout "mobile"

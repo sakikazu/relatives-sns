@@ -2,7 +2,7 @@ class BlogsController < ApplicationController
   before_filter :require_user
   before_filter :page_title
 
-  mobile_filter :hankaku=>true
+  hankaku_filter
 
   # GET /blogs
   # GET /blogs.xml
@@ -84,9 +84,23 @@ class BlogsController < ApplicationController
     end
   end
 
+  def new_mobile
+    @content_title = "日記を書く"
+    @blog = Blog.new
+    set_header
+    render :action => :new_mobile, :layout => "mobile"
+  end
+
   # GET /blogs/1/edit
   def edit
     @blog = Blog.find(params[:id])
+  end
+
+  def edit_mobile
+    @content_title = "日記を編集する"
+    @blog = Blog.find(params[:id])
+    set_header
+    render :action => :edit_mobile, :layout => "mobile"
   end
 
   # POST /blogs
@@ -94,6 +108,13 @@ class BlogsController < ApplicationController
   def create
     params[:blog][:user_id] = current_user.id
     @blog = Blog.new(params[:blog])
+
+    if request.mobile?
+      @blog.save
+      @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
+      redirect_to :action => :show_mobile, :id => @blog.id
+      return
+    end
 
     respond_to do |format|
       if @blog.save
@@ -103,6 +124,7 @@ class BlogsController < ApplicationController
         end
 
         @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
+
         format.html { redirect_to(@blog, :notice => '作成しました') }
         format.xml  { render :xml => @blog, :status => :created, :location => @blog }
       else
@@ -116,6 +138,12 @@ class BlogsController < ApplicationController
   # PUT /blogs/1.xml
   def update
     @blog = Blog.find(params[:id])
+
+    if request.mobile?
+      @blog.update_attributes(params[:blog])
+      redirect_to :action => :show_mobile, :id => @blog.id
+      return
+    end
 
     respond_to do |format|
       if @blog.update_attributes(params[:blog])
@@ -139,10 +167,22 @@ class BlogsController < ApplicationController
     @blog = Blog.find(params[:id])
     @blog.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(blogs_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to(blogs_url)
+  end
+
+  def destroy_mobile
+    @blog = Blog.find(params[:id])
+    @blog.destroy
+
+    set_header
+    redirect_to :action => :index_mobile, :layout => "mobile"
+  end
+
+  def destroy_confirm_mobile
+    @content_title = "削除の確認"
+    @blog = Blog.find(params[:id])
+    set_header
+    render :action => :destroy_confirm_mobile, :layout => "mobile"
   end
 
   def create_comment
@@ -157,13 +197,31 @@ class BlogsController < ApplicationController
     else
       @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT)
     end
+
+    if request.mobile?
+      set_header
+      render :action => :show_mobile, :layout => "mobile"
+    end
   end
 
   def destroy_comment
     @bcom = BlogComment.find(params[:id])
     blog = @bcom.blog
     @bcom.destroy
-    redirect_to :action => :show, :id => blog.id
+
+    if request.mobile?
+      set_header
+      redirect_to :action => :show_mobile, :id => blog.id, :layout => "mobile"
+    else
+      redirect_to :action => :show, :id => blog.id
+    end
+  end
+
+  def destroy_comment_confirm_mobile
+    @content_title = "削除の確認"
+    @bcom = BlogComment.find(params[:id])
+    set_header
+    render :action => :destroy_comment_confirm_mobile, :layout => "mobile"
   end
 
   def destroy_image

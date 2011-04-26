@@ -1,0 +1,11 @@
+投稿者：<%= @bcom.user.dispname %><br />
+投稿日時：<%= @bcom.created_at.to_s(:long) %><br />
+コメント内容：<br />
+<div style="background-color:#E1E1E1">
+  <%= @bcom.content %>
+</div>
+<br /><br />
+こちらの内容を削除してもよろしいでしょうか？
+<br />
+<%= link_to "削除する", :action => :destroy_comment, :id => @bcom.id %> | 
+<%= link_to "キャンセルする", :action => :show_mobile, :id => @bcom.blog.id %>
