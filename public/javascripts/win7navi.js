@@ -5,18 +5,18 @@
  * @copyright (c) 2009 Eduardo D. Sada (www.coders.me)
  * @license   MIT - http://es.wikipedia.org/wiki/Licencia_MIT
 */
-j$(document).ready(function(){
+jQuery(document).ready(function(){
 
-  if ( document.all && !window.opera && !window.XMLHttpRequest && j$.browser.msie ) {
+  if ( document.all && !window.opera && !window.XMLHttpRequest && jQuery.browser.msie ) {
     // stupid jquery ie6 detection
       try { document.execCommand("BackgroundImageCache", false, true); }
       catch(err) {}
   }
   
-  j$('.win7 a').each(function() {
-    var el = j$(this);
+  jQuery('.win7 a').each(function() {
+    var el = jQuery(this);
     
-    el.win7BG = j$(document.createElement('div')).css({'opacity': 0});
+    el.win7BG = jQuery(document.createElement('div')).css({'opacity': 0});
     el.win7BG.insertBefore(el);
         
     el.mousemove(function(ev) {
