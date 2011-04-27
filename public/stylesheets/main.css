@@ -171,18 +171,22 @@ body {
 #mutter{
   width: 700px;
   /*margin: 0px auto 30px;*/
-  margin: 0px 25px 0px 0px;
+  margin: 10px 25px 0px 0px;
   /*border: 1px solid blue;*/
   float: left;
 }
 #mutter #form{
-  height: 120px;
+  height: 130px;
 	background:url(../images/mutter.gif) repeat-x center left;
   margin: 0px 0px 15px 10px;
 }
-#mutter #form input{
-  /*width: 80px;*/
-  /*height: 30px;*/
+#mutter #form textarea{
+  padding: 8px;
+  font-size: 1.2em;
+}
+#mutter #form input.post{
+  width: 80px;
+  height: 40px;
 }
 #mutter #form_search{
   margin: 20px;

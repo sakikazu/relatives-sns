@@ -8,12 +8,12 @@
   <link href="/images/favicon.ico" type="image/x-icon" rel="icon" />
 
   <%= stylesheet_link_tag 'scaffold', 'main', :cache => true %>
-  <%= stylesheet_link_tag 'colorbox/colorbox', 'win7navi', 'sliderkit/sliderkit-core', 'jqtransformplugin/jqtransform', 'tipTip' %>
+  <%= stylesheet_link_tag 'colorbox/colorbox', 'win7navi', 'sliderkit/sliderkit-core', 'tipTip' %>
 
   <%= javascript_include_tag 'jquery.min' %>
   <%= javascript_include_tag 'rails' %>
   <%= javascript_include_tag 'jquery.colorbox-min', 'jquery-fonteffect-1.0.0.min',
-      'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.jqtransform', 'jquery.tipTip.minified','win7navi' %>
+      'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi' %>
 
   <% javascript_tag do %>
     jQuery.noConflict(); // jQueryのコンフリクトを避ける機能をオンにする。
@@ -28,7 +28,6 @@
         height:"750px",
       });
 
-      jQuery("form.jqtransform").jqTransform();
       jQuery("#content_logo").FontEffect({
         gradient:true,
         gradientColor:"#D8D8D8",
