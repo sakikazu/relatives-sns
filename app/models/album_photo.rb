@@ -15,6 +15,6 @@ class AlbumPhoto < ActiveRecord::Base
 
   #全写真からただランダムに抽出する
   def self.rnd_photos
-    self.includes(:album).order("RAND()").limit(30)
+    self.includes(:album).order("RAND()").limit(30).map{|photo| photo if photo.album.present?}
   end
 end
