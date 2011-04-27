@@ -131,7 +131,6 @@ class AlbumPhotosController < ApplicationController
     com = AlbumPhotoComment.find(params[:id])
     @album_photo = com.album_photo
     com.destroy
-    render :partial => "comments"
 
     ### sakikazu memo
     #AlbumPhotoCommentのmodelには
