@@ -15,11 +15,6 @@
   <%= javascript_include_tag 'jquery.colorbox-min', 'jquery-fonteffect-1.0.0.min',
       'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi' %>
 
-  <% javascript_tag do %>
-    jQuery.noConflict(); // jQueryのコンフリクトを避ける機能をオンにする。
-    var j$ = jQuery; // jQueryをj$()に書き換える。
-  <% end %>
-
   <script>
     jQuery(document).ready(function(){
       jQuery(".colorbox").colorbox();

@@ -1,11 +1,11 @@
 <script type="text/javascript">
-j$(document).ready(function(){
-  j$('#show').click(function(){
-    j$('#title_index_area').toggle(50, function(){
-      if (j$('#title_index_area').is(":visible")) {
-        j$('#show').text('非表示');
+$(document).ready(function(){
+  $('#show').click(function(){
+    $('#title_index_area').toggle(50, function(){
+      if ($('#title_index_area').is(":visible")) {
+        $('#show').text('非表示');
       }else {
-        j$('#show').text('再表示');
+        $('#show').text('再表示');
       }
     });
   });

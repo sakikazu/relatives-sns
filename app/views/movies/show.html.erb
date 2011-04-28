@@ -34,7 +34,7 @@
 
 <h3 class="normal">新規コメント</h3>
 <div id="comment_form">
-<%# form_tag :remote => true, :url => {:action => :create_comment, :movie_id => @movie.id}, :update => "comments", :condition => "j$('#comment').val() != ''", :complete => "j$('#comment').val('')" do %>
+<%# form_tag :remote => true, :url => {:action => :create_comment, :movie_id => @movie.id}, :update => "comments", :condition => "$('#comment').val() != ''", :complete => "$('#comment').val('')" do %>
 <%= form_tag url_for(:action => :create_comment, :movie_id => @movie.id), :remote => true do %>
   <%= text_area_tag :comment, nil, :size => "60x5" %><br />
   <%= submit_tag "投稿する" %>

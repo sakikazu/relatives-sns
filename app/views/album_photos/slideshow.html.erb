@@ -31,7 +31,7 @@
 
 <h3 class="normal">新規コメント</h3>
 <div id="comment_form">
-<%#= form_for @album_photo_comment, :remote => true, :update => "comments", :condition => "j$('#album_photo_comment_content').val() != ''", :complete => "j$('#album_photo_comment_content').val('')" do |f| %>
+<%#= form_for @album_photo_comment, :remote => true, :update => "comments", :condition => "$('#album_photo_comment_content').val() != ''", :complete => "$('#album_photo_comment_content').val('')" do |f| %>
 <%= form_for @album_photo_comment, :remote => true do |f| %>
   <%= f.text_area :content, :size => "60x4" %><br />
   <%= f.hidden_field :user_id %>

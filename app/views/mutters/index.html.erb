@@ -1,11 +1,11 @@
 <script type="text/javascript">
-j$(document).ready(function(){
-  j$('#show_more').click(function(){
-    j$('#hide_range').toggle(300, function(){
-      if (j$('#hide_range').is(":visible")) {
-        j$('#show_more').text('隠す');
+$(document).ready(function(){
+  $('#show_more').click(function(){
+    $('#hide_range').toggle(300, function(){
+      if ($('#hide_range').is(":visible")) {
+        $('#show_more').text('隠す');
       }else {
-        j$('#show_more').text('もっと見る');
+        $('#show_more').text('もっと見る');
       }
     });
   });
@@ -13,7 +13,7 @@ j$(document).ready(function(){
 </script>
 
 <div id="mutter">
-  <%# remote_form_for @mutter, :html => {:multipart => true}, :update => "mutter_data", :condition => "j$('#mutter_content').val() != ''", :complete => "j$('#mutter_content').val('');" do |f| -%>
+  <%# remote_form_for @mutter, :html => {:multipart => true}, :update => "mutter_data", :condition => "$('#mutter_content').val() != ''", :complete => "$('#mutter_content').val('');" do |f| -%>
   <div id="form">
   <%= form_for @mutter, :html => {:multipart => true} do |f| -%>
     <table><tr>

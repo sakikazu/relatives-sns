@@ -3,9 +3,9 @@
 <%= javascript_include_tag 'uploadify/swfobject' %>
 
 <script type="text/javascript">// <![CDATA[
-  j$(document).ready(function() {
+  $(document).ready(function() {
     //uploadify
-    j$('#uploadify').uploadify({
+    $('#uploadify').uploadify({
       'uploader' : '<%= "/javascripts/uploadify/" %>uploadify.swf',
       'script' : '/album_photos/create',
       'scriptData' : {'album_id':<%= @album.id %>, 'user_id': <%= current_user.id %>},
@@ -27,15 +27,15 @@
 
     });
 
-    j$('#album_id').bind('change', function(){
-      j$('#uploadify').fileUploadSettings('scriptData','&album_id='+j$(this).val());
+    $('#album_id').bind('change', function(){
+      $('#uploadify').fileUploadSettings('scriptData','&album_id='+$(this).val());
     });
-    j$('#user_id').bind('change', function(){
-      j$('#uploadify').fileUploadSettings('scriptData','&user_id='+j$(this).val());
+    $('#user_id').bind('change', function(){
+      $('#uploadify').fileUploadSettings('scriptData','&user_id='+$(this).val());
     });
 
     //colorbox
-    j$("a[rel='colorbox']").colorbox({
+    $("a[rel='colorbox']").colorbox({
       slideshow:true,
       slideshowSpeed:8000,
       slideshowAuto: false,

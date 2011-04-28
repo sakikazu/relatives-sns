@@ -2,14 +2,14 @@
 <%= javascript_include_tag "jPlayer/js/jquery.jplayer.min" %>
 
 <script type="text/javascript"> 
-j$(document).ready(function(){
+$(document).ready(function(){
 
 	// Local copy of jQuery selectors, for performance.
-	var jpPlayTime = j$("#jplayer_play_time");
-	var jpTotalTime = j$("#jplayer_total_time");
+	var jpPlayTime = $("#jplayer_play_time");
+	var jpTotalTime = $("#jplayer_total_time");
 
 //[memo] firefox3.6では動作しなかった(Chrome、IE8はOK)
-	j$("#jquery_jplayer").jPlayer({
+	$("#jquery_jplayer").jPlayer({
 		ready: function () {
 			this.element.jPlayer("setFile", "<%= root_url %>others/he.mp3");
 			//this.element.jPlayer("setFile", "http://www.miaowmusic.com/audio/mp3/Miaow-07-Bubble.mp3");
@@ -23,8 +23,8 @@ j$(document).ready(function(){
 		preload: 'none'
 	})
 	.jPlayer("onProgressChange", function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
-		jpPlayTime.text(j$.jPlayer.convertTime(playedTime));
-		jpTotalTime.text(j$.jPlayer.convertTime(totalTime));
+		jpPlayTime.text($.jPlayer.convertTime(playedTime));
+		jpTotalTime.text($.jPlayer.convertTime(totalTime));
 	})
 //??
 //	.jPlayer("onSoundComplete", function() {
