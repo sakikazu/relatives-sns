@@ -90,7 +90,7 @@ $(document).ready(function(){
     <p class="title">みんなのログイン情報(直近10人分)</p>
     <table>
     <% @users.each do |user| -%>
-      <tr><td><%= user.current_login_at.to_s(:short) if user.current_login_at %></td><td><%= user.dispname(User::FULLNICK) %></td></tr>
+      <tr><td><%= user.last_request_at.to_s(:short) if user.last_request_at %></td><td><%= user.dispname(User::FULLNICK) %></td></tr>
     <% end -%>
     </table>
   </div>
