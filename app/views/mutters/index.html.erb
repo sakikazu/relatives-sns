@@ -87,10 +87,13 @@ $(document).ready(function(){
   </div>
 
   <div id="current_login_user">
-    <p class="title">みんなのログイン情報(直近10人分)</p>
+    <p class="title">みんなのログイン情報(直近15人分)</p>
     <table>
-    <% @users.each do |user| -%>
-      <tr><td><%= user.last_request_at.to_s(:short) if user.last_request_at %></td><td><%= user.dispname(User::FULLNICK) %></td></tr>
+    <% @login_users.each do |user| -%>
+      <tr>
+        <td><%= user.last_request_at.to_s(:short) if user.last_request_at %></td>
+        <td><%= user.dispname(User::FULLNICK) %></td>
+      </tr>
     <% end -%>
     </table>
   </div>

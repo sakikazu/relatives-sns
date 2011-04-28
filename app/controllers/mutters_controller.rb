@@ -50,7 +50,7 @@ class MuttersController < ApplicationController
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
     @mutters = Mutter.includes(:user).order("id DESC").limit(30)
-    @users = User.includes(:user_ext).order("current_login_at DESC").limit(10)
+    @login_users = User.includes(:user_ext).order("last_request_at DESC").limit(15)
     @updates = UpdateHistory.includes(:user).sort_updated.limit(10)
     @album_thumbs = AlbumPhoto.rnd_photos
 
