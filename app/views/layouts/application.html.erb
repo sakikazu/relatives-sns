@@ -18,10 +18,6 @@
   <script>
     jQuery(document).ready(function(){
       jQuery(".colorbox").colorbox();
-      jQuery(".colorbox_top").colorbox({
-        width:"900px",
-        height:"750px",
-      });
 
       jQuery("#content_logo").FontEffect({
         gradient:true,
@@ -38,20 +34,28 @@
         gradientLength:20
       });
 
-      jQuery(".carousel-demo2").sliderkit({
-        shownavitems:6,
-        scroll:1,
-        mousewheel:true,
-        circular:true,
-        start:1
-      });
-
       jQuery("#new_board_info").tipTip({
         content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
         defaultPosition: "right",
         maxWidth: "auto",
         delay: 0,
       });
+
+      slide_effect = (function(){
+        jQuery(".colorbox_top").colorbox({
+          width:"900px",
+          height:"750px",
+        });
+
+        jQuery(".carousel-demo2").sliderkit({
+          shownavitems:6,
+          scroll:1,
+          mousewheel:true,
+          circular:true,
+          start:0
+        });
+      });
+      slide_effect();
     });
   </script>
 
@@ -78,28 +82,22 @@
   <div style="float:left;margin: 5px 0px 10px 30px">
     <%= render :partial => "layouts/top" %>
   </div>
+
+  <div id="slider_update_btn">
+    <%= form_tag({:action => :slider_update}, :remote => true) do %>
+      <%= submit_tag "写真を変更する" %> 
+    <% end -%>
+    <div id="slider_update_info" style="display:none">↓ 変更しました ↓</div>
+  </div>
+
   <div style="float:right;margin: 10px 30px 0px 0px;color:gray;font-weight:bold;line-height:23px">
     あなたがアクション(日記、コメントなど)すれば<br />
     他の人が楽しめてアクションしたくなります。<br />
     そのアクションによって、またあなたも楽しめるでしょう。<br />
     そういうサイクルができたら最高です。
   </div>
-  <div class="sliderkit carousel-demo2">
-    <div class="sliderkit-nav">
-      <div class="sliderkit-nav-clip">
-        <ul>
-          <% @album_thumbs.each do |thumb| -%>
-            <li>
-              <%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title),
-              {:controller => :album_photos, :action => :slideshow, :id => thumb.id, :top => 1},
-              {:class => "colorbox_top", :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
-            </li>
-          <% end -%>
-        </ul>
-      </div>
-      <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-prev"><a href="#" title="Scroll to the left"><span>Previous</span></a></div>
-      <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-next"><a href="#" title="Scroll to the right"><span>Next</span></a></div>
-    </div>
+  <div id="slider_photo">
+    <%= render "slider" %>
   </div>
 <% else -%>
   <div style="float:left;margin-left: 15px">

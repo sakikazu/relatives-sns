@@ -1,0 +1,18 @@
+<div class="sliderkit carousel-demo2">
+  <div class="sliderkit-nav">
+    <div class="sliderkit-nav-clip">
+      <ul>
+        <% @album_thumbs.each do |thumb| -%>
+          <li>
+            <%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title),
+            {:controller => :album_photos, :action => :slideshow, :id => thumb.id, :top => 1},
+            {:class => "colorbox_top", :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
+          </li>
+        <% end -%>
+      </ul>
+    </div>
+    <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-prev"><a href="#" title="Scroll to the left"><span>Previous</span></a></div>
+    <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-next"><a href="#" title="Scroll to the right"><span>Next</span></a></div>
+  </div>
+</div>
+

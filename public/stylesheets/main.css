@@ -143,6 +143,24 @@ body {
  *  mutter
  *---------------------------------*/
 
+#slider_update_btn{
+  float:left;
+  margin: 70px 0px 0px 200px
+}
+#slider_update_btn input{
+  height: 40px;
+  width: 120px;
+  background-color:#EC8103;
+  color: #fff;
+}
+#slider_update_info{
+  font-size: 20px;
+  color: red;
+  font-weight: bold;
+  margin: 10px;
+}
+
+/* slider-kit */
 .carousel-demo2{width:1070px;height:130px;}
 
 /* Navbar */

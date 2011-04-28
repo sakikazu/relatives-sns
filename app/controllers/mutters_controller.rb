@@ -140,4 +140,8 @@ class MuttersController < ApplicationController
     @uhs = UpdateHistory.sort_updated.paginate(:page => params[:page], :per_page => 50)
   end
 
+  def slider_update
+    @album_thumbs = AlbumPhoto.rnd_photos
+  end
+
 end
