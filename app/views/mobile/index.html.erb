@@ -1,9 +1,8 @@
 <div style="font-size:small">
-<%= form_for @mutter, :url => {:controller => "mobile", :action => :create}, :html => {:multipart => true} do |f| -%>
-  <div style="font-weight:bold;color:rgb(0, 128, 0">つぶやく(絵文字はまだ使えません)</div>
+<%= form_for @mutter, :url => {:controller => "mobile", :action => :create} do |f| -%>
+  <div style="font-weight:bold;color:rgb(0, 128, 0">つぶやく</div>
   <%= f.text_area :content, :size => "15x2" %><br /><br />
-  <div style="font-weight:bold;color:rgb(0, 128, 0;">画像(最近の携帯のみ)</div>
-  <%= f.file_field :image %><br />
+  <div style="font-weight:bold;color:rgb(0, 128, 0;">※携帯から画像はアップロードできません</div><br />
   <%= f.hidden_field :user_id %>
   <%= f.submit "投稿する" %>
 <% end -%>

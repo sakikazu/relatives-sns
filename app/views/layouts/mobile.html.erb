@@ -13,7 +13,7 @@
 <% if !current_user %>
   <%= link_to "ログイン", new_user_session_path %> |
 <% else %>
-  <%= link_to "ログアウト", {:controller => :user_sessions, :action => :destroy} %> / 
+  <%= link_to "ログアウト", {:controller => :user_sessions, :action => :destroy} %><br />
   ユーザー：<%= current_user.login %>
 <% end %>
 
