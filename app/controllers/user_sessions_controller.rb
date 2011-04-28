@@ -1,7 +1,7 @@
 class UserSessionsController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
   before_filter :require_user, :only => :destroy
-  layout "blank", :only => :new
+  layout "simple", :only => :new
   
   def new
     @page_title = "ログイン"
@@ -16,7 +16,7 @@ class UserSessionsController < ApplicationController
       flash[:notice] = "ログインしました"
       redirect_back_or_default root_url
     else
-      render :layout => "blank", :action => :new
+      render :layout => "simple", :action => :new
     end
   end
   

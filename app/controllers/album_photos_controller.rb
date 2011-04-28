@@ -1,6 +1,6 @@
 class AlbumPhotosController < ApplicationController
   before_filter :require_user, :except => [:create] #sakikazu memo 特に意味ないかな・・for uploadify
-  #layout "blank", :only => :slideshow
+  #layout "simple", :only => :slideshow
 
   # GET /album_photos
   # GET /album_photos.xml
@@ -104,7 +104,7 @@ class AlbumPhotosController < ApplicationController
     @from_top_flg = true if params[:top].present?
     @album_photo = AlbumPhoto.find(params[:id])
     @album_photo_comment = AlbumPhotoComment.new(:user_id => current_user.id, :album_photo_id => @album_photo.id)
-    render :layout => false
+    render :layout => "simple"
   end
 
   def update_from_slideshow

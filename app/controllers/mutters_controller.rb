@@ -106,11 +106,6 @@ class MuttersController < ApplicationController
     end
   end
 
-  def album_info
-    @photo = AlbumPhoto.find(params[:photo_id])
-    render :layout => false
-  end
-
   def create
     mutter = Mutter.new(params[:mutter])
     respond_to do |format|
