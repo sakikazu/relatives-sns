@@ -33,16 +33,16 @@ $('#background_black')
         'position': 'fixed',
         'z-index': '101',
         'top':'<%= toplen %>px',
-        'right':'-600px',
-        'font-size': '60px',
-        'line-height': '100px',
+        'right':'-'+$(this).width()+'px', //ブロック幅分を設定(sakikazu やり方覚えておきたい)
+        'font-size': '50px',
+        'line-height': '80px',
         'color': 'white',
       })
-      .delay(<%= i*1200 %>).animate({'right':'2200px'}, 10000);
+      .delay(<%= i*1200 %>).animate({'right':'3000px'}, 14000);
   
     $('.moji').css({
       'color': 'yellow',
-      'font-size': '80px',
+      'font-size': '60px',
     });
 
   <% end -%>
