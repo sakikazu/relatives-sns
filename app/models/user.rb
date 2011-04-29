@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   acts_as_authentic
 
   has_many :mutters
+  has_many :celebrations
   has_one :user_ext
 
   after_save :rel_save

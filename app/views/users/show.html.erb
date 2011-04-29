@@ -34,4 +34,13 @@
   <tr><th>今欲しいもの</th><td><%= @user.user_ext.hosii %></td></tr>
   <tr><th>今行きたいところ</th><td><%= @user.user_ext.ikitai %></td></tr>
   <tr><th>今やりたいこと</th><td><%= @user.user_ext.yaritai %></td></tr>
+  <tr><th>お祝い履歴</th><td>
+    <% @user.celebrations.each do |c| %>
+      <%= c.anniversary_at %>
+      <%= form_tag({:controller => :mutters, :action => :celebration, :celebration_id => c.id}, :remote => true) do %> 
+        <%= submit_tag 'お祝いを見る' %>
+      <% end -%> 
+      <br />
+    <% end -%>
+  </td></tr>
 </table>

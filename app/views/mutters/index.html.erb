@@ -63,16 +63,29 @@ $(document).ready(function(){
     <table>
     <% @kinen.each do |k| -%>
       <tr>
-        <td><%= "#{k[:name]}さん" %></td>
+        <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
         <td><b>
         <% if k[:count] == 0 -%>
-          本日
+          <span class="honzitu">本日</span>
         <% else -%>
           <%= "あと#{k[:count]}日で" %>
         <% end -%>
         </b></td>
         <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
       </tr>
+      <% if k[:count] == 0 -%>
+        <tr class="anniversary"><td colspan=3>
+          <div style="float:left;font-size:17px;height:30px">
+          <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id}, :class => "colorbox" %>
+          </div>
+          <div style="float:left;margin-left:20px">
+            <%= form_tag({:action => :celebration, :user_id => k[:user].id}, :remote => true) do %> 
+              <%= submit_tag 'お祝いを見る' %>
+            <% end -%> 
+          </div>
+          <div style="clear:both"></div>
+        </td></tr>
+      <% end -%> 
     <% end -%> 
     </table>
     <div style="margin-top:5px;text-align:center">(生年月日を登録している人のみ)</div>

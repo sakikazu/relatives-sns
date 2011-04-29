@@ -292,11 +292,42 @@ body {
 #kinenbi table{
   margin: auto;
 }
+#kinenbi .honzitu{
+  font-size:150%;
+  margin: 5px;
+  font-weight:bold;
+  color: Orange;
+}
 #kinenbi .main{
   font-size:130%;
   margin: 5px;
   font-weight:bold;
   color:red;
+}
+#kinenbi table tr.anniversary{
+  height: 70px;
+  text-align: center;
+}
+#kinenbi table tr.anniversary input{
+  height: 33px;
+  width: 90px;
+}
+#celebration_dialog{
+  height: 300px;
+  width: 600px;
+}
+#celebration_dialog form{
+  margin-top: 20px;
+}
+#celebration_dialog textarea{
+  padding: 8px;
+  font-size: 1.2em;
+}
+#celebration_dialog input.post{
+  width: 80px;
+  height: 40px;
+  font-size: 20px;
+  margin: 15px 0 25px 0;
 }
 
 

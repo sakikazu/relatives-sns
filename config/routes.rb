@@ -79,6 +79,9 @@ ADanRails3::Application.routes.draw do
 
   match "/mutters/user/:user_id" => "mutters#user", :as => :mutter_by_user
   match "/mutters/slider_update" => "mutters#slider_update"
+  match "/mutters/celebration" => "mutters#celebration"
+  match "/mutters/celebration_new" => "mutters#celebration_new"
+  match "/mutters/celebration_create" => "mutters#celebration_create"
   resources :mutters do
     collection do
       get :update_history_all

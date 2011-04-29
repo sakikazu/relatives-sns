@@ -89,7 +89,7 @@ class MuttersController < ApplicationController
         #年齢が登録記念日に該当するなら記念日名を、そうでないなら「誕生日」と出力
         years = (birday_tmp - ue.birth_day) / 365
         kinen_name =  kinenbirth_array[years] || "誕生日"
-        @kinen << {:name => ue.user.dispname(User::FULLNAME), :count => diffday, :kinen_name => kinen_name}
+        @kinen << {:user => ue.user, :count => diffday, :kinen_name => kinen_name}
       end
 
       ##--日齢--##
@@ -98,7 +98,7 @@ class MuttersController < ApplicationController
         #記念日齢が10日以内なら表示
         if diffday >= 0 and diffday <= 10
           kinen_name = "#{k}日齢"
-          @kinen << {:name => ue.user.dispname(User::FULLNAME), :count => diffday, :kinen_name => kinen_name}
+          @kinen << {:user => ue.user, :count => diffday, :kinen_name => kinen_name}
           #初めの日齢のみ表示
           break 
         end
@@ -137,6 +137,44 @@ class MuttersController < ApplicationController
 
   def slider_update
     @album_thumbs = AlbumPhoto.rnd_photos
+  end
+
+  def celebration_new
+    user = User.find(params[:user_id])
+    celeb = Celebration.where(:anniversary_at => Date.today, :user_id => user.id).first
+    if celeb.present?
+      if celeb.mutters.where(:user_id => current_user.id).present?
+        @flag = false
+      else
+        @mutter = celeb.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
+        @flag = true
+      end
+      @celebration = celeb
+    else
+      @celebration = Celebration.new(:anniversary_at => Date.today, :user_id => user.id)
+      @mutter = @celebration.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
+      @flag = true
+    end
+    render :layout => "simple"
+  end
+
+  def celebration_create
+    @celebration = Celebration.where(params[:celebration]).first
+    if @celebration.blank?
+      @celebration = Celebration.create(params[:celebration])
+    end
+    params[:mutter][:celebration_id] = @celebration.id
+    Mutter.create(params[:mutter])
+    redirect_to({:action => :index}, :notice => 'お祝いをしました。「お祝いを見る」から確認できます。')
+  end
+
+  def celebration
+    if params[:celebration_id].present?
+      cel = Celebration.find(params[:celebration_id])
+    else
+      cel = Celebration.where(:anniversary_at => Date.today, :user_id => params[:user_id]).first
+    end
+    @celeb_mutters = cel.present? ? cel.mutters : []
   end
 
 end

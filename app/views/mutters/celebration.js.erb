@@ -1,0 +1,63 @@
+$('#background_black')
+  .css({
+    'display': 'block',
+    'z-index': '100',
+    'background-color': 'black',
+    'opacity': '0.8',
+    'cursor': 'pointer',
+    'position': 'fixed',
+    'overflow': 'hidden',
+    'top':'0px',
+    'left':'0px',
+    'width':'100%',
+    'height':'100%',
+  })
+  .click(function(){
+    $(this).hide();
+    $('.celebration_msg').remove();
+  });
+
+<% if @celeb_mutters.size > 0 -%>
+  <% j = 0; toplen = 0 -%>
+  <% @celeb_mutters.each_with_index do |m, i| -%>
+    $('#background_black')
+      <!-- ## 画像がうまく表示できない -->
+      <!-- .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><%= m.user.dispname(User::FULLNICK) %><%= image_tag(m.user.user_ext.image(:small)) %><br /><%= auto_link(m.content).html_safe %></div>') -->
+      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><%= m.user.dispname(User::FULLNICK) %><br /><span class="moji"><%= auto_link(m.content).html_safe %></span></div>')
+
+    <% j=0 if toplen > 250 -%>
+    <% toplen = 20 + j * 120 -%>
+    <% j+=1 -%>
+    $('#celebration_msg<%= i %>')
+      .css({
+        'position': 'fixed',
+        'z-index': '101',
+        'top':'<%= toplen %>px',
+        'right':'-600px',
+        'font-size': '60px',
+        'line-height': '100px',
+        'color': 'white',
+      })
+      .delay(<%= i*1200 %>).animate({'right':'2200px'}, 10000);
+  
+    $('.moji').css({
+      'color': 'yellow',
+      'font-size': '80px',
+    });
+
+  <% end -%>
+
+<% else -%>
+  $('#background_black')
+    .after('<div class="celebration_msg">まだお祝いなし。<br />自分でも祝えるよ＞＜</div>');
+  $('.celebration_msg')
+    .css({
+      'position': 'fixed',
+      'z-index': '101',
+      'top':'150px',
+      'right':'300px',
+      'line-height': '70px',
+      'font-size': '50px',
+      'color': 'white',
+    });
+<% end -%>

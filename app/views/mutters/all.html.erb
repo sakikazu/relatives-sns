@@ -7,7 +7,7 @@
   <tr>
     <td class='time'><%= m.created_at.to_s(:long_br).html_safe %></td>
     <td class='name'><%= link_to m.user.dispname, {:action => "user", :user_id => m.user.id}, {:title => m.user.dispname(User::FULLNAME)} %></td>
-    <td class='content'><%= auto_link(m.content).html_safe %></td>
+    <td class='content'><%= auto_link(m.view_content).html_safe %></td>
     <td class='image'><%= link_to(image_tag(m.image(:thumb)), m.image(:large), {:class => 'colorbox'}) if m.image? %></td>
     <td class='delete'><%= link_to("削除", m, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, m.user) %></td>
   </tr>
