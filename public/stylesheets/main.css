@@ -25,15 +25,27 @@
 }
 a.page_down {
   padding: 9px 20px;
-  color: white;
   font-size: 17px;
   font-weight: bold;
   text-decoration: none;
-  /*background: #146EB4;*/
+  color: white;
   background: #EC8103;
+  /*background: #146EB4;*/
 }
 a.page_down:hover {
   /*background: #6090C8;*/
+  background: #F5B058;
+}
+a.normal-btn{
+  padding: 5px 15px;
+  margin:0px 5px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  background: #EC8103;
+}
+a.normal-btn:hover {
   background: #F5B058;
 }
 .notice{
@@ -201,6 +213,8 @@ body {
 #mutter #form textarea{
   padding: 8px;
   font-size: 1.2em;
+  width: 550px;
+  height: 40px;
 }
 #mutter #form input.post{
   width: 80px;
@@ -292,6 +306,12 @@ body {
 #kinenbi table{
   margin: auto;
 }
+#kinenbi table tr{
+  height: 35px;
+}
+#kinenbi table tr.exist-border td{
+  border-bottom:1px gray solid;
+}
 #kinenbi .honzitu{
   font-size:150%;
   margin: 5px;
@@ -305,8 +325,12 @@ body {
   color:red;
 }
 #kinenbi table tr.anniversary{
-  height: 70px;
+  height: 30px;
   text-align: center;
+}
+#kinenbi table tr.anniversary td{
+  padding-bottom:15px;
+  border-bottom:1px gray solid;
 }
 #kinenbi table tr.anniversary input{
   height: 33px;

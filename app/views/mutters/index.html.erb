@@ -19,7 +19,7 @@ $(document).ready(function(){
     <table><tr>
     <td width="120px">
     <b style="font-family:'HGP創英角ﾎﾟｯﾌﾟ体';font-size:160%" id="mutter_logo">今なんしょって？</b><br />
-    <%= f.text_area :content, :size => "66x2" %>
+    <%= f.text_area :content %>
     <%= f.file_field :image %>
     </td>
     <td>
@@ -62,33 +62,31 @@ $(document).ready(function(){
   <div id="kinenbi">
     <table>
     <% @kinen.each do |k| -%>
-      <tr>
-        <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
-        <td><b>
-        <% if k[:count] == 0 -%>
-          <span class="honzitu">本日</span>
-        <% else -%>
-          <%= "あと#{k[:count]}日で" %>
-        <% end -%>
-        </b></td>
-        <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
-      </tr>
       <% if k[:count] == 0 -%>
+        <tr>
+          <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
+          <td>
+            <span class="honzitu">本日</span>
+          </td>
+          <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
+        </tr>
         <tr class="anniversary"><td colspan=3>
-          <div style="float:left;font-size:17px;height:30px">
-          <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id}, :class => "colorbox" %>
-          </div>
-          <div style="float:left;margin-left:20px">
-            <%= form_tag({:action => :celebration, :user_id => k[:user].id}, :remote => true) do %> 
-              <%= submit_tag 'お祝いを見る' %>
-            <% end -%> 
-          </div>
-          <div style="clear:both"></div>
+          <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id}, :class => "colorbox normal-btn" %>
+          <%= link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id}, :remote => true, :class => "normal-btn" %>
         </td></tr>
-      <% end -%> 
+
+      <% else -%>
+        <tr class="exist-border">
+          <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
+          <td>
+            <b><%= "あと#{k[:count]}日で" %></b>
+          </td>
+          <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
+        </tr>
+      <% end -%>
     <% end -%> 
     </table>
-    <div style="margin-top:5px;text-align:center">(生年月日を登録している人のみ)</div>
+    <div style="margin-top:20px;text-align:center">(生年月日を登録している人のみ)</div>
   </div>
     
   <div id="update_history">
