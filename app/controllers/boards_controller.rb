@@ -25,6 +25,26 @@ class BoardsController < ApplicationController
     end
   end
 
+  def index_mobile
+    @content_title = "掲示板"
+    @sort = params[:sort].blank? ? 1 : params[:sort].to_i
+    case @sort 
+    when 1
+      buf = BoardComment.maximum(:created_at, :group => :board_id)
+      boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
+      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.paginate(:page => params[:page], :per_page => 7)
+    when 2
+      @boards = Board.paginate(:page => params[:page], :per_page => 7, :order => "created_at DESC")
+    else
+      buf = BoardComment.maximum(:created_at, :group => :board_id)
+      boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
+      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.paginate(:page => params[:page], :per_page => 7)
+    end
+
+    set_header
+    render :action => :index_mobile, :layout => "mobile"
+  end
+
   # GET /boards/1
   # GET /boards/1.xml
   def show
@@ -34,6 +54,12 @@ class BoardsController < ApplicationController
       format.html # show.html.erb
       format.xml  { render :xml => @board }
     end
+  end
+
+  def show_mobile
+    @board = Board.find(params[:id])
+    set_header
+    render :action => :show_mobile, :layout => "mobile"
   end
 
   # GET /boards/new
@@ -114,11 +140,31 @@ class BoardsController < ApplicationController
     redirect_to :action => :show, :id => @board.id
   end
 
+  def create_comment_mobile
+    @board = Board.find(params[:board_id])
+    @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
+
+    #UpdateHistory
+    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :assetable_id => @board.id})
+    if uh
+      uh.update_attributes(:updated_at => Time.now)
+    else
+      @board.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT)
+    end
+
+    redirect_to({:action => :show_mobile, :id => @board.id}, :notice => "コメントを投稿しました")
+  end
+
   def destroy_comment
     @bcom = BoardComment.find(params[:id])
     board = @bcom.board
     @bcom.destroy
-    redirect_to({:action => :show, :id => board.id}, :notice => "コメントを削除しました")
+ 
+    if request.mobile?
+      redirect_to({:action => :show_mobile, :id => board.id}, :notice => "コメントを削除しました")
+    else
+      redirect_to({:action => :show, :id => board.id}, :notice => "コメントを削除しました")
+    end
   end
 
 private

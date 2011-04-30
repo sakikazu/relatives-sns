@@ -37,6 +37,10 @@ ADanRails3::Application.routes.draw do
   resources :boards do
     collection do
       post :create_comment
+      post :create_comment_mobile
+      get :index_mobile
+    end
+    member do
       get :show_mobile
     end
   end

@@ -22,7 +22,7 @@
 <%= link_to "トップ", :controller => "mobile", :action => :index %> /
 <%= link_to "更新情報", :controller => "mobile", :action => :update_history %> /
 <%= link_to "日記", :controller => "blogs", :action => :index_mobile %> /
-<%= link_to "掲示板", :controller => "boards", :action => :index %>
+<%= link_to "掲示板", :controller => "boards", :action => :index_mobile %>
 <br /><br />
 <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium"><%= @content_title.html_safe if @content_title.present? %></div>
 <br />

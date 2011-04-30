@@ -1,0 +1,34 @@
+<div style="font-size:small">
+  <div style="font-weight:bold;color: rgb(0, 128, 0);">並び替える</div>
+  <% [["最新コメント順", 1], ["作成日時順", 2]].each do |n, i| -%>
+    <% if @sort == i -%>
+      <%= "<b style='color:red'>★ #{n} ★</b>".html_safe %> |
+    <% else -%>
+      <%= link_to n, :action => :index_mobile, :sort => i %> |
+    <% end -%>
+  <% end -%>
+  <br /><br /><br />
+  
+  <div id="board">
+  <% @boards.each do |board| %>
+    <div class="once_board">
+      <div class="title"><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", :action => :show_mobile, :id => board.id %></div>
+      <% if board.attach? -%> 
+        <%= link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => "colorbox"} %>
+        <br />
+      <% end -%>
+      <div style="background-color:#E1E1E1">
+        <%= "作成者：#{board.user.dispname}" %> | <%= "作成日時：#{board.created_at.to_s(:short2)}" %>
+        <%= " | 最新コメント日時：#{board.board_comments.last.created_at.to_s(:short2)}" if board.board_comments.last && board.board_comments.last.created_at %>
+        <br />
+        <% if editable(current_user, board.user) -%>
+          <%= link_to '編集', edit_board_path(board) %>
+          <%= link_to '削除', board, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+        <% end -%>
+      </div>
+    </div>
+    <br /><br />
+  <% end %>
+  </div>
+</div>
+<%= will_paginate @boards, :previous_label => "前へ", :next_label => "次へ" %>
