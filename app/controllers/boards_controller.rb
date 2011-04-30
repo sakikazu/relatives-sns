@@ -58,6 +58,7 @@ class BoardsController < ApplicationController
 
   def show_mobile
     @board = Board.find(params[:id])
+    @board_comments = @board.board_comments.paginate(:page => params[:page], :per_page => 10, :order => "created_at DESC")
     set_header
     render :action => :show_mobile, :layout => "mobile"
   end

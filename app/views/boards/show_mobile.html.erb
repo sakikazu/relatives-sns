@@ -6,12 +6,21 @@
   </div>
 
   <div class="content">
-    <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => "colorbox"} if @board.attach? %>
+    <%= image_tag(@board.attach(:thumb)) if @board.attach? %>
     <p class="text"><%= br auto_link(@board.description) %></p>
   </div>
   
+  <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">新規コメント</div>
+  <br />
+  <% form_tag({:action => :create_comment_mobile, :board_id => @board.id}) do %>
+    <%= text_area_tag :comment, nil, :size => "20x4" %><br />
+    <br />
+    <%= submit_tag "投稿する" %>
+  <% end -%>
+
+  <br /><br />
   <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">コメント</div>
-  <% @board.board_comments.each do |co| -%>
+  <% @board_comments.each do |co| -%>
     <br />
     <div class="once_comment">
       <div style="background-color:#E1E1E1">
@@ -28,15 +37,10 @@
       <%= link_to "削除する", destroy_comment_board_path(:id => co.id), :confirm => "本当に削除してもよろしいですか？" if editable(@current_user, co.user) %>
     </div>
   <% end -%>
-  
+
   <br /><br />
-  <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">新規コメント</div>
-  <br />
-  <% form_tag({:action => :create_comment_mobile, :board_id => @board.id}) do %>
-    <%= text_area_tag :comment, nil, :size => "20x4" %><br />
-    <br />
-    <%= submit_tag "投稿する" %>
-  <% end -%>
+  <%= will_paginate @board_comments, :previous_label => "前へ", :next_label => "次へ" %>
+  
 </div>
 <br />
 <br />

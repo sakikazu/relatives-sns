@@ -14,7 +14,7 @@
     <div class="once_board">
       <div class="title"><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", :action => :show_mobile, :id => board.id %></div>
       <% if board.attach? -%> 
-        <%= link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => "colorbox"} %>
+        <%= image_tag(board.attach(:thumb)) %>
         <br />
       <% end -%>
       <div style="background-color:#E1E1E1">
