@@ -5,10 +5,8 @@
     <tr><td colspan=3><hr /></td></tr>
     <% if k[:count] == 0 -%>
       <tr>
-        <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
-        <td>
-          <b>本日</b>
-        </td>
+        <td><span style="font-size:small"><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></span></td>
+        <td><span style="font-size:small;color:red">本日</td>
         <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
       </tr>
       <tr class="anniversary"><td colspan=3>
@@ -18,10 +16,8 @@
 
     <% else -%>
       <tr class="exist-border">
-        <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
-        <td>
-          <b><%= "あと#{k[:count]}日で" %></b>
-        </td>
+        <td><span style="font-size:small"><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></span></td>
+        <td><span style="font-size:small;color:red"><%= "あと#{k[:count]}日で" %></td>
         <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
       </tr>
     <% end -%>
