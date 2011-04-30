@@ -53,4 +53,60 @@ class UserExt < ActiveRecord::Base
     ((Date.today - birth_day) / 365).to_i if birth_day.present?
   end
 
+  def nichirei
+    mybirth = self.birth_day
+    if mybirth 
+      nichirei = (Date.today - mybirth).to_i
+      nichirei_future = []
+    	[5000,7777,10000,11111,15000,20000,22222,25000,30000,33333,35000,40000,44444,45000,50000].each do |kinen|
+        break if nichirei_future.size >= 2
+        if nichirei < kinen
+          kinenday = Date.today + (kinen - nichirei) 
+          nichirei_future << [kinen, kinenday]
+        end
+      end
+      return nichirei, nichirei_future
+    else
+      return nil, nil
+    end
+  end
+
+  def self.kinen
+    kinen = []
+    kinenbirth_array = [20 => '二十歳', 60 => '還暦', 77 => '喜寿', 88 => '米寿', 99 => '白寿']
+    kinenday_array = [10000,20000,30000,40000]
+
+    UserExt.includes(:user).where("birth_day is not NULL").each do |ue|
+      birday_tmp = Date.new(Date.today.year, ue.birth_day.month, ue.birth_day.day)
+    
+      ##--年齢--##
+
+      #今年の誕生日が過ぎていたら来年の誕生日で計算する（例えば、本日が2008/12/25だったら、1/5の誕生日の人は2009/1/5で計算する）
+      if (birday_tmp - Date.today) < 0
+        birday_tmp = birday_tmp + 1.year
+      end
+    
+      #記念日が10日以内なら表示
+      diffday = birday_tmp - Date.today
+      if diffday <= 10
+        #年齢が登録記念日に該当するなら記念日名を、そうでないなら「誕生日」と出力
+        years = (birday_tmp - ue.birth_day) / 365
+        kinen_name =  kinenbirth_array[years] || "誕生日"
+        kinen << {:user => ue.user, :count => diffday, :kinen_name => kinen_name}
+      end
+
+      ##--日齢--##
+      kinenday_array.each do |k|
+        diffday = k - (Date.today - ue.birth_day)
+        #記念日齢が10日以内なら表示
+        if diffday >= 0 and diffday <= 10
+          kinen_name = "#{k}日齢"
+          kinen << {:user => ue.user, :count => diffday, :kinen_name => kinen_name}
+          #初めの日齢のみ表示
+          break 
+        end
+      end
+    end
+    return kinen
+  end
 end
