@@ -52,7 +52,17 @@ class MobileController < ApplicationController
       @mutter = @celebration.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
       @flag = true
     end
-    render :layout => "simple"
+    @content_title = "#{@celebration.user.dispname(User::FULLNAME)}さんを祝う"
+  end
+
+  def celebration_create
+    @celebration = Celebration.where(params[:celebration]).first
+    if @celebration.blank?
+      @celebration = Celebration.create(params[:celebration])
+    end
+    params[:mutter][:celebration_id] = @celebration.id
+    Mutter.create(params[:mutter])
+    redirect_to({:action => :index}, :notice => 'お祝いをしました。「お祝いを見る」から確認できます。')
   end
 
   def celebration

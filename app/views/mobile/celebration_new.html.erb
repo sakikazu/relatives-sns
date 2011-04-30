@@ -1,9 +1,5 @@
 <div style="font-size:small">
-<%= link_to '戻る', :back %><br /><br />
-
   <% if @flag.present? -%>
-    <%= @celebration.user.dispname %>さんへのお祝い<br />
-    <hr />
     <%= form_for @celebration, :url => {:action => :celebration_create} do |f| %>
       <%= f.hidden_field :anniversary_at %>
       <%= f.hidden_field :user_id %>

@@ -1,6 +1,8 @@
 <div style="font-size:small">
+  <div style="margin-top:10px;text-align:center">(生年月日を登録している人のみ)</div>
   <table style="font-size:small">
   <% @kinen.each do |k| -%>
+    <tr><td colspan=3><hr /></td></tr>
     <% if k[:count] == 0 -%>
       <tr>
         <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
@@ -23,13 +25,12 @@
         <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
       </tr>
     <% end -%>
-    <tr><td colspan=3><hr /></td></tr>
   <% end -%> 
   </table>
-  <div style="margin-top:10px;text-align:center">(生年月日を登録している人のみ)</div>
   <br /><br />
 
 <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">みんなのつぶやき</div>
+<br />
 <%= form_for @mutter, :url => {:controller => "mobile", :action => :create} do |f| -%>
   <div style="font-weight:bold;color:rgb(0, 128, 0">つぶやく</div>
   <%= f.text_area :content, :size => "20x2" %><br /><br />
@@ -46,7 +47,7 @@
     <%#= link_to(image_tag(m.image(:thumb)), m.image(:large)) %><br />
     <%= image_tag(m.image(:thumb)) %><br />
   <% end -%>
-  <br /><%= auto_link(m.content).html_safe %><br />
+  <br /><%= auto_link(m.view_content).html_safe %><br />
 <%# sakikazu memo F906i 調査。:method～がルーティングに反映しないし、:confirmも無効になった %>
   <%= link_to("削除", {:action => :destroy, :id => m.id}) if editable(current_user, m.user) %>
 <% end -%>
