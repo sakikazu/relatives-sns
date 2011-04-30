@@ -23,9 +23,9 @@ $('#background_black')
   fontsize2 = 50;
   <% @celeb_mutters.each_with_index do |m, i| -%>
     $('#background_black')
-      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><%= m.user.dispname(User::FULLNICK) %><br /><span class="moji"><%= auto_link(m.content).html_safe %></span></div>')
-      //## 画像がうまく表示できない
-      //.after('<div id="celebration_msg<%= i %>" class="celebration_msg"><%= m.user.dispname(User::FULLNICK) %><%= image_tag(m.user.user_ext.image(:small)) %><br /><%= auto_link(m.content).html_safe %></div>')
+      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><%= m.user.dispname(User::FULLNICK) %><br /><span class="moji"><%= auto_link(m.content.sub("\r\n", " ")).html_safe %></span></div>');
+      //## 画像がうまく表示できない(image_tag)
+      //sakikazu memo ここで「content」に改行（\r\n）が入っていたら、実際のJSで改行が入ってスクリプトエラーになった。これを事前に回避するの難しいな。。
 
     <% j=0 if toplen > 250 -%>
     <% toplen = 20 + j * 120 -%>
