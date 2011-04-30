@@ -1,7 +1,38 @@
 <div style="font-size:small">
+  <table style="font-size:small">
+  <% @kinen.each do |k| -%>
+    <% if k[:count] == 0 -%>
+      <tr>
+        <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
+        <td>
+          <b>本日</b>
+        </td>
+        <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
+      </tr>
+      <tr class="anniversary"><td colspan=3>
+        <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id} %>
+        <%= link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id} %>
+      </td></tr>
+
+    <% else -%>
+      <tr class="exist-border">
+        <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
+        <td>
+          <b><%= "あと#{k[:count]}日で" %></b>
+        </td>
+        <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
+      </tr>
+    <% end -%>
+    <tr><td colspan=3><hr /></td></tr>
+  <% end -%> 
+  </table>
+  <div style="margin-top:10px;text-align:center">(生年月日を登録している人のみ)</div>
+  <br /><br />
+
+<div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">みんなのつぶやき</div>
 <%= form_for @mutter, :url => {:controller => "mobile", :action => :create} do |f| -%>
   <div style="font-weight:bold;color:rgb(0, 128, 0">つぶやく</div>
-  <%= f.text_area :content, :size => "15x2" %><br /><br />
+  <%= f.text_area :content, :size => "20x2" %><br /><br />
   <div style="font-weight:bold;color:rgb(0, 128, 0;">※携帯から画像はアップロードできません</div><br />
   <%= f.hidden_field :user_id %>
   <%= f.submit "投稿する" %>

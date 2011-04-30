@@ -11,10 +11,11 @@ class MobileController < ApplicationController
   layout "mobile"
 
   def index
-    @content_title = "みんなのつぶやき"
+    @content_title = "誕生記念日"
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
-    @mutters = Mutter.paginate(:page => params[:page], :per_page => 7, :order => "id DESC")
+    @mutters = Mutter.includes({:user => :user_ext}).paginate(:page => params[:page], :per_page => 7, :order => "id DESC")
+    @kinen = UserExt.kinen
   end
 
   def create
@@ -34,4 +35,33 @@ class MobileController < ApplicationController
     @content_title = "みんなの更新情報"
     @updates = UpdateHistory.sort_updated.paginate(:page => params[:page], :per_page => 15)
   end
+
+  def celebration_new
+    user = User.find(params[:user_id])
+    celeb = Celebration.where(:anniversary_at => Date.today, :user_id => user.id).first
+    if celeb.present?
+      if celeb.mutters.where(:user_id => current_user.id).present?
+        @flag = false
+      else
+        @mutter = celeb.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
+        @flag = true
+      end
+      @celebration = celeb
+    else
+      @celebration = Celebration.new(:anniversary_at => Date.today, :user_id => user.id)
+      @mutter = @celebration.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
+      @flag = true
+    end
+    render :layout => "simple"
+  end
+
+  def celebration
+    if params[:celebration_id].present?
+      cel = Celebration.find(params[:celebration_id])
+    else
+      cel = Celebration.where(:anniversary_at => Date.today, :user_id => params[:user_id]).first
+    end
+    @content_title = "#{cel.user.dispname(User::FULLNAME)}さんへのお祝い"
+    @celeb_mutters = cel.present? ? cel.mutters : []
+  end 
 end

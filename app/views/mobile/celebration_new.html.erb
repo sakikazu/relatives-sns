@@ -1,0 +1,26 @@
+<div style="font-size:small">
+<%= link_to '戻る', :back %><br /><br />
+
+  <% if @flag.present? -%>
+    <%= @celebration.user.dispname %>さんへのお祝い<br />
+    <hr />
+    <%= form_for @celebration, :url => {:action => :celebration_create} do |f| %>
+      <%= f.hidden_field :anniversary_at %>
+      <%= f.hidden_field :user_id %>
+
+      <%= fields_for @mutter do |ff| %>
+        <%= ff.label '自由に言葉を変えてください' %><br />
+        <%= ff.text_area :content, :size => "50x2" %><br />
+        <%= ff.hidden_field :user_id %>
+      <% end -%>
+      <br />
+      <%= f.submit '祝う', :class => "post" %>
+    <% end -%>
+    <br />
+    ・つぶやきにも追加されます。<br />
+    ・投稿後に削除したい場合、つぶやきから削除すればOKです。<br />
+    ・当日以降は、お祝いは親戚ページの各人ページで見れます。<br />
+  <% else -%>
+    今回は既にお祝いしてます。
+  <% end -%>
+</div>

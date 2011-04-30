@@ -29,6 +29,9 @@ ADanRails3::Application.routes.draw do
   match "/m/create" => "mobile#create", :as => :mobile_c
   match "/m/destory" => "mobile#destroy", :as => :mobile_d
   match "/m/update_history" => "mobile#update_history", :as => :mobile_uh
+  match "/m/celebration" => "mobile#celebration", :as => :mobile_uh
+  match "/m/celebration_new" => "mobile#celebration_new", :as => :mobile_uh
+  match "/m/celebration_create" => "mobile#celebration_create", :as => :mobile_uh
 
   match "/boards/destroy_comment/:id" => "boards#destroy_comment", :as => :destroy_comment_board
   resources :boards do

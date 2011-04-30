@@ -1,0 +1,15 @@
+<div style="font-size:small">
+  <%= link_to '戻る', :back %>
+  <br /><br />
+  <% if @celeb_mutters.size > 0 -%>
+    <% @celeb_mutters.each do |m| -%>
+      <%= m.user.dispname(User::FULLNICK) %><br />
+      <span class="moji"><%= auto_link(m.content).html_safe %></span><br />
+      <br />
+      <hr />
+    <% end -%>
+  
+  <% else -%>
+    <div class="celebration_msg">まだお祝いなし。<br />自分でも祝えるよ＞＜</div>
+  <% end -%>
+</div>
