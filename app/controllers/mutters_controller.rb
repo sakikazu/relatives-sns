@@ -124,12 +124,14 @@ class MuttersController < ApplicationController
   end
 
   def celebration
+    #memo 当日以降ならcelebration_idをもとに抽出する
     if params[:celebration_id].present?
       cel = Celebration.find(params[:celebration_id])
     else
       cel = Celebration.where(:anniversary_at => Date.today, :user_id => params[:user_id]).first
     end
-    @celeb_mutters = cel.present? ? cel.mutters : []
+    #ランダム抽出 -sample
+    @celeb_mutters = cel.present? ? cel.mutters.sample(cel.mutters.size) : []
   end
 
 end

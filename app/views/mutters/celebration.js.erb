@@ -18,36 +18,42 @@ $('#background_black')
   });
 
 <% if @celeb_mutters.size > 0 -%>
-  <% j = 0; toplen = 0; -%>
+  <% j = 0; toppoint = 0; -%>
   fontsize = 40;
   fontsize2 = 50;
   <% @celeb_mutters.each_with_index do |m, i| -%>
     $('#background_black')
-      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><%= m.user.dispname(User::FULLNICK) %><br /><span class="moji"><%= auto_link(m.content.sub("\r\n", " ")).html_safe %></span></div>');
+      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= m.user.dispname(User::FULLNICK) %></span><br /><span class="moji"><%= auto_link(m.content.sub("\r\n", " ")).html_safe %></span></div>');
       //## 画像がうまく表示できない(image_tag)
       //sakikazu memo ここで「content」に改行（\r\n）が入っていたら、実際のJSで改行が入ってスクリプトエラーになった。これを事前に回避するの難しいな。。
 
-    <% j=0 if toplen > 250 -%>
-    <% toplen = 20 + j * 120 -%>
-    <% j+=1 -%>
+    <%# j=0 if toppoint > 250 -%>
+    <% j = rand(4) -%>
+    <% toppoint = 20 + j * 120 -%>
+    <%# j+=1 -%>
     $msg = $('#celebration_msg<%= i %>');
     //文字長に、フォントサイズをかけたものを、widthにする
-    len = fontsize2 * ($msg.find("span.moji").text().length);
+    len_max = (len1 = $msg.find("span.moji").text().length) > (len2 = $msg.find("span.name").text().length) ? len1 : len2
+    len = fontsize2 * (len_max);
     $msg
       .css({
         'position': 'fixed',
         'z-index': '101',
-        'top':'<%= toplen %>px',
+        'top':'<%= toppoint %>px',
         'left':$(window).width()+'px',
-        'font-size': fontsize+'px',
         'line-height': '70px',
-        'color': 'white',
         'width': len+'px',
       })
-      .delay(<%= i*3000 %>).animate({'left':'-'+len+'px'}, 14000);
+      .delay(<%= i*3000 %>)
+      .animate({'left':'-'+len+'px', 'top':'<%= rand(500) %>'}, <%= 5000 + rand(10000) %>);
   <% end -%>
 
-  $('.moji').css({
+  $('.celebration_msg>.name').css({
+    'color': 'white',
+    'font-size': fontsize+'px',
+  });
+
+  $('.celebration_msg>.moji').css({
     'color': 'yellow',
     'font-size': fontsize2+'px',
   });
@@ -60,7 +66,7 @@ $('#background_black')
 
 <% else -%>
   $('#background_black')
-    .after('<div class="celebration_msg">まだお祝いなし。<br />自分でも祝えるよ＞＜</div>');
+    .after('<div class="celebration_msg">まだお祝いなし。<br />本人でも祝えるよ＞＜</div>');
   $('.celebration_msg')
     .css({
       'position': 'fixed',
