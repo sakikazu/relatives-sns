@@ -116,6 +116,12 @@ h4.normal {
   width: 400px;
 }
 
+label.normal {
+  color: limeGreen;
+  font-size: 17px;
+  font-weight: bold;
+}
+
 table.tablesorter_like{
   border: 1px solid gray;
   border-spacing: 0px;
@@ -681,6 +687,10 @@ body {
   background: #146EB4;
 }
 
+/* history */
+#history_data td.comment{
+  background-color: lightgray;
+}
 
 /*user*/
 table.user_data tr th{

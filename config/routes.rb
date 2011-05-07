@@ -1,5 +1,13 @@
 ADanRails3::Application.routes.draw do
 
+  resources :histories do
+    collection do
+      get :new_comment
+      post :create_comment
+      delete :destroy_comment
+    end
+  end
+
   resources :others do
     collection do
       get :old_site

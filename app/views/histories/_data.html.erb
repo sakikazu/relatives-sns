@@ -1,0 +1,55 @@
+<table id="tablesorter" class="tablesorter" border="1" cellspacing="0" cellpadding="3" width="95%" style="word-break:break-all;">
+  <thead>
+  <tr>
+    <th>日付</th>
+    <th>内容</th>
+    <th>情報源</th>
+    <th>投稿者</th>
+    <th>投稿日時</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+<% @histories.each_with_index do |history, i| %>
+  <tr <%= "class='odd'"if i%2==1 %>>
+    <td width="100px"><%= history.hist_date %></td>
+    <td width="500px"><%= truncate_80_link(history.content) %></td>
+    <td width="100px"><%= history.src_user_name %></td>
+    <td width="100px"><%= history.user.dispname %></td>
+    <td width="90px"><%= history.created_at.to_s(:date) %></td>
+    <td width="40px"><%= link_to 'コメント', {:action => :new_comment, :history_id => history.id}, :class => "colorbox" %></td>
+    <% if editable(@current_user, history.user) -%>
+      <td width="40px"><%= link_to '編集', edit_history_path(history), :class => "colorbox" %></td>
+      <td width="40px"><%= link_to '削除', history, :confirm => '本当に削除してもよろしいですか？', :method => :delete %></td>
+    <% end -%>
+  </tr>
+  <% history.history_comments.each do |co| -%>
+    <tr>
+      <td class="comment">コメント</td>
+      <td><%= co.content %></td>
+      <td></td>
+      <td><%= co.user.dispname %></td>
+      <td><%= co.created_at.to_s(:date) %></td>
+      <td colspan="2"></td>
+      <td>
+        <% if editable(@current_user, history.user) -%>
+          <%= link_to "削除", {:action => :destroy_comment, :id => co.id}, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+        <% end -%>
+      </td>
+    </tr>
+  <% end %>
+<% end %>
+  </tbody>
+</table>
+
+<%= javascript_include_tag 'tablesorter/jquery.tablesorter.min' %>
+<script type="text/javascript">
+  $(document).ready(function(){ 
+    //sakikazu memo Ajaxで追加された要素には、再度これをやらないと、プラグインが適用されない
+    $(".colorbox").colorbox();
+    $('table#tablesorter').tablesorter();
+  }); 
+</script>
+<%= stylesheet_link_tag '../javascripts/tablesorter/themes/blue/style' %>
+

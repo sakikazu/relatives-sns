@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  episode_year: 1
+  episode_month: 1
+  episode_day: 1
+  about_flg: false
+  content: MyText
+  user_id: 1
+  src_user_name: MyString
+
+two:
+  episode_year: 1
+  episode_month: 1
+  episode_day: 1
+  about_flg: false
+  content: MyText
+  user_id: 1
+  src_user_name: MyString
