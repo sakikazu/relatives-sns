@@ -4,21 +4,19 @@
   </div>
   <%= form_for @history, :remote => true do |f| %>
     <label class="normal">年月</label><br />
-    <%= f.select :episode_year, 1901..Date.today.year, {:include_blank => true} %>年
+    <% a = []; Date.today.year.step(1901, -1){|n| a << n} -%>
+    <%= f.select :episode_year, a, {:include_blank => true} %>年
     <%= f.select :episode_month, 1..12, {:include_blank => true} %>月
     <%= f.select :episode_day, 1..31, {:include_blank => true} %>日
     <br />
     <%= f.check_box :about_flg %><%= f.label :about_flg, "時期不確定" %>
   
   <pre>
-  <b>例：</b>
-  (年を選択しなかった場合)：[時期不明]と表示される
-  (年のみ選択し、チェックをしなかった場合)：[**年]と表示される
-  (年のみ選択し、チェックをした場合)：[**年くらい]と表示される
-  (年月日を選択し、チェックをした場合)：[**年**月**日くらい]と表示される
+  ・年を選択しなかった場合は、[時期不明]と表示される
+  ・「時期不確定」にチェックした場合は、年月日のあとに「くらい」と表示される
   </pre>
   
-    <label class="normal">内容</label><br />
+    <label class="normal">内容(★必須入力)</label><br />
     <%= f.text_area :content, :style => 'width:450px; height:100px' %><br /><br />
   
     <label class="normal">情報源(提供者、文書など)</label><br />
