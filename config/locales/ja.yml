@@ -147,6 +147,12 @@ ja:
       update: "更新する"
       submit: "保存する"
 
+    label:
+      user_session:
+        login: "ユーザーID"
+        password: "パスワード"
+        remember_me: "次回からパスワード入力を省略する"
+
   errors:
     format: "%{attribute} %{message}"
 
@@ -187,6 +193,10 @@ ja:
       full_messages:
         format: "%{attribute}%{message}"
 
+    models:
+      history: "年表"
+
     attributes:
       history:
         content: "内容"
+
