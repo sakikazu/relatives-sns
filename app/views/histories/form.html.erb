@@ -1,7 +1,5 @@
-<div id="his_form" style="height:500px;width:500px">
-  <div style="height:50px">
-    <div id="info" class="notice" style="display:none"></div>
-  </div>
+<div id="info" class="notice" style="display:none;height:120px"></div>
+<div id="his_form" style="height:400px;width:500px;padding:20px">
   <%= form_for @history, :remote => true do |f| %>
     <label class="normal">年月</label><br />
     <% a = []; Date.today.year.step(1901, -1){|n| a << n} -%>
