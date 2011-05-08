@@ -2,6 +2,8 @@ class History < ActiveRecord::Base
   belongs_to :user
   has_many :history_comments
 
+  validates :content, :presence => true
+
   def hist_date
     if episode_year.blank?
       "時期不明"

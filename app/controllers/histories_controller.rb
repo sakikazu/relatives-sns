@@ -5,7 +5,7 @@ class HistoriesController < ApplicationController
   # GET /histories
   # GET /histories.xml
   def index
-    @histories = History.all
+    @histories = History.includes([{:user => :user_ext}, :history_comments]).all
     @history = History.new(:user_id => current_user.id)
 
     respond_to do |format|
@@ -35,11 +35,11 @@ class HistoriesController < ApplicationController
 
     #sakikazu memo ここ、Ajaxのエラーハンドリングはどうすべきなんだろう
     else
-      format.html { render :action => "new" }
-      format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
+      # format.html { render :action => "new" }
+      # format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
     end
 
-    @histories = History.all
+    @histories = History.includes([{:user => :user_ext}, :history_comments]).all
   end
 
   # PUT /histories/1
@@ -51,11 +51,11 @@ class HistoriesController < ApplicationController
       # format.html { redirect_to(@history, :notice => 'History was successfully updated.') }
       # format.xml  { head :ok }
     else
-      format.html { render :action => "edit" }
-      format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
+      # format.html { render :action => "edit" }
+      # format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
     end
 
-    @histories = History.all
+    @histories = History.includes([{:user => :user_ext}, :history_comments]).all
   end
 
   # DELETE /histories/1
@@ -76,8 +76,12 @@ class HistoriesController < ApplicationController
   end
 
   def create_comment
-    @comment = HistoryComment.create(params[:history_comment])
-    redirect_to(histories_path, :notice => "コメントしました")
+    @comment = HistoryComment.new(params[:history_comment])
+    if @comment.save
+      redirect_to(histories_path, :notice => "コメントしました")
+    else
+      redirect_to(histories_path, :notice => "エラー：コメント内容を入力してください")
+    end
   end
 
   def destroy_comment

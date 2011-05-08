@@ -13,8 +13,8 @@
   <tbody>
 <% @histories.each_with_index do |history, i| %>
   <tr <%= "class='odd'"if i%2==1 %>>
-    <td width="100px"><%= history.hist_date %></td>
-    <td width="500px"><%= truncate_80_link(history.content) %></td>
+    <td width="120px"><%= history.hist_date %></td>
+    <td width="400px"><%= truncate_120_link(history.content) %></td>
     <td width="100px"><%= history.src_user_name %></td>
     <td width="100px"><%= history.user.dispname %></td>
     <td width="90px"><%= history.created_at.to_s(:date) %></td>
@@ -27,7 +27,7 @@
   <% history.history_comments.each do |co| -%>
     <tr>
       <td class="comment">コメント</td>
-      <td><%= co.content %></td>
+      <td><%= br auto_link(co.content) %></td>
       <td></td>
       <td><%= co.user.dispname %></td>
       <td><%= co.created_at.to_s(:date) %></td>

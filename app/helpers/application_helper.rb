@@ -36,10 +36,10 @@ module ApplicationHelper
   end
 
   #※マルチバイト文字対応(utf8)
-  def truncate_80_link(text)
+  def truncate_120_link(text)
     text2 = strip_tags(text)
-    if text2.split(//u).length > 80
-      ret = text2.truncate(80, :omission => "")
+    if text2.split(//u).length > 120
+      ret = br auto_link(text2.truncate(120, :omission => ""))
       ret += link_to " ...(続き)", "javascript:void(0)", :title => text2
     else
       ret = text2

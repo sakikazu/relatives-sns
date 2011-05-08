@@ -1,7 +1,15 @@
-$('#data').html(
-  '<%= escape_javascript(render "data") %>'
-)
-$('#his_form form textarea').text("");
-$('#info')
-  .show()
-  .html('追加しました')
+<% if @history.errors.any? %>
+  $('#info')
+    .show()
+    .html(
+      '<%= escape_javascript(render "error") %>'
+    )
+<% else %>
+  $('#history_data').html(
+    '<%= escape_javascript(render "data") %>'
+  );
+  $('#info')
+    .show()
+    .html('追加しました');
+  $('#his_form form textarea').val("");
+<% end %>
