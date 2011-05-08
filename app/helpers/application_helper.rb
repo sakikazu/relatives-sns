@@ -42,7 +42,7 @@ module ApplicationHelper
       ret = br auto_link(text2.truncate(120, :omission => ""))
       ret += link_to " ...(続き)", "javascript:void(0)", :title => text2
     else
-      ret = text2
+      ret = br auto_link(text2)
     end
     ret.html_safe
   end
