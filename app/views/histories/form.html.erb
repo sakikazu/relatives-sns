@@ -2,8 +2,7 @@
 <div id="his_form" style="height:400px;width:500px;padding:20px">
   <%= form_for @history, :remote => true do |f| %>
     <label class="normal">年月</label><br />
-    <% a = []; Date.today.year.step(1901, -1){|n| a << n} -%>
-    <%= f.select :episode_year, a, {:include_blank => true} %>年
+    <%= f.select :episode_year, (1901..Date.today.year).to_a.reverse, {:include_blank => true} %>年
     <%= f.select :episode_month, 1..12, {:include_blank => true} %>月
     <%= f.select :episode_day, 1..31, {:include_blank => true} %>日
     <br />
