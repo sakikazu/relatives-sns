@@ -701,6 +701,20 @@ table.user_data tr td{
   border-bottom: 1px solid;
 }
 
+/* user#map */
+#gmap {
+  width: 800px;
+  height: 550px;
+  float: left;
+}
+#gmap_sidebar {
+  margin-left: 30px;
+  width: 200px;
+  height: 550px;
+  float: left;
+}
+
+
 /*footer*/
 #footer {
   margin-top: 25px;

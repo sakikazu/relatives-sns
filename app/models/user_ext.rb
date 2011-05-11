@@ -1,6 +1,8 @@
 class UserExt < ActiveRecord::Base
   belongs_to :user
 
+  attr_accessor :lat, :lng
+
   content_name = "profile"
   has_attached_file :image,
     :styles => {
@@ -108,5 +110,9 @@ class UserExt < ActiveRecord::Base
       end
     end
     return kinen
+  end
+
+  def address
+    "#{addr1}#{addr2}#{addr3}"
   end
 end

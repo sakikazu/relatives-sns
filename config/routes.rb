@@ -89,6 +89,7 @@ ADanRails3::Application.routes.draw do
       get :edit_ex
       put :update_ex
       get :all
+      get :map
     end
   end
 
