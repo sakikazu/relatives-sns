@@ -1,4 +1,6 @@
 class UserExt < ActiveRecord::Base
+  require 'net/http'
+
   belongs_to :user
 
   attr_accessor :lat, :lng
@@ -114,5 +116,17 @@ class UserExt < ActiveRecord::Base
 
   def address
     "#{addr1}#{addr2}#{addr3}"
+  end
+
+# sakikazu memo 内部でエラーになる可能性があるので(httpエラーのレスポンスをdecodeしたときとか)、ハンドリングすべき
+  def geocode
+    addr = self.address.gsub(/[　 ]/, "")
+    gdata = Net::HTTP.get 'maps.google.com', "/maps/api/geocode/json?address=#{addr}&sensor=false"
+    d_data = ActiveSupport::JSON.decode(gdata)
+    if d_data["status"] == "OK"
+      return d_data["results"][0]["geometry"]["location"]
+    else
+      return nil
+    end
   end
 end
