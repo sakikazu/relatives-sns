@@ -65,13 +65,21 @@ class MuttersController < ApplicationController
 
   def create
     mutter = Mutter.new(params[:mutter])
-    respond_to do |format|
-      if mutter.save
-        format.html { redirect_to(mutters_path, :notice => '') }
-        format.xml  { render :xml => mutter, :status => :created, :location => mutter }
-      else
-        format.html { redirect_to(mutters_path, :notice => 'つぶやきを入力しないと投稿できません') }
-        format.xml  { render :xml => mutter.errors, :status => :unprocessable_entity }
+
+    # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
+    if request.xhr?
+      mutter.save
+      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+      render :partial => "list"
+    else
+      respond_to do |format|
+        if mutter.save
+          format.html { redirect_to(mutters_path, :notice => '') }
+          format.xml  { render :xml => mutter, :status => :created, :location => mutter }
+        else
+          format.html { redirect_to(mutters_path, :notice => 'つぶやきを入力しないと投稿できません') }
+          format.xml  { render :xml => mutter.errors, :status => :unprocessable_entity }
+        end
       end
     end
 

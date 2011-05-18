@@ -9,6 +9,27 @@ $(document).ready(function(){
       }
     });
   });
+
+  // submit押下時、ファイルが添付されてなかったら、AjaxでPOSTする
+  $m_form = $('form#new_mutter')
+  $m_form.submit(function(event) {
+    if($('#mutter_content', $m_form).val() == "") {
+      event.preventDefault();
+      alert('つぶやきを入力しないと投稿できません');
+      return false; //preventDefault()してても、下記処理に入らないようにreturnしておく
+    }
+    if($(':file:first', $m_form).val() == "") {
+      event.preventDefault();
+      $.post(
+        '/mutters',
+        $('input, textarea', $m_form).serialize(),
+        function(data) {
+          $('#mutter_content', $m_form).val('');
+          $('#mutter_data').html(data);
+        }
+      );
+    }
+  });
 });
 </script>
 
