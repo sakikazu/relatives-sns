@@ -2,11 +2,11 @@
 
 <h1>編集する</h1>
 
-<% form_for(@blog, :html => {:multipart => true}) do |f| %>
+<% form_for(@blog, :html => form_html_option) do |f| %>
 
   <p>
     <%= f.label :title, "タイトル" %><br />
-    <%= f.text_field :title %>
+    <%= f.text_field :title, :size => "70" %>
   </p>
   <p>
     <%= f.label :content, "内容" %><br />

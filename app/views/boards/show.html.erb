@@ -26,7 +26,7 @@
 <h3 class="normal">新規コメント</h3>
 <div id="comment_form">
 <%# form_tag :remote => true, :url => {:action => :create_comment, :board_id => @board.id}, :update => "comments", :condition => "$('#comment').val() != ''", :complete => "$('#comment').val('')" do %>
-<% form_tag({:action => :create_comment, :board_id => @board.id}, {:multipart => true}) do %>
+<% form_tag({:action => :create_comment, :board_id => @board.id}, :html => form_html_option) do %>
   <%= text_area_tag :comment, nil, :size => "60x5" %><br />
   <%= file_field_tag :attach %><br />
   <br />

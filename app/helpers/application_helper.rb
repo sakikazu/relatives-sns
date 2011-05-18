@@ -1,5 +1,10 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+  def form_html_option
+    request.smart_phone? ? {} : {:multipart => true}
+  end
+
   def editable(login_user, content_user)
     (login_user.role == 0 or login_user.role == 1 or login_user.id == content_user.id)
   end

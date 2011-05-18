@@ -1,7 +1,7 @@
 <h1>新規作成</h1>
 
 <%= link_to '一覧へ戻る', boards_path %>
-<% form_for(@board, :html => {:multipart => true}) do |f| %>
+<% form_for(@board, :html => form_html_option) do |f| %>
 
   <p>
     <%= f.label :title, "タイトル" %><br />
