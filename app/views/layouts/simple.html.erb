@@ -6,6 +6,10 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>A団HP | <%= "#{@page_title || controller.controller_name} > #{controller.action_name}" %></title>
   <link href="/images/favicon.ico" type="image/x-icon" rel="icon" />
+
+  <%= javascript_include_tag 'jquery.min' %>
+  <%= javascript_include_tag 'rails' %>
+  <%= csrf_meta_tag %>
 </head>
 <body>
 

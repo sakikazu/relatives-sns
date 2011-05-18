@@ -54,6 +54,8 @@ class MuttersController < ApplicationController
     @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
     @album_thumbs = AlbumPhoto.rnd_photos
 
+    @slider_class_name = request.smart_phone? ? "" : "colorbox_top"
+
     ###日齢
     @nichirei, @nichirei_future = current_user.user_ext.nichirei
 

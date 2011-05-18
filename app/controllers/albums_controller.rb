@@ -36,6 +36,8 @@ class AlbumsController < ApplicationController
       @album_photos = @album.album_photos.find(:all, :order => "id DESC")
     end
 
+    @link_to_option = request.smart_phone? ? {} : {:rel => "colorbox"}
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @album }

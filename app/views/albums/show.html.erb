@@ -91,7 +91,7 @@
     <div class="bar">
       <%= "#{p.title} (コメント数：#{p.album_photo_comments.size}）" %>
     </div>
-    <%= link_to(image_tag(p.attach(:thumb)), {:controller => :album_photos, :action => :slideshow, :id => p.id}, {:rel => 'colorbox'}) if p.attach? %>
+    <%= link_to(image_tag(p.attach(:thumb)), {:controller => :album_photos, :action => :slideshow, :id => p.id}, @link_to_option) if p.attach? %>
     <div class="info">
       投稿者：<%= p.user.dispname %><br />
       投稿日時：<%= p.created_at.to_s(:short2) if p.created_at %><br />
