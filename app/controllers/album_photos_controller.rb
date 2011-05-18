@@ -104,7 +104,9 @@ class AlbumPhotosController < ApplicationController
     @from_top_flg = true if params[:top].present?
     @album_photo = AlbumPhoto.find(params[:id])
     @album_photo_comment = AlbumPhotoComment.new(:user_id => current_user.id, :album_photo_id => @album_photo.id)
-    render :layout => "simple"
+    unless request.smart_phone?
+      render :layout => "simple"
+    end
   end
 
   def update_from_slideshow
