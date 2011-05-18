@@ -1,8 +1,9 @@
 $('#slider_photo').html(
   '<%= escape_javascript(render "slider") %>'
 );
+
 slide_effect(); //再度jQueryのプラグインを実行する
+
 $("#slider_update_info")
   .show()
   .fadeOut(5000);
-
