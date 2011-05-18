@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
     end
 
     def redirect_if_mobile
-      if request.mobile?
+      if request.mobile? and not request.smart_phone?
         pa = params.dup
         pa[:controller] = "/mobile"
         redirect_to pa
