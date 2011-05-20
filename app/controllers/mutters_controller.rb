@@ -47,7 +47,6 @@ class MuttersController < ApplicationController
   end
 
   def index
-raise # ExceptionNotifierテスト用
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
     @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
