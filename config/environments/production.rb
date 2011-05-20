@@ -46,4 +46,10 @@ ADanRails3::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # エラー通知
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[AdanHP] ", # Subjectのprefix
+    :sender_address => %("AdanHP_notifier" <notifier@example.com>), # 送信元 ※これは適当アドレスだが、environment.rbでGmailの設定をしているのでGmailが送信元になって送られた
+    :exception_recipients => %w(sakikazu15@gmail.com) # あて先の配列
 end

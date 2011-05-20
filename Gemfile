@@ -16,6 +16,8 @@ gem 'flash_cookie_session'
 gem 'will_paginate', "~> 3.0.pre2"
 gem 'exifr'
 gem 'rails3_acts_as_paranoid'
+# gem 'exception_notification_rails3'
+gem 'exception_notification', :require => 'exception_notifier'
 
 # Use unicorn as the web server
 # gem 'unicorn'
