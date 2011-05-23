@@ -21,11 +21,14 @@ $('#background_black')
   <% j = 0; toppoint = 0; -%>
   fontsize = 40;
   fontsize2 = 50;
+
+  //sakikazu ここはデータをJS配列にして、それを回すようにしたいなぁ。生成されたソースが汚い
   <% @celeb_mutters.each_with_index do |m, i| -%>
     $('#background_black')
-      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= m.user.dispname(User::FULLNICK) %></span><br /><span class="moji"><%= auto_link(m.content.sub("\r\n", " ")).html_safe %></span></div>');
+      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= m.user.dispname(User::FULLNICK) %></span><br /><span class="moji"><%= auto_link(m.content.sub(/[\r\n]+/, " ")).html_safe %></span></div>');
       //## 画像がうまく表示できない(image_tag)
       //sakikazu memo ここで「content」に改行（\r\n）が入っていたら、実際のJSで改行が入ってスクリプトエラーになった。これを事前に回避するの難しいな。。
+      //→どこの環境かわからんけど、(\n\n)が入ったことがあった。なので/[\r\n]+/で、スペース変換するようにした
 
     <%# j=0 if toppoint > 250 -%>
     <% j = rand(4) -%>
