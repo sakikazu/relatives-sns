@@ -3,9 +3,18 @@ class MuttersController < ApplicationController
   before_filter :require_user, :except => :rss
 
   def search
-    str = params[:search_text]
-    @mutters = Mutter.where('content like :q', :q => "%#{str}%").order('id DESC').limit(30)
-    @action_flg = !params[:action_flg]
+    @action_flg = params[:action_flg].to_i
+    case @action_flg
+    when 0
+      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+    when 1
+      str = params[:search_text]
+      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).where('content like :q', :q => "%#{str}%").order('id DESC').limit(30)
+    when 2
+      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).where('image_file_name IS NOT NULL').order('id DESC').limit(30)
+    when 3
+      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).where('content like :q', :q => "%http%").order('id DESC').limit(30)
+    end
   end
 
   def rss

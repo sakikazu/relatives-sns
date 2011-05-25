@@ -231,9 +231,14 @@ body {
 }
 #mutter #form_search{
   margin: 20px;
+  text-align: center;
 }
 #mutter #form_search form{
   text-align: center;
+  margin-left: 15px;
+  padding: 10px;
+  display: inline;
+  border: dotted 2px #EC8103;
 }
 #mutter table.data{
   border: none;

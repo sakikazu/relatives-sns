@@ -1,7 +1,7 @@
-<% if @action_flg %>
+<% if @action_flg != nil && @action_flg != 0 %>
   <%= form_tag search_mutters_path, {:remote => true, :method => :get} do %>
-    <%= hidden_field_tag :action_flg, true %>
-    <%= submit_tag "すべて表示する" %>
+    <%= hidden_field_tag :action_flg, 0 %>
+    <%= submit_tag "検索結果を解除する" %>
   <% end -%>
 <% end -%>
 
