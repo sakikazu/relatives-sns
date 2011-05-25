@@ -1,3 +1,8 @@
 $('#mutter_data').html(
   '<%= escape_javascript(render :partial => "list", :locals => {:mutters => @mutters}) %>'
-)
+);
+
+// 多分、DOM構築を待つようにしたほうがいいかと思って$(functionで囲んだ
+$(function(){
+  $(".colorbox").colorbox();
+});
