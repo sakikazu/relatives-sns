@@ -1,6 +1,22 @@
 class MuttersController < ApplicationController
-  before_filter :redirect_if_mobile
+  before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
+  after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
   before_filter :require_user, :except => :rss
+
+  def new_from_mail
+    config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
+    @to = config['to']
+    @subject = "[a-dan-hp]mutter[user_id]#{current_user.id}"
+    if request.mobile?
+      @content_title = "画像付きつぶやき"
+      render :layout => 'mobile'
+    end
+  end
+
+  def create_from_mail
+    Mutter.create_from_mail
+    redirect_to(mutters_path, :notice => 'メールからつぶやきました。まだそれが表示されてないときは、しばらく待ってからページを更新してみてください。')
+  end
 
   def search
     @action_flg = params[:action_flg].to_i

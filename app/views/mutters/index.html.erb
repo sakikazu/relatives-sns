@@ -50,6 +50,7 @@ $(document).ready(function(){
     </tr></table>
   <% end -%>
   </div>
+  <%= link_to '写真付きでつぶやく', :action => "new_from_mail" if request.smart_phone? %>
 
   <div id="form_search">
     <%= form_tag search_mutters_path(:action_flg => 1), {:remote => true, :method => :get} do %>

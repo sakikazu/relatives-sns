@@ -27,10 +27,10 @@
 
 <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">みんなのつぶやき</div>
 <br />
+<%= link_to '写真付きでつぶやく', :controller => "mutters", :action => "new_from_mail" %><br /><br />
 <%= form_for @mutter, :url => {:controller => "mobile", :action => :create} do |f| -%>
   <div style="font-weight:bold;color:rgb(0, 128, 0">つぶやく</div>
   <%= f.text_area :content, :size => "20x2" %><br /><br />
-  <div style="font-weight:bold;color:rgb(0, 128, 0;">※携帯から画像はアップロードできません</div><br />
   <%= f.hidden_field :user_id %>
   <%= f.submit "投稿する" %>
 <% end -%>

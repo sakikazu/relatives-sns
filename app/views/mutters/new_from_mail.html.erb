@@ -1,0 +1,11 @@
+<div style="font-size:small">
+1. まず↓からメールに写真を添付し、本文につぶやきを書いて送ります。<br />
+<%= link_to 'メールを作る', "mailto:#{@to}?subject=#{@subject}" %><br />
+<div style="font-size:x-small;color:red">※メールの件名はそのままにしててね</div>
+<br />
+2. 次にここをクリックすると、つぶやきが完了します。
+<%= form_tag :controller => :mutters, :action => :create_from_mail do %>
+  <%= submit_tag 'つぶやく！' %> 
+<% end -%>
+<div style="font-size:x-small;color:red">※もしつぶやきがまだ表示されなかったら、この画面に戻って、再度↑をクリックしてくださいm(_ _)m</div>
+</div>
