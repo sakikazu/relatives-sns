@@ -15,7 +15,7 @@ class MuttersController < ApplicationController
 
   def create_from_mail
     Mutter.create_from_mail
-    redirect_to(mutters_path, :notice => 'メールからつぶやきました。まだそれが表示されてないときは、しばらく待ってからページを更新してみてください。')
+    redirect_to(mutters_path, :notice => 'メールからつぶやきました。それが表示されてないときは、前の画面に戻って再度「つぶやく」ボタンを押してください。')
   end
 
   def search

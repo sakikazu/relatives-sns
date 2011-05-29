@@ -7,6 +7,8 @@ class Mutter < ActiveRecord::Base
 
   MUTTER_DATA_VISIBLE = 12
 
+  @@imap = nil
+
   content_name = "mutter"
   has_attached_file :image,
     :styles => {
@@ -35,35 +37,33 @@ class Mutter < ActiveRecord::Base
   # -------------------------------------
   require 'net/imap'
   def self.create_from_mail
-    imap, mail_uids = self.get_gmail_inbox_uids
+    mail_uids = self.get_gmail_inbox_uids
     mail_uids.each do |uid|
-      email = TMail::Mail.parse(imap.uid_fetch(uid,'RFC822').first.attr['RFC822'])
+      email = TMail::Mail.parse(@@imap.uid_fetch(uid,'RFC822').first.attr['RFC822'])
       self.create_from_mail2(email)
-#sakikazu これなくても閲覧済みになった
-      imap.store(uid,"+FLAGS",[:Seen])    #mail readed
-      #imap.store(uid,'+FLAGS',[:Deleted]) #delete mail
-      imap.expunge
+      # 一応明示的に既読にする(なくてもparseの時点で既読になる)
+      @@imap.store(uid,"+FLAGS",[:Seen])    #mail readed
+      # @@imap.store(uid,'+FLAGS',[:Deleted]) #delete mail
+      @@imap.expunge
     end
 
     # 切断する
-    imap.logout
+    @@imap.logout
     p "IMAP LOGOUT"
   end
 
+  # GmailにIMAPで接続し、未読メールを取得
   def self.get_gmail_inbox_uids
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
-
-    # GmailにIMAPで接続、ログインする
-    imap = Net::IMAP.new(config['host'],config['port'],true)
-    imap.login(config['username'],config['password']) # ID、パスワード
+    @@imap = Net::IMAP.new(config['host'],config['port'],true)
+    @@imap.login(config['username'],config['password']) # ID、パスワード
     p "IMAP LOGIN --------------------"
 
     # 受信箱を開く
-    imap.select('INBOX')
-    p 'IMAP SELECT INBOX --------------------'
-    mail_uids = imap.uid_search(["UNSEEN"])
-
-    [imap, mail_uids]
+    @@imap.select(config['gmail_label'])
+    p "IMAP SELECT #{config['gmail_label']} --------------------"
+    mail_uids = @@imap.uid_search(["UNSEEN"])
+    mail_uids
   end
 
   # ファイルが添付されてないとMutterを作成しない
@@ -74,20 +74,17 @@ class Mutter < ActiveRecord::Base
     u = email.subject.split("[user_id]")[1]
     u_check = u.present? && u =~ /\d/
     return if [title_check, u_check, email.has_attachments?].any?{|x| x.blank?}
+    p 'mail check ok -------------'
 
     user_id = u.to_i
-
     content = self.get_content(email)
-p content
+    p content
 
     #メールの判定などのコード(省略)  ←って何をすべきなんだろう？
     img = email.attachments.first
-    # temp = Tempfile::new("a-dan_mutter", "#{Rails.root}/tmp")
-    # temp.write(img.read)
     mutter = self.new(:user_id => user_id, :content => content)
     mutter.image = img #paperclip 関連が生成される(画像、ディレクトリ)
     mutter.save
-    # mutter.update_attributes(:image_file_name => img.original_filename, :image_content_type => img.content_type)
     p "save one image"
   end
 
