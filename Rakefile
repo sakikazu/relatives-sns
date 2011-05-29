@@ -4,4 +4,13 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
+module ::ADanRails3 ## Railsアプリケーションのモジュール（Rails.root.join("/config/application.rb")で定義されてるモジュール)
+  class Application
+    include Rake::DSL
+  end
+end
+module ::RakeFileUtils
+  extend Rake::FileUtilsExt
+end
+
 ADanRails3::Application.load_tasks
