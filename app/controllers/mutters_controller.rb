@@ -6,7 +6,8 @@ class MuttersController < ApplicationController
   def new_from_mail
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
     @to = config['to']
-    @subject = "[a-dan-hp]mutter[user_id]#{current_user.id}"
+    env = Rails.env == "development" ? "[dev]" : ""
+    @subject = "[a-dan-hp]#{env}mutter[user_id]#{current_user.id}"
     if request.mobile?
       @content_title = "画像付きつぶやき"
       render :layout => 'mobile'
