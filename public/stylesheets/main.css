@@ -230,8 +230,9 @@ body {
   height: 40px;
 }
 #mutter #form_search{
-  margin: 20px;
+  margin: 20px auto;
   text-align: center;
+  width: 100%;
 }
 #mutter #form_search form{
   text-align: center;
@@ -258,26 +259,29 @@ body {
   border-right: none;
 }
 #mutter table.data td.time{
-  width: 50px;
+  width: 45px;
   font-size: 12px;
   color: DimGray;
   text-align: left;
+  text-align: center;
+  padding: 2px;
 }
 #mutter table.data td.name{
-  width: 75px;
+  width: 70px;
   font-weight: bold;
   color: #666;
-  text-align: left;
+  text-align: center;
+  padding: 2px;
 }
 #mutter table.data td.content{
+  text-align: left;
+  letter-spacing: 0.1em;
+  padding: 10px 7px;
+  line-height: 170%;
   width: 400px;
-  text-align: left;
-  letter-spacing: 0.1em;
 }
-#mutter table.data td.content2{
+#mutter table.data td.non_image{
   width: 520px;
-  text-align: left;
-  letter-spacing: 0.1em;
 }
 #mutter table.data td.image{
   width: 120px;
@@ -287,6 +291,7 @@ body {
 #mutter table.data td.delete{
   width: 40px;
   font-size: 12px;
+  text-align: center;
 }
 #mutter div#show_more {
   color: white;
@@ -662,6 +667,7 @@ body {
 
 /*update_history*/
 #update_history .list{
+  padding-top:7px;
   font-size: 90%;  
 }
 #update_history .list .once{
@@ -683,6 +689,9 @@ body {
 }
 #current_login_user{
   margin-top: 15px;
+}
+#current_login_user table{
+  padding:5px;
 }
 
 .right_side_bar p.title{

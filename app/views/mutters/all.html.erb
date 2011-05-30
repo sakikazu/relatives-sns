@@ -3,12 +3,16 @@
 <%= will_paginate @mutters %>
 <br />
 <table class='data'>
-<% @mutters.each do |m| -%>
-  <tr>
+<% @mutters.each_with_index do |m, cnt| -%>
+  <tr <%= "class='even'" if cnt%2==0  %>>
     <td class='time'><%= m.created_at.to_s(:long_br).html_safe %></td>
     <td class='name'><%= link_to m.user.dispname, {:action => "user", :user_id => m.user.id}, {:title => m.user.dispname(User::FULLNAME)} %></td>
+<% if m.image? -%> 
     <td class='content'><%= auto_link(m.view_content).html_safe %></td>
     <td class='image'><%= link_to(image_tag(m.image(:thumb)), m.image(:large), {:class => 'colorbox'}) if m.image? %></td>
+<% else -%>
+    <td colspan=2 class='content non_image'><%= auto_link(m.view_content).html_safe %></td>
+<% end -%>
     <td class='delete'><%= link_to("削除", m, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, m.user) %></td>
   </tr>
 <% end %>

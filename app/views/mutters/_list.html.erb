@@ -6,8 +6,7 @@
 <% end -%>
 
 <table class='data'>
-<% cnt = 0 -%>
-<% @mutters.each do |m| %>
+<% @mutters.each_with_index do |m, cnt| %>
   <% if cnt == Mutter::MUTTER_DATA_VISIBLE -%>
     </table>
     <table class='data' id='hide_range' style='display:none'>
@@ -20,10 +19,9 @@
     <td class='content'><%= auto_link(m.view_content).html_safe %></td>
     <td class='image'><%= link_to(image_tag(m.image(:thumb)), m.image(:large), {:class => 'colorbox'}) %></td>
 <% else -%>
-    <td colspan=2 class='content2'><%= auto_link(m.view_content).html_safe %></td>
+    <td colspan=2 class='content non_image'><%= auto_link(m.view_content).html_safe %></td>
 <% end -%>
     <td class='delete'><%= link_to("削除", m, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, m.user) %></td>
   </tr>
-  <% cnt = cnt + 1 -%>
 <% end %>
 </table>
