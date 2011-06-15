@@ -121,7 +121,7 @@ class MuttersController < ApplicationController
   end
 
   def update_history_all
-    @uhs = UpdateHistory.sort_updated.paginate(:page => params[:page], :per_page => 50)
+    @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.paginate(:page => params[:page], :per_page => 50)
   end
 
   def slider_update
