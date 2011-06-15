@@ -46,7 +46,8 @@ class AlbumPhotosController < ApplicationController
 
     params[:album_photo] = {}
     params[:album_photo][:attach] = params['Filedata'] #paperclip
-    params[:album_photo][:exif_at] = EXIFR::JPEG.new(params['Filedata'].path).date_time
+    #memo 「date_time」だと、写真の更新日付になってしまうことがあった。「exif.date_time_digitized」で取得すること
+    params[:album_photo][:exif_at] = EXIFR::JPEG.new(params['Filedata'].path).exif.date_time_digitized || EXIFR::JPEG.new(params['Filedata'].path).date_time
     params[:album_photo][:user_id] = params['user_id']
     params[:album_photo][:album_id] = params['album_id']
     params[:album_photo][:title] = "[無題]" 
