@@ -57,6 +57,11 @@ class UserExt < ActiveRecord::Base
     ((Date.today - birth_day) / 365).to_i if birth_day.present?
   end
 
+  # ゼロパディングする
+  def age_to_s
+    "%02d"%self.age if self.age.present?
+  end
+
   def nichirei
     mybirth = self.birth_day
     if mybirth 

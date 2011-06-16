@@ -43,7 +43,7 @@
     <td><%= link_to image_tag(user.user_ext.image(:small)), user.user_ext.image(:large), {:class => colorbox_class} if user.user_ext.image? %></td>
     <td><%= user.user_ext.blood_name %></td>
     <td><%= user.user_ext.sex_name %></td>
-    <td><%= user.user_ext.age %></td>
+    <td><%= user.user_ext.age_to_s %></td>
     <td><%= user.user_ext.birth_day.to_s(:date) if user.user_ext.birth_day %></td>
     <td><%= user.user_ext.root11_name %></td>
     <td><%= user.current_login_at.to_s(:long) if user.current_login_at %></td>
