@@ -16,6 +16,11 @@
       'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi' %>
 
   <script type="text/javascript">
+    //sakikazu RJSはまだprototype.js依存みたいだが、これを追加すればOK
+    Element.update = function (element, html) {
+      $('#' + element).html(html);
+    }
+
     jQuery(document).ready(function(){
       //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
       jQuery(".colorbox").colorbox();

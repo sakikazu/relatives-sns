@@ -23,6 +23,47 @@
   /*text-align: center;*/
   margin: 30px auto 10px;
 }
+
+.clearfix {
+  width:100%;
+}
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.select_menu span {
+  diplay: block;
+  width: 110px;
+  height: 20px;
+  padding: 5px;
+  margin-left: 2px;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 100%;
+  float: left;
+  text-align: center;
+  background: none repeat scroll 0 0 #FFFFFF;
+  box-shadow: 1px 1px 1px #999999;
+  border: 1px solid lightgray;
+}
+.select_menu a {
+  text-decoration: none;
+  color: gray;
+}
+.select_menu a:hover span {
+  background: lightgray;
+  color: black;
+}
+.select_menu span.selected {
+	background: url('/images/icons/apply.png') no-repeat left center #FFFFFF;
+  padding-left: 20px;
+}
+.select_menu a:hover span.selected {
+	background: url('/images/icons/apply.png') no-repeat left center lightgray;
+}
+
 a.page_down {
   padding: 9px 20px;
   font-size: 17px;
@@ -69,18 +110,66 @@ a.colorbox:hover img{
   border: 3px solid tomato;
 }
 
+
+.once_content{
+  background-color: white;
+  clear: both;
+  margin: 5px 10px 30px;
+  width: 95%;
+  border: 1px solid #CCCCCC;
+}
+.once_content .title{
+  background-color: #7D3E62;
+  color: white;
+  /* background-color: #E1E1E1; */
+  padding: 5px;
+  font-weight: bold;
+  font-size: 115%;
+  margin-bottom: 8px;
+}
+.once_content .title a, .once_content .title a:hover {
+  color: white;
+}
+.once_content .for_index {
+  font-size: 105%;
+  background-color: #DFDFDF;
+  color: black;
+}
+.once_content .for_index a {
+  color: black;
+ }
+.once_content .info{
+  text-align: right;
+  margin-right: 15px;
+  color: gray;
+}
+.once_content .description{
+  padding: 12px 20px;
+}
+.once_content .description .text{
+  margin-top: 10px;
+  padding: 4px;
+}
+.once_content .nice{
+  background:#EFC1C1;
+  text-align:center;
+  padding:3px;
+  font-size:120%;
+}
+
+
 .once_comment {
-  width: 600px;
+  width: 500px;
   margin: 5px 0px 10px;
   border: 1px solid;
   /*background-color: lightgray;*/
 }
 .once_comment .bar{
-  height: 20px;
+  height: 17px;
   /*border-bottom: 1px solid;*/
   /*margin-bottom: 13px;*/
   background-color: #E1E1E1;
-  padding: 5px;
+  padding: 4px;
 }
 .once_comment .bar .name{
   float: left;
@@ -632,6 +721,8 @@ body {
   float: left;
   margin-left: 8px;
   height: 270px;
+  width: 180px;
+  overflow: auto;
 }
 .once_photo .bar{
   background-color: #E1E1E1;
@@ -641,6 +732,14 @@ body {
   background-color: #F2EEE8;
   font-size: 85%;
   padding: 5px;
+}
+.once_photo img{
+  border: solid 1px #161616;
+}
+.once_photo a:hover {
+   filter: alpha(opacity=80);
+  -moz-opacity:0.8;
+  opacity:0.8;
 }
 
 #slideshow{

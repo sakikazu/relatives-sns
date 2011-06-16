@@ -48,7 +48,46 @@
       arrowKey:false
     });
 
+    // アルバム説明が長すぎたら開閉スイッチを挿入する
+    var min_height = 200;
+    var $desc = $('#album_info .content')
+    var desc_height = $desc.height();
+    if(desc_height > min_height) {
+      $desc
+        .height(min_height)
+        .css({"overflow":"hidden"})
+        .after('<div id="desc_open">＞＞続きを読む</div>');
+
+      $('#desc_open')
+        .css({
+          'font-size':'16px',
+          'color':'red',
+          'font-weight':'bold',
+          'cursor':'pointer'
+        })
+        .click(function(){
+          if ($(this).data('open') == true ) {
+            $(this).data('open', false);
+            $desc.height(min_height);
+            $(this).text('＞＞続きを読む');
+          } else {
+            $(this).data('open', true);
+            $desc.height(desc_height);
+            $(this).text('＞＞閉じる');
+          }
+        })
+    }
+
   });
+
+commentshow = function() {
+  $("#comment_area").toggle();
+  if($("#showlink").text() == "表示") {
+    $("#showlink").text("非表示");
+  } else {
+    $("#showlink").text("表示");
+  }
+}
 // ]]></script>
 
 <%= link_to '一覧へ戻る', albums_path %>
@@ -65,6 +104,26 @@
   <div class="content"><%= br auto_link(@album.description) %></div>
 </div>
 
+<h3 class="normal">このアルバムへのコメント<span style="color:red;font-size:16px;margin-left:8px;">(<%= @album.album_comments.size %>)</span> / <%= link_to '表示', "javascript:commentshow();", {:id => 'showlink'} %></h3>
+<div style="width:600px">
+  <div id="comment_area" style="display:none">
+    <div id="comments">
+      <%= render "comments" %>
+    </div>
+
+    <%= form_for([@album, @comment], :url => create_comment_album_path(@album), :remote => true) do |f| %>
+      <div class="field">
+        <%= f.text_area :content, :size => "40x3" %>
+      </div>
+      <%= f.hidden_field :album_id %>
+      <%= f.hidden_field :user_id %>
+      <div class="actions">
+        <%= f.submit "コメントする" %>
+      </div>
+    <% end -%>
+  </div>
+</div>
+
 
 <h3 class="normal">写真をアップロードする (複数ファイル選択可能)</h3>
 <div id="fileQueue"></div>
@@ -74,13 +133,15 @@
 
 <% if @album_photos.size > 0 -%>
   <h3 class="normal">写真を並び替える</h3>
-  <% [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3]].each do |n, i| -%>
-    <% if @sort == i -%>
-      <%= "<b style='color:red'>★ #{n} ★</b>".html_safe %> |
-    <% else -%>
-      <%= link_to n, :action => :show, :sort => i %> |
+  <div class="select_menu clearfix">
+    <% [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3]].each do |n, i| -%>
+      <% if @sort == i -%>
+        <%= link_to "<span class='selected'>#{n}</span>".html_safe, album_path(:sort => i) %>
+      <% else -%>
+        <%= link_to "<span>#{n}</span>".html_safe, album_path(:sort => i) %>
+      <% end -%>
     <% end -%>
-  <% end -%>
+  </div>
 
   <h3 class="normal">写真をクリックするとスライドショーが開始されます</h3>
 <% end -%>
@@ -91,7 +152,7 @@
     <div class="bar">
       <%= "#{p.title} (コメント数：#{p.album_photo_comments.size}）" %>
     </div>
-    <%= link_to(image_tag(p.attach(:thumb)), {:controller => :album_photos, :action => :slideshow, :id => p.id}, @link_to_option) if p.attach? %>
+    <%= link_to(image_tag(p.attach(:thumb)), {:controller => :album_photos, :action => :slideshow, :id => p.id}, {:rel => colorbox_class}) if p.attach? %>
     <div class="info">
       投稿者：<%= p.user.dispname %><br />
       投稿日時：<%= p.created_at.to_s(:short2) if p.created_at %><br />

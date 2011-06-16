@@ -36,7 +36,7 @@ class AlbumsController < ApplicationController
       @album_photos = @album.album_photos.find(:all, :order => "id DESC")
     end
 
-    @link_to_option = request.smart_phone? ? {} : {:rel => "colorbox"}
+    @comment = AlbumComment.new(:user_id => current_user.id, :album_id => @album.id)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -169,6 +169,37 @@ class AlbumsController < ApplicationController
     tmp.close(true) if tmp
     FileUtils.rm(zipfile) if File.exist?(zipfile)
   end
+
+
+  def create_comment
+    @album_comment = AlbumComment.create(params[:album_comment])
+    @album = @album_comment.album
+
+    #UpdateHistory
+    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT, :assetable_id => @album.id).first
+    if action
+      action.update_attributes(:updated_at => Time.now)
+    else
+      @album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT)
+    end
+  end
+
+  def destroy_comment
+    @album_comment = AlbumComment.find(params[:id])
+    @album_comment.destroy
+    @album = @album_comment.album
+
+    respond_to do |format|
+      format.html { redirect_to(album_comments_url) }
+      format.js do
+        render do |page|
+          page.replace_html 'comments', :partial => 'comments'
+        end
+      end
+      format.xml  { head :ok }
+    end
+  end
+
 
 private
   def page_title

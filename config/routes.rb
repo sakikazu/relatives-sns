@@ -27,8 +27,10 @@ ADanRails3::Application.routes.draw do
 
   match "/albums/upload_complete/:id" => "albums#upload_complete", :as => :album_up_comp 
   match  "/albums/title_index" => "albums#title_index", :as => :album_title_index
+  match "/album_comments/destroy_comment/:id" => "albums#destroy_comment", :as => :destroy_album_comment
   resources :albums do
     member do
+      post :create_comment
       get :download
     end
   end

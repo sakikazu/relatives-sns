@@ -1,6 +1,7 @@
 class Album < ActiveRecord::Base
   belongs_to :user
   has_many :album_photos
+  has_many :album_comments
   has_many :update_histories, :as => :assetable, :dependent => :destroy
   belongs_to :use1_photo, :class_name => "AlbumPhoto", :foreign_key => :use1_id
 
