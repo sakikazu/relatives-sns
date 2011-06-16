@@ -9,7 +9,7 @@
     </span>
   </p>
   <div class="content">
-    <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => "colorbox"} if @board.attach? %>
+    <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach? %>
     <p class="text"><%= br auto_link(@board.description) %></p>
   </div>
 </div>

@@ -9,7 +9,7 @@
     <td class='name'><%= link_to m.user.dispname, {:action => "user", :user_id => m.user.id}, {:title => m.user.dispname(User::FULLNAME)} %></td>
 <% if m.image? -%> 
     <td class='content'><%= auto_link(m.view_content).html_safe %></td>
-    <td class='image'><%= link_to(image_tag(m.image(:thumb)), m.image(:large), {:class => 'colorbox'}) if m.image? %></td>
+    <td class='image'><%= link_to(image_tag(m.image(:thumb)), m.image(:large), {:class => colorbox_class}) if m.image? %></td>
 <% else -%>
     <td colspan=2 class='content non_image'><%= auto_link(m.view_content).html_safe %></td>
 <% end -%>

@@ -13,7 +13,7 @@
     </p>
     <div class="content">
       <% blog.blog_images.each do |image| -%>
-        <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => "colorbox"} if image.image? %>
+        <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>
       <% end -%>
       <p class="text">(本文抜粋)<%= truncate(blog.content, :length => 100) %></p>
       <%= link_to '編集する', edit_blog_path(blog) if editable(@current_user, blog.user) %>

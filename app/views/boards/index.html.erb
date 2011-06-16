@@ -16,7 +16,7 @@
   <div class="once_board">
     <div class="title"><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", board %></div>
     <% if board.attach? -%> 
-      <%= link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => "colorbox"} %>
+      <%= link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => colorbox_class} %>
       <br />
     <% end -%>
     <div class="bar">

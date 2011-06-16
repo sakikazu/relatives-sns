@@ -6,7 +6,7 @@
           <li>
             <%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title),
             {:controller => :album_photos, :action => :slideshow, :id => thumb.id, :top => 1},
-            {:class => colorbox_top_class, :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
+            {:class => colorbox_fix_size, :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
           </li>
         <% end -%>
       </ul>

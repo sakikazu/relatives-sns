@@ -1,8 +1,13 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  def colorbox_top_class
-    request.smart_phone? ? "" : "colorbox_top"
+  def colorbox_class
+    request.smart_phone? ? "" : "colorbox"
   end
+
+  def colorbox_fix_size
+    request.smart_phone? ? "" : "colorbox_fix_size"
+  end
+
 
   def form_html_option
     request.smart_phone? ? {} : {:multipart => true}

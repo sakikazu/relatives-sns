@@ -17,7 +17,16 @@
 
   <script type="text/javascript">
     jQuery(document).ready(function(){
+      //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
       jQuery(".colorbox").colorbox();
+      //対象がhtml(colorboxのサイズ指定必要)
+      colorbox_fix_size = (function(){
+        jQuery(".colorbox_fix_size").colorbox({
+          width:"900px",
+          height:"750px",
+        });
+      });
+      colorbox_fix_size();
 
       jQuery("#content_logo").FontEffect({
         gradient:true,
@@ -42,11 +51,6 @@
       });
 
       slide_effect = (function(){
-        jQuery(".colorbox_top").colorbox({
-          width:"900px",
-          height:"750px",
-        });
-
         jQuery(".carousel-demo2").sliderkit({
           shownavitems:6,
           scroll:1,
@@ -55,7 +59,6 @@
           start:0
         });
       });
-      slide_effect();
     });
   </script>
 

@@ -2,7 +2,9 @@ $('#slider_photo').html(
   '<%= escape_javascript(render "slider") %>'
 );
 
-slide_effect(); //再度jQueryのプラグインを実行する
+//再度jQueryのプラグインを実行する
+colorbox_fix_size();
+slide_effect();
 
 $("#slider_update_info")
   .show()

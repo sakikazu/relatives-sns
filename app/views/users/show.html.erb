@@ -1,5 +1,5 @@
 <%= link_to "親戚データ一覧へ", users_path %>
-<br /><br /><%= link_to((image_tag @user.user_ext.image(:thumb)), @user.user_ext.image.url(:large), {:class => "colorbox"}) if  @user.user_ext.image? %>
+<br /><br /><%= link_to((image_tag @user.user_ext.image(:thumb)), @user.user_ext.image.url(:large), {:class => colorbox_class}) if  @user.user_ext.image? %>
 
 <table class="user_data">
   <tr><th>姓</th><td><%= @user.user_ext.firstname %></td></tr>
