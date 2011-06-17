@@ -1,0 +1,70 @@
+<div id="nice_show">
+<div class="select_menu clearfix">
+  <%= link_to "<span class='selected'>最近</span>".html_safe, recent_nices_path %>
+  <%= link_to "<span>ランキング</span>".html_safe, ranking_nices_path %>
+</div>
+<h3 class="normal">最近評価されたつぶやき</h3>
+<% @mutter_data.each do |data| -%>
+  <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
+  <% obj = data.nice -%>
+  <% if obj.blank? -%>
+    削除されました.
+  <% else -%>
+    <div class="nice_content">
+      <div class="mutter_rows" style="margin-left:10px">
+        <b style="font-size:14px"><%= link_to '(詳細)', mutter_path(:id => obj.id) %></b><br>
+        <span class="image"><%= link_to(image_tag(obj.image(:thumb)), obj.image(:large), {:class => colorbox_class}) if obj.image?  %></span>
+        <span class="content" style="background:#E7E7DA;padding:5px;font-weight:bold"><%= br auto_link(obj.content) %></span>
+        <div class="clear"></div>
+        投稿者：<%= obj.user.dispname %> / 投稿日：<%= l obj.created_at %>
+      </div>
+    </div>
+  <% end -%>
+  <hr>
+<% end -%>
+
+<h3 class="normal">最近評価された写真</h3>
+<% @photo_data.each do |data| -%>
+  <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
+  <% obj = data.nice -%>
+  <% if obj.blank? -%>
+    削除されました.
+  <% else -%>
+    <%= link_to(image_tag(obj.attach(:thumb)), slideshow_album_photo_path(obj.album, obj), {:class => colorbox_fix_size}) if obj.attach?  %><br>
+    写真タイトル：<%= obj.title %> / アルバム：<%= obj.album.title %>
+  <% end -%>
+  <hr>
+<% end -%>
+
+<h3 class="normal">最近評価された日記</h3>
+<% @blog_data.each do |data| -%>
+  <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
+  <% obj = data.nice -%>
+  <% if obj.blank? -%>
+    削除されました.
+  <% else -%>
+    <% if obj.blog_images.size > 0 -%>
+      <% b_image = obj.blog_images.first -%>
+      <%= image_tag(b_image.image(:thumb)) if b_image.image? %><br>
+    <% end -%>
+    <%= link_to obj.title, blog_path(obj) %>
+  <% end -%>
+  <hr>
+<% end -%>
+
+
+<h3 class="normal">最近評価された動画</h3>
+<% @movie_data.each do |data| -%>
+  <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
+  <% obj = data.nice -%>
+  <% if obj.blank? -%>
+    削除されました.
+  <% else -%>
+    <%= link_to obj.title, movie_path(obj) %><br>
+    <%= image_tag(obj.thumb(:thumb)) if obj.thumb?  %>
+  <% end -%>
+  <hr>
+<% end -%>
+
+
+</div> <!-- #nice_show -->

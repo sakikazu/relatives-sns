@@ -8,7 +8,7 @@ class UserExt < ActiveRecord::Base
   content_name = "profile"
   has_attached_file :image,
     :styles => {
-      :small => "80x80>",
+      :small => "50x50#",
       :thumb => "250x250>",
       :large => "800x800>"
     },

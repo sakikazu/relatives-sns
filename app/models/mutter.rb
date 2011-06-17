@@ -1,6 +1,7 @@
 class Mutter < ActiveRecord::Base
   belongs_to :user
   belongs_to :celebration
+  has_many :nices, :as => :nice
 
   before_save :trans_space
   validates_presence_of :content

@@ -2,6 +2,7 @@ class Movie < ActiveRecord::Base
   belongs_to :user
   has_many :movie_comments
   has_many :update_histories, :as => :assetable, :dependent => :destroy
+  has_many :nices, :as => :nice
 
   validates_presence_of :movie_file_name
 

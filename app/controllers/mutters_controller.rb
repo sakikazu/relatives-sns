@@ -87,6 +87,16 @@ class MuttersController < ApplicationController
     @kinen = UserExt.kinen
   end
 
+  # nicesからのみ呼ばれる
+  def show
+    @mutter = Mutter.find(params[:id])
+    #現在のmutterの位置から前後5つずつのmutterを取得する
+    num = 5
+    count = Mutter.where("id < ?", @mutter.id).count
+    @mutters = Mutter.includes([{:user => :user_ext}, :nices]).offset(count - num).limit(num*2+1)
+    @mutters = @mutters.reverse
+  end
+
   def create
     mutter = Mutter.new(params[:mutter])
 

@@ -2,21 +2,21 @@
 <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.login) unless @blog.user == current_user %>
 
 <div id="show_blog">
-  <p class="bar">
-    <span class="title"><%= @blog.title %></span>
-    <span class="time">
-      投稿日時：<br /><%= @blog.created_at.to_s(:long) if @blog.created_at %>
-    </span>
-  </p>
-  <div class="content">
-    <% @blog.blog_images.each do |image| -%>
-      <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>
-      <%= link_to "削除", {:action => :destroy_image, :id => image.id}, :confirm => "画像を削除してもいいですか？" if image.image? && editable(@current_user, @blog.user) %>
-    <% end -%>
-    <p class="text"><%= br auto_link(@blog.content) %></p>
+  <div class="once_content">
+    <div class="title"><%= @blog.title %></div>
+    <div class="info">投稿日時：<%= @blog.created_at.to_s(:long) if @blog.created_at %></div>
+    <div class="description">
+      <% @blog.blog_images.each do |image| -%>
+        <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>
+        <%= link_to "削除", {:action => :destroy_image, :id => image.id}, :confirm => "画像を削除してもいいですか？" if image.image? && editable(@current_user, @blog.user) %>
+      <% end -%>
+      <p class="text"><%= br auto_link(@blog.content) %></p>
+    </div>
+    <%= link_to '編集する', edit_blog_path(@blog) if editable(@current_user, @blog.user) %>
+    <div class="nice">
+      <span id="update_nice"><%= render :partial => 'nices/nice', :locals => {:content => @blog, :content_type => "blog", :area => "#update_nice"} %></span>
+    </div>
   </div>
-  <%= link_to '編集する', edit_blog_path(@blog) if editable(@current_user, @blog.user) %>
-</div>
 
 <div class="line_width100">
   <a href="#comment_form" class="page_down">ページ最下部へ</a>
@@ -35,7 +35,5 @@
   <%= submit_tag "投稿する" %>
 <% end -%>
 </div>
-<br />
-<br />
-<br />
-<br />
+</div> <!-- #show_blog -->
+

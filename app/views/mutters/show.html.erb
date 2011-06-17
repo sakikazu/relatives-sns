@@ -1,0 +1,21 @@
+<div id="mutter" style="width:710px;margin:auto;float:none">
+<%= link_to '戻る', :back %><br>
+<h3 class="normal">イイネされたつぶやきの前後もろともはちゅまれー</h3>
+<ul class="mutter_rows">
+  <% @mutters.each_with_index do |mutter, cnt| %>
+<% if mutter == @mutter -%>
+    <li <%= "style='background:Tan'" %>>
+<% else -%>
+    <li <%= "class='even'" if cnt%2==0  %>>
+<% end -%>
+    <div class="left icon">
+      <p><%= image_tag mutter.user.user_ext.image(:small), :size => "50x50" if mutter.user.user_ext.image? %></p>
+    </div>
+    <div class="left content_wrap">
+      <%= render :partial => 'mutter_row', :locals => {:mutter => mutter} %>
+    </div>
+    <div class="clear"></div>
+    </li>
+  <% end %>
+</ul>
+</div>

@@ -1,18 +1,17 @@
-<%= link_to '一覧へ戻る', boards_path %>
-
 <div id="show_board">
-  <p class="bar">
-    <span class="title"><%= @board.title %></span>
-    <span class="info">
-      作成者：<%= @board.user.dispname %><br />
+  <%= link_to '一覧へ戻る', boards_path %>
+
+  <div class="once_content">
+    <div class="title"><%= @board.title %></div>
+    <div class="info">
+      作成者：<%= @board.user.dispname %> | 
       作成日時：<%= @board.created_at.to_s(:long) if @board.created_at %>
-    </span>
-  </p>
-  <div class="content">
-    <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach? %>
-    <p class="text"><%= br auto_link(@board.description) %></p>
+    </div>
+    <div class="description">
+      <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach? %>
+      <p class="text"><%= br auto_link(@board.description) %></p>
+    </div>
   </div>
-</div>
 
 <div class="line_width100">
   <a href="#comment_form" class="page_down">ページ最下部へ</a>
@@ -33,7 +32,5 @@
   <%= submit_tag "投稿する" %>
 <% end -%>
 </div>
-<br />
-<br />
-<br />
-<br />
+</div> <!-- #show_board -->
+

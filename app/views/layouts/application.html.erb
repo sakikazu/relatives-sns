@@ -3,84 +3,91 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>A団HP | <%= "#{@page_title || controller.controller_name} > #{controller.action_name}" %></title>
-  <link href="/images/favicon.ico" type="image/x-icon" rel="icon" />
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<title>A団HP | <%= "#{@page_title || controller.controller_name} > #{controller.action_name}" %></title>
+<link href="/images/favicon.ico" type="image/x-icon" rel="icon" />
 
-  <%= stylesheet_link_tag 'scaffold', 'main' %>
-  <%= stylesheet_link_tag 'colorbox/colorbox', 'win7navi', 'sliderkit/sliderkit-core', 'tipTip' %>
+<%= stylesheet_link_tag 'scaffold', 'main' %>
+<%= stylesheet_link_tag 'colorbox/colorbox', 'win7navi', 'sliderkit/sliderkit-core', 'tipTip' %>
 
-  <%= javascript_include_tag 'jquery.min' %>
-  <%= javascript_include_tag 'rails' %>
-  <%= javascript_include_tag 'jquery.colorbox-min', 'jquery-fonteffect-1.0.0.min',
-      'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi' %>
+<%= javascript_include_tag 'jquery.min' %>
+<%= javascript_include_tag 'rails' %>
+<%= javascript_include_tag 'jquery.colorbox-min', 'jquery-fonteffect-1.0.0.min',
+    'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi' %>
 
-  <script type="text/javascript">
-    //sakikazu RJSはまだprototype.js依存みたいだが、これを追加すればOK
-    Element.update = function (element, html) {
-      $('#' + element).html(html);
-    }
+<script>
+//sakikazu RJSはまだprototype.js依存みたいだが、これを追加すればOK
+Element.update = function (element, html) {
+  $('#' + element).html(html);
+}
 
-    jQuery(document).ready(function(){
-      //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
-      jQuery(".colorbox").colorbox();
-      //対象がhtml(colorboxのサイズ指定必要)
-      colorbox_fix_size = (function(){
-        jQuery(".colorbox_fix_size").colorbox({
-          width:"900px",
-          height:"750px",
-        });
-      });
-      colorbox_fix_size();
-
-      jQuery("#content_logo").FontEffect({
-        gradient:true,
-        gradientColor:"#D8D8D8",
-        mirror:true,
-        mirrorColor:"#298d79"
-      });
-      jQuery("#mutter_logo").FontEffect({
-        //outline:true,
-        shadow:true,
-        gradient:true,
-        gradientColor:"gray",
-        gradientPosition:25,
-        gradientLength:20
-      });
-
-      jQuery("#new_board_info").tipTip({
-        content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
-        defaultPosition: "right",
-        maxWidth: "auto",
-        delay: 0,
-      });
-
-      slide_effect = (function(){
-        jQuery(".carousel-demo2").sliderkit({
-          shownavitems:6,
-          scroll:1,
-          mousewheel:true,
-          circular:true,
-          start:0
-        });
-      });
+jQuery(document).ready(function(){
+  //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
+  jQuery(".colorbox").colorbox();
+  //対象がhtml(colorboxのサイズ指定必要)
+  colorbox_fix_size = (function(){
+    jQuery(".colorbox_fix_size").colorbox({
+      width:"900px",
+      height:"750px",
     });
-  </script>
+  });
+  colorbox_fix_size();
 
-  <%#= calendar_date_select_includes %>
-  <script type="text/javascript">
-    //calendar_date_select日本語化
-    _translations = {
-      "OK": "OK",
-      "Now": "現在",
-      "Today": "今日",
-      "Clear": "戻る"
-    }
-    //Date.weekdays = $w("日 月 火 水 木 金 土");
-    //Date.months = $w("1 2 3 4 5 6 7 8 9 10 11 12" );
-  </script>
+  jQuery("#content_logo").FontEffect({
+    gradient:true,
+    gradientColor:"#D8D8D8",
+    mirror:true,
+    mirrorColor:"#298d79"
+  });
+  jQuery("#mutter_logo").FontEffect({
+    //outline:true,
+    shadow:true,
+    gradient:true,
+    gradientColor:"gray",
+    gradientPosition:25,
+    gradientLength:20
+  });
 
-  <%= csrf_meta_tag %>
+  jQuery("#new_board_info").tipTip({
+    content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
+    defaultPosition: "right",
+    maxWidth: "auto",
+    delay: 0,
+  });
+
+  slide_effect = (function(){
+    jQuery(".carousel-demo2").sliderkit({
+      shownavitems:6,
+      scroll:1,
+      mousewheel:true,
+      circular:true,
+      start:0
+    });
+  });
+
+  // コンテンツの高さが足りないページでも、フッターを下の方に配置する
+  // ※bodyに対して設定しようとしたら適用されなかった
+  if($("body").height() < $(window).height()) {
+    offset = $("body").height() - $("#wrapper").height();
+    $("#wrapper").height($(window).height() - offset);
+  }
+});
+</script>
+
+<%#= calendar_date_select_includes %>
+<script type="text/javascript">
+  //calendar_date_select日本語化
+  _translations = {
+    "OK": "OK",
+    "Now": "現在",
+    "Today": "今日",
+    "Clear": "戻る"
+  }
+  //Date.weekdays = $w("日 月 火 水 木 金 土");
+  //Date.months = $w("1 2 3 4 5 6 7 8 9 10 11 12" );
+</script>
+
+<%= csrf_meta_tag %>
 </head>
 <body>
 
@@ -106,7 +113,7 @@
     そのアクションによって、またあなたも楽しめるでしょう。<br />
     そういうサイクルができたら最高です。
   </div>
-  <div style="clear:both"></div>
+  <div class="clear"></div>
   <div id="slider_photo">
     <%= render "mutters/slider" %>
   </div>
@@ -118,11 +125,12 @@
     <div id="content_logo"><%= @page_title %></div>
   </div>
 <% end -%>
-<div class="clear-both"></div>
+<div class="clear"></div>
 
 
 <ul class="win7">
   <li class="win7red"><%= link_to "トップ", root_path %></li>
+  <li class="win7blue"><%= link_to "人気", nices_path %></li>
   <li class="win7yellow"><%= link_to "アルバム", albums_path %></li>
   <li class="win7green"><%= link_to "日記", blogs_path %></li>
   <li class="win7green"><%= link_to "動画", movies_path %></li>
@@ -132,7 +140,7 @@
   <li><%= link_to "その他", others_path %></li>
   <li><span style="color:GreenYellow;font-weight:bold"><%= "〈 ユーザー：#{current_user.login} 〉" if current_user %></span></li>
 </ul>
-<div class="clear-both"></div>
+<div class="clear"></div>
 <br />
 
 <%= "<p class='notice'>#{flash[:notice]}</p>".html_safe if flash[:notice].present? %>
@@ -140,7 +148,7 @@
 <div id="wrapper">
 <%= yield  %>
 </div>
-<div class="clear-both"></div>
+<div class="clear"></div>
 <div id="footer">
 - AdanHP -
 </div>

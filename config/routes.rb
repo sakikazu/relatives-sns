@@ -1,5 +1,13 @@
 ADanRails3::Application.routes.draw do
 
+  resources :nices, :only => [:create, :destroy] do
+    collection do
+      get :recent
+      get :ranking
+    end
+  end
+  match "nices" => "nices#recent"
+
   resources :histories do
     collection do
       get :new_comment

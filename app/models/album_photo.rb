@@ -2,6 +2,7 @@ class AlbumPhoto < ActiveRecord::Base
   belongs_to :user
   belongs_to :album
   has_many :album_photo_comments
+  has_many :nices, :as => :nice
 
   content_name = "album"
   has_attached_file :attach,

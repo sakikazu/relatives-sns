@@ -1,0 +1,13 @@
+<div class="bar">
+  <span class='name'><%= link_to mutter.user.dispname, {:action => "user", :user_id => mutter.user.id}, {:title => mutter.user.dispname(User::FULLNAME)} %></span>
+  <span class='time'><%= l mutter.created_at %></span>
+  <span class="nice">
+    <span id='cont_<%= mutter.id %>'>
+      <%= render :partial => 'nices/nice', :locals => {:content => mutter, :content_type => "mutter", :area => "#cont_#{mutter.id}"} %>
+    </span> 
+  </span>
+</div>
+<span class='image'><%= link_to(image_tag(mutter.image(:thumb)), mutter.image(:large), {:class => colorbox_class}) if mutter.image? %></span>
+<span class='content'><%= auto_link(mutter.view_content).html_safe %></span>
+<div class="clear"></div>
+<span class='delete'><%= link_to("削除", mutter, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, mutter.user) %></span>
