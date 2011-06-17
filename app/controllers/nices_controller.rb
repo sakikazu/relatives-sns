@@ -1,15 +1,12 @@
 class NicesController < ApplicationController
   def recent
 #sakikazu 現在、同じコンテンツでも、複数人が評価してたら人数分出てしまうので、コンテンツごとにまとめたい。ソート対象は、最後に評価した人物のnice.created_at
-
-    # まず多めに50個取得しておいて、後で各コンテンツに10個ずつ分ける。
-    # これだと一つのコンテンツだけ10個になって、あとは0ってことも起こりうるが、とりあえずこれでいい
-    data = Nice.order("id DESC").limit(60)
-    data2 = data.group_by{|d| d[:nice_type] =~ /(Mutter|AlbumPhoto|Movie|Blog)/;$1}
-    @mutter_data = data2["Mutter"].present? ? data2["Mutter"].slice(0,10) : []
-    @movie_data = data2["Movie"].present? ? data2["Movie"].slice(0,10) : []
-    @photo_data = data2["AlbumPhoto"].present? ? data2["AlbumPhoto"].slice(0,10) : []
-    @blog_data = data2["Blog"].present? ? data2["Blog"].slice(0,10) : []
+    #sakikazu ページネートは、コンテンツごとに置いてるが、ページを送ると、すべてのコンテンツが次ページのデータになる。問題はないけど、理想は、Ajaxでそのコンテンツのみだな
+      # →あ、少なくともkaminariのAjaxのやつではできるわ
+    @nices = {}
+    %w(Mutter AlbumPhoto Movie Blog).each do |type|
+      @nices[type.downcase] = Nice.where(:nice_type => type).order("id DESC").paginate(:page => params[:page], :per_page => 10)
+    end
   end
 
   def ranking

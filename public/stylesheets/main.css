@@ -36,6 +36,13 @@
   clear: both;
 }
 
+a.colorbox:hover {
+  opacity: 0.8;
+}
+a.colorbox_fix_size:hover {
+  opacity: 0.8;
+}
+
 .select_menu span {
   diplay: block;
   width: 110px;
@@ -188,6 +195,30 @@ a.colorbox:hover img{
 }
 .once_comment .content .text{
   margin-top: 10px;
+}
+
+#mokuji {
+  margin: 20px 10px;
+}
+#mokuji ul {
+  padding-left: 0px;
+}
+#mokuji li {
+  font-size: 14px;
+  line-height: 18px;
+  margin-left: 25px;
+}
+/* via: http://jsdo.it/event/topics/2011/06/jquery-mobile */
+h2.normal {
+  background-image: -moz-linear-gradient(center top , #DCDCDC 0%, #FFFFFF 100%);
+  border: 1px solid #CCCCCC;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 0 0 2px #FFFFFF inset, 0 0 2px #FFFFFF inset, 0 0 1px #FFFFFF inset, 0 0 1px #FFFFFF inset, 0 0 1px #FFFFFF inset, 0 0 1px #FFFFFF inset;
+  font-size: 16px;
+  line-height: 1;
+  margin-bottom: 15px;
+  margin-top: 30px;
+  padding: 15px 20px;
 }
 
 h3.normal{
@@ -365,9 +396,6 @@ body {
 .mutter_rows .image {
   float: left;
   margin-right: 12px;
-}
-.mutter_rows a:hover img {
-  opacity: 0.8;
 }
 .mutter_rows .icon {
   width: 50px;
@@ -771,4 +799,8 @@ table.user_data tr td{
   margin: 7px 0px 7px;
   color: olive;
   font-weight: bold;
+}
+.nice_content_info {
+  margin-top: 10px;
+  color: gray;
 }

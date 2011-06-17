@@ -1,5 +1,10 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+  def nice_author_and_created_at(obj)
+     "<div class='nice_content_info'>投稿者：#{obj.user.dispname} / 投稿日：#{l obj.created_at}</div>".html_safe
+  end
+
   def colorbox_class
     request.smart_phone? ? "" : "colorbox"
   end
