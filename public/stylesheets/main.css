@@ -217,8 +217,12 @@ h2.normal {
   font-size: 16px;
   line-height: 1;
   margin-bottom: 15px;
-  margin-top: 30px;
+  margin-top: 40px;
   padding: 15px 20px;
+}
+.h2normal_content {
+  width: 95%;
+  margin-left: 15px;
 }
 
 h3.normal{
@@ -399,6 +403,9 @@ body {
 }
 .mutter_rows .icon {
   width: 50px;
+}
+.mutter_rows .icon p {
+  margin: 4px 0px;
 }
 .mutter_rows .content_wrap {
   width: 580px;
@@ -787,18 +794,32 @@ table.user_data tr td{
   margin: auto;
 }
 #nice_show .nice_content {
-  padding: 4px 12px 0px;
+  padding: 4px 4px 0px;
+}
+#nice_show .nice_content .mutter_rows {
+  width:100%;
+  margin-left:10px;
+}
+#nice_show .nice_content .mutter_rows .content {
+  background:#E7E7DA;
+  padding:5px;
+  line-height:20px;
 }
 .nice_rank {
   font-weight:bold;
   font-size: 120%;
   color:red;
-  margin-bottom:12px;
+  margin:20px 0px 12px;
 }
 .nice_user {
-  margin: 7px 0px 7px;
+  margin: 12px 0px;
   color: olive;
   font-weight: bold;
+  font-size: 14px;
+}
+.nice_rank .nice_user {
+  margin: 0px 0px 0px 7px;
+  font-size: 12px;
 }
 .nice_content_info {
   margin-top: 10px;

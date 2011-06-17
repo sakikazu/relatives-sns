@@ -1,4 +1,7 @@
 class NicesController < ApplicationController
+  before_filter :require_user
+  before_filter :page_title
+
   def recent
 #sakikazu 現在、同じコンテンツでも、複数人が評価してたら人数分出てしまうので、コンテンツごとにまとめたい。ソート対象は、最後に評価した人物のnice.created_at
     #sakikazu ページネートは、コンテンツごとに置いてるが、ページを送ると、すべてのコンテンツが次ページのデータになる。問題はないけど、理想は、Ajaxでそのコンテンツのみだな
@@ -59,4 +62,10 @@ class NicesController < ApplicationController
     nice.destroy
     render "create.js"
   end
+
+private
+  def page_title
+    @page_title = "人気"
+  end
+
 end
