@@ -307,14 +307,17 @@ body {
   float: left;
 }
 #mutter #form{
+  border: 1px solid lightgray;
+  padding: 20px 25px 0px;
   height: 130px;
-	background:url(../images/mutter.gif) repeat-x center left;
+  background: #F2F2F2;
+	/* background:url(../images/mutter.gif) repeat-x center left; */
   margin: 0px 0px 15px 10px;
 }
 #mutter #form textarea{
   padding: 8px;
   font-size: 1.2em;
-  width: 550px;
+  width: 530px;
   height: 40px;
 }
 #mutter #form input.post{

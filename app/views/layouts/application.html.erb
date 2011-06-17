@@ -12,8 +12,7 @@
 
 <%= javascript_include_tag 'jquery.min' %>
 <%= javascript_include_tag 'rails' %>
-<%= javascript_include_tag 'jquery.colorbox-min', 'jquery-fonteffect-1.0.0.min',
-    'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi' %>
+<%= javascript_include_tag 'jquery.colorbox-min', 'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi' %>
 
 <script>
 //sakikazu RJSはまだprototype.js依存みたいだが、これを追加すればOK
@@ -32,21 +31,6 @@ jQuery(document).ready(function(){
     });
   });
   colorbox_fix_size();
-
-  jQuery("#content_logo").FontEffect({
-    gradient:true,
-    gradientColor:"#D8D8D8",
-    mirror:true,
-    mirrorColor:"#298d79"
-  });
-  jQuery("#mutter_logo").FontEffect({
-    //outline:true,
-    shadow:true,
-    gradient:true,
-    gradientColor:"gray",
-    gradientPosition:25,
-    gradientLength:20
-  });
 
   jQuery("#new_board_info").tipTip({
     content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
