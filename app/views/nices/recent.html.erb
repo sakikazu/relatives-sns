@@ -1,15 +1,24 @@
 <script>
 $(document).ready(function() {
-  $("#mokuji")
-    .append('<ul><h3 class="normal">目次</h3></ul>')
-  
+  //目次を作成する
+  $("#mokuji").append('<ul><h3 class="normal">目次</h3></ul>');
   var items = [];
-  $('h2').each(function(idx){
+  $('h2.normal').each(function(idx){
     $(this).attr("id", "mokuji"+idx);
     items.push('<a href="#mokuji' + idx + '">' + $(this).text() + '</a>');
   });
   $("#mokuji ul").append('<li>' + items.join("</li><li>") + '</li>');
-  })
+
+  //すべてのカテゴリから評価された日付降順に抽出する
+  var data = [];
+  $(".nice_content_wrap").each(function(){
+    data.push({"id" : $(this).attr("id"), "time" : new Date($(this).attr("time"))});
+  });
+  data = data.sort(function(x, y){return x.time < y.time ? 1 : -1});
+  for(var i = 0; i < 10; i++){
+    $('h2.normal["summary=true"]').after($("#" + data[i].id).clone())
+  }
+})
 </script>
 
 <div id="nice_show">
@@ -20,10 +29,13 @@ $(document).ready(function() {
 
 <div id="mokuji"></div>
 
+<h2 class="normal" summary="true">最近評価されたまとめ(直近10個)</h2>
+
 <h2 class="normal">最近評価されたつぶやき</h2>
-<%= will_paginate @nices["mutter"] %><br />
+<%= will_paginate @nices["mutter"] %>
 <div class="h2normal_content">
 <% @nices["mutter"].each do |data| -%>
+  <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
   <% obj = data.nice -%>
   <% if obj.blank? -%>
@@ -40,13 +52,15 @@ $(document).ready(function() {
     </div>
   <% end -%>
   <hr>
+  </div>
 <% end -%>
 </div>
 
 <h2 class="normal">最近評価された写真</h2>
-<%= will_paginate @nices["albumphoto"] %><br />
+<%= will_paginate @nices["albumphoto"] %>
 <div class="h2normal_content">
 <% @nices["albumphoto"].each do |data| -%>
+  <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
   <% obj = data.nice -%>
   <% if obj.blank? -%>
@@ -56,13 +70,15 @@ $(document).ready(function() {
     写真タイトル：<%= obj.title %> / アルバム：<%= link_to obj.album.title, obj.album %>
   <% end -%>
   <hr>
+  </div>
 <% end -%>
 </div>
 
 <h2 class="normal">最近評価された日記</h2>
-<%= will_paginate @nices["blog"] %><br />
+<%= will_paginate @nices["blog"] %>
 <div class="h2normal_content">
 <% @nices["blog"].each do |data| -%>
+  <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
   <% obj = data.nice -%>
   <% if obj.blank? -%>
@@ -76,14 +92,16 @@ $(document).ready(function() {
     <%= nice_author_and_created_at(obj) %>
   <% end -%>
   <hr>
+  </div>
 <% end -%>
 </div>
 
 
 <h2 class="normal">最近評価された動画</h2>
-<%= will_paginate @nices["movie"] %><br />
+<%= will_paginate @nices["movie"] %>
 <div class="h2normal_content">
 <% @nices["movie"].each do |data| -%>
+  <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
   <% obj = data.nice -%>
   <% if obj.blank? -%>
@@ -94,6 +112,7 @@ $(document).ready(function() {
     <%= nice_author_and_created_at(obj) %>
   <% end -%>
   <hr>
+  </div>
 <% end -%>
 </div>
 

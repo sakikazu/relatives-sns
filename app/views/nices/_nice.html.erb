@@ -1,5 +1,5 @@
 <% if content.nices.size > 0 -%> 
-  イイネ<strong style="color:red"><%= "(#{content.nices.size})" %></strong>
+  <strong style="color:red" class="nice_members" nice_members="<%= content.nices.map{|n| n.user.dispname}.join(",") %>"><%= "イイネ(#{content.nices.size})" %></strong>
 <% end %>
 <% nice = content.nices.where(:user_id => current_user.id).first -%>
 <% if nice.present? -%>

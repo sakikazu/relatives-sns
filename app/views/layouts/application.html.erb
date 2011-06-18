@@ -21,6 +21,18 @@ Element.update = function (element, html) {
 }
 
 jQuery(document).ready(function(){
+  //イイネしたメンバーをクリックで表示する
+  $('.nice_members').each(function(){
+    $(this).css({'cursor' : 'pointer'});
+    $(this).tipTip({
+      content: $(this).attr('nice_members'),
+      defaultPosition: "top",
+      maxWidth: "auto",
+      activation: "click",
+      delay: 0,
+    });
+  });
+
   //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
   jQuery(".colorbox").colorbox();
   //対象がhtml(colorboxのサイズ指定必要)
