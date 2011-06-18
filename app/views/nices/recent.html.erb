@@ -14,9 +14,11 @@ $(document).ready(function() {
   $(".nice_content_wrap").each(function(){
     data.push({"id" : $(this).attr("id"), "time" : new Date($(this).attr("time"))});
   });
-  data = data.sort(function(x, y){return x.time > y.time ? 1 : -1});
-  for(var i = 0; i < 10; i++){
-    $('h2.normal["summary=true"]').after($("#" + data[i].id).clone())
+  data = data.sort(function(x, y){return x.time < y.time ? 1 : -1});
+  for(var i = 9; i >= 0; i--){
+    $obj = $("#" + data[i].id).clone();
+    $obj.attr("id","");
+    $('h2.normal[summary=true]').after($obj);
   }
 })
 </script>
