@@ -80,17 +80,15 @@ commentshow = function() {
 // ]]></script>
 
 <%= link_to '一覧へ戻る', albums_path %>
-<br />
-<br />
-<div id="album_info">
-  <div class="bar">
-    <span class="title"><%= "#{@album.title} （写真数：#{@album_photos.size}）" %></span>
-    <span class="right">
-      作成者：<%= @album.user.dispname %><br />
+<div style="width:650px">
+  <div class="once_content">
+    <div class="title"><%= "#{@album.title} （写真数：#{@album.album_photos.size}）" %></div>
+    <div class="info">
+      作成者：<%= @album.user.dispname %> | 
       作成日時：<%= @album.created_at.to_s(:long) if @album.created_at %>
-    </span>
+    </div>
+    <div class="description"><%= br auto_link(@album.description) %></div>
   </div>
-  <div class="content"><%= br auto_link(@album.description) %></div>
 </div>
 
 <h3 class="normal">このアルバムへのコメント<span style="color:red;font-size:16px;margin-left:8px;">(<%= @album.album_comments.size %>)</span> / <%= link_to '表示', "javascript:commentshow();", {:id => 'showlink'} %></h3>
@@ -157,4 +155,5 @@ commentshow = function() {
   </div>
 <% end -%>
 </div>
+<%= will_paginate @album_photos, :prev_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 </div>

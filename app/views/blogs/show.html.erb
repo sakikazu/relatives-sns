@@ -1,9 +1,13 @@
-<%= link_to '自分の日記へ', blogs_path %> |
-<%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.login) unless @blog.user == current_user %>
-
 <div id="show_blog">
+  <%= link_to '自分の日記へ', blogs_path %> |
+  <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.login) unless @blog.user == current_user %>
+
   <div class="once_content">
-    <div class="title"><%= @blog.title %></div>
+    <div class="title">
+      <%= @blog.title %> 
+      <%= link_to "(コメント数：#{@blog.blog_comments.size}）", "#comments" %>
+    </div>
+
     <div class="info">投稿日時：<%= @blog.created_at.to_s(:long) if @blog.created_at %></div>
     <div class="description">
       <% @blog.blog_images.each do |image| -%>
