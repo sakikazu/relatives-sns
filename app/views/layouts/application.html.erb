@@ -12,7 +12,8 @@
 
 <%= javascript_include_tag 'jquery.min' %>
 <%= javascript_include_tag 'rails' %>
-<%= javascript_include_tag 'jquery.colorbox-min', 'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min', 'jquery.tipTip.minified','win7navi', 'jquery.autopager-1.0.0.min' %>
+<%= javascript_include_tag 'jquery.colorbox-min', 'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min',
+     'jquery.tipTip.minified','win7navi', 'jquery.autopager-1.0.0.min', 'desktopify.js' %>
 
 <script>
 //sakikazu RJSはまだprototype.js依存みたいだが、これを追加すればOK
@@ -98,6 +99,35 @@ jQuery(document).ready(function(){
     offset = $("body").height() - $("#wrapper").height();
     $("#wrapper").height($(window).height() - offset);
   }
+
+
+  // つぶやきのデスクトップ通知
+  $('<button id="desktopify">つぶやきの通知を有効にする<\/button>')
+    .appendTo('#desktopnotification')
+    .desktopify({ 
+      timeout: 15000,
+      callback: function(){
+        setInterval(function(){
+          $.get("/mutters/update_check", function(data){
+            if(data != "") {
+              $('#desktopify').trigger('notify', [
+              data + 'がつぶやきました',
+              '新着つぶやき(15秒後に非表示)'
+              ]);
+              return false;
+            }
+          });
+        },20000);
+      },
+      unsupported: function() {
+        $('<div>あなたのブラウザは通知をサポートしてません。Chromeにするか、Firefoxなら <a href="http://code.google.com/p/ff-html5notifications/">http://code.google.com/p/ff-html5notifications/</a> をインストールしてください<\/div>')
+          .appendTo('#desktopnotification');
+        $('#desktopify').hide();
+      } 
+    })
+    .trigger('click');
+
+
 });
 </script>
 
@@ -177,6 +207,7 @@ jQuery(document).ready(function(){
 </div>
 <div class="clear"></div>
 <div id="footer">
+<div id="desktopnotification"></div>
 - AdanHP -
 </div>
 </div>

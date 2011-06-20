@@ -194,4 +194,18 @@ class MuttersController < ApplicationController
     end
   end  
 
+  #つぶやき新着チェック
+  def update_check
+#sakikazu ここの時間設定、適当すぎるがどうしよう。cookie経由にした方がいいかな
+    prev_check = Time.now - 23.second #余裕を持って＋3秒
+    mutters = Mutter.where("created_at > ?", prev_check)
+    #自分のつぶやきは無視する
+    mutters.reject!{|m| m.user == current_user}
+    if mutters.size > 0
+      relt = mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
+    else
+      relt = "" 
+    end
+    render :text => relt
+  end
 end
