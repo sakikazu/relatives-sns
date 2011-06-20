@@ -22,14 +22,16 @@ Element.update = function (element, html) {
 
 jQuery(document).ready(function(){
   //イイネしたメンバーをクリックで表示する
-  $('.nice_members').each(function(){
-    $(this).css({'cursor' : 'pointer'});
-    $(this).tipTip({
-      content: $(this).attr('nice_members'),
-      defaultPosition: "top",
-      maxWidth: "auto",
-      activation: "click",
-      delay: 0,
+  nice_member = (function(){
+    $('.nice_members').each(function(){
+      $(this).css({'cursor' : 'pointer'});
+      $(this).tipTip({
+        content: $(this).attr('nice_members'),
+        defaultPosition: "top",
+        maxWidth: "auto",
+        activation: "click",
+        delay: 0,
+      });
     });
   });
 
