@@ -20,7 +20,7 @@ th {
   <tr><th>住所(アパート名とか)</th><td><%= f.text_field :addr4 %></td></tr>
   <tr><th>出身地</th><td><%= f.text_field :addr_from %></td></tr>
   <tr><th>誕生日</th><td>
-    <%= f.date_select :birth_day, :start_year => 1910, :end_year => Date.today.year, :use_month_numbers => true %>
+    <%= f.date_select :birth_day, :start_year => 1910, :end_year => Date.today.year, :use_month_numbers => true, :include_blank => true %>
     <%#= f.calendar_date_select :birth_day, :popup=>:force, :embedded => true, :year_range => Time.local(1910,1,1,1,1,1)..0.years.ago %>
   </td></tr>
   <tr><th>仕事</th><td><%= f.text_field :job %></td></tr>
