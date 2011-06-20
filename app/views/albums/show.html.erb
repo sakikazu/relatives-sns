@@ -67,7 +67,20 @@
         })
     }
 
-  });
+    $.autopager({
+      content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
+      //次ページリンクのセレクタ(Default: 'a[rel=next]')
+      //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
+      load: function(current, next) {
+        var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
+        //thisは読み込んだコンテンツ要素を指す
+        $(this).before(pageBreak);
+        //読み込んだページに再度colorboxを適用させる
+        colorbox_slideshow();
+      }
+    });
+
+  }); //jquery#ready
 
 commentshow = function() {
   $("#comment_area").toggle();
@@ -77,21 +90,6 @@ commentshow = function() {
     $("#showlink").text("表示");
   }
 }
-
-
-$.autopager({
-  content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
-  //次ページリンクのセレクタ(Default: 'a[rel=next]')
-  //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
-  load: function(current, next) {
-    var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
-    //thisは読み込んだコンテンツ要素を指す
-    $(this).before(pageBreak);
-    //読み込んだページに再度colorboxを適用させる
-    colorbox_slideshow();
-  }
-});
-
 
 // ]]></script>
 
