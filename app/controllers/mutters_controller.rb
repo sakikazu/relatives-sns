@@ -79,6 +79,7 @@ class MuttersController < ApplicationController
     @login_users = User.includes(:user_ext).order("last_request_at DESC").limit(15)
     @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
     @album_thumbs = AlbumPhoto.rnd_photos
+    @dispupdate_interval = 10 * 1000
 
     ###日齢
     @nichirei, @nichirei_future = current_user.user_ext.nichirei
@@ -177,5 +178,20 @@ class MuttersController < ApplicationController
     #ランダム抽出 -sample
     @celeb_mutters = cel.present? ? cel.mutters.sample(cel.mutters.size) : []
   end
+
+  #つぶやき表示更新
+  def update_disp
+    interval = params[:interval]
+    #sakikazu 余裕を持って＋5秒前から取得
+    interval = interval.to_i/1000 + 5
+    prev_check = Time.now - interval
+    new_mutters = Mutter.where("created_at > ?", prev_check)
+    if new_mutters.size > 0
+      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+      render :partial => "list"
+    else
+      render :text => ""
+    end
+  end  
 
 end
