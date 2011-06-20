@@ -97,7 +97,7 @@ jQuery(document).ready(function(){
           $.get("/mutters/update_check", function(data){
             if(data != "" && data != undefined) {
               $('#desktopify').trigger('notify', [
-              data + 'がつぶやきました',
+              data,
               '新着つぶやき(15秒後に非表示)'
               ]);
               return false;
