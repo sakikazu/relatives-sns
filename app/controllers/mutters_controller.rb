@@ -182,8 +182,8 @@ class MuttersController < ApplicationController
   #つぶやき表示更新
   def update_disp
     interval = params[:interval]
-    #sakikazu 余裕を持って＋5秒前から取得
-    interval = interval.to_i/1000 + 5
+    #sakikazu 余裕を持って＋15秒前から取得
+    interval = interval.to_i/1000 + 15
     prev_check = Time.now - interval
     new_mutters = Mutter.where("created_at > ?", prev_check)
     if new_mutters.size > 0
@@ -202,10 +202,9 @@ class MuttersController < ApplicationController
     #自分のつぶやきは無視する
     mutters.reject!{|m| m.user == current_user}
     if mutters.size > 0
-      relt = mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
+      render :text => mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
     else
-      relt = "" 
+      render :text => ""
     end
-    render :text => relt
   end
 end

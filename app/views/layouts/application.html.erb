@@ -62,20 +62,6 @@ jQuery(document).ready(function(){
     });
   });
 
-  $.autopager({
-    content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
-    //次ページリンクのセレクタ(Default: 'a[rel=next]')
-    //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
-    load: function(current, next) {
-      var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
-      //thisは読み込んだコンテンツ要素を指す
-      $(this).before(pageBreak);
-      //読み込んだページに再度colorboxを適用させる
-      colorbox_slideshow();
-    }
-  });
-
-
   jQuery("#new_board_info").tipTip({
     content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
     defaultPosition: "right",
