@@ -35,18 +35,7 @@
     });
 
     //colorbox
-    $("a[rel='colorbox']").colorbox({
-      slideshow:true,
-      slideshowSpeed:8000,
-      slideshowAuto: false,
-      slideshowStart: "★開始する(8秒送り)",
-      slideshowStop: "★停止する",
-      width:"900px",
-      height:"750px",
-      current: "{current} / {total}",
-      escKey:false,
-      arrowKey:false
-    });
+    colorbox_slideshow();
 
     // アルバム説明が長すぎたら開閉スイッチを挿入する
     var min_height = 200;
@@ -146,7 +135,8 @@ commentshow = function() {
   <h3 class="normal">写真をクリックするとスライドショーが開始されます</h3>
 <% end -%>
 
-<div id="photo">
+<div class="autopagerize_page_element">
+<div id="photo" class="clearfix">
 <% @album_photos.each do |p| -%>
   <div class="once_photo">
     <div class="bar">
@@ -166,4 +156,5 @@ commentshow = function() {
     </div>
   </div>
 <% end -%>
+</div>
 </div>

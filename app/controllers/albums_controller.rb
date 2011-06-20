@@ -27,13 +27,13 @@ class AlbumsController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort 
     when 1
-      @album_photos = @album.album_photos.find(:all, :order => "id DESC")
+      @album_photos = @album.album_photos.order("id DESC").paginate(:page => params[:page], :per_page => 30)
     when 2
-      @album_photos = @album.album_photos.find(:all, :order => "exif_at ASC")
+      @album_photos = @album.album_photos.order("exif_at ASC").paginate(:page => params[:page], :per_page => 30)
     when 3
-      @album_photos = @album.album_photos.find(:all, :order => "last_comment_at DESC")
+      @album_photos = @album.album_photos.order("last_comment_at DESC").paginate(:page => params[:page], :per_page => 30)
     else
-      @album_photos = @album.album_photos.find(:all, :order => "id DESC")
+      @album_photos = @album.album_photos.order("id DESC").paginate(:page => params[:page], :per_page => 30)
     end
 
     @comment = AlbumComment.new(:user_id => current_user.id, :album_id => @album.id)
