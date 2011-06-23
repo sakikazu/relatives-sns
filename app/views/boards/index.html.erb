@@ -11,7 +11,7 @@
   <% end -%>
 </div>
 
-<%= will_paginate @boards %>
+<%= will_paginate @boards, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <div id="board">
 <% @boards.each do |board| %>
   <div class="once_board">
@@ -32,4 +32,4 @@
   </div>
 <% end %>
 </div>
-<%= will_paginate @boards %>
+<%= will_paginate @boards, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>

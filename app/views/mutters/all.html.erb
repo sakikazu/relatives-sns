@@ -1,7 +1,27 @@
+<script>
+$(document).ready(function() {
+
+  $.autopager({
+    content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
+    //次ページリンクのセレクタ(Default: 'a[rel=next]')
+    //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
+    load: function(current, next) {
+      var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
+      //thisは読み込んだコンテンツ要素を指す
+      $(this).before(pageBreak);
+      //読み込んだページに再度colorboxを適用させる
+      $(".colorbox").colorbox();
+    }
+  });
+
+}); //jquery#ready
+</script>
+
 <div id="mutter">
 つぶやき総数: <%= @mutters.total_entries %>
-<%= will_paginate @mutters %>
+<%= will_paginate @mutters, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <br />
+<div class="autopagerize_page_element">
 <ul class="mutter_rows">
   <% @mutters.each_with_index do |mutter, cnt| %>
     <li <%= "class='even'" if cnt%2==0  %>>
@@ -15,7 +35,8 @@
     </li>
   <% end %>
 </ul>
-<%= will_paginate @mutters %>
+<%= will_paginate @mutters, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
+</div> <!-- autopagerize_page_element -->
 </div>
 
 <div class="right_side_bar">

@@ -1,7 +1,7 @@
 <h3 class="normal"><%= link_to '新規作成 (動画準備の解説あり)', new_movie_path %></h3>
 
 <div id="movie">
-<%= will_paginate @movies %>
+<%= will_paginate @movies, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <% @movies.each do |movie| -%>
   <div class="once_movie">
     <div class="title"><%= link_to "#{movie.title}(#{movie.movie_comments.size})", movie %></div>
@@ -15,5 +15,5 @@
     <%= link_to '削除する', movie, :confirm => '本当に削除してもよろしいですか？', :method => :delete if editable(@current_user, movie.user) %>
   </div>
 <% end -%>
-<%= will_paginate @movies %>
+<%= will_paginate @movies, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 </div>

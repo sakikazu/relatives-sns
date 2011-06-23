@@ -62,8 +62,8 @@ class MuttersController < ApplicationController
   end
 
   def all
-    @mutters = Mutter.paginate(:page => params[:page], :per_page => 50, :order => "id DESC")
-    @users = User.all
+    @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 50)
+    @users = User.includes([:user_ext])
   end
 
   def user

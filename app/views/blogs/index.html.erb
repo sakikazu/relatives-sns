@@ -3,7 +3,7 @@
 <h3 class="normal"><%= @user ? @user.dispname : "自分" %>の日記</h3>
 
 <div id="blog">
-<%= will_paginate @blogs %>
+<%= will_paginate @blogs, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <%= "まだ日記がありません" if @blogs.size == 0 %>
 <% @blogs.each do |blog| -%>
   <div class="once_blog">
@@ -21,7 +21,7 @@
     </div>
   </div>
 <% end -%>
-<%= will_paginate @blogs %>
+<%= will_paginate @blogs, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 </div>
 
 <div class="right_side_bar">

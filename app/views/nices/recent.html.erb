@@ -34,7 +34,7 @@ $(document).ready(function() {
 <h2 class="normal" summary="true">最近評価されたまとめ(直近10個)</h2>
 
 <h2 class="normal">最近評価されたつぶやき</h2>
-<%= will_paginate @nices["mutter"] %>
+<%= will_paginate @nices["mutter"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <div class="h2normal_content">
 <% @nices["mutter"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
@@ -59,7 +59,7 @@ $(document).ready(function() {
 </div>
 
 <h2 class="normal">最近評価された写真</h2>
-<%= will_paginate @nices["albumphoto"] %>
+<%= will_paginate @nices["albumphoto"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <div class="h2normal_content">
 <% @nices["albumphoto"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
@@ -77,7 +77,7 @@ $(document).ready(function() {
 </div>
 
 <h2 class="normal">最近評価された日記</h2>
-<%= will_paginate @nices["blog"] %>
+<%= will_paginate @nices["blog"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <div class="h2normal_content">
 <% @nices["blog"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
@@ -100,7 +100,7 @@ $(document).ready(function() {
 
 
 <h2 class="normal">最近評価された動画</h2>
-<%= will_paginate @nices["movie"] %>
+<%= will_paginate @nices["movie"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <div class="h2normal_content">
 <% @nices["movie"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
