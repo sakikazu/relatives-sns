@@ -159,7 +159,7 @@ commentshow = function() {
       投稿者：<%= p.user.dispname %><br />
       投稿日時：<%= p.created_at.to_s(:short2) if p.created_at %><br />
       撮影日時：<%= p.exif_at.to_s(:short2) if p.exif_at %><br />
-      最新コメント日時：<%= p.last_comment_at.to_s(:short2) if p.last_comment_at %><br />
+      最新ｺﾒﾝﾄ：<%= p.last_comment_at.to_s(:short2) if p.last_comment_at %><br />
 
       <% if editable(current_user, p.user) -%>
         <%= link_to '編集', edit_album_photo_path(p) %> | 

@@ -4,9 +4,10 @@
   float: left;
 }
 .right_side_bar {
-  width: 300px;
+  width: 280px;
   float: left;
   border: 1px solid gray;
+  margin-left: 20px;
 }
 .left {
   float: left;
@@ -275,7 +276,7 @@ body {
 
 #container{
   margin:0px auto;
-  width:1100px;
+  width:1000px;
   border-style:solid;
   border-color: black;
   border-width: 1px 8px 1px 8px;
@@ -338,9 +339,9 @@ body {
 
 
 #mutter{
-  width: 700px;
+  width: 630px;
   /*margin: 0px auto 30px;*/
-  margin: 10px 25px 0px 0px;
+  margin: 10px 0px 0px 0px;
   /*border: 1px solid blue;*/
   float: left;
 }
@@ -355,7 +356,7 @@ body {
 #mutter #form textarea{
   padding: 8px;
   font-size: 1.2em;
-  width: 530px;
+  width: 470px;
   height: 40px;
 }
 #mutter #form input.post{
@@ -369,7 +370,7 @@ body {
 }
 #mutter #form_search form{
   text-align: center;
-  margin-left: 15px;
+  margin-left: 10px;
   padding: 10px;
   display: inline;
   /* border: dotted 2px #EC8103; */
@@ -392,8 +393,8 @@ body {
 
 .mutter_rows {
   padding: 0px;
-  width: 670px;
-  margin-left: 30px;
+  width: 620px;
+  margin-left: 15px;
 }
 .mutter_rows .content {
   display: block;
@@ -411,7 +412,7 @@ body {
   margin: 4px 0px;
 }
 .mutter_rows .content_wrap {
-  width: 580px;
+  width: 530px;
   margin-left: 15px;
 }
 .mutter_rows .bar {
@@ -512,12 +513,12 @@ body {
 
 /* blog#index */
 #blog {
-  width: 650px;
+  width: 630px;
   /*height: 300px;*/
   float: left;
 }
 #blog .once_blog{
-  margin: 0px 20px 15px 0px;
+  margin: 0px 0px 15px 0px;
   /*padding: 15px;*/
   border: 1px solid;
 }
@@ -631,12 +632,12 @@ body {
 
 /*album*/
 #album{
-  margin: 20px 15px;
+  margin: 20px 5px;
 }
 .once_album{
-  width: 230px;
+  width: 210px;
   float: left;
-  margin-left: 8px;
+  margin-left: 9px;
   height: 270px;
 }
 .once_album .bar{
@@ -663,9 +664,9 @@ body {
 }
 .once_photo{
   float: left;
-  margin-left: 8px;
+  margin-left: 9px;
   height: 270px;
-  width: 180px;
+  width: 190px;
   overflow: auto;
 }
 .once_photo .bar{
@@ -675,12 +676,14 @@ body {
 .once_photo .info{
   background-color: #F2EEE8;
   font-size: 85%;
-  padding: 5px;
+  padding: 7px;
 }
 .once_photo img{
+  display: block;
   border: solid 1px #161616;
+  margin: 2px auto;
 }
-.once_photo a:hover {
+.once_photo a:hover img{
    filter: alpha(opacity=80);
   -moz-opacity:0.8;
   opacity:0.8;
@@ -752,8 +755,8 @@ table.user_data tr td{
   float: left;
 }
 #gmap_sidebar {
-  margin-left: 30px;
-  width: 200px;
+  margin-left: 15px;
+  width: 140px;
   float: left;
 }
 
