@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
     if name.blank? and not only_user_set
       name = self.login
     end
-    return name
+    return Sanitize.clean(name, Sanitize::Config::BASIC)
   end
 
   def rel_save

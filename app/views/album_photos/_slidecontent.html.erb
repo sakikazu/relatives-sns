@@ -12,7 +12,7 @@
     <%= image_tag(@album_photo.attach(:large)) if @album_photo.attach? %>
     <br />
     <%= link_to "元画像", @album_photo.attach(:original) if @album_photo.attach? %>
-    <p class="text"><%= br auto_link(@album_photo.description) %></p>
+    <p class="text"><%= sani_br(@album_photo.description) %></p>
   </div>
   <div class="nice">
     <span id="update_nice"><%= render :partial => 'nices/nice', :locals => {:content => @album_photo, :content_type => "photo", :area => "#update_nice"} %></span>

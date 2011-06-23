@@ -43,6 +43,9 @@ a.colorbox_fix_size:hover {
   opacity: 0.8;
 }
 
+.select_menu {
+  margin-bottom: 30px;
+}
 .select_menu span {
   diplay: block;
   width: 110px;
@@ -906,4 +909,7 @@ table.user_data tr td{
   .flickr_pagination .next_page {
     margin-left: 1em; }
 
-
+/* tipTip */
+#tiptip_content {
+  font-size: 14px;
+}

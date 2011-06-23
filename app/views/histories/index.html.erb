@@ -1,3 +1,17 @@
+<script>
+jQuery(document).ready(function(){
+  $('.overstring').each(function(){
+    $(this).css({'cursor' : 'pointer'});
+    $(this).tipTip({
+      content: $(this).attr('title'),
+      defaultPosition: "top",
+      maxWidth: "auto",
+      activation: "click",
+      delay: 0,
+    });
+  });
+});
+</script>
 <h3><%= link_to "できごとを追加する", {:action => :new}, :class => colorbox_class + " normal-btn" %></h3>
 
 <h3 class="normal">できごと一覧</h3>

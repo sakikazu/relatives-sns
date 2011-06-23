@@ -1,4 +1,4 @@
 <% @mutters.each do |m| -%>
   <%= "[#{m.user.dispname}]" %>:
-  <%= (truncate m.content, :length => 20).html_safe %> /
+  <%= (truncate sani(m.content), :length => 20).html_safe %> /
 <% end -%>

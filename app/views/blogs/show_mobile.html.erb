@@ -15,7 +15,7 @@
     <% @blog.blog_images.each do |image| -%>
       <%= image_tag(image.image(:thumb)) if image.image? %>
     <% end -%>
-    <p class="text"><%= br auto_link(@blog.content) %></p>
+    <p class="text"><%= sani_br(@blog.content) %></p>
     <br />
   </div>
   <%= link_to '編集する', :action => :edit_mobile, :id => @blog.id if editable(@current_user, @blog.user) %>
@@ -31,7 +31,7 @@
       <span><%= co.user.dispname %></span><span style="margin-left:20px">投稿日時：<%= co.created_at.to_s(:long) %></span>
     </div>
     <div class="content">
-      <div class="text"><%= br auto_link(co.content) %></div>
+      <div class="text"><%= sani_br(co.content) %></div>
     </div>
     <%= link_to "削除する", :action => :destroy_comment_confirm_mobile, :id => co.id if editable(@current_user, co.user) %><br />
   <% end -%>

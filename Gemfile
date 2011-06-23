@@ -19,6 +19,8 @@ gem 'rails3_acts_as_paranoid'
 # gem 'exception_notification_rails3'
 gem 'exception_notification', :require => 'exception_notifier'
 gem 'tmail'
+gem "sanitize"
+
 
 # Use unicorn as the web server
 # gem 'unicorn'

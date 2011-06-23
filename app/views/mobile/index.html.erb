@@ -43,7 +43,7 @@
     <%#= link_to(image_tag(m.image(:thumb)), m.image(:large)) %><br />
     <%= image_tag(m.image(:thumb)) %><br />
   <% end -%>
-  <br /><%= auto_link(m.view_content).html_safe %><br />
+  <br /><%= sani(m.view_content) %><br />
 <%# sakikazu memo F906i 調査。:method～がルーティングに反映しないし、:confirmも無効になった %>
   <%= link_to("削除", {:action => :destroy, :id => m.id}) if editable(current_user, m.user) %>
 <% end -%>

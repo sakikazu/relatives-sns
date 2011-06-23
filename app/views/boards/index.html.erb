@@ -1,14 +1,15 @@
 <h3 class="normal"><%= link_to '新規作成', new_board_path %><span id="new_board_info" style="margin-left: 15px;font-size:75%;color:gray"><%= image_tag "info.png", :size => "20x20" %>日記との使い分け</span></h3> 
 
 <h3 class="normal">並び替える</h3>
-<% [["最新コメント順", 1], ["作成日時順", 2]].each do |n, i| -%>
-  <% if @sort == i -%>
-    <%= "<b style='color:red'>★ #{n} ★</b>".html_safe %> |
-  <% else -%>
-    <%= link_to n, :action => :index, :sort => i %> |
+<div class="select_menu clearfix">
+  <% [["最新コメント順", 1], ["作成日時順", 2]].each do |n, i| -%>
+    <% if @sort == i -%>
+      <%= link_to "<span class='selected'>#{n}</span>".html_safe, boards_path(:sort => i) %>
+    <% else -%>
+      <%= link_to "<span>#{n}</span>".html_safe, boards_path(:sort => i) %>
+    <% end -%>
   <% end -%>
-<% end -%>
-<br /><br /><br />
+</div>
 
 <%= will_paginate @boards %>
 <div id="board">

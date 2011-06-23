@@ -9,7 +9,7 @@
           <%= link_to image_tag(co.attach(:thumb)), co.attach(:large), {:class => colorbox_class} %><br />
         <% end -%>
       </div>
-      <div class="text"><%= br auto_link(co.content) %></div>
+      <div class="text"><%= sani_br(co.content) %></div>
     </div>
     <%= link_to "削除する", destroy_comment_board_path(:id => co.id), :confirm => "本当に削除してもよろしいですか？" if editable(@current_user, co.user) %>
   </div>

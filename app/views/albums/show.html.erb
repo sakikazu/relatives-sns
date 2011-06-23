@@ -101,7 +101,7 @@ commentshow = function() {
       作成者：<%= @album.user.dispname %> | 
       作成日時：<%= @album.created_at.to_s(:long) if @album.created_at %>
     </div>
-    <div class="description"><%= br auto_link(@album.description) %></div>
+    <div class="description"><%= sani_br(@album.description) %></div>
   </div>
 </div>
 

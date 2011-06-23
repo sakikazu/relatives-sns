@@ -32,7 +32,7 @@ $(document).ready(function() {
       <div class="mutter_rows">
         <b style="font-size:14px"><%= link_to '(詳細)', mutter_path(:id => obj.id) %></b><br>
         <span class="image"><%= link_to(image_tag(obj.image(:thumb)), obj.image(:large), {:class => colorbox_class}) if obj.image?  %></span>
-        <span class="content" style="background:#E7E7DA;padding:5px;"><%= br auto_link(obj.content) %></span>
+        <span class="content" style="background:#E7E7DA;padding:5px;"><%= sani_br(obj.content) %></span>
         <div class="clear"></div>
         <%= nice_author_and_created_at(obj) %>
       </div>

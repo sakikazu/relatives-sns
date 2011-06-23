@@ -7,7 +7,7 @@
 
   <div class="content">
     <%= image_tag(@board.attach(:thumb)) if @board.attach? %>
-    <p class="text"><%= br auto_link(@board.description) %></p>
+    <p class="text"><%= sani_br(@board.description) %></p>
   </div>
   
   <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">新規コメント</div>
@@ -32,7 +32,7 @@
             <%= image_tag(co.attach(:thumb)) %><br />
           <% end -%>
         </div>
-        <div class="text"><%= br auto_link(co.content) %></div>
+        <div class="text"><%= sani_br(co.content) %></div>
       </div>
       <%= link_to "削除する", destroy_comment_board_path(:id => co.id), :confirm => "本当に削除してもよろしいですか？" if editable(@current_user, co.user) %>
     </div>

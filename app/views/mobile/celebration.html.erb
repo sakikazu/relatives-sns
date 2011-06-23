@@ -4,7 +4,7 @@
       <div style="background-color:#E1E1E1">
         <%= m.user.dispname(User::FULLNICK) %>
       </div>
-      <%= auto_link(m.content).html_safe %><br />
+      <%= sani(m.content) %><br />
       <br />
     <% end -%>
   

@@ -22,7 +22,7 @@
         s1.addParam("flashvars","file=../../uploads/movie/<%= @movie.id %>/original/<%= @movie.movie_file_name %>&image=<%= @movie.thumb(:large) if @movie.thumb? %>");
         s1.write("container2");
         </script>
-      <div class="text"><%= br auto_link(@movie.description) %></div>
+      <div class="text"><%= sani_br(@movie.description) %></div>
     </div>
     <div class="nice">
       <span id="update_nice"><%= render :partial => 'nices/nice', :locals => {:content => @movie, :content_type => "movie", :area => "#update_nice"} %></span>

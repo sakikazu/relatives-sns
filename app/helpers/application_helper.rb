@@ -22,8 +22,19 @@ module ApplicationHelper
     (login_user.role == 0 or login_user.role == 1 or login_user.id == content_user.id)
   end
 
-  def br(target)
-    target.gsub(/\r\n|\r|\n/, "<br />").html_safe unless target.blank?
+  def sani(html)
+    auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
+  end
+
+  def sani_br(html)
+    html.gsub!(/\r\n|\r|\n/, "<br>") unless html.blank?
+    auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
+  end
+
+  #jsコード内に出力するときに改行コードがあるとjsコード自体が改行されてしまうのでスペースに変換する
+  def sani_for_js(html)
+    html.gsub!(/[\r\n]+/, " ") unless html.blank?
+    auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
   end
 
   def action_info(up)
@@ -57,10 +68,10 @@ module ApplicationHelper
   def truncate_120_link(text)
     text2 = strip_tags(text)
     if text2.split(//u).length > 120
-      ret = br auto_link(text2.truncate(120, :omission => ""))
-      ret += link_to " ...(続き)", "javascript:void(0)", :title => text2
+      ret = sani_br(text2.truncate(120, :omission => ""))
+      ret += link_to " ...(続き)", "javascript:void(0)", :title => text2, :class => "overstring"
     else
-      ret = br auto_link(text2)
+      ret = sani_br(text2)
     end
     ret.html_safe
   end
