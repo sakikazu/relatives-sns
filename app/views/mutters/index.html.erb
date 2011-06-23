@@ -34,6 +34,7 @@ $(document).ready(function(){
   });
 
   // つぶやき表示更新
+<% if Rails.env == "production" %>
   setInterval(function(){
     $.get("<%= url_for(update_disp_mutters_path(:interval => @dispupdate_interval)) %>", function(data){
       if(data != "") {
@@ -41,6 +42,7 @@ $(document).ready(function(){
       }
     });
   }, <%= @dispupdate_interval %>);
+<% end %>
 
 });
 </script>

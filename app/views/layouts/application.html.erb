@@ -38,7 +38,7 @@ jQuery(document).ready(function(){
   });
 
   //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
-  jQuery(".colorbox").colorbox();
+  $(".colorbox").colorbox();
   //対象がhtml(colorboxのサイズ指定必要)
   colorbox_fix_size = (function(){
     jQuery(".colorbox_fix_size").colorbox({
@@ -89,6 +89,7 @@ jQuery(document).ready(function(){
 
 
   // つぶやきのデスクトップ通知
+<% if Rails.env == "production" %>
   $('<button id="desktopify">つぶやきの通知を有効にする<\/button>')
     .appendTo('#desktopnotification')
     .desktopify({ 
@@ -113,6 +114,7 @@ jQuery(document).ready(function(){
       } 
     })
     .trigger('click');
+<% end %>
 
 
 });
