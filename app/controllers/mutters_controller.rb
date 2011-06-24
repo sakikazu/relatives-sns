@@ -2,6 +2,7 @@ class MuttersController < ApplicationController
   before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
   after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
   before_filter :require_user, :except => :rss
+  cache_sweeper :mutter_sweeper, :only => [:create, :destroy]
 
   def new_from_mail
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
@@ -85,9 +86,7 @@ class MuttersController < ApplicationController
     unless read_fragment :mutter_data
       @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
     end
-    unless read_fragment :update_history
-      @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
-    end
+    @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
     @login_users = User.includes(:user_ext).order("last_request_at DESC").limit(15)
     @album_thumbs = AlbumPhoto.rnd_photos
     @dispupdate_interval = 10 * 1000

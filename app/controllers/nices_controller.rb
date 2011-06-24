@@ -1,6 +1,7 @@
 class NicesController < ApplicationController
   before_filter :require_user
   before_filter :page_title
+  cache_sweeper :nice_sweeper, :only => [:create, :destroy]
 
   def recent
 #sakikazu 現在、同じコンテンツでも、複数人が評価してたら人数分出てしまうので、コンテンツごとにまとめたい。ソート対象は、最後に評価した人物のnice.created_at
