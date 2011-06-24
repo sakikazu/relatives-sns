@@ -62,22 +62,33 @@ class MuttersController < ApplicationController
   end
 
   def all
-    @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 50)
-    @users = User.includes([:user_ext])
+#sakimura ↓だとMutterすべてのレコードのカウントをJOINして出すので時間かかってる。kaminariならそんなことないのかなぁ。limit(30)とかやってもダメね。
+    # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
+#sakimura ページネート時にフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
+    @mutters = Mutter.order("id DESC").paginate(:page => params[:page], :per_page => 30)
+    unless read_fragment :mutter_by_user
+      @users = User.includes([:user_ext, :mutters])
+    end
   end
 
   def user
-    @mutters = Mutter.paginate(:conditions => {:user_id => params[:user_id]}, :page => params[:page], :per_page => 50, :order => "id DESC")
-    @users = User.all
+    @mutters = Mutter.order("id DESC").where(:user_id => params[:user_id]).paginate(:page => params[:page], :per_page => 30)
+    unless read_fragment :mutter_by_user
+      @users = User.includes([:user_ext, :mutters])
+    end
     render :action => :all
   end
 
   def index
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
-    @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+    unless read_fragment :mutter_data
+      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+    end
+    unless read_fragment :update_history
+      @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
+    end
     @login_users = User.includes(:user_ext).order("last_request_at DESC").limit(15)
-    @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
     @album_thumbs = AlbumPhoto.rnd_photos
     @dispupdate_interval = 10 * 1000
 

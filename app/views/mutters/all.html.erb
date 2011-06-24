@@ -40,6 +40,7 @@ $(document).ready(function() {
 </div>
 
 <div class="right_side_bar">
+<% cache :mutter_by_user do %>
   <div id="mutter_by_user">
     <p class="title">メンバー</p>
     ()内はつぶやき数
@@ -49,4 +50,5 @@ $(document).ready(function() {
     <% end -%>
     </ul>
   </div>
+<% end -%>
 </div>

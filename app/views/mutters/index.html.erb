@@ -81,7 +81,9 @@ $(document).ready(function(){
 
 
   <div id="mutter_data">
+  <% cache :mutter_data do -%>
     <%= render :partial => "list" %>
+  <% end -%>
   </div>
 
   <div id="show_more" style="">もっと見る</div>
@@ -132,11 +134,13 @@ $(document).ready(function(){
   </div>
     
   <div id="update_history">
+    <% cache :update_history do %>
     <p class="title">みんなの新着情報</p>
     <div class="list">
       <%= render :partial => "update_history" %>
     </div>
     <b><%= link_to "すべて見る", :action => :update_history_all %></b>
+    <% end %>
   </div>
 
   <div id="current_login_user">
