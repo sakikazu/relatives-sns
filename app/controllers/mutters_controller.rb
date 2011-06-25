@@ -65,17 +65,19 @@ class MuttersController < ApplicationController
   def all
 #sakimura ↓だとMutterすべてのレコードのカウントをJOINして出すので時間かかってる。kaminariならそんなことないのかなぁ。limit(30)とかやってもダメね。
     # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
-#sakimura ページネート時にフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
+#sakimura ページネート時のフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
     @mutters = Mutter.order("id DESC").paginate(:page => params[:page], :per_page => 30)
     unless read_fragment :mutter_by_user
-      @users = User.includes([:user_ext, :mutters])
+      @users_mcnt = Mutter.group(:user_id).count
+      @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
     end
   end
 
   def user
     @mutters = Mutter.order("id DESC").where(:user_id => params[:user_id]).paginate(:page => params[:page], :per_page => 30)
     unless read_fragment :mutter_by_user
-      @users = User.includes([:user_ext, :mutters])
+      @users_mcnt = Mutter.group(:user_id).count
+      @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
     end
     render :action => :all
   end

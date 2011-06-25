@@ -46,7 +46,7 @@ $(document).ready(function() {
     ()内はつぶやき数
     <ul>
     <% @users.each do |user| -%>
-      <li><%= link_to user.dispname(User::FULLNAME), :action => :user, :user_id => user.id %>(<%= user.mutters.size%>)</li>
+      <li><%= link_to user.dispname(User::FULLNAME), :action => :user, :user_id => user.id %>(<%= @users_mcnt[user.id] %>)</li>
     <% end -%>
     </ul>
   </div>
