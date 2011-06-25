@@ -105,7 +105,7 @@ ADanRails3::Application.routes.draw do
 
   match "/mutters/new_from_mail" => "mutters#new_from_mail"
   match "/mutters/create_from_mail" => "mutters#create_from_mail"
-  match "/mutters/user/:user_id" => "mutters#user", :as => :mutter_by_user
+  match "/mutters/user/:user_id" => "mutters#all", :as => :mutter_by_user
   match "/mutters/slider_update" => "mutters#slider_update"
   match "/mutters/celebration" => "mutters#celebration"
   match "/mutters/celebration_new" => "mutters#celebration_new"

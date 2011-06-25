@@ -1,5 +1,5 @@
 <div class="bar">
-  <span class='name'><%= link_to mutter.user.dispname, {:action => "user", :user_id => mutter.user.id}, {:title => mutter.user.dispname(User::FULLNAME)} %></span>
+  <span class='name'><%= link_to mutter.user.dispname, mutter_by_user_path(mutter.user.id), {:title => mutter.user.dispname(User::FULLNAME)} %></span>
   <span class='time'><%= l mutter.created_at %></span>
   <span class="nice">
     <span id='cont_<%= mutter.id %>'>

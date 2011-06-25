@@ -20,6 +20,10 @@ class Mutter < ActiveRecord::Base
     :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/uploads/#{content_name}/:id/:style/:basename.:extension"
 
+  scope :latest_first, order("id DESC")
+  scope :user_is, lambda {|n| n.present? ? where(:user_id => n).latest_first : latest_first}
+    
+
   def trans_space
     #auto_linkでURLの後に全角スペースが入るとリンクが延長されてしまうため、半角スペースに変換
     self.content.gsub!("　", " ")
