@@ -47,15 +47,9 @@ $(document).ready(function() {
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
-    <div class="nice_content">
-      <div class="mutter_rows">
-        <b style="font-size:14px"><%= link_to '(詳細)', mutter_path(:id => obj.id) %></b><br>
-        <span class="image"><%= link_to(image_tag(obj.image(:thumb)), obj.image(:large), {:class => colorbox_class}) if obj.image?  %></span>
-        <span class="content"><%= sani_br(obj.content) %></span>
-        <div class="clear"></div>
-        <%= nice_author_and_created_at(obj) %>
-      </div>
-    </div>
+    <ul class="mutter_rows">
+      <%= render :partial => 'mutters/mutter_row', :locals => {:mutter_row => obj} %>
+    </ul>
   <% end -%>
   <hr>
   </div>

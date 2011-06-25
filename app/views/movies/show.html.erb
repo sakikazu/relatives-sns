@@ -25,7 +25,9 @@
       <div class="text"><%= sani_br(@movie.description) %></div>
     </div>
     <div class="nice">
-      <span id="update_nice"><%= render :partial => 'nices/nice', :locals => {:content => @movie, :content_type => "movie", :area => "#update_nice"} %></span>
+      <span id="update_nice">
+        <%= nice_field(@movie, "movie", "#update_nice") %>
+      </span>
     </div>
   </div>
 

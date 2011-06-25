@@ -15,6 +15,8 @@
     <p class="text"><%= sani_br(@album_photo.description) %></p>
   </div>
   <div class="nice">
-    <span id="update_nice"><%= render :partial => 'nices/nice', :locals => {:content => @album_photo, :content_type => "photo", :area => "#update_nice"} %></span>
+    <span id="update_nice">
+      <%= nice_field(@album_photo, "photo", "#update_nice") %>
+    </span>
   </div>
 </div>

@@ -2,14 +2,30 @@
 $(document).ready(function(){
   slide_effect();
 
-  $('#show_more').click(function(){
-    $('#hide_range').toggle(300, function(){
-      if ($('#hide_range').is(":visible")) {
-        $('#show_more').text('隠す');
-      }else {
-        $('#show_more').text('もっと見る');
-      }
-    });
+  //mutter表示行数制限
+  $hidden_data = $('ul.mutter_rows>li:gt(<%= Mutter::MUTTER_DATA_VISIBLE %>)');
+  $hidden_data.hide();
+  $show_btn = $('#show_more');
+  $show_btn.data('show', false);
+
+  $show_btn.click(function(){
+    if($show_btn.data('show') == false) {
+      $hidden_data.show();
+      $show_btn.text('隠す');
+      $show_btn.data('show', true);
+    }else {
+      $hidden_data.hide();
+      $show_btn.text('もっと見る');
+      $show_btn.data('show', false);
+    }
+//sakikazu $hidden_dataは集合データなので、↓でやると要素の一つ一つにfunctionが設定されてるぽくて負荷が高まった。注意。
+//    $hidden_data.toggle(300, function(){
+  //      if ($hidden_data.is(":visible")) {
+    //        $('#show_more').text('隠す');
+    //      }else {
+    //        $('#show_more').text('もっと見る');
+    //      }
+//    });
   });
 
   // submit押下時、ファイルが添付されてなかったら、AjaxでPOSTする

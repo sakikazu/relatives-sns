@@ -4,24 +4,6 @@
     <%= submit_tag "検索結果を解除する" %>
   <% end -%>
 <% end -%>
-
-<div> <!-- ここの前半のデフォルト表示分のdivは不要と思いそうだが、つぶやき数がMUTTER_DATA_VISIBLE以下の場合、最後の</div>によって余分に閉じられてしまうため、必要 -->
 <ul class="mutter_rows">
-  <% @mutters.each_with_index do |mutter, cnt| %>
-    <!-- sakikazu ここは何回も通るので「>=」で判定してはダメですよ -->
-    <% if cnt == Mutter::MUTTER_DATA_VISIBLE -%>
-      </div><div class='data' id='hide_range' style='display:none'>
-      </ul><ul class="mutter_rows">
-    <% end -%>
-    <li <%= "class='even'" if cnt%2==0  %>>
-    <div class="left icon">
-      <p><%= image_tag mutter.user.user_ext.image(:small), :size => "50x50" if mutter.user.user_ext.image? %></p>
-    </div>
-    <div class="left content_wrap">
-      <%= render :partial => 'mutter_row', :locals => {:mutter => mutter} %>
-    </div>
-    <div class="clear"></div>
-    </li>
-  <% end %>
-  </div>
+  <%= render :partial => 'mutter_row', :collection => @mutters %>
 </ul>

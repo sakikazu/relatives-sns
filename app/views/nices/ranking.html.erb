@@ -28,15 +28,9 @@ $(document).ready(function() {
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
-    <div class="nice_content">
-      <div class="mutter_rows">
-        <b style="font-size:14px"><%= link_to '(詳細)', mutter_path(:id => obj.id) %></b><br>
-        <span class="image"><%= link_to(image_tag(obj.image(:thumb)), obj.image(:large), {:class => colorbox_class}) if obj.image?  %></span>
-        <span class="content" style="background:#E7E7DA;padding:5px;"><%= sani_br(obj.content) %></span>
-        <div class="clear"></div>
-        <%= nice_author_and_created_at(obj) %>
-      </div>
-    </div>
+    <ul class="mutter_rows">
+      <%= render :partial => 'mutters/mutter_row', :locals => {:mutter_row => obj} %>
+    </ul>
   <% else -%>
     削除されました.
   <% end -%>

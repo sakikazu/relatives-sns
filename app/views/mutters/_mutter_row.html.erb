@@ -1,13 +1,26 @@
-<div class="bar">
-  <span class='name'><%= link_to mutter.user.dispname, mutter_by_user_path(mutter.user.id), {:title => mutter.user.dispname(User::FULLNAME)} %></span>
-  <span class='time'><%= l mutter.created_at %></span>
-  <span class="nice">
-    <span id='cont_<%= mutter.id %>'>
-      <%= render :partial => 'nices/nice', :locals => {:content => mutter, :content_type => "mutter", :area => "#cont_#{mutter.id}"} %>
-    </span> 
-  </span>
+<% if mutter_row == @mutter -%>
+  <li <%= "style='background:Tan'" %>>
+<% else -%>
+  <li class="<%= cycle("", "even") %>">
+<% end -%>
+
+<div class="left icon">
+  <p><%= image_tag mutter_row.user.user_ext.image(:small), :size => "50x50" if mutter_row.user.user_ext.image? %></p>
 </div>
-<span class='image'><%= link_to(image_tag(mutter.image(:thumb)), mutter.image(:large), {:class => colorbox_class}) if mutter.image? %></span>
-<span class='content'><%= sani(mutter.view_content) %></span>
+<div class="left content_wrap">
+  <div class="bar">
+    <span class='name'><%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} %></span>
+    <span class='time'><%= link_to (l mutter_row.created_at), mutter_path(mutter_row) %></span>
+    <span class="nice">
+      <span id='cont_<%= mutter_row.id %>'>
+        <%= nice_field(mutter_row, "mutter", "#cont_#{mutter_row.id}") %>
+      </span> 
+    </span>
+  </div>
+  <span class='image'><%= link_to(image_tag(mutter_row.image(:thumb)), mutter_row.image(:large), {:class => colorbox_class}) if mutter_row.image? %></span>
+  <span class='content'><%= sani(mutter_row.view_content) %></span>
+  <div class="clear"></div>
+  <span class='delete'><%= link_to("削除", mutter_row, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, mutter_row.user) %></span>
+</div>
 <div class="clear"></div>
-<span class='delete'><%= link_to("削除", mutter, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, mutter.user) %></span>
+</li>

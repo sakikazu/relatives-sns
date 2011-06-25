@@ -1,6 +1,38 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  #何度もrenderされるので、無理にヘルパーにした
+  def nice_field(content, content_type, area)
+    output = <<"EOS"
+<script>
+jQuery(document).ready(function(){
+  nice_member();
+})
+</script>
+
+EOS
+
+    if content.nices.size > 0
+      output += <<"EOS"
+<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}">イイネ(#{content.nices.size})</strong>
+EOS
+    end
+
+    nice = content.nices.blank? ? nil : content.nices.where(:user_id => current_user.id).first
+    if nice.present?
+      output += <<"EOS"
+  :#{link_to 'イイネを取り消す', nice_path(:id => nice.id, :type => content_type, :content_id => content.id, :area => area), :method => :delete, :remote => true}
+EOS
+    else
+      output += <<"EOS"
+  #{link_to 'イイネ ', nices_path(:type => content_type, :content_id => content.id, :area => area), :method => :post, :remote => true}
+EOS
+    end
+
+    return output.html_safe
+  end
+
+
   def nice_author_and_created_at(obj)
      "<div class='nice_content_info'>投稿者：#{obj.user.dispname} / 投稿日：#{l obj.created_at}</div>".html_safe
   end

@@ -18,7 +18,9 @@
     </div>
     <%= link_to '編集する', edit_blog_path(@blog) if editable(@current_user, @blog.user) %>
     <div class="nice">
-      <span id="update_nice"><%= render :partial => 'nices/nice', :locals => {:content => @blog, :content_type => "blog", :area => "#update_nice"} %></span>
+      <span id="update_nice">
+        <%= nice_field(@blog, "blog", "#update_nice") %>
+      </span>
     </div>
   </div>
 
