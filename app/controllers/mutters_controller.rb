@@ -24,14 +24,14 @@ class MuttersController < ApplicationController
     @action_flg = params[:action_flg].to_i
     case @action_flg
     when 0
-      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+      @mutters = Mutter.includes_all.order("id DESC").limit(30)
     when 1
       str = params[:search_text]
-      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).where('content like :q', :q => "%#{str}%").order('id DESC').limit(30)
+      @mutters = Mutter.includes_all.where('content like :q', :q => "%#{str}%").order('id DESC').limit(30)
     when 2
-      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).where('image_file_name IS NOT NULL').order('id DESC').limit(30)
+      @mutters = Mutter.includes_all.where('image_file_name IS NOT NULL').order('id DESC').limit(30)
     when 3
-      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).where('content like :q', :q => "%http%").order('id DESC').limit(30)
+      @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC').limit(30)
     end
   end
 
@@ -42,7 +42,7 @@ class MuttersController < ApplicationController
     @author = "sakikazu"
 
     @contents = []
-    @mutters = Mutter.find(:all, :limit => 5, :order => "id DESC")
+    @mutters = Mutter.id_desc.limit(5)
     @mutters.each do |obj|
       @contents << {:title => "[#{obj.created_at.to_s(:short3)}] つぶやき(#{obj.user.dispname})", :description => obj.content, :updated_at => obj.created_at}
     end
@@ -77,7 +77,7 @@ class MuttersController < ApplicationController
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
     unless read_fragment :mutter_data
-      @mutters = Mutter.includes([{:user => :user_ext}, :nices, :celebration]).order("id DESC").limit(30)
+      @mutters = Mutter.includes_all.id_desc.limit(30)
     end
     @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
     @login_users = User.includes(:user_ext).order("last_request_at DESC").limit(15)
@@ -97,7 +97,7 @@ class MuttersController < ApplicationController
     #現在のmutterの位置から前後5つずつのmutterを取得する
     num = 5
     count = Mutter.where("id < ?", @mutter.id).count
-    @mutters = Mutter.includes([{:user => :user_ext}, :nices]).offset(count - num).limit(num*2+1)
+    @mutters = Mutter.includes_all.offset(count - num).limit(num*2+1)
     @mutters = @mutters.reverse
   end
 
@@ -107,7 +107,7 @@ class MuttersController < ApplicationController
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
       mutter.save
-      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+      @mutters = Mutter.includes_all.id_desc.limit(30)
       render :partial => "list"
     else
       respond_to do |format|
@@ -190,7 +190,7 @@ class MuttersController < ApplicationController
     prev_check = Time.now - interval
     new_mutters = Mutter.where("created_at > ?", prev_check)
     if new_mutters.size > 0
-      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+      @mutters = Mutter.includes_all.id_desc.limit(30)
       render :partial => "list"
     else
       render :text => ""

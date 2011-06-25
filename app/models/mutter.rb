@@ -20,8 +20,9 @@ class Mutter < ActiveRecord::Base
     :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/uploads/#{content_name}/:id/:style/:basename.:extension"
 
-  scope :latest_first, order("id DESC")
-  scope :user_is, lambda {|n| n.present? ? where(:user_id => n).latest_first : latest_first}
+  scope :id_desc, order("id DESC")
+  scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
+  scope :includes_all, includes([{:user => :user_ext}, :nices, :celebration])
     
 
   def trans_space
