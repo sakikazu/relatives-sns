@@ -77,7 +77,7 @@ class MuttersController < ApplicationController
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
     unless read_fragment :mutter_data
-      @mutters = Mutter.includes([{:user => :user_ext}, :celebration]).order("id DESC").limit(30)
+      @mutters = Mutter.includes([{:user => :user_ext}, :nices, :celebration]).order("id DESC").limit(30)
     end
     @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
     @login_users = User.includes(:user_ext).order("last_request_at DESC").limit(15)
