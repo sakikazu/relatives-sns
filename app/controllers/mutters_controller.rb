@@ -2,7 +2,7 @@ class MuttersController < ApplicationController
   before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
   after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
   before_filter :require_user, :except => :rss
-  cache_sweeper :mutter_sweeper, :only => [:create, :destroy]
+  cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
   def new_from_mail
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
