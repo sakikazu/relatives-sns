@@ -63,6 +63,11 @@ EOS
     auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
   end
 
+  def sani_custom_br(html)
+    html.gsub!(/\r\n|\r|\n/, "<br>") unless html.blank?
+    auto_link(Sanitize.clean(html, Sanitize::Config::CUSTOM)).html_safe
+  end
+
   #jsコード内に出力するときに改行コードがあるとjsコード自体が改行されてしまうのでスペースに変換する
   def sani_for_js(html)
     html.gsub!(/[\r\n]+/, " ") unless html.blank?

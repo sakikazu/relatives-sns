@@ -15,6 +15,7 @@
 <%= javascript_include_tag 'rails' %>
 <%= javascript_include_tag 'jquery.colorbox-min', 'jquery.sliderkit.1.5.1.pack', 'jquery.mousewheel.min',
      'jquery.tipTip.minified','win7navi', 'jquery.autopager-1.0.0.min', 'desktopify.js' %>
+<%= yield :add_jscss %>
 
 <script>
 //sakikazu RJSはまだprototype.js依存みたいだが、これを追加すればOK

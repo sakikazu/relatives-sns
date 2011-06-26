@@ -1,8 +1,10 @@
-<%= stylesheet_link_tag 'uploadify' %>
-<%= javascript_include_tag 'uploadify/jquery.uploadify.v2.1.0.min' %>
-<%= javascript_include_tag 'uploadify/swfobject' %>
+<% content_for :add_jscss do %>
+  <%= stylesheet_link_tag 'uploadify' %>
+  <%= javascript_include_tag 'uploadify/jquery.uploadify.v2.1.0.min' %>
+  <%= javascript_include_tag 'uploadify/swfobject' %>
+<% end %>
 
-<script type="text/javascript">// <![CDATA[
+<script>
   $(document).ready(function() {
     //uploadify
     $('#uploadify').uploadify({
@@ -91,7 +93,7 @@ commentshow = function() {
   }
 }
 
-// ]]></script>
+</script>
 
 <%= link_to '一覧へ戻る', albums_path %>
 <div style="width:650px">

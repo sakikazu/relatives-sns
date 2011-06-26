@@ -1,0 +1,46 @@
+<% content_for :add_jscss do %>
+  <%= stylesheet_link_tag 'CLEditor/jquery.cleditor.css' %>
+  <%= javascript_include_tag 'CLEditor/jquery.cleditor.min.js' %>
+<% end %>
+
+<script>
+$(document).ready(function() {
+  $('#blog_content').cleditor({
+    width: 550,
+    height: 450,
+    fonts: "メイリオ, ＭＳ Ｐゴシック, Helvetica, Arial,Arial Black,Comic Sans MS, Georgia,Impact,Tahoma",
+    bodyStyle: "margin:6px; font:14px メイリオ,Helvetica; cursor:text"
+  });
+})
+</script>
+
+<%= form_for(@blog, :html => form_html_option) do |f| %>
+  <% if @blog.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@blog.errors.count, "error") %> prohibited this blog from being saved:</h2>
+
+      <ul>
+      <% @blog.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= f.label :title, "タイトル" %><br />
+    <%= f.text_field :title, :size => "70" %>
+  </p>
+  <p>
+    <%= f.label :content, "内容" %><br />
+    <%= f.text_area :content, :size => "75x30" %>
+  </p>
+  <p>
+    <%= f.label :image, "画像" %><br />
+    <%= file_field :image, :image %>
+  </p>
+  
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
