@@ -49,7 +49,7 @@ class Sanitize
         'th'         => ['abbr', 'axis', 'colspan', 'rowspan', 'scope', 'width'],
         'time'       => ['datetime', 'pubdate'],
         'ul'         => ['type'],
-        'font'       => ['size', 'color']
+        'font'       => ['size', 'color', 'face']
       },
 
       :protocols => {
