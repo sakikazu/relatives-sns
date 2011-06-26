@@ -21,6 +21,7 @@
 #++
 
 #sakikazu RELAXEDを元に拡張(/usr/lib/ruby/gems/1.8/gems/sanitize-2.0.2/lib/sanitize/config/relaxed.rb)
+#sakikazu jQueryプラグイン「CLEditor」で生成されるコードに適用するようにしている
 class Sanitize
   module Config
     CUSTOM = {
@@ -29,11 +30,11 @@ class Sanitize
         dt em figcaption figure h1 h2 h3 h4 h5 h6 hgroup i img ins kbd li mark
         ol p pre q rp rt ruby s samp small strike strong sub sup table tbody td
         tfoot th thead time tr u ul var wbr
-        font
+        font hr
       ],
 
       :attributes => {
-        :all         => ['dir', 'lang', 'title', 'style'],
+        :all         => ['dir', 'lang', 'title', 'style', 'align'],
         'a'          => ['href'],
         'blockquote' => ['cite'],
         'col'        => ['span', 'width'],
@@ -48,7 +49,7 @@ class Sanitize
         'th'         => ['abbr', 'axis', 'colspan', 'rowspan', 'scope', 'width'],
         'time'       => ['datetime', 'pubdate'],
         'ul'         => ['type'],
-        'font'         => ['size', 'color']
+        'font'       => ['size', 'color']
       },
 
       :protocols => {

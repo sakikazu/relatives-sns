@@ -164,6 +164,18 @@ a.colorbox:hover img{
   margin-top: 10px;
   padding: 4px;
 }
+
+/* for WYSIWYG */
+.once_content .description h1,
+.once_content .description h2,
+.once_content .description h3,
+.once_content .description h4,
+.once_content .description h5,
+.once_content .description h6
+{
+  padding: 0.4em;
+}
+
 .once_content .nice{
   background:#EFC1C1;
   text-align:center;
