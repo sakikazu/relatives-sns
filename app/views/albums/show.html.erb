@@ -137,7 +137,7 @@ commentshow = function() {
 <% if @album_photos.size > 0 -%>
   <h3 class="normal">写真を並び替える</h3>
   <div class="select_menu clearfix">
-    <% [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3]].each do |n, i| -%>
+    <% [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]].each do |n, i| -%>
       <% if @sort == i -%>
         <%= link_to "<span class='selected'>#{n}</span>".html_safe, album_path(:sort => i) %>
       <% else -%>
@@ -154,7 +154,7 @@ commentshow = function() {
 <% @album_photos.each do |p| -%>
   <div class="once_photo">
     <div class="bar">
-      <%= "#{p.title} (コメント数：#{p.album_photo_comments.size}）" %>
+      <%= "#{p.title} (コメント数：#{p.album_photo_comments.size}）" %>&nbsp;<%= nice_field_disp_only(p) %>
     </div>
     <%= link_to(image_tag(p.attach(:thumb)), {:controller => :album_photos, :action => :slideshow, :id => p.id}, {:rel => colorbox_class}) if p.attach? %>
     <div class="info">

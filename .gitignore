@@ -8,4 +8,4 @@ public/uploads/
 *.DS_Store
 *.svn
 public/javascripts/all.js
-
+public/stylesheets/all.css

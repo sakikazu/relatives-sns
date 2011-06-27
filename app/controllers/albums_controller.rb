@@ -24,17 +24,18 @@ class AlbumsController < ApplicationController
   # GET /albums/1.xml
   def show
     @album = Album.find(params[:id])
-    @sort = params[:sort].blank? ? 1 : params[:sort].to_i
+    @sort = (params[:sort] =~ /1|2|3|4/) ? params[:sort].to_i : 1
     case @sort 
     when 1
-      @album_photos = @album.album_photos.order("id DESC").paginate(:page => params[:page], :per_page => 30)
+      album_photos = @album.album_photos.order("id DESC")
     when 2
-      @album_photos = @album.album_photos.order("exif_at ASC").paginate(:page => params[:page], :per_page => 30)
+      album_photos = @album.album_photos.order("exif_at ASC")
     when 3
-      @album_photos = @album.album_photos.order("last_comment_at DESC").paginate(:page => params[:page], :per_page => 30)
-    else
-      @album_photos = @album.album_photos.order("id DESC").paginate(:page => params[:page], :per_page => 30)
+      album_photos = @album.album_photos.order("last_comment_at DESC")
+    when 4
+      album_photos = @album.album_photos.order("nices.created_at DESC").order("last_comment_at DESC")
     end
+    @album_photos = album_photos.includes(:nices).paginate(:page => params[:page], :per_page => 30)
 
     @comment = AlbumComment.new(:user_id => current_user.id, :album_id => @album.id)
 

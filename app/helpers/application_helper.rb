@@ -32,6 +32,25 @@ EOS
     return output.html_safe
   end
 
+  def nice_field_disp_only(content)
+    output = <<"EOS"
+<script>
+jQuery(document).ready(function(){
+  nice_member();
+})
+</script>
+
+EOS
+
+    if content.nices.size > 0
+      output += <<"EOS"
+<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}">イイネ(#{content.nices.size})</strong>
+EOS
+    end
+
+    return output.html_safe
+  end
+
 
   def nice_author_and_created_at(obj)
      "<div class='nice_content_info'>投稿者：#{obj.user.dispname} / 投稿日：#{l obj.created_at}</div>".html_safe
