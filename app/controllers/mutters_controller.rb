@@ -184,10 +184,8 @@ class MuttersController < ApplicationController
 
   #つぶやき表示更新
   def update_disp
-    interval = params[:interval]
-    #sakikazu 余裕を持って＋15秒前から取得
-    interval = interval.to_i/1000 + 15
-    prev_check = Time.now - interval
+    prev_check = Time.parse(cookies[:update_disp_at]) rescue Time.now - 1.day
+    cookies[:update_disp_at] = Time.now.to_i
     new_mutters = Mutter.where("created_at > ?", prev_check)
     if new_mutters.size > 0
       @mutters = Mutter.includes_all.id_desc.limit(30)
@@ -199,8 +197,8 @@ class MuttersController < ApplicationController
 
   #つぶやき新着チェック
   def update_check
-#sakikazu ここの時間設定、適当すぎるがどうしよう。cookie経由にした方がいいかな
-    prev_check = Time.now - 23.second #余裕を持って＋3秒
+    prev_check = Time.parse(cookies[:update_check_at]) rescue Time.now - 1.day
+    cookies[:update_check_at] = Time.now.to_i
     @mutters = Mutter.where("created_at > ?", prev_check)
     #自分のつぶやきは無視する
     @mutters.reject!{|m| m.user.id == current_user.id}

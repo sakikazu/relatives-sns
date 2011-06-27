@@ -52,7 +52,7 @@ $(document).ready(function(){
   // つぶやき表示更新
 <% if Rails.env == "production" %>
   setInterval(function(){
-    $.get("<%= url_for(update_disp_mutters_path(:interval => @dispupdate_interval)) %>", function(data){
+    $.get("<%= update_disp_mutters_path %>", function(data){
       if(data != "") {
         $("#mutter_data").html(data);
       }
