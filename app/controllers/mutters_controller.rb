@@ -184,8 +184,8 @@ class MuttersController < ApplicationController
 
   #つぶやき表示更新
   def update_disp
-    prev_check = Time.parse(cookies[:update_disp_at]) rescue Time.now - 1.day
-    cookies[:update_disp_at] = Time.now.to_i
+    prev_check = Time.parse(cookies[:update_disp_at]) rescue Time.now
+    cookies[:update_disp_at] = Time.now
     new_mutters = Mutter.where("created_at > ?", prev_check)
     if new_mutters.size > 0
       @mutters = Mutter.includes_all.id_desc.limit(30)
@@ -197,8 +197,8 @@ class MuttersController < ApplicationController
 
   #つぶやき新着チェック
   def update_check
-    prev_check = Time.parse(cookies[:update_check_at]) rescue Time.now - 1.day
-    cookies[:update_check_at] = Time.now.to_i
+    prev_check = Time.parse(cookies[:update_check_at]) rescue Time.now
+    cookies[:update_check_at] = Time.now
     @mutters = Mutter.where("created_at > ?", prev_check)
     #自分のつぶやきは無視する
     @mutters.reject!{|m| m.user.id == current_user.id}
