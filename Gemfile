@@ -21,6 +21,9 @@ gem 'exception_notification', :require => 'exception_notifier'
 gem 'tmail'
 gem "sanitize"
 
+group :development do
+  gem 'ruby-debug'
+end
 
 # Use unicorn as the web server
 # gem 'unicorn'

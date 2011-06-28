@@ -3,6 +3,8 @@ class UpdateHistory < ActiveRecord::Base
   belongs_to :assetable, :polymorphic => true
 
   scope :sort_updated, order('updated_at DESC')
+  #ALBUMPHOTO_COMMENTのものはコンテンツがアルバムであり、出しても意味ないので無視する
+  scope :view_offset, lambda{|n| where("action_type != ?", UpdateHistory::ALBUMPHOTO_COMMENT).order("updated_at DESC").limit(1).offset(n)}
 
   #action_type
   ALBUM_CREATE = 1

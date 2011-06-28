@@ -214,11 +214,11 @@ class MuttersController < ApplicationController
   def update_allview
     next_page = params[:ups_page].blank? ? 0 : params[:ups_page].to_i
     if next_page > 0
-      up_prev = UpdateHistory.where("action_type != ?", UpdateHistory::ALBUMPHOTO_COMMENT).order("id DESC").limit(1).offset(next_page - 1).first
-      up_current = UpdateHistory.where("action_type != ?", UpdateHistory::ALBUMPHOTO_COMMENT).order("id DESC").limit(1).offset(next_page).first
+      up_prev = UpdateHistory.view_offset(next_page - 1).first
+      up_current = UpdateHistory.view_offset(next_page).first
       up, next_page = recursive_for_update_all_view(up_prev, up_current, next_page)
     else
-      up = UpdateHistory.where("action_type != ?", UpdateHistory::ALBUMPHOTO_COMMENT).order("id DESC").limit(1).offset(next_page).first
+      up = UpdateHistory.view_offset(next_page).first
     end
 
     @ups_page = next_page + 1
@@ -237,9 +237,7 @@ class MuttersController < ApplicationController
       redirect_to board_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::MOVIE_CREATE, UpdateHistory::MOVIE_COMMENT
       redirect_to movie_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
-    when UpdateHistory::BLOG_CREATE
-      redirect_to blog_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
-    when UpdateHistory::BLOG_COMMENT
+    when UpdateHistory::BLOG_CREATE, UpdateHistory::BLOG_COMMENT
       redirect_to blog_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
     end
   end
@@ -248,8 +246,7 @@ class MuttersController < ApplicationController
   def recursive_for_update_all_view(prev, current, next_page)
     if prev.assetable == current.assetable
       next_page += 1
-      #ALBUMPHOTO_COMMENTのものはコンテンツがアルバムであり、出しても意味ないので無視する
-      up_next = UpdateHistory.where("action_type != ?", UpdateHistory::ALBUMPHOTO_COMMENT).order("id DESC").limit(1).offset(next_page).first
+      up_next = UpdateHistory.view_offset(next_page).first
       recursive_for_update_all_view(current, up_next, next_page)
     else
       return current, next_page
