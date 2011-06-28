@@ -80,7 +80,7 @@ class MuttersController < ApplicationController
       @mutters = Mutter.includes_all.id_desc.limit(30)
     end
     @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
-    @login_users = User.includes(:user_ext).order("last_request_at DESC").limit(20)
+    @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(20)
     @album_thumbs = AlbumPhoto.rnd_photos
     @dispupdate_interval = 10 * 1000
 
