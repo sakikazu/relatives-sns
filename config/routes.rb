@@ -4,6 +4,8 @@ ADanRails3::Application.routes.draw do
     collection do
       get :recent
       get :ranking
+      get :donice
+      get :wasnice
     end
   end
   match "nices" => "nices#recent"

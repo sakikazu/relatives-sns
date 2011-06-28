@@ -1,0 +1,9 @@
+<div class="select_menu clearfix">
+  <% [["最近", 1, recent_nices_path], ["ランキング", 2, ranking_nices_path], ["各人がイイネしたもの", 3, donice_nices_path], ["各人がイイネされたもの", 4, wasnice_nices_path]].each do |n, i, path| -%>
+    <% if @sort == i -%>
+      <%= link_to "<span class='selected'>#{n}</span>".html_safe, path %>
+    <% else -%>
+      <%= link_to "<span>#{n}</span>".html_safe, path %>
+    <% end -%>
+  <% end -%>
+</div>

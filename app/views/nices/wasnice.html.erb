@@ -1,12 +1,22 @@
 <script>
 $(document).ready(function() {
+  //目次を作成する
   $("#mokuji").mokuji();
+
+  //colorbox 再適用
+  $(".colorbox").colorbox();
+  colorbox_fix_size();
 })
 </script>
 
-<div id="nice_show">
+<div id="nice_show" style="width:900px">
 
 <%= render :partial => 'nices_menu' %>
+
+
+<h1 style="margin-top:45px">＜<%= @user.dispname %>＞がイイネされたもの</h1>
+
+<div id="nice_show_left">
 
 <div id="mokuji"></div>
 
@@ -88,5 +98,17 @@ $(document).ready(function() {
 <% end -%>
 </div>
 
+
+</div> <!-- #nice_show_left -->
+
+
+<div class="right_side_bar" style="width:180px;margin-top:30px;">
+    <p class="title">イイネされたことがある人</p>
+    <ul>
+    <% @users.each do |user| -%>
+      <li><%= link_to user.dispname(User::FULLNAME), wasnice_nices_path(:user_id => user.id) %></li>
+    <% end -%>
+    </ul>
+</div>
 
 </div> <!-- #nice_show -->

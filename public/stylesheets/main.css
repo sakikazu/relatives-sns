@@ -62,6 +62,9 @@ a.colorbox_fix_size:hover {
   box-shadow: 1px 1px 1px #999999;
   border: 1px solid lightgray;
 }
+.select_menu span.long {
+  width: 150px;
+}
 .select_menu a {
   text-decoration: none;
   color: gray;
@@ -804,6 +807,10 @@ table.user_data tr td{
   background:#E7E7DA;
   padding:5px;
   line-height:20px;
+}
+#nice_show_left {
+  width: 650px;
+  float: left;
 }
 .nice_rank {
   font-weight:bold;

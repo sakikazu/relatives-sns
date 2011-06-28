@@ -1,7 +1,7 @@
 <script>
 $(document).ready(function() {
   //目次を作成する
-  $("#mokuji").mokuji({summary : true});
+  $("#mokuji").mokuji();
 
   //colorbox 再適用
   $(".colorbox").colorbox();
@@ -9,13 +9,18 @@ $(document).ready(function() {
 })
 </script>
 
-<div id="nice_show">
+<div id="nice_show" style="width:900px">
 
 <%= render :partial => 'nices_menu' %>
 
+
+<h1 style="margin-top:45px">＜<%= @user.dispname %>＞がイイネしたもの</h1>
+
+<div id="nice_show_left">
+
 <div id="mokuji"></div>
 
-<h2 class="normal">最近評価されたつぶやき</h2>
+<h2 class="normal">最近評価したつぶやき</h2>
 <%= will_paginate @nices["mutter"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["mutter"].present? %>
 <div class="h2normal_content">
 <% @nices["mutter"].each do |data| -%>
@@ -34,7 +39,7 @@ $(document).ready(function() {
 <% end -%>
 </div>
 
-<h2 class="normal">最近評価された写真</h2>
+<h2 class="normal">最近評価した写真</h2>
 <%= will_paginate @nices["albumphoto"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["albumphoto"].present? %>
 <div class="h2normal_content">
 <% @nices["albumphoto"].each do |data| -%>
@@ -52,7 +57,7 @@ $(document).ready(function() {
 <% end -%>
 </div>
 
-<h2 class="normal">最近評価された日記</h2>
+<h2 class="normal">最近評価した日記</h2>
 <%= will_paginate @nices["blog"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["blog"].present? %>
 <div class="h2normal_content">
 <% @nices["blog"].each do |data| -%>
@@ -75,7 +80,7 @@ $(document).ready(function() {
 </div>
 
 
-<h2 class="normal">最近評価された動画</h2>
+<h2 class="normal">最近評価した動画</h2>
 <%= will_paginate @nices["movie"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["movie"].present? %>
 <div class="h2normal_content">
 <% @nices["movie"].each do |data| -%>
@@ -94,5 +99,17 @@ $(document).ready(function() {
 <% end -%>
 </div>
 
+
+</div> <!-- #nice_show_left -->
+
+
+<div class="right_side_bar" style="width:180px;margin-top:30px;">
+    <p class="title">イイネしたことがある人</p>
+    <ul>
+    <% @users.each do |user| -%>
+      <li><%= link_to user.dispname(User::FULLNAME), donice_nices_path(:user_id => user.id) %></li>
+    <% end -%>
+    </ul>
+</div>
 
 </div> <!-- #nice_show -->
