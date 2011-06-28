@@ -104,10 +104,13 @@ class AlbumPhotosController < ApplicationController
   end
 
   def slideshow
+    #更新情報一括閲覧用
+    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
+
     @from_top_flg = true if params[:top].present?
     @album_photo = AlbumPhoto.find(params[:id])
     @album_photo_comment = AlbumPhotoComment.new(:user_id => current_user.id, :album_photo_id => @album_photo.id)
-    unless request.smart_phone?
+    if not request.smart_phone? and @ups_page.blank?
       render :layout => "simple"
     end
   end
@@ -129,6 +132,14 @@ class AlbumPhotosController < ApplicationController
       uh.update_attributes(:updated_at => Time.now)
     else
       @album_photo.album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT)
+    end
+
+    #UpdateHistory(2)
+    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO, :assetable_id => @album_photo.id})
+    if uh
+      uh.update_attributes(:updated_at => Time.now)
+    else
+      @album_photo.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO)
     end
   end
 

@@ -3,6 +3,7 @@ class AlbumPhoto < ActiveRecord::Base
   belongs_to :album
   has_many :album_photo_comments
   has_many :nices, :as => :nice
+  has_many :update_histories, :as => :assetable, :dependent => :destroy
 
   content_name = "album"
   has_attached_file :attach,

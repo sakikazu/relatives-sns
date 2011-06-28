@@ -15,12 +15,14 @@ class UpdateHistory < ActiveRecord::Base
   MOVIE_COMMENT = 8
   BLOG_CREATE = 9
   BLOG_COMMENT = 10
+  ALBUMPHOTO_COMMENT_FOR_PHOTO = 11 #AlbumComment用。上の(4)は、Album用
 
   ACTION_INFO = {
     ALBUM_CREATE => {:content_name => "アルバム", :info => "を作成しました"},
     ALBUM_COMMENT => {:content_name => "アルバム", :info => "にコメントしました"},
     ALBUMPHOTO_CREATE => {:content_name => "アルバム", :info => "に写真を追加しました"},
     ALBUMPHOTO_COMMENT => {:content_name => "アルバム", :info => "の写真にコメントしました"},
+    ALBUMPHOTO_COMMENT_FOR_PHOTO => {:content_name => "写真", :info => "にコメントしました"},
     BOARD_CREATE => {:content_name => "掲示板", :info => "を作成しました"},
     BOARD_COMMENT => {:content_name => "掲示板", :info => "にコメントしました"},
     MOVIE_CREATE => {:content_name => "動画", :info => "を作成しました"},

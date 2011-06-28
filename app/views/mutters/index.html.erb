@@ -151,6 +151,7 @@ $(document).ready(function(){
     
   <div id="update_history">
     <p class="title">みんなの新着情報</p>
+    <div style="margin:3px 0px;background-color:yellow;text-align:center"><%= link_to '一気に見る！', update_allview_mutters_path, :style => "font-weight:bold;font-size:18px;color:red" %></div>
     <div class="list">
       <%= render :partial => "update_history" %>
     </div>

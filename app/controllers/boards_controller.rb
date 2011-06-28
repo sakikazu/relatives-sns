@@ -48,6 +48,9 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.xml
   def show
+    #更新情報一括閲覧用
+    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
+
     @board = Board.find(params[:id])
 
     respond_to do |format|

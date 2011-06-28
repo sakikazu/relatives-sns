@@ -65,6 +65,9 @@ class BlogsController < ApplicationController
   # GET /blogs/1
   # GET /blogs/1.xml
   def show
+    #更新情報一括閲覧用
+    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
+
     @blog = Blog.find(params[:id])
 
     respond_to do |format|
