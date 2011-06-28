@@ -23,7 +23,7 @@
   <tr><th>仕事</th><td><%= @user.user_ext.job %></td></tr>
   <tr><th>趣味</th><td><%= @user.user_ext.hobby %></td></tr>
   <tr><th>特技</th><td><%= @user.user_ext.skill %></td></tr>
-  <tr><th>アピールとか</th><td><%= sani_br(@user.user_ext.free_text) %></td></tr>
+  <tr><th>アピールとか</th><td><%= sani_custom_br(@user.user_ext.free_text) %></td></tr>
   <tr><th>関係する11兄弟</th><td><%= @user.user_ext.root11_name %></td></tr>
   <tr><th>generation</th><td></td></tr> <!--t.integer  "generation"-->
   <tr><th>性格</th><td><%= @user.user_ext.character %></td></tr>

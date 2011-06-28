@@ -27,7 +27,7 @@
   <% history.history_comments.each do |co| -%>
     <tr>
       <td class="comment">コメント</td>
-      <td><%= sani_br(co.content) %></td>
+      <td><%= sani_custom_br(co.content) %></td>
       <td></td>
       <td><%= co.user.dispname %></td>
       <td><%= co.created_at.to_s(:date) %></td>

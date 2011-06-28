@@ -4,7 +4,7 @@
       <span class="name"><%= co.user.dispname %></span><span class="time">投稿日時：<%= co.created_at.to_s(:long) %></span>
     </div>
     <div class="content">
-      <div class="text"><%= sani_br(co.content) %></div>
+      <div class="text"><%= sani_custom_br(co.content) %></div>
     </div>
     <%= link_to "削除する", destroy_comment_movie_path(:id => co.id), :confirm => "本当に削除してもよろしいですか？" if editable(@current_user, co.user) %>
   </div>

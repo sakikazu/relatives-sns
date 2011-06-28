@@ -30,7 +30,7 @@ class Sanitize
         dt em figcaption figure h1 h2 h3 h4 h5 h6 hgroup i img ins kbd li mark
         ol p pre q rp rt ruby s samp small strike strong sub sup table tbody td
         tfoot th thead time tr u ul var wbr
-        font hr
+        font hr iframe
       ],
 
       :attributes => {
@@ -49,7 +49,8 @@ class Sanitize
         'th'         => ['abbr', 'axis', 'colspan', 'rowspan', 'scope', 'width'],
         'time'       => ['datetime', 'pubdate'],
         'ul'         => ['type'],
-        'font'       => ['size', 'color', 'face']
+        'font'       => ['size', 'color', 'face'],
+        'iframe'     => ['width', 'height', 'src', 'scrolling', 'frameborder'],
       },
 
       :protocols => {

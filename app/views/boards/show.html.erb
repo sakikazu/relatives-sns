@@ -13,7 +13,7 @@
     </div>
     <div class="description">
       <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach? %>
-      <p class="text"><%= sani_br(@board.description) %></p>
+      <p class="text"><%= sani_custom_br(@board.description) %></p>
     </div>
   </div>
 
