@@ -184,10 +184,10 @@ class MuttersController < ApplicationController
 
   #つぶやき表示更新
   def update_disp
-    prev_check = Time.parse(cookies[:update_disp_at]) rescue Time.now
-    cookies[:update_disp_at] = Time.now
-    new_mutters = Mutter.where("created_at > ?", prev_check)
-    if new_mutters.size > 0
+    prev_check = cookies[:update_disp_id].to_i
+    last_id = Mutter.last.id
+    if last_id > prev_check
+      cookies[:update_disp_id] = last_id
       @mutters = Mutter.includes_all.id_desc.limit(30)
       render :partial => "list"
     else
@@ -197,12 +197,12 @@ class MuttersController < ApplicationController
 
   #つぶやき新着チェック
   def update_check
-    prev_check = Time.parse(cookies[:update_check_at]) rescue Time.now
-    cookies[:update_check_at] = Time.now
-    @mutters = Mutter.where("created_at > ?", prev_check)
+    prev_check = cookies[:update_check_id].to_i
+    @mutters = Mutter.where("id > ?", prev_check)
     #自分のつぶやきは無視する
     @mutters.reject!{|m| m.user.id == current_user.id}
     if @mutters.size > 0
+      cookies[:update_check_id] = Mutter.last.id
       # render :text => @mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
       render :partial => "mutter_update"
     else
