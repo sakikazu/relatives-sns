@@ -12,6 +12,6 @@ class MutterSweeper < ActionController::Caching::Sweeper
   private
   def expire_public_page
     expire_fragment :mutter_by_user
-    expire_fragment :mutter_data
+    # expire_fragment :mutter_data
   end
 end

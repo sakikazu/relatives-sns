@@ -76,9 +76,9 @@ class MuttersController < ApplicationController
   def index
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
-    unless read_fragment :mutter_data
-      @mutters = Mutter.includes_all.id_desc.limit(30)
-    end
+    # unless read_fragment :mutter_data
+    @mutters = Mutter.includes_all.id_desc.limit(30)
+    # end
     @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
     @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(20)
     @album_thumbs = AlbumPhoto.rnd_photos
