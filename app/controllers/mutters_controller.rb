@@ -184,8 +184,14 @@ class MuttersController < ApplicationController
 
   #つぶやき表示更新
   def update_disp
-    prev_check = cookies[:update_disp_id].to_i
     last_id = Mutter.last.id
+    if cookies[:update_disp_id].blank?
+      cookies[:update_disp_id] = last_id
+      render :text => ""
+      return
+    end
+
+    prev_check = cookies[:update_disp_id].to_i
     if last_id > prev_check
       cookies[:update_disp_id] = last_id
       @mutters = Mutter.includes_all.id_desc.limit(30)
@@ -197,6 +203,12 @@ class MuttersController < ApplicationController
 
   #つぶやき新着チェック
   def update_check
+    if cookies[:update_check_id].blank?
+      cookies[:update_check_id] = Mutter.last.id
+      render :text => ""
+      return
+    end
+
     prev_check = cookies[:update_check_id].to_i
     @mutters = Mutter.where("id > ?", prev_check)
     #自分のつぶやきは無視する
