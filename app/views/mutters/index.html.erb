@@ -60,7 +60,7 @@ $(document).ready(function(){
   // つぶやき表示更新
 <% if Rails.env == "production" %>
   setInterval(function(){
-    $.get("<%= update_disp_mutters_path %>", function(data){
+    $.get("<%= update_disp_mutters_path(:t => Time.now.to_i) %>", function(data){
       if(data != "") {
         $("#mutter_data").html(data);
         $(document).ready(function(){

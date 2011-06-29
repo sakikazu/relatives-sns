@@ -97,7 +97,7 @@ jQuery(document).ready(function(){
       timeout: 15000,
       callback: function(){
         setInterval(function(){
-          $.get("/mutters/update_check", function(data){
+          $.get("/mutters/update_check?t=<%= Time.now.to_i %>", function(data){
             if(data != "" && data != undefined) {
               $('#desktopify').trigger('notify', [
               data,
