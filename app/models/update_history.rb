@@ -2,10 +2,6 @@ class UpdateHistory < ActiveRecord::Base
   belongs_to :user
   belongs_to :assetable, :polymorphic => true
 
-  scope :sort_updated, order('updated_at DESC')
-  #ALBUMPHOTO_COMMENTのものはコンテンツがアルバムであり、出しても意味ないので無視する
-  scope :view_offset, lambda{|n| where("action_type != ?", UpdateHistory::ALBUMPHOTO_COMMENT).order("updated_at DESC").limit(1).offset(n)}
-
   #action_type
   ALBUM_CREATE = 1
   ALBUM_COMMENT = 2
@@ -18,6 +14,15 @@ class UpdateHistory < ActiveRecord::Base
   BLOG_CREATE = 9
   BLOG_COMMENT = 10
   ALBUMPHOTO_COMMENT_FOR_PHOTO = 11 #AlbumComment用。上の(4)は、Album用
+
+  scope :sort_updated, order('updated_at DESC')
+  #ALBUMPHOTO_COMMENT_FOR_PHOTOのものは更新情報一覧には出さない。アルバムへの更新として出されているので→ALBUMPHOTO_COMMENT
+  scope :reject_photo_comment, where("action_type != ?", ALBUMPHOTO_COMMENT_FOR_PHOTO)
+  scope :view_normal, includes({:user => :user_ext}).reject_photo_comment.sort_updated
+
+  #ALBUMPHOTO_COMMENTのものはコンテンツがアルバムであり、出しても意味ないので無視する
+  scope :view_offset, lambda{|n| where("action_type != ?", ALBUMPHOTO_COMMENT).order("updated_at DESC").limit(1).offset(n)}
+
 
   ACTION_INFO = {
     ALBUM_CREATE => {:content_name => "アルバム", :info => "を作成しました"},

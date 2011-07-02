@@ -46,7 +46,7 @@ class MuttersController < ApplicationController
     @mutters.each do |obj|
       @contents << {:title => "[#{obj.created_at.to_s(:short3)}] つぶやき(#{obj.user.dispname})", :description => obj.content, :updated_at => obj.created_at}
     end
-    @uhs = UpdateHistory.sort_updated.find(:all, :limit => 5)
+    @uhs = UpdateHistory.view_normal.limit(5)
     @uhs.each do |obj|
       ai = UpdateHistory::ACTION_INFO[obj.action_type]
       time = obj.updated_at || obj.created_at
@@ -79,7 +79,7 @@ class MuttersController < ApplicationController
     # unless read_fragment :mutter_data
     @mutters = Mutter.includes_all.id_desc.limit(30)
     # end
-    @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.limit(10)
+    @updates = UpdateHistory.view_normal.limit(10)
     @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(20)
     @album_thumbs = AlbumPhoto.rnd_photos
     @dispupdate_interval = 10 * 1000
@@ -135,7 +135,7 @@ class MuttersController < ApplicationController
   end
 
   def update_history_all
-    @updates = UpdateHistory.includes({:user => :user_ext}).sort_updated.paginate(:page => params[:page], :per_page => 50)
+    @updates = UpdateHistory.view_normal.paginate(:page => params[:page], :per_page => 50)
   end
 
   def slider_update

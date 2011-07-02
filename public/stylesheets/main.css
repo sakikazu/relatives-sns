@@ -715,22 +715,35 @@ body {
   padding-top:7px;
   font-size: 90%;  
 }
-#update_history .list .once{
-  padding-left:5px;
-  /*color:darkRed;*/
+
+#update_history .list .once_row {
+  padding: 7px 8px;
+  line-height: 18px;
+  border-bottom: 1px dotted DimGray;
 }
-#update_history .list .once .name{
-  margin-left:15px;
+#update_history .list .bar {
+  margin-bottom: 5px; 
+}
+#update_history .list .bar .name{
+  font-weight: bold;
+  background: lightgray;
+  padding: 3px;
+}
+#update_history .list .bar .time{
+  margin-left: 7px;
+  color: DimGray;
+}
+
+
+#update_history .summary {
+  margin:6px 0px 13px;
+  text-align:center;
+}
+#update_history .summary a {
   font-weight:bold;
-  background-color:lightgray;
-  padding:3px;
-}
-#update_history .list .once a{
-  /*color:red;*/
-  /*background-color:khaki;*/
-}
-#update_history .list .once a:hover {
-  /*background-color:greenYellow;*/
+  font-size:17px;
+  color:blue;
+  text-shadow: 1px 1px 0 lightgray;
 }
 #current_login_user{
   margin-top: 15px;
@@ -746,7 +759,9 @@ body {
   margin: 0px;
   padding: 7px;
   color: white;
-  background: #146EB4;
+  /* background: #146EB4; */
+  background: -moz-linear-gradient(rgb(0, 0, 0) 0%, rgb(94, 94, 94) 2%, rgb(95, 95, 95) 3%, rgb(66, 66, 66) 3%, rgb(168, 163, 163) 83%, rgb(255, 255, 255) 89%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgb(0, 0, 0)), color-stop(2%, rgb(94, 94, 94)), color-stop(3%, rgb(95, 95, 95)), color-stop(3%, rgb(66, 66, 66)), color-stop(83%, rgb(168, 163, 163)), color-stop(89%, rgb(255, 255, 255)));
 }
 
 /* history */

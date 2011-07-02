@@ -1,3 +1,7 @@
+<div id="update_history">
 <%= will_paginate @updates, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
-  <%= render :partial => "update_history" %>
+  <div class="list">
+    <%= render :partial => "update_history" %>
+  </div>
 <%= will_paginate @updates, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
+</div>
