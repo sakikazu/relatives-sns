@@ -37,6 +37,42 @@
   clear: both;
 }
 
+.button {
+    background-color: #ECECEC;
+    background-image: -moz-linear-gradient(#F4F4F4, #ECECEC);
+    border: 1px solid #D4D4D4;
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font: 11px sans-serif;
+    margin: 0;
+    outline: medium none;
+    overflow: visible;
+    padding: 0.5em 1em;
+    position: relative;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 #FFFFFF;
+    white-space: nowrap;
+    font-weight: bold;
+}
+.button:hover, .button:focus, .button:active, .button.active {
+    background-color: #3C8DDE;
+    background-image: -moz-linear-gradient(#599BDC, #3072B3);
+    border-color: #3072B3 #3072B3 #2A65A0;
+    color: #FFFFFF;
+    text-decoration: none;
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+}
+.button:active, .button.active {
+  background-color: #3072B3;
+  background-image: -moz-linear-gradient(#3072B3, #599BDC);
+  border-color: #2A65A0 #2A65A0 #3884CF;
+}
+.button + .button, .button + .button-group, .button-group + .button, .button-group + .button-group {
+    margin-left: 15px;
+}
+
 a.colorbox:hover {
   opacity: 0.8;
 }
@@ -385,10 +421,13 @@ body {
 }
 #mutter #form_search form{
   text-align: center;
-  margin-left: 10px;
-  padding: 10px;
+  margin-left: 13px;
   display: inline;
   /* border: dotted 2px #EC8103; */
+}
+#mutter #form_search form input#search_text {
+  width: 160px;
+  height: 21px;
 }
 
 #mutter div#show_more {
@@ -716,6 +755,9 @@ body {
   font-size: 90%;  
 }
 
+#update_history .list .once_row:first-child {
+  border-top: 1px dotted DimGray;
+}
 #update_history .list .once_row {
   padding: 7px 8px;
   line-height: 18px;

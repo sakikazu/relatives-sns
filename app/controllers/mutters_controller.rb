@@ -24,14 +24,20 @@ class MuttersController < ApplicationController
     @action_flg = params[:action_flg].to_i
     case @action_flg
     when 0
-      @mutters = Mutter.includes_all.order("id DESC").limit(30)
+      @mutters = Mutter.includes_all.order("id DESC")
     when 1
       str = params[:search_text]
-      @mutters = Mutter.includes_all.where('content like :q', :q => "%#{str}%").order('id DESC').limit(30)
+      @mutters = Mutter.includes_all.where('content like :q', :q => "%#{str}%").order('id DESC')
     when 2
-      @mutters = Mutter.includes_all.where('image_file_name IS NOT NULL').order('id DESC').limit(30)
+      @mutters = Mutter.includes_all.where('mutters.image_file_name IS NOT NULL').order('id DESC')
     when 3
-      @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC').limit(30)
+      @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC')
+    end
+    @mutters = @mutters.paginate(:page => params[:page], :per_page => 30)
+
+    respond_to do |format|
+      format.html {render :action => "all"}
+      format.js
     end
   end
 

@@ -97,13 +97,13 @@ $(document).ready(function(){
   <div id="form_search">
     <%= form_tag search_mutters_path(:action_flg => 1), {:remote => true, :method => :get} do %>
       <%= text_field_tag :search_text %>
-      <%= submit_tag "発言内容から検索する" %>
+      <%= submit_tag "発言内容から検索する", :class => "button" %>
     <% end %>
     <%= form_tag search_mutters_path(:action_flg => 2), {:remote => true, :method => :get} do %>
-      <%= submit_tag "画像が含まれる" %>
+      <%= submit_tag "画像が含まれる", :class => "button" %>
     <% end %>
     <%= form_tag search_mutters_path(:action_flg => 3), {:remote => true, :method => :get} do %>
-      <%= submit_tag "URLが含まれる" %>
+      <%= submit_tag "URLが含まれる", :class => "button" %>
     <% end %>
   </div>
 
