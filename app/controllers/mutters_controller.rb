@@ -64,6 +64,7 @@ class MuttersController < ApplicationController
       @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC')
     end
     @mutters = @mutters.paginate(:page => params[:page], :per_page => 30)
+    @action_is_search = true
 
     respond_to do |format|
       format.html {render :action => "all"}

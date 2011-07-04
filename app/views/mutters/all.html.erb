@@ -48,7 +48,7 @@ $(document).ready(function() {
 </div> <!-- autopagerize_page_element -->
 </div>
 
-<% if @users.present? -%>
+<% unless @action_is_search -%>
   <div class="right_side_bar">
   <% cache :mutter_by_user do %>
     <div id="mutter_by_user">
