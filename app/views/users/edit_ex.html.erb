@@ -6,7 +6,7 @@ th {
 
 <h1>情報を変更する(好きなとこだけ設定すればいいよ)</h1>
 
-<% form_for @user_ext, :html => {:multipart => true}, :url => {:action => :update_ex} do |f| %>
+<% form_for @user_ext, :html => form_html_option, :url => {:action => :update_ex} do |f| %>
 <table>
   <tr><th><%= f.label :firstname, "姓" %></th><td><%= f.text_field :firstname %></td></tr>
   <tr><th><%= f.label :lastname, "名" %></th><td><%= f.text_field :lastname %></td></tr>
