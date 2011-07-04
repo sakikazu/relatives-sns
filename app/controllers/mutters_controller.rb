@@ -4,6 +4,36 @@ class MuttersController < ApplicationController
   before_filter :require_user, :except => :rss
   cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
+  def graph
+    if params[:all].present? or params[:year].blank?
+      @mutters_count = Mutter.group("DATE_FORMAT(created_at, '%Y/%m')").count
+      @mutters_count = @mutters_count.map{|m| ["#{m[0]}/01", m[1]]}
+      @format = "%y年%m月"
+      @min = '2008-04'
+      @interval = "1 year"
+      @range_for_title = "全期間：2008年 - #{Date.today.year}年"
+      @flg = 0
+    else
+      year = params[:year]
+      month = params[:month]
+
+      if year.present? and month.present?
+        @mutters_count = Mutter.where("created_at >= ? and created_at <= ?", "#{year}/#{month}/1", "#{year}/#{month}/31").group("DATE_FORMAT(created_at, '%Y/%m/%d')").count.to_a
+        @format = "%#d日"
+        @min = "#{year}-#{month}-1" 
+        @interval = "1 day"
+        @range_for_title = "#{year}年#{month}月"
+      elsif year.present? and month.blank?
+        @mutters_count = Mutter.where("created_at >= ? and created_at <= ?", "#{year}/1/1", "#{year}/12/31").group("DATE_FORMAT(created_at, '%Y/%m')").count
+        @mutters_count = @mutters_count.map{|m| ["#{m[0]}/01", m[1]]}
+        @format = "%m月"
+        @min = "#{year}-1-1" 
+        @interval = "1 month"
+        @range_for_title = "#{year}年"
+      end
+    end
+  end
+
   def new_from_mail
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
     @to = config['to']

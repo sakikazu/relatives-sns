@@ -1,0 +1,67 @@
+<% content_for :add_jscss do %>
+  <%= stylesheet_link_tag 'jquery.jqplot.min' %>
+  <%= javascript_include_tag 'jqplot/jquery.jqplot.min' %>
+  <%= javascript_include_tag 'jqplot/plugins/jqplot.cursor.min' %>
+  <%= javascript_include_tag 'jqplot/plugins/jqplot.highlighter.min' %>
+  <%= javascript_include_tag 'jqplot/plugins/jqplot.dateAxisRenderer.min' %>
+  <%= javascript_include_tag 'jqplot/plugins/jqplot.barRenderer.min' %>
+<% end %>
+
+<script>
+$(document).ready(function() {
+
+  var line1=[
+<% @mutters_count.each do |data| -%>
+  <%= "['#{data[0]}', #{data[1]}]," %>
+<% end -%>
+  ];
+  var plot = $.jqplot('chart', [line1], {
+    title:'つぶやき数(<%= @range_for_title %>)',
+    gridPadding:{right:20},
+    axes:{
+      xaxis:{
+        renderer:$.jqplot.DateAxisRenderer,
+        tickOptions:{formatString:'<%= @format %>'},
+        min:'<%= @min %>',
+        tickInterval:'<%= @interval %>'
+      }
+    },
+    seriesDefaults: {
+      renderer:$.jqplot.BarRenderer,
+      rendererOptions: {
+        barPadding: 2,      // number of pixels between adjacent bars in the same
+        // group (same category or bin).
+        barMargin: 5,      // number of pixels between adjacent groups of bars.
+        barDirection: 'vertical', // vertical or horizontal.
+        barWidth: 14,     // width of the bars.  null to calculate automatically.
+        shadowOffset: 2,    // offset from the bar edge to stroke the shadow.
+        shadowDepth: 2,     // nuber of strokes to make for the shadow.
+        shadowAlpha: 0.8,   // transparency of the shadow.
+      }
+    },
+    highlighter: {
+      show: true,
+      sizeAdjust: 7.5
+    },
+    cursor: {
+      show: false
+    }
+  });
+}); //jquery#ready
+</script>
+
+<div id="mutter_graph">
+<%= form_tag graph_mutters_path, :method => "get" do %>
+  <%= select_tag "year", options_for_select(2008..Date.today.year) %>
+  <%= select_tag "month", options_for_select(1..12), :include_blank => true %>
+  <%= submit_tag "期間を選択して表示", :class => "button" %>
+<% end -%>
+<%= form_tag graph_mutters_path, :method => "get" do %>
+  <%= hidden_field_tag :all, 1 %>
+  <%= submit_tag "全期間を表示", :class => "button" %>
+<% end -%>
+</div>
+
+
+<div id="chart">
+</div>

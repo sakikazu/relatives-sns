@@ -114,6 +114,7 @@ ADanRails3::Application.routes.draw do
   match "/mutters/celebration_create" => "mutters#celebration_create"
   resources :mutters do
     collection do
+      get :graph
       get :update_allview
       get :update_check
       get :update_disp

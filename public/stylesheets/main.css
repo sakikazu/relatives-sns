@@ -343,6 +343,14 @@ body {
  *  mutter
  *---------------------------------*/
 
+#mutter_graph {
+  margin: 20px 0px 35px;
+}
+#mutter_graph form {
+  margin-left: 30px;
+  display: inline;
+}
+
 #slider_update_btn{
   float:left;
   margin: 70px 0px 0px 200px

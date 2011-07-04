@@ -20,6 +20,7 @@ $(document).ready(function() {
 
 <div id="mutter">
 つぶやき総数: <%= @mutters.total_entries %>
+<div><%= link_to 'グラフを見る', graph_mutters_path, :class => "button" %></div>
 <%= will_paginate @mutters, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <br />
 
@@ -38,7 +39,6 @@ $(document).ready(function() {
     <%= submit_tag "URLが含まれる", :class => "button" %>
   <% end %>
 </div>
-
 
 <div class="autopagerize_page_element">
 <ul class="mutter_rows">
