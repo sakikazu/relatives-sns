@@ -8,6 +8,9 @@ class Movie < ActiveRecord::Base
 
   acts_as_paranoid
 
+  TYPE_NORMAL = 0
+  TYPE_MODIFY = 1
+
   content_name = "movie"
   has_attached_file :movie,
     :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",

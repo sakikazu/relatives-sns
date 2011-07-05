@@ -1,5 +1,17 @@
 <h3 class="normal"><%= link_to '新規作成 (動画準備の解説あり)', new_movie_path %></h3>
 
+<h3 class="normal">動画一覧</h3>
+<div class="select_menu clearfix">
+  <% [["編集動画", 1], ["編集なし動画", 2]].each do |n, i| -%>
+    <% if @sort == i -%>
+      <%= link_to "<span class='selected'>#{n}</span>".html_safe, movies_path(:sort => i) %>
+    <% else -%>
+      <%= link_to "<span>#{n}</span>".html_safe, movies_path(:sort => i) %>
+    <% end -%>
+  <% end -%>
+</div>
+
+
 <div id="movie">
 <%= will_paginate @movies, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
 <% @movies.each do |movie| -%>

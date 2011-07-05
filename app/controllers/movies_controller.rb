@@ -5,7 +5,13 @@ class MoviesController < ApplicationController
   # GET /movies
   # GET /movies.xml
   def index
-    @movies = Movie.paginate(:page => params[:page], :per_page => 10, :order => "id DESC")
+    @sort = params[:sort].blank? ? 1 : params[:sort].to_i
+    case @sort 
+    when 1
+      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).paginate(:page => params[:page], :per_page => 10, :order => "id DESC")
+    else
+      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).paginate(:page => params[:page], :per_page => 10, :order => "id DESC")
+    end
 
     respond_to do |format|
       format.html # index.html.erb
