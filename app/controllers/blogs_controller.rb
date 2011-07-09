@@ -189,7 +189,11 @@ class BlogsController < ApplicationController
   end
 
   def create_comment
-    exit if params[:comment].blank?
+    if params[:comment].blank?
+      render :text => "", :status => 500
+      return
+    end
+
     @blog = Blog.find(params[:blog_id])
     @blog.blog_comments.create(:user_id => current_user.id, :content => params[:comment])
 

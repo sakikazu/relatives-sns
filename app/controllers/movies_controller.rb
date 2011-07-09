@@ -98,7 +98,11 @@ class MoviesController < ApplicationController
   end
 
   def create_comment
-    exit if params[:comment].blank?
+    if params[:comment].blank?
+      render :text => "", :status => 500
+      return
+    end
+
     @movie = Movie.find(params[:movie_id])
     @movie.movie_comments.create(:user_id => current_user.id, :content => params[:comment])
 

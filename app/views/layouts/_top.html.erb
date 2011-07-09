@@ -1,4 +1,4 @@
-    <h1><%= link_to "AdanHP", root_path %></h1>
+    <h1 id="site_title"><%= link_to "AdanHP", root_path %></h1>
     現在 <%= User.logged_in.count %> 人がログインしています<br /> <!-- This based on last_request_at, if they were active < 10 minutes they are logged in -->
     
     <% if !current_user %>
@@ -9,4 +9,4 @@
         <%= link_to "Register", new_account_path %>
       <% end %>
     <% end %>
-    <br /><%= link_to "RSS", rss2_url %>
+    <%= link_to "RSS", rss2_url %>

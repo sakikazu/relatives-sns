@@ -121,7 +121,10 @@ class AlbumPhotosController < ApplicationController
   end
 
   def create_comment
-    exit if params[:album_photo_comment][:content].blank?
+    if params[:album_photo_comment][:content].blank?
+      render :text => "", :status => 500
+      return
+    end
     comment = AlbumPhotoComment.create(params[:album_photo_comment])
     @album_photo = comment.album_photo 
     @album_photo.update_attributes(:last_comment_at => Time.now)

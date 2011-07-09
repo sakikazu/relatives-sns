@@ -263,6 +263,16 @@ a.colorbox:hover img{
   line-height: 18px;
   margin-left: 25px;
 }
+
+h1#site_title a {
+  font-size: 40px;
+  text-decoration: none;
+  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.4), 1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+h1#site_title {
+  margin-bottom: 25px;
+}
+
 /* via: http://jsdo.it/event/topics/2011/06/jquery-mobile */
 h2.normal {
   background-image: -moz-linear-gradient(center top , #DCDCDC 0%, #FFFFFF 100%);
@@ -342,7 +352,6 @@ body {
 /*---------------------------------
  *  mutter
  *---------------------------------*/
-
 #mutter_graph {
   margin: 20px 0px 35px;
 }
@@ -353,7 +362,7 @@ body {
 
 #slider_update_btn{
   float:left;
-  margin: 70px 0px 0px 200px
+  margin: 60px 0px 20px 200px
 }
 #slider_update_btn input{
   height: 40px;
@@ -460,12 +469,12 @@ body {
 }
 .mutter_rows .content {
   display: block;
-  padding: 5px 5px;
+  padding: 5px 4px;
   /* float: left; */
 }
 .mutter_rows .image {
   float: left;
-  margin-right: 12px;
+  margin-right: 8px;
 }
 .mutter_rows .icon {
   width: 50px;
@@ -473,9 +482,13 @@ body {
 .mutter_rows .icon p {
   margin: 4px 0px;
 }
+.mutter_rows .icon p img {
+  border: 1px gray solid;
+  padding: 4px;
+}
 .mutter_rows .content_wrap {
   width: 530px;
-  margin-left: 15px;
+  margin-left: 20px;
 }
 .mutter_rows .bar {
   padding-bottom: 3px;
@@ -501,10 +514,12 @@ body {
   /* border-radius: 7px 7px 7px 7px; */
   /* box-shadow: 1px 1px 3px #999999; */
   background-color: white;
+  border: 1px outset gray;
 }
 .mutter_rows li.even{
   background-color: MistyRose;
 }
+
 
 
 #nichirei {

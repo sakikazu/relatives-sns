@@ -14,7 +14,7 @@
   </div>
   <div style="text-align:center">
     <div style="margin:20px;font-size:18px;color:gray">
-      アルバム：<%= link_to @album_photo.album.title, @album_photo.album %>
+      アルバム：<%= @album_photo.album.present? ? (link_to @album_photo.album.title, @album_photo.album) : "(なし)" %>
     </div>
   </div>
 <% end -%>
