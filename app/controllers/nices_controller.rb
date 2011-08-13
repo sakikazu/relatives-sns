@@ -35,7 +35,7 @@ class NicesController < ApplicationController
     @photo_data = contents["AlbumPhoto"] || []
     @blog_data = contents["Blog"] || []
 
-    @users = Nice.select('distinct niced_user_id').map{|n| User.find(n.niced_user_id)}
+    @users = Nice.select('distinct niced_user_id').where("niced_user_id IS NOT NULL").map{|n| User.find(n.niced_user_id)}
 
     @sort = 4
   end
