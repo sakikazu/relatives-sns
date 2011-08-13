@@ -352,6 +352,20 @@ body {
 /*---------------------------------
  *  mutter
  *---------------------------------*/
+#link_recent_login_users {
+  color: black;
+  background-color:#ECECEC;
+  margin-top:8px;
+  padding:7px 0px;
+  border-top:1px dotted gray;
+  font-weight:bold;
+  text-align:center
+}
+#link_recent_login_users:hover {
+  cursor: pointer;
+}
+
+
 #mutter_graph {
   margin: 20px 0px 35px;
 }

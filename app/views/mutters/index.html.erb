@@ -1,4 +1,15 @@
 <script>
+show_recent_login_users = function(){
+  $link = $('#link_recent_login_users')
+  if($link.text() != '隠す'){
+    $('.hide_row').show();
+    $link.text('隠す');  
+  }else{
+    $('.hide_row').hide();
+    $link.text('もっと見る(直近40人分)');  
+  }
+}
+
 $(document).ready(function(){
   slide_effect();
 
@@ -171,15 +182,20 @@ $(document).ready(function(){
   </div>
 
   <div id="current_login_user">
-    <p class="title">みんなのアクセス情報(直近20人分)</p>
+    <p class="title">みんなのアクセス情報</p>
     <table>
-    <% @login_users.each do |user| -%>
+    <% @login_users.each_with_index do |user, idx| -%>
+<% if idx > 20 -%>
+      <tr class="hide_row" style="display:none">
+<% else -%>
       <tr>
-        <td><%= user.last_request_at.to_s(:short) if user.last_request_at %></td>
+<% end -%>
+        <td><%= user.last_request_at.present? ? user.last_request_at.to_s(:short) : "ログインなし" %></td>
         <td><%= user.dispname(User::FULLNICK) %></td>
       </tr>
     <% end -%>
     </table>
+    <div id="link_recent_login_users" onclick="javascript:show_recent_login_users()">もっと見る(直近40人分)</div>
   </div>
 </div>
 <div style="clear: both"></div>
