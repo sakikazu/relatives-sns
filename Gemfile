@@ -15,11 +15,13 @@ gem 'flash_cookie_session'
 #gem 'calendar_date_select', :git => 'git://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
 gem 'will_paginate', "~> 3.0.pre2"
 gem 'exifr'
-gem 'rails3_acts_as_paranoid'
+gem 'rails3_acts_as_paranoid', '0.0.8'
 # gem 'exception_notification_rails3'
 gem 'exception_notification', :require => 'exception_notifier'
 gem 'tmail'
 gem "sanitize"
+
+gem 'typus'
 
 group :development do
   gem 'ruby-debug'

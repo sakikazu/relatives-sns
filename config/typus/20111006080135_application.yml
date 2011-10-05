@@ -1,0 +1,214 @@
+# Typus Models Configuration File
+#
+# Use the README file as a reference to customize settings.
+
+Album:
+  fields:
+    default: user_id, title, description, use1_id, use2_id, user, use1_photo
+    form: user_id, title, description, use1_id, use2_id, user, use1_photo
+  order_by: 
+  relationships: album_comments, album_photos, update_histories, use1_photo, user
+  filters: created_at
+  search: title
+  application: a-dan
+
+AlbumComment:
+  fields:
+    default: user_id, album_id, content, user, album
+    form: user_id, album_id, content, user, album
+  order_by: 
+  relationships: album, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+AlbumPhoto:
+  fields:
+    default: user_id, title, description, album_id, exif_at, last_comment_at, attach_file_name, user, album
+    form: user_id, title, description, album_id, exif_at, last_comment_at, attach_file_name, user, album
+  order_by: 
+  relationships: album, album_photo_comments, nices, update_histories, user
+  filters: created_at
+  search: title
+  application: a-dan
+
+AlbumPhotoComment:
+  fields:
+    default: user_id, album_photo_id, content, album_photo, user
+    form: user_id, album_photo_id, content, album_photo, user
+  order_by: 
+  relationships: album_photo, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+Blog:
+  fields:
+    default: user_id, title, content, user
+    form: user_id, title, content, user
+  order_by: 
+  relationships: blog_comments, blog_images, nices, update_histories, user
+  filters: created_at
+  search: title
+  application: a-dan
+
+BlogComment:
+  fields:
+    default: blog_id, user_id, content, user, blog
+    form: blog_id, user_id, content, user, blog
+  order_by: 
+  relationships: blog, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+BlogImage:
+  fields:
+    default: blog_id, image_file_name, user, blog
+    form: blog_id, image_file_name, user, blog
+  order_by: 
+  relationships: blog, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+Board:
+  fields:
+    default: user_id, title, description, attach_file_name, user
+    form: user_id, title, description, attach_file_name, user
+  order_by: 
+  relationships: board_comments, update_histories, user
+  filters: created_at
+  search: title
+  application: a-dan
+
+BoardComment:
+  fields:
+    default: board_id, user_id, content, attach_file_name, user, board
+    form: board_id, user_id, content, attach_file_name, user, board
+  order_by: 
+  relationships: board, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+Celebration:
+  fields:
+    default: user_id, anniversary_at, user
+    form: user_id, anniversary_at, user
+  order_by: 
+  relationships: mutters, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+Geocode:
+  fields:
+    default: address, lat, lng
+    form: address, lat, lng
+  order_by: 
+  relationships: 
+  filters: created_at
+  search: 
+  application: a-dan
+
+History:
+  fields:
+    default: episode_year, episode_month, episode_day, about_flg, content, user_id, src_user_name, user
+    form: episode_year, episode_month, episode_day, about_flg, content, user_id, src_user_name, user
+  order_by: 
+  relationships: history_comments, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+HistoryComment:
+  fields:
+    default: history_id, user_id, content, user, history
+    form: history_id, user_id, content, user, history
+  order_by: 
+  relationships: history, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+LoginHistory:
+  fields:
+    default: user_id, user
+    form: user_id, user
+  order_by: 
+  relationships: user
+  filters: created_at
+  search: 
+  application: a-dan
+
+Movie:
+  fields:
+    default: user_id, title, description, movie_file_name, thumb_file_name, user
+    form: user_id, title, description, movie_file_name, thumb_file_name, user
+  order_by: 
+  relationships: movie_comments, nices, update_histories, user
+  filters: created_at
+  search: title
+  application: a-dan
+
+MovieComment:
+  fields:
+    default: movie_id, user_id, content, user, movie
+    form: movie_id, user_id, content, user, movie
+  order_by: 
+  relationships: movie, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+Mutter:
+  fields:
+    default: user_id, content, reply_id, image_file_name, celebration_id, user, celebration
+    form: user_id, content, reply_id, image_file_name, celebration_id, user, celebration
+  order_by: 
+  relationships: celebration, nices, user
+  filters: created_at
+  search: 
+  application: a-dan
+
+Nice:
+  fields:
+    default: user_id, nice_id, comment, niced_user_id, user
+    form: user_id, nice_id, comment, niced_user_id, user
+  order_by: 
+  relationships: user
+  filters: created_at
+  search: 
+  application: a-dan
+
+UpdateHistory:
+  fields:
+    default: user_id, assetable_id, user
+    form: user_id, assetable_id, user
+  order_by: 
+  relationships: user
+  filters: created_at
+  search: 
+  application: a-dan
+
+User:
+  fields:
+    default: login, login_count, last_request_at, last_login_at, current_login_at, last_login_ip, current_login_ip, role, name
+    form: login, login_count, last_request_at, last_login_at, current_login_at, last_login_ip, current_login_ip, role, name
+  order_by: 
+  relationships: celebrations, mutters, user_ext
+  filters: created_at
+  search: name
+  application: a-dan
+
+UserExt:
+  fields:
+    default: user_id, firstname, lastname, nickname, sex, blood, email, addr1, addr2, addr3, addr4, addr_from, birth_day, root11, generation, image_file_name, job, hobby, skill, character, jiman, dream, sonkei, kyujitsu, myboom, fav_food, unfav_food, fav_movie, fav_book, fav_sports, fav_music, fav_game, fav_brand, hosii, ikitai, yaritai, free_text, user
+    form: user_id, firstname, lastname, nickname, sex, blood, email, addr1, addr2, addr3, addr4, addr_from, birth_day, root11, generation, image_file_name, job, hobby, skill, character, jiman, dream, sonkei, kyujitsu, myboom, fav_food, unfav_food, fav_movie, fav_book, fav_sports, fav_music, fav_game, fav_brand, hosii, ikitai, yaritai, free_text, user
+  order_by: 
+  relationships: user
+  filters: created_at
+  search: 
+  application: a-dan
+

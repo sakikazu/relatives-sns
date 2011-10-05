@@ -1,0 +1,26 @@
+# Typus Roles Configuration File
+#
+# Use the README file as a reference to customize settings.
+
+admin:
+  Album: create, read, update, delete
+  AlbumComment: create, read, update, delete
+  AlbumPhoto: create, read, update, delete
+  AlbumPhotoComment: create, read, update, delete
+  Blog: create, read, update, delete
+  BlogComment: create, read, update, delete
+  BlogImage: create, read, update, delete
+  Board: create, read, update, delete
+  BoardComment: create, read, update, delete
+  Celebration: create, read, update, delete
+  Geocode: create, read, update, delete
+  History: create, read, update, delete
+  HistoryComment: create, read, update, delete
+  LoginHistory: create, read, update, delete
+  Movie: create, read, update, delete
+  MovieComment: create, read, update, delete
+  Mutter: create, read, update, delete
+  Nice: create, read, update, delete
+  UpdateHistory: create, read, update, delete
+  User: create, read, update, delete
+  UserExt: create, read, update, delete
