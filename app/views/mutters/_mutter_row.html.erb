@@ -10,7 +10,7 @@
 <div class="left content_wrap">
   <div class="bar">
     <span class='name'><%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} %></span>
-    <span class='time'><%= link_to (l mutter_row.created_at), mutter_path(mutter_row) %></span>
+    <span class='time'><%= link_to (mutter_row.created_at.to_s(:long)), mutter_path(mutter_row) %></span>
     <span class="nice">
       <span id='cont_<%= mutter_row.id %>'>
         <%= nice_field(mutter_row, "mutter", "#cont_#{mutter_row.id}") %>

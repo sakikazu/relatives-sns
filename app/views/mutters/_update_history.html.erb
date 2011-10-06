@@ -2,7 +2,7 @@
   <div class="once_row">
     <div class="bar">
       <span class="name"><%= up.user.dispname %></span>
-      <span class="time"><%= l up.updated_at if up.updated_at %></span>
+      <span class="time"><%= up.updated_at.to_s(:long) if up.updated_at %></span>
     </div>
     <% ai = action_info(up) -%>
     <b>[<%= ai[:content_name] %>]<%= ai[:link] %></b>
