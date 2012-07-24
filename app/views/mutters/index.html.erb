@@ -89,7 +89,7 @@ $(document).ready(function(){
 <div id="mutter">
   <%# remote_form_for @mutter, :html => {:multipart => true}, :update => "mutter_data", :condition => "$('#mutter_content').val() != ''", :complete => "$('#mutter_content').val('');" do |f| -%>
   <div id="form">
-    <%= form_for @mutter, :html => form_html_option do |f| -%>
+    <%= form_for @mutter, :html => {:multipart => true} do |f| -%>
     <table><tr>
     <td width="120px">
     <b style="font-family:'HGP創英角ﾎﾟｯﾌﾟ体';font-size:160%" id="mutter_logo">今なんしょって？</b><br />
