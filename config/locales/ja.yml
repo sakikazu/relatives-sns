@@ -4,9 +4,15 @@
 # contributors:
 #  - Tsutomu Kuroda (t-kuroda@oiax.jp)
 
+# for typus
+time:
+  formats:
+    default: "%Y/%m/%d %H:%M"
+
 ja:
   date:
     formats:
+      le: "%Y/%m"
       default: "%Y/%m/%d"
       short: "%m/%d"
       long: "%Y年%m月%d日(%a)"
@@ -24,9 +30,9 @@ ja:
 
   time:
     formats:
-      default: "%Y/%m/%d %H:%M:%S"
-      short: "%y/%m/%d %H:%M"
+      default: "%Y/%m/%d %H:%M"
       long: "%Y年%m月%d日(%a) %H時%M分%S秒 %Z"
+      short: "%H:%M"
     am: "午前"
     pm: "午後"
 
@@ -143,9 +149,11 @@ ja:
       prompt: "選択してください。"
 
     submit:
-      create: "作成する"
+      create: "登録する"
       update: "更新する"
       submit: "保存する"
+      Sign in: "ログイン"
+      Sign up: "ユーザー登録"
 
     label:
       user_session:
@@ -194,9 +202,65 @@ ja:
         format: "%{attribute}%{message}"
 
     models:
-      history: "年表"
+      course: " 権利消化"
 
     attributes:
-      history:
-        content: "内容"
+      user:
+        email: "メールアドレス"
+        fullpath: "(管理者用)フルネーム"
+        role: "権限"
+        username: "ユーザー名"
+        password: "パスワード"
+        password_confirmation: "パスワード(再入力)"
+        remember_me: "次回からパスワード入力を省く"
+        familyname: "姓"
+        givenname: "名"
+        familyname_kana: "姓(カナ)"
+        givenname_kana: "名(カナ)"
+        familyname_alpha: "姓(ｱﾙﾌｧﾍﾞｯﾄ)"
+        givenname_alpha: "名(ｱﾙﾌｧﾍﾞｯﾄ)"
+        prefecture: "都道府県"
+        addr1: "市町村"
+        addr2: "番地"
+        addr3: "建物名"
+        birthday: "誕生日"
+        join_company_at: "入社日"
+        nickname: "ニックネーム"
+        sex: "性別"
+        blood: "血液型"
+        zipcode: "郵便番号"
+        contact: "連絡できるメールアドレス、ソーシャルメディアのリンクなど"
+        hometown_prefecture: "出身地の都道府県"
+        hometown_addr: "出身地の都道府県以降の住所"
+        image: "アイコン画像"
+        free_text: "自由欄"
+        hobby: "趣味"
+        skill: "特技"
+        jiman: "自慢できること"
+        dream: "夢"
+        myboom: "マイブーム"
+        sonkei: "尊敬する人"
+        kyujitsu: "休日の過ごし方"
 
+      document:
+        title: "タイトル"
+        document_group_id: "グループ"
+        content: "内容"
+        user_id: "作成者"
+        readable_users: "閲覧権限のあるユーザー"
+        readwritable_users: "閲覧書込権限のあるユーザー"
+
+      document_group:
+        title: "グループタイトル"
+        sort_no: "表示順"
+
+  views:
+    pagination:
+      previous: "<< 前ページ"
+      next: "次ページ >>"
+      truncate: "..."
+
+  formtastic:
+    actions:
+      create: "登録する"
+      update: "更新する"

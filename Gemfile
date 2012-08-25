@@ -1,51 +1,81 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '3.0.6'
+gem 'rails', '3.2.8'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2', '< 0.3'
-gem 'rspec-rails'
-gem 'jquery-rails'
-gem 'authlogic'
-gem 'jpmobile', '1.0.0.pre.4', :require => 'action_pack'
-gem 'paperclip', '2.3.10'
-gem 'flash_cookie_session'
-#gem 'calendar_date_select', :git => 'git://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
-gem 'will_paginate', "~> 3.0.pre2"
-gem 'exifr'
-gem 'rails3_acts_as_paranoid', '0.0.8'
-# gem 'exception_notification_rails3'
+gem 'mysql2'
+
+gem 'devise'
+# gem "rails3_acts_as_paranoid", "~>0.2.0"
+gem "rails3_acts_as_paranoid"
 gem 'exception_notification', :require => 'exception_notifier'
-gem 'tmail'
 gem "sanitize"
+gem 'paperclip'
+gem 'exifr'
+gem "rails_autolink"
+gem 'kaminari'
+gem 'acts-as-taggable-on'
+
+# gem 'formtastic'
+# gem 'formtastic-bootstrap'
+gem 'simple_form'
+gem 'twitter-bootstrap-rails'
 
 gem 'typus'
+gem 'faker'
 
-group :development do
-  gem 'ruby-debug'
+# gem 'jpmobile'
+# gem 'flash_cookie_session'
+# gem 'tmail'
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier', '>= 1.0.3'
 end
 
-# Use unicorn as the web server
+gem 'jquery-rails'
+
+group :development do
+  gem 'mongrel', '>= 1.2.0.pre2'
+
+  gem 'ruby-debug19'
+  gem 'rails-erd'
+  gem 'rails-footnotes'
+  gem 'pry-rails'
+end
+
+group :development, :test do
+  gem "rspec"
+  gem "rspec-rails"
+  # gem "factory_girl_rails" // 2012-08-25現在、r g scaffoldにてエラーになる
+  gem "rails3-generators"
+  gem "rr"
+  gem "capybara"
+  gem 'spork'
+  gem "guard-spork"
+  gem "guard-rspec"
+
+  # gem "hocus_pocus"
+end
+
+
+
+# To use ActiveModel has_secure_password
+# gem 'bcrypt-ruby', '~> 3.0.0'
+
+# To use Jbuilder templates for JSON
+# gem 'jbuilder'
+
+# Use unicorn as the app server
 # gem 'unicorn'
 
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-# gem 'ruby-debug19', :require => 'ruby-debug'
-
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-# gem 'aws-s3', :require => 'aws/s3'
-
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-# group :development, :test do
-#   gem 'webrat'
-# end
+# To use debugger
+# gem 'debugger'

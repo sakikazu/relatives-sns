@@ -1,0 +1,11 @@
+<% url = @user.id.blank? ? members_path : member_path(@user) -%>
+<%= simple_form_for(@user, url: url) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
