@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Blog < ActiveRecord::Base
   belongs_to :user
   has_many :blog_comments

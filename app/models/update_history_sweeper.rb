@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class UpdateHistorySweeper < ActionController::Caching::Sweeper
   observe UpdateHistory
 

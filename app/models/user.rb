@@ -1,11 +1,23 @@
+# -*- coding: utf-8 -*-
 class User < ActiveRecord::Base
-  acts_as_authentic
+  # acts_as_paranoid
 
   has_many :mutters
   has_many :celebrations
   has_one :user_ext
 
   after_save :rel_save
+
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable,
+  # :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :username, :fullname, :role, :email, :password, :password_confirmation, :remember_me
+  # attr_accessible :title, :body
+
 
   #role
   ADMIN = 0
@@ -20,6 +32,22 @@ class User < ActiveRecord::Base
   FULLNICK = 3
 
 
+  def self.find_or_create(username, password)
+    user = find_by_username(username)
+    if user.blank?
+      user = create!(:username => username, :password => password, :password_confirmation => password)
+    end
+    return user
+  end
+
+  def self.find_or_create2(username, password, fullname, email, role)
+    user = find_by_username(username)
+    if user.blank?
+      user = create!(username: username, password: password, password_confirmation: password, fullname: fullname, email: email, role: role)
+    end
+    return user
+  end
+
   def admin?
     self.role == ADMIN
   end
@@ -28,7 +56,7 @@ class User < ActiveRecord::Base
     Hash[*ROLE.flatten.reverse][self.role]
   end
 
-  def dispname(type = NICKNAME, only_user_set = false)
+  def dispname(type = NICKNAME, user_set_only = false)
     name = ""
     case type
     when NICKNAME
@@ -39,8 +67,8 @@ class User < ActiveRecord::Base
       name = "#{self.user_ext.nickname}(#{self.user_ext.firstname}#{self.user_ext.lastname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.user_ext.firstname.blank? && !self.user_ext.lastname.blank?
     end
 
-    if name.blank? and not only_user_set
-      name = self.login
+    if name.blank? and not user_set_only
+      name = self.username
     end
     return Sanitize.clean(name, Sanitize::Config::BASIC)
   end
@@ -48,4 +76,5 @@ class User < ActiveRecord::Base
   def rel_save
     self.user_ext ||= UserExt.create
   end
+
 end

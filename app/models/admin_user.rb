@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class AdminUser < ActiveRecord::Base
 
   ROLE = Typus::Configuration.roles.keys.sort

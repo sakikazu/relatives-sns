@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Album < ActiveRecord::Base
   belongs_to :user
   has_many :album_photos

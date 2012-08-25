@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class UpdateHistory < ActiveRecord::Base
   belongs_to :user
   belongs_to :assetable, :polymorphic => true

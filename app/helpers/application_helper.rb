@@ -1,4 +1,4 @@
-# Methods added to this helper will be available to all templates in the application.
+# -*- coding: utf-8 -*-
 module ApplicationHelper
 
   #何度もrenderされるので、無理にヘルパーにした
@@ -57,7 +57,8 @@ EOS
   end
 
   def colorbox_class
-    request.smart_phone? ? "" : "colorbox"
+    # request.smart_phone? ? "" : "colorbox"
+    "colorbox"
   end
 
   def colorbox_fix_size
@@ -66,7 +67,8 @@ EOS
 
 
   def form_html_option
-    request.smart_phone? ? {} : {:multipart => true}
+    # request.smart_phone? ? {} : {:multipart => true}
+    {:multipart => true}
   end
 
   def editable(login_user, content_user)

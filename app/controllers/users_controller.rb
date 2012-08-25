@@ -1,95 +1,38 @@
-class UsersController < ApplicationController
-  #before_filter :require_no_user, :only => [:new, :create]
-  #before_filter :require_user, :only => [:index, :show, :edit, :update]
-  before_filter :require_user
-  before_filter :page_title
-  
-
-  def index
-    @users = User.all(:include => "user_ext", :order => "user_exts.root11, users.id")
-  end
-
-  def all
-    @users = User.all(:include => "user_ext", :order => "user_exts.updated_at DESC")
-  end
-
-  def map
-    #県名(addr1)が空でないユーザーのみ対象
-    user_exts = UserExt.includes(:user).where("(addr1 is not NULL) and (addr1 != '')")
-    gcodes = Geocode.all
-    @user_exts = []
-    @user_exts_err = []
-    user_exts.each do |user_x|
-      address = user_x.address
-      gc = gcodes.find{|g| g.address == address}
-      if gc.present?
-        user_x.lat = gc.lat
-        user_x.lng = gc.lng
-        @user_exts << user_x
-      else
-        #テーブルに登録されていなかったらジオコーディングで取得する
-        if(x = user_x.geocode).present?
-          user_x.lat = x["lat"]
-          user_x.lng = x["lng"]
-          @user_exts << user_x
-          Geocode.create(:address => address, :lat => x["lat"], :lng => x["lng"])
-        else
-          @user_exts_err << user_x
-        end
-      end
-    end
-  end
-
+# -*- coding: utf-8 -*-
+class UsersController < Devise::RegistrationsController
   def new
-    render :text => "権限がありません。" unless current_user.admin?
-    @user = User.new
+    render action: "registrations/new"
   end
-  
+
+  # ユーザーに新規登録はさせず、予め登録されたアカウントのパスワードを変更することがユーザー登録となる
   def create
-    @user = User.new(params[:user])
-    if @user.save
-      flash[:notice] = "#{@user.login} を登録しました！"
-      redirect_back_or_default new_user_url
+    emsg = nil
+    email = params[:user][:email]
+    pass = params[:user][:password]
+    pass2 = params[:user][:password_confirmation]
+    user = User.find_by_email(email)
+    if user.blank?
+      emsg = 'メールアドレスはこのシステムに登録されていません。システム管理人に登録の依頼をしてください。'
+    elsif pass.blank?
+      emsg = 'パスワードを入力してください。'
+    elsif pass != pass2
+      emsg = '確認用パスワードが一致しません。'
     else
-      render :action => :new
+      user.update_attributes(password: pass, password_confirmation: pass2)
     end
-  end
-  
-  def show
-    @user = User.find(params[:id])
-  end
 
-  def edit
-    @user = @current_user
-  end
-  
-  def update
-    @user = @current_user # makes our views "cleaner" and more consistent
-    if @user.update_attributes(params[:user])
-      flash[:notice] = "更新しました。"
-      redirect_to :action => :show, :id => @user.id
+    if emsg.blank?
+      flash[:notice] = 'ユーザーの登録をしました。'
+      sign_in(resource_name, user)
+      # これだとエラー時にgemの方のViewを見に行ってしまう
+      # respond_with user, :location => after_sign_up_path_for(user)
+      redirect_to root_path
     else
-      render :action => :edit
+      flash[:notice] = emsg
+      render action: "registrations/new"
     end
-  end
-
-  def edit_ex
-    @user_ext = @current_user.user_ext
-  end
-
-  def update_ex
-    @current_user.user_ext.update_attributes(params[:user_ext])
-    flash[:notice] = "更新しました。"
-    redirect_to :action => :show, :id => @current_user.user_ext.user.id
-  end
-
-  def login_history
-    @lhs = LoginHistory.paginate(:page => params[:page], :per_page => 100, :order => "created_at DESC")
-  end
-
-private
-  def page_title
-    @page_title = "親戚データ"
   end
 
 end
+
+

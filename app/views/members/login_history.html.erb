@@ -1,0 +1,13 @@
+<%= will_paginate @lhs, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
+<table border="1" cellspacing="0" cellpadding="3">
+  <tr><th>LoginHistory ID</th><th>time</th><th>name</th><th>ログイン回数</th><tr>
+<% @lhs.each do |lh| -%>
+  <tr>
+    <td><%= lh.id %></td>
+    <td><%= lh.created_at.strftime("%Y/%m/%d %H:%M:%S") %></td>
+    <td><%= lh.user.login if lh.user %></td>
+    <td><%= lh.user.login_count if lh.user %></td>
+  </tr>
+<% end -%>
+</table>
+<%= will_paginate @lhs, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>

@@ -1,6 +1,8 @@
-<h1>Editing member</h1>
+<h1>ログイン名とパスワードを変更する</h1>
 
-<%= render 'form' %>
+<% form_for @user, url: member_path(@user) do |f| %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "更新" %>
+<% end %>
 
-<%= link_to 'Show', @member %> |
-<%= link_to 'Back', members_path %>
+<br /><%= link_to "親戚データ一覧へ", members_path %>

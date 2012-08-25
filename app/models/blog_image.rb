@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class BlogImage < ActiveRecord::Base
   belongs_to :user
   belongs_to :blog
