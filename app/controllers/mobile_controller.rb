@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class MobileController < ApplicationController
   before_filter :require_user
 

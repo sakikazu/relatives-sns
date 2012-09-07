@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 class UpdateHistory < ActiveRecord::Base
   belongs_to :user
-  belongs_to :assetable, :polymorphic => true
+  belongs_to :content, :polymorphic => true
+
+  attr_accessible :user_id, :action_type, :updated_at
 
   #action_type
   ALBUM_CREATE = 1

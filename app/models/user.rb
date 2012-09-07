@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :username, :fullname, :role, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me
   # attr_accessible :title, :body
 
 
@@ -40,10 +40,10 @@ class User < ActiveRecord::Base
     return user
   end
 
-  def self.find_or_create2(username, password, fullname, email, role)
-    user = find_by_username(username)
+  def self.find_or_create2(username, password, familyname, givenname, email, role, root11, generation)
+    user = self.find_by_username(username)
     if user.blank?
-      user = create!(username: username, password: password, password_confirmation: password, fullname: fullname, email: email, role: role)
+      user = self.create!(username: username, password: password, password_confirmation: password, familyname: familyname, givenname: givenname, email: email, role: role, root11: root11, generation: generation)
     end
     return user
   end
@@ -62,9 +62,9 @@ class User < ActiveRecord::Base
     when NICKNAME
       name = self.user_ext.nickname if self.user_ext
     when FULLNAME
-      name = "#{self.user_ext.firstname}#{self.user_ext.lastname}" if self.user_ext 
+      name = "#{self.user_ext.familyname}#{self.user_ext.givenname}" if self.user_ext 
     when FULLNICK
-      name = "#{self.user_ext.nickname}(#{self.user_ext.firstname}#{self.user_ext.lastname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.user_ext.firstname.blank? && !self.user_ext.lastname.blank?
+      name = "#{self.user_ext.nickname}(#{self.user_ext.familyname}#{self.user_ext.givenname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.user_ext.familyname.blank? && !self.user_ext.givenname.blank?
     end
 
     if name.blank? and not user_set_only

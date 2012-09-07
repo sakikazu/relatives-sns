@@ -1,0 +1,43 @@
+<%= link_to "アルバム：#{@photo.album.title}に戻る", @photo.album, class: "btn" %>
+<%= link_to '編集する', edit_album_photo_path(@photo), class: "btn btn-info" %>
+
+<div class="once_content mgn-t40">
+  <div class="title">
+    <%= "#{@photo.title} " %>
+    <%= link_to "(コメント数：#{@photo.photo_comments.size}）", "#comment_area" %>
+  </div>
+  <div class="info">
+    投稿者：<%= @photo.user.dispname %> | 
+    投稿日時：<%= l @photo.created_at if @photo.created_at %> | 
+    撮影日時：<%= l @photo.exif_at if @photo.exif_at %>
+  </div>
+  <div class="description">
+    <%= image_tag(@photo.image(:large)) if @photo.image? %>
+    <br />
+    <%= link_to "元画像", @photo.image(:original) if @photo.image? %>
+    <p class="text"><%= sani_custom_br(@photo.description) %></p>
+  </div>
+  <div class="nice">
+    <span id="update_nice">
+      <%= nice_field(@photo, "photo", "#update_nice") %>
+    </span>
+  </div>
+</div>
+
+<div id="slideshow_comment">
+  <h3 class="normal">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
+  <div id="photo_comments">
+    <%= render :partial => "photo_comments/comments" %>
+  </div>
+
+  <h3 class="normal">新規コメント</h3>
+  <div id="comment_form">
+    <%= form_for [@photo.album, @photo, @photo_comment], :remote => true do |f| %>
+      <%= f.text_area :content, rows: 5, class: "span5" %><br />
+      <%= f.hidden_field :user_id %>
+      <%= f.hidden_field :photo_id %>
+      <%= submit_tag "投稿する", class: "btn btn-primary" %>
+    <% end -%>
+    <br /><br />
+  </div>
+</div>

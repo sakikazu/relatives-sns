@@ -4,7 +4,7 @@ class UserExt < ActiveRecord::Base
 
   belongs_to :user
 
-  attr_accessible :firstname, :lastname, :nickname, :sex, :blood, :email, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :job, :hobby, :skill, :free_text, :image, :root11, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id
+  attr_accessible :familyname, :givenname, :nickname, :sex, :blood, :email, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :job, :hobby, :skill, :free_text, :image, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id
 
   attr_accessor :lat, :lng
 
@@ -19,8 +19,8 @@ class UserExt < ActiveRecord::Base
       :small => ['-quality 70', '-strip'],
       :thumb => ['-quality 80', '-strip'],
     },
-    :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/uploads/#{content_name}/:id/:style/:basename.:extension"
+    :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
+    :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
   SEX_LIST = [["男", 0], ["女", 1]]
 

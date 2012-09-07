@@ -1,0 +1,13 @@
+<% if @destroy_flg.blank? -%>
+  if($('#photo_comment_content').val() != ''){
+    $('#photo_comment_content').val('');
+    $('#photo_comments').html(
+      '<%= escape_javascript(render "comments") %>'
+    );
+  }
+<% else -%>
+  $('#photo_comments').html(
+      '<%= escape_javascript(render "comments") %>'
+  );
+<% end -%>
+

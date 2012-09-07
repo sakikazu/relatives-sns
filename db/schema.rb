@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120825032905) do
+ActiveRecord::Schema.define(:version => 20120902151627) do
 
   create_table "admin_users", :force => true do |t|
-    t.string   "first_name",       :default => "",    :null => false
-    t.string   "last_name",        :default => "",    :null => false
+    t.string   "familyname",       :default => "",    :null => false
+    t.string   "givenname",        :default => "",    :null => false
     t.string   "role",                                :null => false
     t.string   "email",                               :null => false
     t.boolean  "status",           :default => false
@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "salt",                                :null => false
     t.string   "crypted_password",                    :null => false
     t.string   "preferences"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
@@ -33,50 +33,26 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.integer  "user_id"
     t.integer  "album_id"
     t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "album_photo_comments", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "album_photo_id"
-    t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "album_photos", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "title"
-    t.text     "description"
-    t.integer  "album_id"
-    t.datetime "exif_at"
-    t.datetime "last_comment_at"
-    t.string   "attach_file_name"
-    t.string   "attach_content_type"
-    t.integer  "attach_file_size"
-    t.datetime "attach_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "albums", :force => true do |t|
     t.integer  "user_id"
     t.string   "title"
     t.text     "description"
-    t.integer  "use1_id"
-    t.integer  "use2_id"
+    t.integer  "thumb_id"
     t.datetime "deleted_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "blog_comments", :force => true do |t|
     t.integer  "blog_id"
     t.integer  "user_id"
     t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "blog_images", :force => true do |t|
@@ -85,8 +61,8 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   create_table "blogs", :force => true do |t|
@@ -94,8 +70,8 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "title"
     t.text     "content"
     t.datetime "deleted_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "board_comments", :force => true do |t|
@@ -106,8 +82,8 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "attach_content_type"
     t.integer  "attach_file_size"
     t.datetime "attach_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   create_table "boards", :force => true do |t|
@@ -119,23 +95,23 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.integer  "attach_file_size"
     t.datetime "attach_updated_at"
     t.datetime "deleted_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   create_table "celebrations", :force => true do |t|
     t.integer  "user_id"
     t.date     "anniversary_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "geocodes", :force => true do |t|
     t.string   "address"
     t.float    "lat"
     t.float    "lng"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "histories", :force => true do |t|
@@ -146,30 +122,30 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.text     "content"
     t.integer  "user_id"
     t.string   "src_user_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "history_comments", :force => true do |t|
     t.integer  "history_id"
     t.integer  "user_id"
     t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "login_histories", :force => true do |t|
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "movie_comments", :force => true do |t|
     t.integer  "movie_id"
     t.integer  "user_id"
     t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "movies", :force => true do |t|
@@ -185,8 +161,8 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.integer  "thumb_file_size"
     t.datetime "thumb_updated_at"
     t.datetime "deleted_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.integer  "movie_type"
   end
 
@@ -198,26 +174,52 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.integer  "celebration_id"
+    t.datetime "deleted_at"
+    t.datetime "for_sort_at"
   end
 
   create_table "nices", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "nice_id"
-    t.string   "nice_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "asset_id"
+    t.string   "asset_type"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.text     "comment"
     t.integer  "niced_user_id"
+  end
+
+  create_table "photo_comments", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "content"
+    t.integer  "photo_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "photos", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.text     "description"
+    t.integer  "album_id"
+    t.datetime "exif_at"
+    t.datetime "last_comment_at"
+    t.datetime "deleted_at"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
@@ -226,16 +228,16 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
   create_table "update_histories", :force => true do |t|
     t.integer  "user_id"
     t.integer  "action_type"
-    t.integer  "assetable_id"
-    t.string   "assetable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "content_id"
+    t.string   "content_type"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "user_exts", :force => true do |t|
     t.integer  "user_id"
-    t.string   "firstname"
-    t.string   "lastname"
+    t.string   "familyname"
+    t.string   "givenname"
     t.string   "nickname"
     t.integer  "sex"
     t.integer  "blood"
@@ -246,8 +248,6 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "addr4"
     t.string   "addr_from"
     t.date     "birth_day"
-    t.integer  "root11"
-    t.integer  "generation"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -273,8 +273,9 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "ikitai"
     t.string   "yaritai"
     t.text     "free_text"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "deleted_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -282,7 +283,11 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
     t.string   "encrypted_password",     :default => "", :null => false
     t.integer  "role",                   :default => 2,  :null => false
     t.string   "email",                  :default => ""
-    t.string   "fullname",               :default => "", :null => false
+    t.string   "familyname"
+    t.string   "givenname"
+    t.integer  "root11"
+    t.integer  "generation"
+    t.datetime "deleted_at"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -297,26 +302,5 @@ ActiveRecord::Schema.define(:version => 20120825032905) do
 
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true
-
-  create_table "users_bak", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "login",                            :null => false
-    t.string   "crypted_password",                 :null => false
-    t.string   "password_salt",                    :null => false
-    t.string   "persistence_token",                :null => false
-    t.integer  "login_count",       :default => 0, :null => false
-    t.datetime "last_request_at"
-    t.datetime "last_login_at"
-    t.datetime "current_login_at"
-    t.string   "last_login_ip"
-    t.string   "current_login_ip"
-    t.integer  "role"
-    t.string   "name"
-  end
-
-  add_index "users_bak", ["last_request_at"], :name => "index_users_on_last_request_at"
-  add_index "users_bak", ["login"], :name => "index_users_on_login"
-  add_index "users_bak", ["persistence_token"], :name => "index_users_on_persistence_token"
 
 end

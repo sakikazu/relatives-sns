@@ -1,26 +1,103 @@
-<% if mutter_row == @mutter -%>
-  <li <%= "style='background:Tan'" %>>
+<% if mutter_row == @created_mutter -%>
+  <li class="clearfix" <%= "style='border:3px solid red'" %>>
 <% else -%>
-  <li class="<%= cycle("", "even") %>">
+  <li class="clearfix">
 <% end -%>
 
-<div class="left icon">
-  <p><%= image_tag mutter_row.user.user_ext.image(:small), :size => "50x50" if mutter_row.user.user_ext.image? %></p>
+<div class="clearfix">
+<div class="left icon span1">
+  <p>
+  <% if  mutter_row.user.present? && mutter_row.user.user_ext.image? -%>
+    <%= image_tag mutter_row.user.user_ext.image(:small), :size => "50x50"  %>
+  <% else -%>
+    <%= image_tag 'noimage.gif', :size => "50x50"  %>
+  <% end -%>
+  </p>
 </div>
-<div class="left content_wrap">
+<div class="left content_wrap span7">
   <div class="bar">
-    <span class='name'><%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} %></span>
-    <span class='time'><%= link_to (mutter_row.created_at.to_s(:long)), mutter_path(mutter_row) %></span>
+    <span class='name'><%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
+    <span class='time'><%= link_to (l mutter_row.created_at), mutter_path(mutter_row) %></span>
     <span class="nice">
       <span id='cont_<%= mutter_row.id %>'>
         <%= nice_field(mutter_row, "mutter", "#cont_#{mutter_row.id}") %>
       </span> 
+      <a data-toggle="modal" href="#myModal<%= mutter_row.id %>" ><i class="icon-comment"></i>&nbsp;レス</a>
     </span>
   </div>
-  <span class='image'><%= link_to(image_tag(mutter_row.image(:thumb)), mutter_row.image(:large), {:class => colorbox_class}) if mutter_row.image? %></span>
-  <span class='content'><%= sani_custom(mutter_row.view_content) %></span>
+  <span class='image'><%= link_to(image_tag(mutter_row.image(:thumb)), mutter_row.image(:large), {:class => 'colorbox'}) if mutter_row.image? %></span>
+  <span class='content'><%= sani_custom(mutter_row.content) %></span>
   <div class="clear"></div>
-  <span class='delete'><%= link_to("削除", mutter_row, :confirm => "本当に削除してもよろしいですか？", :method => :delete) if editable(current_user, mutter_row.user) %></span>
+  <span class='delete'><%= link_to("削除", mutter_row, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></span>
 </div>
-<div class="clear"></div>
+</div>
+
+<!-- つぶやきへのレス -->
+<% if mutter_row.children.present? -%>
+<ul class="children">
+  <% mutter_row.children.id_asc.each do |child| -%>
+    <li class="clearfix row">
+    <div class="left icon span1">
+      <p>
+      <% if  child.user.present? && child.user.user_ext.image? -%>
+        <%= image_tag child.user.user_ext.image(:small), :size => "50x50"  %>
+      <% else -%>
+        <%= image_tag 'noimage.gif', :size => "50x50"  %>
+      <% end -%>
+      </p>
+    </div>
+    <div class="left content_wrap span5">
+      <div class="bar">
+        <span class='name'><%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
+        <span class='time'><%= link_to (l child.created_at), mutter_path(child) %></span>
+        <span class="nice">
+          <span id='cont_<%= child.id %>'>
+            <%= nice_field(child, "mutter", "#cont_#{child.id}") %>
+          </span>
+          <!-- sakikazu とりあえずできない -->
+          <!-- <a data-toggle="modal" href="#myModal<%#= child.id %>" >レス</a> -->
+        </span>
+      </div>
+      <span class='image'><%= link_to(image_tag(child.image(:thumb)), child.image(:large), {:class => 'colorbox'}) if child.image? %></span>
+      <span class='content'><%= sani_custom(child.content) %></span>
+      <div class="clear"></div>
+      <span class='delete'><%= link_to("削除", child, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, child.user) %></span>
+    </div>
+
+    </li>
+  <% end -%>
+</ul>
+<% end -%>
+
 </li>
+
+
+<!-- レス用モーダル -->
+<div class="modal" id="myModal<%= mutter_row.id %>" style="display:none">
+  <% @mutter.reply_id = mutter_row.id -%>
+  <%= form_for @mutter, html: {multi_part: true} do |f| %>
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>返信</h3>
+    </div>
+    <div class="modal-body">
+      <div id="form" class="clearfix">
+        <div class="left">
+          <%= f.text_area :content, rows: 3, class: "span5", placeholder: "「#{mutter_row.content}」へのレス" %><br>
+          <%= f.file_field :image %>
+          <%= f.hidden_field :user_id %>
+          <%= f.hidden_field :reply_id %>
+        </div>
+        <div class="left">
+          <br>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <%= f.submit "返信する", class: "btn btn-primary", style: "z-index:98" %>
+      <a href="#" class="btn" data-dismiss="modal" style="z-index:99">キャンセル</a>
+    </div>
+  <% end -%>
+</div>
+

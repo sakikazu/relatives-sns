@@ -1,150 +1,118 @@
+# -*- coding: utf-8 -*-
 class AlbumsController < ApplicationController
-  before_filter :require_user
-  before_filter :page_title
+  before_filter :authenticate_user!
+  before_filter :set_title
 
   # GET /albums
-  # GET /albums.xml
+  # GET /albums.json
   def index
-    case params[:sort].to_i
+    @title = "一覧"
+    @sort = params[:sort].blank? ? 1 : params[:sort].to_i
+    case @sort
     when 1
-      @albums = Album.sort_upload
+      @albums = Album.order("id DESC").page(params[:page])
     when 2
-      @albums = Album.all(:order => "id DESC")
-    else
       @albums = Album.sort_upload
+    else
+      @albums = Album.order("id DESC").page(params[:page])
     end
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @albums }
+      format.json { render json: @albums }
     end
   end
 
   # GET /albums/1
-  # GET /albums/1.xml
+  # GET /albums/1.json
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
-    @album = Album.find(params[:id])
     @sort = (params[:sort] =~ /1|2|3|4/) ? params[:sort].to_i : 1
     case @sort 
     when 1
-      album_photos = @album.album_photos.order("id DESC")
+      photos = @album.photos.order("id DESC")
     when 2
-      album_photos = @album.album_photos.order("exif_at ASC")
+      photos = @album.photos.order("exif_at ASC")
     when 3
-      album_photos = @album.album_photos.order("last_comment_at DESC")
+      photos = @album.photos.order("last_comment_at DESC")
     when 4
-      album_photos = @album.album_photos.order("nices.created_at DESC").order("last_comment_at DESC")
+      photos = @album.photos.order("nices.created_at DESC").order("last_comment_at DESC")
     end
-    @album_photos = album_photos.includes(:nices).paginate(:page => params[:page], :per_page => 30)
+    @photos = photos.includes(:nices).page(params[:page])
 
-    @comment = AlbumComment.new(:user_id => current_user.id, :album_id => @album.id)
+    @comment = AlbumComment.new(:album_id => @album.id)
+
+    @photo_all_num = @album.photos.size
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @album }
+      format.json { render json: @album }
     end
   end
 
   # GET /albums/new
-  # GET /albums/new.xml
+  # GET /albums/new.json
   def new
     @album = Album.new
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @album }
+      format.json { render json: @album }
     end
   end
 
   # GET /albums/1/edit
   def edit
-    @album = Album.find(params[:id])
+    @page_title = "アルバムを編集する"
   end
 
   # POST /albums
-  # POST /albums.xml
+  # POST /albums.json
   def create
-    params[:album][:user_id] = current_user.id
     @album = Album.new(params[:album])
+    @album.user_id = current_user.id
 
     respond_to do |format|
       if @album.save
         @album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_CREATE)
-        format.html { redirect_to(@album, :notice => '作成されました.') }
-        format.xml  { render :xml => @album, :status => :created, :location => @album }
+        format.html { redirect_to @album, notice: 'アルバムを作成しました。' }
+        format.json { render json: @album, status: :created, location: @album }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @album.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @album.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # PUT /albums/1
-  # PUT /albums/1.xml
+  # PUT /albums/1.json
   def update
-    @album = Album.find(params[:id])
-
     respond_to do |format|
       if @album.update_attributes(params[:album])
-        format.html { redirect_to(@album, :notice => '更新されました.') }
-        format.xml  { head :ok }
+        format.html { redirect_to @album, notice: 'アルバム情報を更新しました。' }
+        format.json { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @album.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @album.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /albums/1
-  # DELETE /albums/1.xml
+  # DELETE /albums/1.json
   def destroy
-    @album = Album.find(params[:id])
     @album.destroy
 
     respond_to do |format|
-      format.html { redirect_to(albums_url) }
-      format.xml  { head :ok }
+      format.html { redirect_to albums_url }
+      format.json { head :ok }
     end
   end
 
+
   def title_index
     @albums = Album.sort_upload
-    @photo_count = AlbumPhoto.count(:group => :album_id)
-    @last_comment_at = AlbumPhoto.maximum(:last_comment_at, :group => :album_id)
-  end
-
-#現在Callされていない
-  def upload_complete
-    @album = Album.find(params[:id])
-    redirect_to :action => :show, :id => @album.id
-
-
-#UpdateHistory更新処理は、AlbumPhotosController のcreateで行っている
-    #$exist_data = $this->UpdateInfo->find( array(
-      #'UpdateInfo.user_id' => $this->Auth->user('id'), 
-      #'action' => ACTION_ALBUMPHOTO_CREATE,
-      #'ref_id' => $this->params['named']['album_id'],
-      #'UpdateInfo.created BETWEEN ? AND ?' => array(date("Y/m/d", strtotime ("now")), date("Y/m/d", strtotime ("+1 day"))),
-      #));
-
-    #if(empty($exist_data)){
-      #$this->UpdateInfo->create();
-      #$this->UpdateInfo->save(
-        #array('UpdateInfo' => array(
-          #'user_id' => $this->Auth->user('id'),
-          #'action' => ACTION_ALBUMPHOTO_CREATE,
-          #'ref_id' => $this->params['named']['album_id'],
-          #'ref_str' => $this->params['named']['album_title'],
-        #))
-      #);
-    #}else{
-      #$this->UpdateInfo->read(null, $exist_data['UpdateInfo']['id']);
-      #$this->UpdateInfo->saveField('created', date("Y-m-d H:i:s"));
-    #}
-
+    @photo_count = Photo.count(:group => :album_id)
+    @last_comment_at = Photo.maximum(:last_comment_at, :group => :album_id)
   end
 
   def download
@@ -152,11 +120,11 @@ class AlbumsController < ApplicationController
     tmp = Tempfile.new('album')
     tmp_dir = tmp.path + '.dir'
     FileUtils.mkdir(tmp_dir)
-    album.album_photos.each do |photo|
-      if File.exist?(photo.attach.path)
-        FileUtils.cp photo.attach.path, tmp_dir
-      elsif File.exist?(photo.attach.path(:large))
-        FileUtils.cp photo.attach.path(:large), tmp_dir
+    album.photos.each do |photo|
+      if File.exist?(photo.image.path)
+        FileUtils.cp photo.image.path, tmp_dir
+      elsif File.exist?(photo.image.path(:large))
+        FileUtils.cp photo.image.path(:large), tmp_dir
       end
     end
 
@@ -174,40 +142,8 @@ class AlbumsController < ApplicationController
     FileUtils.rm(zipfile) if File.exist?(zipfile)
   end
 
-
-  def create_comment
-    @album_comment = AlbumComment.create(params[:album_comment])
-    @album = @album_comment.album
-
-    #UpdateHistory
-    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT, :assetable_id => @album.id).first
-    if action
-      action.update_attributes(:updated_at => Time.now)
-    else
-      @album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT)
-    end
+  def set_title
+    @album = Album.find(params[:id]) if params[:id].present?
+    @title = @album.title if @album.present?
   end
-
-  def destroy_comment
-    @album_comment = AlbumComment.find(params[:id])
-    @album_comment.destroy
-    @album = @album_comment.album
-
-    respond_to do |format|
-      format.html { redirect_to(album_comments_url) }
-      format.js do
-        render do |page|
-          page.replace_html 'comments', :partial => 'comments'
-        end
-      end
-      format.xml  { head :ok }
-    end
-  end
-
-
-private
-  def page_title
-    @page_title = "アルバム"
-  end
-
 end

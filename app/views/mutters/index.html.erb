@@ -44,8 +44,9 @@ $(document).ready(function(){
 
 
   // submit押下時、ファイルが添付されてなかったら、AjaxでPOSTする
-  $m_form = $('form#new_mutter')
+  $m_form = $('form#new_mutter:first');
   $m_form.submit(function(event) {
+    console.log(event);
     if($('#mutter_content', $m_form).val() == "") {
       event.preventDefault();
       alert('つぶやきを入力しないと投稿できません');
@@ -86,64 +87,60 @@ $(document).ready(function(){
 });
 </script>
 
-<div id="mutter">
-  <%# remote_form_for @mutter, :html => {:multipart => true}, :update => "mutter_data", :condition => "$('#mutter_content').val() != ''", :complete => "$('#mutter_content').val('');" do |f| -%>
-  <div id="form">
-    <%= form_for @mutter, :html => {:multipart => true} do |f| -%>
-    <table><tr>
-    <td width="120px">
-    <b style="font-family:'HGP創英角ﾎﾟｯﾌﾟ体';font-size:160%" id="mutter_logo">今なんしょって？</b><br />
-    <%= f.text_area :content %>
-    <%= f.file_field :image %>
-    </td>
-    <td>
-    <%= f.hidden_field :user_id %>
-    <%= f.submit "投稿する", :class => "post" %>
-    </td>
-    </tr></table>
-  <% end -%>
-  </div>
-  <%= link_to '写真付きでつぶやく', :action => "new_from_mail" if request.smart_phone? %>
 
-  <div id="form_search">
-    <%= form_tag search_mutters_path(:action_flg => 1), {:remote => true, :method => :get} do %>
-      <%= text_field_tag :search_text %>
-      <%= submit_tag "発言内容から検索する", :class => "button" %>
-    <% end %>
-    <%= form_tag search_mutters_path(:action_flg => 2), {:remote => true, :method => :get} do %>
-      <%= submit_tag "画像が含まれる", :class => "button" %>
-    <% end %>
-    <%= form_tag search_mutters_path(:action_flg => 3), {:remote => true, :method => :get} do %>
-      <%= submit_tag "URLが含まれる", :class => "button" %>
-    <% end %>
-  </div>
+      <!-- スライドショー -->
+      <!--
+      <div class="clearfix" style="background-color:black;height:120px;margin-bottom: 40px;">
+        <% 1.upto(2) { |i| -%>
+          <div style="width:130px;height:110px;border: 1px solid white; margin:5px;float:left;background-color:gray">
+            現在、touchのSafariで見たら、背景をつきぬけて下に並んでしまう。JSにしたとき直る？
+          </div>
+        <% } -%>
+      </div>
 
+      <div class="row" style="background-color:black;height:120px">
+        <% 1.upto(2) { |i| -%>
+          <div class="span2" style="border: 1px solid white; margin:5px; background-color: gray; height:110px">
+            現在、touchのSafariで見たら、背景をつきぬけて下に並んでしまう。JSにしたとき直る？
+          </div>
+        <% } -%>
+      </div>
 
-  <div id="mutter_data">
-  <%# cache :mutter_data do -%>
-    <%= render :partial => "list" %>
-  <%# end -%>
-  </div>
+      <div class="row">
+        <div class="span4">
+          なぜかここにダミーでrowを入れないと下のレイアウトが崩れる
+          aaaa
+        </div>
+        <div class="span8">
+          k
+          bbaeaw
+        </div>
+      </div>
+      -->
 
-  <div id="show_more" style="">もっと見る</div>
-  <div style="text-align:right;margin-top:5px"><%= link_to "むしろすべて見る", :action => :all %></div>
-</div>
+<div class="row">
+  <div class="span4">
+    <div class="well sidebar-nav">
+      <ul class="nav nav-list">
+        <li class="nav-header text-center">― 日齢 ― 生まれて何日？</li>
+      </ul>
+      <div id="nichirei">
+        <% if @nichirei -%>
+          <div class="main"><%= @nichirei %>日</div>
+          <% @nichirei_future.each do |n| -%>
+            <%= "#{n[0]}日: #{n[1].strftime("%Y/%m/%d")}" %><br />
+          <% end -%>
+        <% else -%>
+          ※生年月日を登録している人のみ
+        <% end -%>
+      </div>
+    </div><!--/.well -->
 
-<div class="right_side_bar">
-  <p class="title">― 日齢 ― 生まれて何日？</p>
-  <div id="nichirei">
-  <% if @nichirei -%>
-    <div class="main"><%= @nichirei %>日</div>
-    <% @nichirei_future.each do |n| -%>
-      <%= "#{n[0]}日: #{n[1].strftime("%Y/%m/%d")}" %><br />
-    <% end -%>
-  <% else -%>
-    ※生年月日を登録している人のみ
-  <% end -%>
-  </div>
-  <p class="title">みんなの誕生記念日</p>
-  <div id="kinenbi">
-    <table>
+    <div class="well sidebar-nav">
+      <ul class="nav nav-list">
+        <li class="nav-header text-center">みんなの誕生記念日</li>
+      </ul>
+   <table>
     <% @kinen.each do |k| -%>
       <% if k[:count] == 0 -%>
         <tr>
@@ -160,7 +157,7 @@ $(document).ready(function(){
 
       <% else -%>
         <tr class="exist-border">
-          <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
+          <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" if k[:user].present? %></td>
           <td>
             <b><%= "あと#{k[:count]}日で" %></b>
           </td>
@@ -170,37 +167,93 @@ $(document).ready(function(){
     <% end -%> 
     </table>
     <div style="margin-top:20px;text-align:center">(生年月日を登録している人のみ)</div>
-  </div>
-    
-  <div id="update_history">
-    <p class="title">みんなの新着情報</p>
+
+          </div><!--/.well -->
+
+
+
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header text-center">みんなの新着情報</li>
     <div class="summary"><%= link_to '＜一気に見る＞', update_allview_mutters_path %></div>
     <div class="list">
       <%= render :partial => "update_history" %>
     </div>
     <b><%= link_to "すべて見る", :action => :update_history_all %></b>
-  </div>
 
-  <div id="current_login_user">
-    <p class="title">みんなのアクセス情報</p>
-    <table>
+            </ul>
+          </div><!--/.well -->
+
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header text-center">みんなのアクセス情報</li>
+            </ul>
+    <table class="table table-striped table-condensed">
     <% @login_users.each_with_index do |user, idx| -%>
 <% if idx > 20 -%>
       <tr class="hide_row" style="display:none">
 <% else -%>
       <tr>
 <% end -%>
-        <td><%= user.last_request_at.present? ? user.last_request_at.to_s(:short) : "ログインなし" %></td>
+        <td><%= user.last_sign_in_at.present? ? user.last_sign_in_at.to_s(:short) : "ログインなし" %></td>
         <td><%= user.dispname(User::FULLNICK) %></td>
       </tr>
     <% end -%>
     </table>
     <div id="link_recent_login_users" onclick="javascript:show_recent_login_users()">もっと見る(直近40人分)</div>
-  </div>
-</div>
-<div style="clear: both"></div>
+
+          </div><!--/.well -->
+
+        </div><!--/span-->
+        <div class="span8">
+
+   <div id="mutter" class="clearfix row">
+    <div id="form" class="clearfix">
+      <%= simple_form_for @mutter, :html => {:multipart => true} do |f| -%>
+        <div class="span5">
+        <%= f.text_area :content, rows: 3, class: "span5", placeholder: "つぶやき" %><br>
+        <%= f.file_field :image %>
+        <%= f.hidden_field :user_id %>
+        </div>
+        <div class="span1">
+          <br>
+          <%= f.submit "投稿する", class: "btn btn-primary btn-large" %>
+        </div>
+      <% end -%>
+    </div>
+    <%#= link_to '写真付きでつぶやく', :action => "new_from_mail" if request.smart_phone? %>
+
+    <div id="form_search" class="well" style="padding-left:8px; padding-right:8px;">
+      <%= form_for @mutter, url: search_mutters_path(action_flg: 1), :remote => true, :method => :get do |f| %>
+        <%= f.text_field :search_word, class: "span2" %>
+        <%= f.submit "発言内容から検索する", class: "btn btn-info" %>
+      <% end %>
+      <%= form_for @mutter, url: search_mutters_path(action_flg: 2), :remote => true, :method => :get do |f| %>
+        <%= f.submit "画像が含まれる", class: "btn btn-info" %>
+      <% end %>
+      <%= form_for @mutter, url: search_mutters_path(action_flg: 3), :remote => true, :method => :get do |f| %>
+        <%= f.submit "URLが含まれる", class: "btn btn-info" %>
+      <% end %>
+    </div>
+
+    <div id="mutter_data">
+      <%# cache :mutter_data do -%>
+        <%= render :partial => "list" %>
+        <%# end -%>
+    </div>
+
+    <%= link_to "もっと見る", "javascript:void(0)", {id: "show_more", class: "left btn"} %>
+    <%= link_to "むしろすべて見る", {:action => :all}, class: "right btn" %>
+  </div> <!-- #mutter -->
+
+
 <ul>
-<li><%= link_to "sqlbuddy", "http://182.163.58.103/sqlbuddy/#page=home" %></li>
-<li><%= link_to "phpMyAdmin", "http://182.163.58.103/phpmyadmin/index.php?db=adan&target=db_structure.php&token=957d66fdcf377401bfc14c9f9ef8f0ec" %></li>
-<li><%= link_to "old_a-dan", "http://182.163.58.103/a-dan" %></li>
+  <li><%= link_to "sqlbuddy", "http://182.163.58.103/sqlbuddy/#page=home" %></li>
+  <li><%= link_to "phpMyAdmin", "http://182.163.58.103/phpmyadmin/index.php?db=adan&target=db_structure.php&token=957d66fdcf377401bfc14c9f9ef8f0ec" %></li>
+  <li><%= link_to "old_a-dan", "http://182.163.58.103/a-dan" %></li>
 </ul>
+
+        </div>
+      </div><!--/row-->
+
+

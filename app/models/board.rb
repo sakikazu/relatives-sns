@@ -2,7 +2,7 @@
 class Board < ActiveRecord::Base
   belongs_to :user
   has_many :board_comments
-  has_many :update_histories, :as => :assetable, :dependent => :destroy
+  has_many :update_histories, :as => :content, :dependent => :destroy
 
   attr_accessor :sort_at
 
@@ -15,7 +15,7 @@ class Board < ActiveRecord::Base
       :large => "800x800>"
     },
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
-    :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/uploads/#{content_name}/:id/:style/:basename.:extension"
+    :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
+    :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
 end

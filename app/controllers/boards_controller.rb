@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class BoardsController < ApplicationController
   before_filter :require_user
   before_filter :page_title

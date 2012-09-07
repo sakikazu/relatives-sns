@@ -3,8 +3,8 @@ class CreateUpdateHistories < ActiveRecord::Migration
     create_table :update_histories do |t|
       t.integer :user_id
       t.integer :action_type
-      t.integer :assetable_id
-      t.string :assetable_type
+      t.integer :content_id
+      t.string :content_type
 
       t.timestamps
     end

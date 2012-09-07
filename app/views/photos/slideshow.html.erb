@@ -1,0 +1,42 @@
+<% if @from_top_flg %>
+  <div style="background-color:lightgray;padding-left:15px">
+  <% if editable(current_user, @photo.user) %>
+    <%= form_for @photo, :url => update_from_slideshow_album_photo_path(@photo.album, @photo), :remote => true do |f| %>
+      タイトル<br />
+      <%= f.text_field :title %><br />
+      写真の説明<br />
+      <%= f.text_area :description, rows: 5, class: "span5" %><br />
+      <%= f.submit "編集する", class: "btn btn-primary" %>※この画像のアップロード者のみ可能
+    <% end -%>
+    <div id="info"></div>
+    <hr />
+  <% end -%>
+  </div>
+  <div style="text-align:center">
+    <div style="margin:20px;font-size:18px;color:gray">
+      アルバム：<%= link_to @photo.album.title, @photo.album %>
+    </div>
+  </div>
+<% end -%>
+
+<div id="slideshow">
+  <%= render :partial => "slidecontent" %>
+</div>
+
+<div id="slideshow_comment">
+  <h3 class="normal">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
+  <div id="photo_comments">
+    <%= render :partial => "photo_comments/comments" %>
+  </div>
+
+  <h3 class="normal">新規コメント</h3>
+  <div id="comment_form">
+    <%= form_for [@photo.album, @photo, @photo_comment], :remote => true do |f| %>
+      <%= f.text_area :content, rows: 5, class: "span5" %><br />
+      <%= f.hidden_field :user_id %>
+      <%= f.hidden_field :photo_id %>
+      <%= submit_tag "投稿する", class: "btn btn-primary" %>
+    <% end -%>
+    <br /><br />
+  </div>
+</div>

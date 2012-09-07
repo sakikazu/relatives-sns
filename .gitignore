@@ -15,6 +15,7 @@
 /tmp
 
 # my setting
-/public/uploads/
+public/upload/*
+public/assets
 *.DS_Store
 *.svn

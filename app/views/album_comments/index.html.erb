@@ -1,0 +1,27 @@
+<h1>Listing album_comments</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Album</th>
+    <th>Content</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @album_comments.each do |album_comment| %>
+  <tr>
+    <td><%= album_comment.user_id %></td>
+    <td><%= album_comment.album_id %></td>
+    <td><%= album_comment.content %></td>
+    <td><%= link_to 'Show', album_comment %></td>
+    <td><%= link_to 'Edit', edit_album_comment_path(album_comment) %></td>
+    <td><%= link_to 'Destroy', album_comment, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Album comment', new_album_comment_path %>

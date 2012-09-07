@@ -1,0 +1,21 @@
+<%= simple_form_for @album do |f| %>
+  <% if @album.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+
+      <ul>
+      <% @album.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.input :title, label: "タイトル" %>
+  <%= f.input :description, label: "説明", input_html: {class: "span7"} %>
+  <%= f.input :thumb_id, as: :select, collection: @album.photos.map{|p| ["#{p.id}(#{p.title})", p.id]}, label: "アルバムトップに表示する写真" %>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

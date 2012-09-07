@@ -11,10 +11,12 @@
 
 
 members = [
-  %w(sakikazu 0745 崎村和孝 sakikazu15@gmail.com 0),
-  %w(sakiyasu 0000 崎村泰孝 sakikazu15+1@gmail.com 2),
+  %w(sakikazu 0745 崎村 和孝 sakikazu15@gmail.com 0 0 2),
+  %w(sakiyasu 0000 崎村 泰孝 sakikazu15+1@gmail.com 2 0 2),
+  %w(sakitest 0000 崎村 テストくん sakikazu15+2@gmail.com 3 0 2),
 ]
 
 members.each do |m|
-  User.find_or_create2(m[0], m[1], m[2], m[3], m[4])
+  # def self.find_or_create2(username, password, familyname, givenname, email, role, root11, generation)
+  User.find_or_create2(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7])
 end

@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 class Mutter < ActiveRecord::Base
+  acts_as_paranoid
+
   belongs_to :user
   belongs_to :celebration
-  has_many :nices, :as => :nice
+  belongs_to :parent, class_name: "Mutter", foreign_key: "reply_id"
+  has_many :children, class_name: "Mutter", foreign_key: "reply_id"
+  has_many :nices, :as => :asset
 
   before_save :trans_space
+  after_create :update_sort_at
   validates_presence_of :content
+  attr_accessor :search_word
+
+  attr_accessible :user_id, :content, :reply_id, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :created_at, :updated_at, :celebration_id, :image, :for_sort_at
 
   MUTTER_DATA_VISIBLE = 12
 
@@ -18,17 +26,28 @@ class Mutter < ActiveRecord::Base
       :large => "800x800>"
     },
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
-    :url => "/uploads/#{content_name}/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/uploads/#{content_name}/:id/:style/:basename.:extension"
+    :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
+    :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
-  scope :id_desc, order("id DESC")
   scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
   scope :includes_all, includes([{:user => :user_ext}, :nices, :celebration])
-    
+  scope :parents_mod, where("mutters.reply_id is null") #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
+  scope :id_desc, order("mutters.id DESC")
+  scope :id_asc, order("mutters.id ASC")
+
 
   def trans_space
     #auto_linkでURLの後に全角スペースが入るとリンクが延長されてしまうため、半角スペースに変換
     self.content.gsub!("　", " ")
+  end
+
+  # ソート用の日時カラムを更新。レスされた親のも更新する。
+  def update_sort_at
+    # self.for_sort_at = Time.now
+    self.update_attributes(for_sort_at: Time.now)
+    if self.parent.present?
+      self.parent.update_attributes(for_sort_at: Time.now)
+    end
   end
 
   def view_content

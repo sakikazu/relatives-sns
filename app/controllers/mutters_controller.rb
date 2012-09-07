@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 class MuttersController < ApplicationController
-  before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
-  after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
-  before_filter :require_user, :except => :rss
+  # mobile tmp
+  # before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
+  # after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
+  before_filter :authenticate_user!, :except => :rss
   cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
   def graph
@@ -111,14 +113,29 @@ class MuttersController < ApplicationController
   end
 
   def index
+    @layout_type = 1
+    @slideshow_visible = true
     @page_title = "トップ"
-    @mutter = Mutter.new(:user_id => current_user.id)
-    # unless read_fragment :mutter_data
-    @mutters = Mutter.includes_all.id_desc.limit(30)
-    # end
+
     @updates = UpdateHistory.view_normal.limit(10)
-    @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(40)
-    @album_thumbs = AlbumPhoto.rnd_photos
+    @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_sign_in_at DESC").limit(40)
+
+    # from lesys
+    @fix_title = ""
+    #sakikazu ↓は、includesだったら、関連先が存在しないデータでも取得されてしまって不都合になるんだけど、joinsなら存在するデータのみなので良い。
+    #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
+    # @mutters = mutter.includes_all.id_desc.limit(30)
+
+    # レスされた順に並び替え
+    # unless read_fragment :mutter_data
+    @mutters = Mutter.includes(:user, :children).parents_mod.order('for_sort_at DESC').limit(20)
+    # end
+
+    #新規レス用
+    @mutter = Mutter.new(:user_id => current_user.id)
+    # sakikazu 最終アクセス日がDeviseで取れればいいんだけど
+    @login_users = User.where("role != ?", User::TEST_USER).order("last_sign_in_at DESC").limit(20)
+    @album_thumbs = Photo.rnd_photos
     @dispupdate_interval = 10 * 1000
 
     ###日齢
@@ -139,21 +156,24 @@ class MuttersController < ApplicationController
   end
 
   def create
-    mutter = Mutter.new(params[:mutter])
+    @mutter = Mutter.new(params[:mutter])
 
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
-      mutter.save
-      @mutters = Mutter.includes_all.id_desc.limit(30)
+      @mutter.save
+      @mutters = Mutter.includes(:user, :children).parents_mod.order('for_sort_at DESC').limit(20)
+      # 新規post用に入れ替える
+      @created_mutter = @mutter
+      @mutter = Mutter.new(:user_id => current_user.id)
       render :partial => "list"
     else
       respond_to do |format|
-        if mutter.save
-          format.html { redirect_to(mutters_path, :notice => '') }
-          format.xml  { render :xml => mutter, :status => :created, :location => mutter }
+        if @mutter.save
+          format.html { redirect_to mutters_path, notice: 'つぶやきを投稿しました。' }
+          format.json { render json: @mutter, status: :created, location: @mutter }
         else
           format.html { redirect_to(mutters_path, :notice => 'つぶやきを入力しないと投稿できません') }
-          format.xml  { render :xml => mutter.errors, :status => :unprocessable_entity }
+          format.json { render json: @mutter.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -176,7 +196,7 @@ class MuttersController < ApplicationController
   end
 
   def slider_update
-    @album_thumbs = AlbumPhoto.rnd_photos
+    @album_thumbs = Photo.rnd_photos
   end
 
   def celebration_new
@@ -281,7 +301,7 @@ class MuttersController < ApplicationController
     when UpdateHistory::ALBUMPHOTO_CREATE
       redirect_to album_path(up.assetable, "sort" => 1, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO
-      redirect_to slideshow_album_photo_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to slideshow_photo_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::BOARD_CREATE, UpdateHistory::BOARD_COMMENT
       redirect_to board_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::MOVIE_CREATE, UpdateHistory::MOVIE_COMMENT

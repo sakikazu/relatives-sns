@@ -1,0 +1,11 @@
+<%= simple_form_for @photo_comment do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :user_id %>
+    <%= f.input :content %>
+    <%= f.input :photo_id %>
+  <% end %>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

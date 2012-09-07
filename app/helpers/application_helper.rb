@@ -25,7 +25,7 @@ EOS
 EOS
     else
       output += <<"EOS"
-  #{link_to 'イイネ ', nices_path(:type => content_type, :content_id => content.id, :area => area), :method => :post, :remote => true}
+  #{link_to '<i class="icon-heart"></i>&nbsp;イイネ '.html_safe, nices_path(:type => content_type, :content_id => content.id, :area => area), :method => :post, :remote => true}
 EOS
     end
 
@@ -57,8 +57,7 @@ EOS
   end
 
   def colorbox_class
-    # request.smart_phone? ? "" : "colorbox"
-    "colorbox"
+    request.smart_phone? ? "" : "colorbox"
   end
 
   def colorbox_fix_size
@@ -72,7 +71,7 @@ EOS
   end
 
   def editable(login_user, content_user)
-    (login_user.role == 0 or login_user.role == 1 or login_user.id == content_user.id)
+    login_user.role == 0 or login_user.role == 1 or (content_user.present? and (login_user.id == content_user.id))
   end
 
   def sani(html)
@@ -103,26 +102,26 @@ EOS
     ai = UpdateHistory::ACTION_INFO[up.action_type]
     case up.action_type
     when UpdateHistory::ALBUM_CREATE
-      ai.merge(:link => (link_to up.assetable.title, album_path(up.assetable, :sort => 2)))
+      ai.merge(:link => (link_to up.content.title, album_path(up.content, :sort => 2)))
     when UpdateHistory::ALBUM_COMMENT
-      ai.merge(:link => (link_to up.assetable.title, album_path(up.assetable)))
+      ai.merge(:link => (link_to up.content.title, album_path(up.content)))
     when UpdateHistory::ALBUMPHOTO_CREATE
-      ai.merge(:link => (link_to up.assetable.title, album_path(up.assetable, :sort => 1)))
+      ai.merge(:link => (link_to up.content.title, album_path(up.content, :sort => 1)))
     when UpdateHistory::ALBUMPHOTO_COMMENT
-      ai.merge(:link => (link_to up.assetable.title, album_path(up.assetable, :sort => 3)))
+      ai.merge(:link => (link_to up.content.title, album_path(up.content, :sort => 3)))
     when UpdateHistory::BOARD_CREATE
-      ai.merge(:link => (link_to up.assetable.title, board_path(up.assetable)))
+      ai.merge(:link => (link_to up.content.title, board_path(up.content)))
     when UpdateHistory::BOARD_COMMENT
-      ai.merge(:link => (link_to up.assetable.title, board_path(up.assetable)))
+      ai.merge(:link => (link_to up.content.title, board_path(up.content)))
     when UpdateHistory::MOVIE_CREATE
-      #ai.merge(:link => (link_to up.assetable.title, :controller => :movies, :action => :show, :id => up.assetable.id))
-      ai.merge(:link => (link_to up.assetable.title, movie_path(up.assetable)))
+      #ai.merge(:link => (link_to up.content.title, :controller => :movies, :action => :show, :id => up.content.id))
+      ai.merge(:link => (link_to up.content.title, movie_path(up.content)))
     when UpdateHistory::MOVIE_COMMENT
-      ai.merge(:link => (link_to up.assetable.title, movie_path(up.assetable)))
+      ai.merge(:link => (link_to up.content.title, movie_path(up.content)))
     when UpdateHistory::BLOG_CREATE
-      ai.merge(:link => (link_to up.assetable.title, blog_path(up.assetable)))
+      ai.merge(:link => (link_to up.content.title, blog_path(up.content)))
     when UpdateHistory::BLOG_COMMENT
-      ai.merge(:link => (link_to up.assetable.title, blog_path(up.assetable)))
+      ai.merge(:link => (link_to up.content.title, blog_path(up.content)))
     end
   end
 

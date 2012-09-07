@@ -26,7 +26,7 @@ gem 'twitter-bootstrap-rails'
 gem 'typus'
 gem 'faker'
 
-# gem 'jpmobile'
+gem 'jpmobile'
 # gem 'flash_cookie_session'
 # gem 'tmail'
 

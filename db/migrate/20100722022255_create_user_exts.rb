@@ -2,8 +2,8 @@ class CreateUserExts < ActiveRecord::Migration
   def self.up
     create_table :user_exts do |t|
       t.integer :user_id
-      t.string :firstname
-      t.string :lastname
+      t.string :familyname
+      t.string :givenname
       t.string :nickname
       t.integer :sex
       t.integer :blood
@@ -14,8 +14,6 @@ class CreateUserExts < ActiveRecord::Migration
       t.string :addr4
       t.string :addr_from
       t.date :birth_day
-      t.integer :root11
-      t.integer :generation
 
       t.string :image_file_name
       t.string :image_content_type
@@ -43,6 +41,7 @@ class CreateUserExts < ActiveRecord::Migration
       t.string :ikitai
       t.string :yaritai
       t.text :free_text
+      t.datetime :deleted_at
 
       t.timestamps
     end

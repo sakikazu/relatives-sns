@@ -1,0 +1,23 @@
+<div class="once_content">
+  <div class="title">
+    <%= "#{@photo.title} " %>
+    <%= link_to "(コメント数：#{@photo.photo_comments.size}）", "#comment_area" %>
+  </div>
+  <div class="info">
+    投稿者：<%= @photo.user.dispname %> | 
+    投稿日時：<%= l @photo.created_at if @photo.created_at %> | 
+    撮影日時：<%= l @photo.exif_at if @photo.exif_at %>
+  </div>
+  <div class="description">
+    <%= image_tag(@photo.image(:large)) if @photo.image? %>
+    <br />
+    <%= link_to "元画像", @photo.image(:original) if @photo.image? %>
+    <p class="text"><%= sani_custom_br(@photo.description) %></p>
+  </div>
+  <div class="nice">
+    <span id="update_nice">
+      <%= nice_field(@photo, "photo", "#update_nice") %>
+    </span>
+  </div>
+</div>
+

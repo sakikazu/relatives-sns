@@ -2,8 +2,8 @@ class CreateNices < ActiveRecord::Migration
   def self.up
     create_table :nices do |t|
       t.integer :user_id
-      t.integer :nice_id
-      t.string :nice_type
+      t.integer :asset_id
+      t.string :asset_type
 
       t.timestamps
     end

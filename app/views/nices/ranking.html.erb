@@ -32,19 +32,19 @@ $(document).ready(function() {
 <h2 class="normal">人気の写真</h2>
 <div class="h2normal_content">
 <% @photo_data.each_with_index do |data, idx| -%>
-  <% obj = AlbumPhoto.find_by_id(data[:id]) -%>
+  <% obj = Photo.find_by_id(data[:id]) -%>
   <div class="nice_rank">
     <%= idx + 1 %>位：<%= data[:count] %> イイネ
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
-    <%= link_to(image_tag(obj.attach(:thumb)), slideshow_album_photo_path(obj), {:class => colorbox_fix_size}) if obj.attach?  %><br>
+    <%= link_to(image_tag(obj.image(:thumb)), slideshow_album_photo_path(obj), {:class => colorbox_fix_size}) if obj.image?  %><br>
     写真タイトル：<%= obj.title %> / アルバム：<%= link_to obj.album.title, obj.album %>
   <% else -%>
     削除されました.
   <% end -%>
   <hr>
-<% end -%>
+<% end if false -%>
 </div>
 
 <h2 class="normal">人気の日記</h2>
@@ -56,10 +56,10 @@ $(document).ready(function() {
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
-    <% if obj.blog_images.size > 0 -%>
-      <% b_image = obj.blog_images.first -%>
-      <%= image_tag(b_image.image(:thumb)) if b_image.image? %><br>
-    <% end -%>
+    <%# if obj.blog_images.size > 0 -%>
+      <%# b_image = obj.blog_images.first -%>
+      <%#= image_tag(b_image.image(:thumb)) if b_image.image? %><br>
+    <%# end -%>
     日記：<%= link_to obj.title, blog_path(obj) %><br>
     <%= nice_author_and_created_at(obj) %>
   <% else -%>
@@ -69,7 +69,7 @@ $(document).ready(function() {
 <% end -%>
 </div>
 
-<h2 class="normal">人気の動画</h2>
+<!-- <h2 class="normal">人気の動画</h2> -->
 <div class="h2normal_content">
 <% @movie_data.each_with_index do |data, idx| -%>
   <% obj = Movie.find_by_id(data[:id]) -%>

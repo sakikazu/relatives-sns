@@ -1,11 +1,11 @@
-<div class="sliderkit carousel-demo2">
+<div class="sliderkit carousel-demo2 clearfix" style="margin:-18px auto 40px;">
   <div class="sliderkit-nav">
     <div class="sliderkit-nav-clip">
       <ul>
         <% @album_thumbs.each do |thumb| -%>
           <li>
-            <%= link_to image_tag(thumb.attach(:thumb), :alt => thumb.album.title),
-            {:controller => :album_photos, :action => :slideshow, :id => thumb.id, :top => 1},
+          <%= link_to image_tag(thumb.image(:thumb), :alt => thumb.album.title),
+            slideshow_album_photo_path(thumb.album, thumb, top: 1),
             {:class => colorbox_fix_size, :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
           </li>
         <% end -%>

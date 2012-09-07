@@ -10,7 +10,7 @@ class BoardComment < ActiveRecord::Base
       :large => "800x800>"
     },
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
-    :url => "/uploads/#{content_name}/:board/_res/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/uploads/#{content_name}/:board/_res/:id/:style/:basename.:extension"
+    :url => "/upload/#{content_name}/:board/_res/:id/:style/:basename.:extension",
+    :path => ":rails_root/public/upload/#{content_name}/:board/_res/:id/:style/:basename.:extension"
 
 end

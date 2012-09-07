@@ -1,23 +1,30 @@
-<h3 class="normal"><%= link_to '新規作成', new_album_path %></h3>
+<%= link_to '新規作成', new_album_path, class: "btn btn-info" %>
 
-<h3 class="normal">アルバム詳細一覧 (写真のダウンロードも可能)</h3>
-<div id=title_index>
-  <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true %>
+<div class="page-header"><h3>アルバム詳細一覧<small>写真のダウンロードも可能</small></h3></div>
+<div id="title_index">
+  <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn" %>
 </div>
 
-<h3 class="normal">サムネイル一覧</h3>
-<%= link_to "最新写真アップ順", :action => :index, :sort => 1 %> |
-<%= link_to "アルバム作成順", :action => :index, :sort => 2 %>
+<div class="page-header"><h3>アルバム一覧</h3></div>
+<div class="select_menu clearfix">
+  <% [["アルバム作成順", 1], ["最新写真アップ順", 2]].each do |n, i| -%>
+    <% if @sort == i -%>
+      <%= link_to n, albums_path(:sort => i), class: "btn btn-danger disabled" %>
+    <% else -%>
+      <%= link_to n, albums_path(:sort => i), class: "btn btn-danger" %>
+    <% end -%>
+  <% end -%>
+</div>
 
 <div id="album">
 <% @albums.each do |album| %>
-<div class="once_album">
+<div class="once_photo">
   <div class="bar"><%= link_to album.title, album %></div>
-  <div class="photo"><%= image_tag album.use1_photo.attach(:thumb) if album.use1_photo %></div>
+  <div class="photo"><%= link_to(image_tag(album.thumb.image(:thumb)), album) if album.thumb.present? %></div>
   <div class="info">
-    作成者：<%= album.user.dispname %><br />
-    作成日時：<%= album.created_at.to_s(:short2) if album.created_at %><br />
-    最新アップ日時：<%= album.sort_at.to_s(:short2) if album.sort_at %>
+    作成者：<%= album.user.try(:dispname) %><br />
+    作成日時：<%= l album.created_at if album.created_at %><br />
+    最新アップ日時：<%= l album.sort_at if album.sort_at %>
     <br />
     <% if editable(current_user, album.user) -%>
       <%= link_to '編集', edit_album_path(album) %> | 
@@ -26,5 +33,6 @@
   </div>
 </div>
 <% end %>
+<div class="clear"></div>
 </div>
 

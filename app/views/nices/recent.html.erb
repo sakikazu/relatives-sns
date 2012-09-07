@@ -16,12 +16,12 @@ $(document).ready(function() {
 <div id="mokuji"></div>
 
 <h2 class="normal">最近評価されたつぶやき</h2>
-<%= will_paginate @nices["mutter"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["mutter"].present? %>
+<%#= paginate @nices["mutter"], :window => 2, :outer_window => 2 if @nices["mutter"].present? %>
 <div class="h2normal_content">
 <% @nices["mutter"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
@@ -35,37 +35,38 @@ $(document).ready(function() {
 </div>
 
 <h2 class="normal">最近評価された写真</h2>
-<%= will_paginate @nices["albumphoto"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["albumphoto"].present? %>
+<%#= paginate @nices["photo"], :window => 2, :outer_window => 2 if @nices["photo"].present? %>
 <div class="h2normal_content">
-<% @nices["albumphoto"].each do |data| -%>
+<% @nices["photo"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
-    <%= link_to(image_tag(obj.attach(:thumb)), slideshow_album_photo_path(obj), {:class => colorbox_fix_size}) if obj.attach?  %><br>
+    <% p obj -%>
+    <%= link_to(image_tag(obj.image(:thumb)), slideshow_album_photo_path(obj.album, obj), {:class => colorbox_fix_size}) if obj.image?  %><br>
     写真タイトル：<%= obj.title %> / アルバム：<%= link_to obj.album.title, obj.album %>
   <% end -%>
   <hr>
   </div>
-<% end -%>
+  <% end -%>
 </div>
 
 <h2 class="normal">最近評価された日記</h2>
-<%= will_paginate @nices["blog"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["blog"].present? %>
+<%#= paginate @nices["blog"], :window => 2, :outer_window => 2 if @nices["blog"].present? %>
 <div class="h2normal_content">
 <% @nices["blog"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
-    <% if obj.blog_images.size > 0 -%>
-      <% b_image = obj.blog_images.first -%>
-      <%= image_tag(b_image.image(:thumb)) if b_image.image? %><br>
-    <% end -%>
+    <%# if obj.blog_images.size > 0 -%>
+      <%# b_image = obj.blog_images.first -%>
+      <%#= image_tag(b_image.image(:thumb)) if b_image.image? %><br>
+    <%# end -%>
     日記：<%= link_to obj.title, blog_path(obj) %><br>
     <%= nice_author_and_created_at(obj) %>
   <% end -%>
@@ -75,13 +76,13 @@ $(document).ready(function() {
 </div>
 
 
-<h2 class="normal">最近評価された動画</h2>
-<%= will_paginate @nices["movie"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["movie"].present? %>
+<!-- <h2 class="normal">最近評価された動画</h2> -->
+<%#= paginate @nices["movie"], :window => 2, :outer_window => 2 if @nices["movie"].present? %>
 <div class="h2normal_content">
 <% @nices["movie"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
