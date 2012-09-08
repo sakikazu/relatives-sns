@@ -1,28 +1,38 @@
-<h2>Sign up</h2>
-  <% if notice.present? -%>
-    <p id="notice" class="notice"><%= notice %></p>
-  <% end -%>
-  <% if alert.present? -%>
-    <p class="alert"><%= alert %></p>
-  <% end -%>
+<h2>登録</h2>
+
+<% if notice.present? -%>
+  <p id="notice" class="notice"><%= notice %></p>
+<% end -%>
+<% if alert.present? -%>
+  <p class="alert"><%= alert %></p>
+<% end -%>
+
+<% if resource.errors.any? %>
+  <div class="alert alert-error"><p>入力エラーがあります。下記のエラー内容を確認してください。</p></div>
+<% end %>
 
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
 
-  <div class="form-inputs">
-    <%= f.input :username, :required => true, :autofocus => true %>
-    <%= f.input :password, :required => true %>
-    <%= f.input :password_confirmation, :required => true %>
-    <%= f.input :email %>
-    <%= f.input :familyname %>
-    <%= f.input :givenname %>
-    <%= f.input :root11 %>
-    <%= f.input :generation %>
-    <%= f.input :role %>
-  </div>
+<div class="form-inputs">
+  <%= f.input :username, :required => true, :autofocus => true, label: "ユーザー名" %>
+  <%= f.input :password, :required => true, label: "パスワード" %>
+  <%= f.input :password_confirmation, :required => true, label: "パスワード（確認用）" %>
+  <%= f.input :email, label: "メールアドレス", required: false %>
+  <%= f.input :familyname, label: "管理用（姓）", required: false %>
+  <%= f.input :givenname, label: "管理用（名）", required: false %>
+<%= f.input :root11, label: "関連する11兄弟" do %>
+  <%= f.select :root11, User::ROOT_LIST, include_blank: true, required: false %>
+<% end -%>
+<%= f.input :generation, label: "世代数" do %>
+  <%= f.select :generation, [1, 2, 3, 4, 5].map{|n| ["#{n}世代", n]}, required: false %>
+<% end -%>
+<%= f.input :role, label: "権限" do %>
+  <%= f.select :role, User::ROLE, selected: 2 %>
+<% end -%>
+</div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
+<div class="form-actions">
+  <%= f.button :submit, "登録" %>
+</div>
 <% end %>
-
 <%= render "devise/shared/links" %>

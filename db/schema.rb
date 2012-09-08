@@ -170,15 +170,16 @@ ActiveRecord::Schema.define(:version => 20120902151627) do
     t.integer  "user_id"
     t.text     "content"
     t.integer  "reply_id"
+    t.integer  "celebration_id"
+    t.datetime "for_sort_at"
+    t.string   "ua"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.datetime "deleted_at"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
-    t.integer  "celebration_id"
-    t.datetime "deleted_at"
-    t.datetime "for_sort_at"
   end
 
   create_table "nices", :force => true do |t|

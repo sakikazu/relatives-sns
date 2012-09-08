@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+# これは、db:seedからしかユーザー登録できないときの機能。既存のユーザーに対して、パスワードなどを変更することが登録となるもの。
+
+# AdanHP4では使用していない
 class UsersController < Devise::RegistrationsController
   def new
     render action: "registrations/new"
@@ -7,12 +11,12 @@ class UsersController < Devise::RegistrationsController
   # ユーザーに新規登録はさせず、予め登録されたアカウントのパスワードを変更することがユーザー登録となる
   def create
     emsg = nil
-    email = params[:user][:email]
+    username = params[:user][:username]
     pass = params[:user][:password]
     pass2 = params[:user][:password_confirmation]
-    user = User.find_by_email(email)
+    user = User.find_by_username(username)
     if user.blank?
-      emsg = 'メールアドレスはこのシステムに登録されていません。システム管理人に登録の依頼をしてください。'
+      emsg = 'このユーザー名はシステムに登録されていません。システム管理人に登録の依頼をしてください。'
     elsif pass.blank?
       emsg = 'パスワードを入力してください。'
     elsif pass != pass2

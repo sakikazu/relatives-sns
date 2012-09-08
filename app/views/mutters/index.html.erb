@@ -207,7 +207,7 @@ $(document).ready(function(){
         </div><!--/span-->
         <div class="span8">
 
-   <div id="mutter" class="clearfix row">
+   <div id="mutter" class="clearfix well well2">
     <div id="form" class="clearfix">
       <%= simple_form_for @mutter, :html => {:multipart => true} do |f| -%>
         <div class="span5">
@@ -242,8 +242,10 @@ $(document).ready(function(){
         <%# end -%>
     </div>
 
+    <div class="mgn-t40">
     <%= link_to "もっと見る", "javascript:void(0)", {id: "show_more", class: "left btn"} %>
     <%= link_to "むしろすべて見る", {:action => :all}, class: "right btn" %>
+    </div>
   </div> <!-- #mutter -->
 
 

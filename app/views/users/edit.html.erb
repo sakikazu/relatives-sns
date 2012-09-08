@@ -1,8 +1,0 @@
-<h1>ログイン名とパスワードを変更する</h1>
-
-<% form_for @user, :action => :update do |f| %>
-  <%= render :partial => "form", :object => f %>
-  <%= f.submit "更新" %>
-<% end %>
-
-<br /><%= link_to "親戚データ一覧へ", users_path %>

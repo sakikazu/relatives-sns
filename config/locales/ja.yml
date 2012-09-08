@@ -258,6 +258,8 @@ ja:
     pagination:
       previous: "<< 前ページ"
       next: "次ページ >>"
+      first: "最初"
+      last: "最後"
       truncate: "..."
 
   formtastic:

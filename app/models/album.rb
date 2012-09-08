@@ -7,6 +7,8 @@ class Album < ActiveRecord::Base
 
   attr_accessible :title, :description, :thumb_id, :user_id
 
+  validates :title, presence: true
+
   #sakikazu ↓これがあると、このモデルの関連ができなくなり、処理にめっちゃ時間がかかり、Stackがあふれたみたいなエラーが出る…なぜ
   # acts_as_paranoid
   attr_accessor :sort_at

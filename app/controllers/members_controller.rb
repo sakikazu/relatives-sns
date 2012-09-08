@@ -6,7 +6,7 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @users = User.all(:include => "user_ext", :order => "user_exts.root11, users.id")
+    @users = User.all(:include => "user_ext", :order => "users.root11, users.id")
 
     respond_to do |format|
       format.html # index.html.erb

@@ -105,7 +105,9 @@ ADan4::Application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: {registrations: "users"}
+  # devise カスタマイズ版
+  # devise_for :users, controllers: {registrations: "users"}
+  devise_for :users
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

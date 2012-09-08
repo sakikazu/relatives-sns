@@ -4,11 +4,10 @@
 </div>
 <%= link_to(image_tag(@user.user_ext.image(:thumb), class: "img-polaroid"), @user.user_ext.image.url(:large), {:class => colorbox_class}) if  @user.user_ext.image? %>
 
+<h2><%= @user.dispname(User::FULLNICK) %></h2>
+
 <table class="table table-striped table-bordered table-hover">
-  <tr><th>姓</th><td><%= @user.user_ext.familyname %></td></tr>
-  <tr><th>名</th><td><%= @user.user_ext.givenname %></td></tr>
-  <tr><th>ニックネーム</th><td><%= @user.user_ext.nickname %></td></tr>
-  <tr><th>性別</th><td><%= @user.user_ext.sex_name %></td></tr>
+  <tr><th width="200">性別</th><td><%= @user.user_ext.sex_name %></td></tr>
   <tr><th>血液型</th><td><%= @user.user_ext.blood_name %></td></tr>
   <tr><th>メールアドレス</th><td><%= @user.user_ext.email %></td></tr>
   <tr><th>住所</th><td><%= "#{@user.user_ext.addr1} #{@user.user_ext.addr2} #{@user.user_ext.addr3} #{@user.user_ext.addr4}" %></td></tr>

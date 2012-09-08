@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 class User < ActiveRecord::Base
-  # acts_as_paranoid
+  acts_as_paranoid
 
   has_many :mutters
   has_many :celebrations
@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   attr_accessible :username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me
   # attr_accessible :title, :body
 
+  validates :username, presence: true, uniqueness: true
+
 
   #role
   ADMIN = 0
@@ -30,6 +32,24 @@ class User < ActiveRecord::Base
   FULLNAME = 1
   NICKNAME = 2
   FULLNICK = 3
+
+  #root11
+  R1 = 0
+  R2 = 1
+  R3 = 2
+  R4 = 3
+  R5 = 4
+  R6 = 5
+  R7 = 6
+  R8 = 7
+  R9 = 8
+  R10 = 9
+  R11 = 10
+  ROOT_LIST = [["輝美", R1], ["由美子", R2], ["順子", R3], ["真澄", R4], ["泰弘", R5], ["睦子", R6], ["満喜子", R7], ["浩敏", R8], ["徹", R9], ["ゆかり", R10], ["英樹" ,R11]]
+
+  def root11_name
+    Hash[*ROOT_LIST.flatten.reverse][self.root11]
+  end
 
 
   def self.find_or_create(username, password)
@@ -62,13 +82,13 @@ class User < ActiveRecord::Base
     when NICKNAME
       name = self.user_ext.nickname if self.user_ext
     when FULLNAME
-      name = "#{self.user_ext.familyname}#{self.user_ext.givenname}" if self.user_ext 
+      name = "#{self.familyname}#{self.givenname}"
     when FULLNICK
-      name = "#{self.user_ext.nickname}(#{self.user_ext.familyname}#{self.user_ext.givenname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.user_ext.familyname.blank? && !self.user_ext.givenname.blank?
+      name = "#{self.user_ext.nickname}(#{self.familyname}#{self.givenname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.familyname.blank? && !self.givenname.blank?
     end
 
     if name.blank? and not user_set_only
-      name = self.username
+      name = "#{self.familyname}#{self.givenname}"
     end
     return Sanitize.clean(name, Sanitize::Config::BASIC)
   end

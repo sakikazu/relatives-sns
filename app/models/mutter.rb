@@ -11,7 +11,7 @@ class Mutter < ActiveRecord::Base
   before_save :trans_space
   after_create :update_sort_at
   validates_presence_of :content
-  attr_accessor :search_word
+  attr_accessor :search_word, :action_flg
 
   attr_accessible :user_id, :content, :reply_id, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :created_at, :updated_at, :celebration_id, :image, :for_sort_at
 

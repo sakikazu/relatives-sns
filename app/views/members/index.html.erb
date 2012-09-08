@@ -14,7 +14,7 @@
 <div class="page-header">
   <h3>自分の情報を変更する</h3>
 </div>
-<%= link_to "自分の情報を変更する", edit_members_path, class: "btn btn-info" %>
+<%= link_to "自分の情報を変更する", edit_user_registration_path, class: "btn btn-info" %>
 <%= link_to "さらに変更する", edit_ex_members_path, class: "btn btn-info" %>
 
 <div class="page-header">
@@ -57,7 +57,7 @@
     <td><%= user.user_ext.sex_name %></td>
     <td><%= user.user_ext.age_to_s %></td>
     <td><%= user.user_ext.birth_day.to_s(:date) if user.user_ext.birth_day %></td>
-    <td><%= user.user_ext.root11_name %></td>
+    <td><%= user.root11_name %></td>
     <td><%= user.current_sign_in_at.to_s(:long) if user.current_sign_in_at %></td>
 <% if current_user.admin? -%>
     <td><%= user.id %></td>

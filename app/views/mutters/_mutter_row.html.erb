@@ -5,7 +5,7 @@
 <% end -%>
 
 <div class="clearfix">
-<div class="left icon span1">
+<div class="icon span1" style="margin-left: 6px;">
   <p>
   <% if  mutter_row.user.present? && mutter_row.user.user_ext.image? -%>
     <%= image_tag mutter_row.user.user_ext.image(:small), :size => "50x50"  %>
@@ -14,9 +14,10 @@
   <% end -%>
   </p>
 </div>
-<div class="left content_wrap span7">
+<div class="span6" style="margin-left: 22px;">
   <div class="bar">
-    <span class='name'><%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
+    <span class='label label-inverse'><%= useragent(mutter_row.ua) %></span>
+    <span class='name'>&nbsp;<%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
     <span class='time'><%= link_to (l mutter_row.created_at), mutter_path(mutter_row) %></span>
     <span class="nice">
       <span id='cont_<%= mutter_row.id %>'>
@@ -37,7 +38,7 @@
 <ul class="children">
   <% mutter_row.children.id_asc.each do |child| -%>
     <li class="clearfix row">
-    <div class="left icon span1">
+    <div class="icon span1" style="margin-left: 6px;">
       <p>
       <% if  child.user.present? && child.user.user_ext.image? -%>
         <%= image_tag child.user.user_ext.image(:small), :size => "50x50"  %>
@@ -46,9 +47,10 @@
       <% end -%>
       </p>
     </div>
-    <div class="left content_wrap span5">
+    <div class="span5" style="margin-left: 22px;">
       <div class="bar">
-        <span class='name'><%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
+        <span class='label label-inverse'><%= useragent(child.ua) %></span>
+        <span class='name'>&nbsp;<%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
         <span class='time'><%= link_to (l child.created_at), mutter_path(child) %></span>
         <span class="nice">
           <span id='cont_<%= child.id %>'>

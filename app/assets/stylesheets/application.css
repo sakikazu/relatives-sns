@@ -13,6 +13,40 @@
  */
 
 
+/**********************************************
+ from scaffold.css
+**********************************************/
+
+/* 現在エラーは、各フォームフィールドの横に出す形式にしている */
+
+/* .field_with_errors { */
+  /* padding: 2px; */
+  /* background-color: red; */
+  /* display: table; */
+/* } */
+
+/* #error_explanation { */
+  /* width: 450px; */
+  /* border: 2px solid red; */
+  /* padding: 7px; */
+  /* padding-bottom: 0; */
+  /* margin-bottom: 20px; */
+  /* background-color: #f0f0f0; */
+/* } */
+/* #error_explanation h2 { */
+  /* text-align: left; */
+  /* font-weight: bold; */
+  /* padding: 5px 5px 5px 15px; */
+  /* font-size: 12px; */
+  /* margin: -7px; */
+  /* margin-bottom: 0px; */
+  /* background-color: #c00; */
+  /* color: #fff; */
+/* } */
+/* #error_explanation ul li { */
+  /* font-size: 12px; */
+  /* list-style: square; */
+/* } */
 
 /**********************************************
  mutter
@@ -40,11 +74,6 @@
 .mutter_rows .icon p img {
   border: 1px gray solid;
   padding: 4px;
-}
-.mutter_rows .content_wrap {
-  /* width: 520px; */
-  width: 100% - 70px;
-  margin-left: 20px;
 }
 .mutter_rows .bar {
   padding-bottom: 3px;
@@ -85,12 +114,8 @@ ul.children {
 }
 
 ul.children li {
-  background-color: #EBEBEB;
+  background-color: #DCEAF4;
   border: none;
-}
-ul.children .content_wrap {
-  width: 430px;
-  margin-left: 20px;
 }
 
 #nichirei {
@@ -143,7 +168,6 @@ ul.children .content_wrap {
 
 #form_search{
   margin: 30px auto;
-  width: 600px;
 }
 #form_search form{
   text-align: center;
@@ -183,12 +207,12 @@ ul.children .content_wrap {
 
 /*footer*/
 footer {
-  margin-top: 25px;
+  margin-top: 80px;
   background-color: black;
   color: white;
   text-align: center;
-  padding: 5px;
-  width: 100% - 5px;
+  padding: 5px 0px;
+  width: 100%;
   filter: alpha(opacity=80);
   -moz-opacity:0.8;
   opacity:0.8;

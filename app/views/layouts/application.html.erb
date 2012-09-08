@@ -196,30 +196,47 @@ jQuery(document).ready(function(){
 
 
 
-  </head>
-  <body>
+ </head>
+ <body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="/">ADan4</a>
-          <div class="container nav-collapse">
-            <ul class="nav">
-              <li><%= link_to "人気", "/nices"  %></li>
-              <li><%= link_to "アルバム", "/albums"  %></li>
-              <li><%= link_to "親戚データ", "/members"  %></li>
-              <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete  %></li>
-              <li><a href="#" ><i class="icon-arrow-up"></i>&nbsp;TOP</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+   <div class="navbar navbar-fixed-top navbar-inverse">
+     <div class="navbar-inner">
+       <div class="container">
+         <!-- スマホから見た時の小さいメニューボタン用 -->
+         <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+         </a>
+
+         <a class="brand" href="/">ADan4</a>
+         <div class="container nav-collapse">
+           <ul class="nav">
+             <li class="<%= controller.controller_name == "nices" ? "active" : "" %>"><%= link_to "人気", nices_path %></li>
+             <li class="<%= controller.controller_name == "albums" ? "active" : "" %>"><%= link_to "アルバム", albums_path %></li>
+             <li class="<%= controller.controller_name == "members" ? "active" : "" %>"><%= link_to "親戚データ", members_path %></li>
+             <!-- todo ドロップダウンメニューに入れたら、httpメソッドがGETになってしまう？？ -->
+             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+             <li><a href="#" ><i class="icon-arrow-up"></i>&nbsp;TOP</a></li>
+           </ul>
+           <ul class="nav pull-right">
+             <li><%= link_to current_user.dispname(User::FULLNAME), edit_ex_members_path if current_user.present? %></li>
+             <li><%= link_to '写真を入れ替える', "#" %></li>
+             <li class="divider-vertical"></li>
+             <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">その他メニュー<b class="caret"></b></a>
+             <ul class="dropdown-menu">
+               <li><a href="#">RSS</a></li>
+               <li><a href="#">QRコード</a></li>
+               <li class="divider"></li>
+               <li><a href="#">HPについて</a></li>
+             </ul>
+             </li>
+           </ul>
+         </div><!--/.nav-collapse -->
+       </div>
+     </div>
+   </div>
 
 
     <% if @slideshow_visible -%>

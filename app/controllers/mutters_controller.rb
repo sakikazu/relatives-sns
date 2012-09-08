@@ -4,6 +4,7 @@ class MuttersController < ApplicationController
   # before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
   # after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
   before_filter :authenticate_user!, :except => :rss
+  before_filter :set_new_mutter_obj, only: [:index, :all, :search]
   cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
   def graph
@@ -53,19 +54,21 @@ class MuttersController < ApplicationController
   end
 
   def search
-    @action_flg = params[:action_flg].to_i
+    @action_flg = params["mutter"][:action_flg].to_i
     case @action_flg
     when 0
       @mutters = Mutter.includes_all.order("id DESC")
     when 1
-      str = params[:search_text]
+      str = params["mutter"][:search_word]
       @mutters = Mutter.includes_all.where('content like :q', :q => "%#{str}%").order('id DESC')
     when 2
       @mutters = Mutter.includes_all.where('mutters.image_file_name IS NOT NULL').order('id DESC')
     when 3
       @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC')
     end
-    @mutters = @mutters.paginate(:page => params[:page], :per_page => 30)
+    @mutters = @mutters.page(params[:page]).per(30)
+
+    # 検索時は右サイドバーを出さないように（理由は忘れた）
     @action_is_search = true
 
     respond_to do |format|
@@ -105,7 +108,9 @@ class MuttersController < ApplicationController
 #sakimura ↓だとMutterすべてのレコードのカウントをJOINして出すので時間かかってる。kaminariならそんなことないのかなぁ。limit(30)とかやってもダメね。
     # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
 #sakimura ページネート時のフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
-    @mutters = Mutter.user_is(params[:user_id]).paginate(:page => params[:page], :per_page => 30)
+#todo kaminariにしてみたけどincludeしたらどうなる？？
+    @mutters = Mutter.user_is(params[:user_id]).page(params[:page]).per(30)
+
     unless read_fragment :mutter_by_user
       @users_mcnt = Mutter.group(:user_id).count
       @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
@@ -131,8 +136,6 @@ class MuttersController < ApplicationController
     @mutters = Mutter.includes(:user, :children).parents_mod.order('for_sort_at DESC').limit(20)
     # end
 
-    #新規レス用
-    @mutter = Mutter.new(:user_id => current_user.id)
     # sakikazu 最終アクセス日がDeviseで取れればいいんだけど
     @login_users = User.where("role != ?", User::TEST_USER).order("last_sign_in_at DESC").limit(20)
     @album_thumbs = Photo.rnd_photos
@@ -157,6 +160,8 @@ class MuttersController < ApplicationController
 
   def create
     @mutter = Mutter.new(params[:mutter])
+    ua = request.env["HTTP_USER_AGENT"]
+    @mutter.ua = ua
 
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
@@ -184,15 +189,14 @@ class MuttersController < ApplicationController
   end
 
   def destroy
-    mutter = Mutter.find(params[:id])
-    name = mutter.user.login
-    mutter.destroy
-    flash[:notice] = "#{name}のつぶやきを削除しました"
-    redirect_to :action => :index
+    @mutter = Mutter.find(params[:id])
+    @mutter.destroy
+    @mutters = Mutter.includes(:user, :children).parents_mod.order('for_sort_at DESC').limit(20)
+    render "update_list.js"
   end
 
   def update_history_all
-    @updates = UpdateHistory.view_normal.paginate(:page => params[:page], :per_page => 50)
+    @updates = UpdateHistory.view_normal.page(params[:page]).per(50)
   end
 
   def slider_update
@@ -322,4 +326,8 @@ class MuttersController < ApplicationController
     end
   end
 
+  #新規レス用のオブジェクト生成
+  def set_new_mutter_obj
+    @mutter = Mutter.new(:user_id => current_user.id)
+  end
 end

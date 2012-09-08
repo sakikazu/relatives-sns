@@ -18,48 +18,60 @@ $(document).ready(function() {
 }); //jquery#ready
 </script>
 
-<div id="mutter">
-つぶやき総数: <%= @mutters.total_entries %>
-<div><%= link_to 'グラフを見る', graph_mutters_path, :class => "button" %></div>
-<%= will_paginate @mutters, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
-<br />
+<div class="row">
+  <div class="span8">
+    <div id="mutter">
+      <div class="page-header"><h3>つぶやき総数: <%= @mutters.total_count %></h3></div>
+      <div><%= link_to 'グラフを見る', graph_mutters_path, :class => "button" %></div>
+      <%= paginate @mutters, window: 2 %>
+      <br />
 
-<div id="form_search">
-  <%= form_tag search_mutters_path, {:method => :get} do %>
-    <%= text_field_tag :search_text %>
-    <%= hidden_field_tag :action_flg, 1 %>
-    <%= submit_tag "発言内容から検索する", :class => "button" %>
-  <% end %>
-  <%= form_tag search_mutters_path, {:method => :get} do %>
-    <%= hidden_field_tag :action_flg, 2 %>
-    <%= submit_tag "画像が含まれる", :class => "button" %>
-  <% end %>
-  <%= form_tag search_mutters_path, {:method => :get} do %>
-    <%= hidden_field_tag :action_flg, 3 %>
-    <%= submit_tag "URLが含まれる", :class => "button" %>
-  <% end %>
-</div>
+      <%
+      mutter1 = @mutter.dup
+      mutter1.action_flg = 1
+      mutter2 = @mutter.dup
+      mutter2.action_flg = 2
+      mutter3 = @mutter.dup
+      mutter3.action_flg = 3
+      %>
+      <div id="form_search" class="well" style="padding-left:8px; padding-right:8px;">
+        <%= form_for mutter1, url: search_mutters_path, :method => :get do |f| %>
+          <%= f.text_field :search_word, class: "span2" %>
+          <%= f.hidden_field :action_flg %>
+          <%= f.submit "発言内容から検索する", class: "btn btn-info" %>
+        <% end %>
+        <%= form_for mutter2, url: search_mutters_path, :method => :get do |f| %>
+          <%= f.hidden_field :action_flg %>
+          <%= f.submit "画像が含まれる", class: "btn btn-info" %>
+        <% end %>
+        <%= form_for mutter3, url: search_mutters_path, :method => :get do |f| %>
+          <%= f.hidden_field :action_flg %>
+          <%= f.submit "URLが含まれる", class: "btn btn-info" %>
+        <% end %>
+      </div>
 
-<div class="autopagerize_page_element">
-<ul class="mutter_rows">
-  <%= render :partial => 'mutter_row', :collection => @mutters %>
-</ul>
-<%= will_paginate @mutters, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
-</div> <!-- autopagerize_page_element -->
-</div>
 
-<% unless @action_is_search -%>
-  <div class="right_side_bar">
-  <% cache :mutter_by_user do %>
-    <div id="mutter_by_user">
-      <p class="title">メンバー</p>
-      ()内はつぶやき数
-      <ul>
-      <% @users.each do |user| -%>
-        <li><%= link_to user.dispname(User::FULLNAME), mutter_by_user_path(user.id) %>(<%= @users_mcnt[user.id] %>)</li>
+      <div class="autopagerize_page_element">
+        <ul class="mutter_rows">
+          <%= render :partial => 'mutter_row', :collection => @mutters %>
+        </ul>
+        <%= paginate @mutters, window: 2 %>
+      </div> <!-- autopagerize_page_element -->
+    </div>
+  </div> <!-- span -->
+
+  <% unless @action_is_search -%>
+    <div class="right_side_bar span4">
+      <% cache :mutter_by_user do %>
+        <div id="mutter_by_user">
+          <div class="page-header"><h3>メンバー<small>()内はつぶやき数</small></h3></div>
+          <ul>
+            <% @users.each do |user| -%>
+              <li><%= link_to user.dispname(User::FULLNAME), mutter_by_user_path(user.id) %>(<%= @users_mcnt[user.id] %>)</li>
+            <% end if @users.present? -%>
+          </ul>
+        </div>
       <% end -%>
-      </ul>
     </div>
   <% end -%>
-  </div>
-<% end -%>
+</div> <!-- row -->
