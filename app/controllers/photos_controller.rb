@@ -66,15 +66,17 @@ class PhotosController < ApplicationController
       @photo.album.update_histories << UpdateHistory.create(:user_id => @photo.user.id, :action_type => UpdateHistory::ALBUMPHOTO_CREATE)
     end
 
-    respond_to do |format|
-      if @photo.save
-        format.html { redirect_to([@photo.album, @photo], :notice => 'Photo was successfully created.') }
-        format.xml  { render :xml => @photo, :status => :created, :location => @photo }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @photo.errors, :status => :unprocessable_entity }
-      end
-    end
+    @photo.save
+    
+    # respond_to do |format|
+      # if @photo.save
+        # format.html { redirect_to([@photo.album, @photo], :notice => 'Photo was successfully created.') }
+        # format.xml  { render :xml => @photo, :status => :created, :location => @photo }
+      # else
+        # format.html { render :action => "new" }
+        # format.xml  { render :xml => @photo.errors, :status => :unprocessable_entity }
+      # end
+    # end
   end
 
   def slideshow

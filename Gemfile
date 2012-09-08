@@ -27,7 +27,11 @@ gem 'typus'
 gem 'faker'
 
 gem 'jpmobile'
+
+# Uploadifyでflashによってセッションが切れてログアウトしてしまう問題の対応のため
+# todo これだけじゃダメだった
 # gem 'flash_cookie_session'
+#
 # gem 'tmail'
 
 # Gems used only for assets and not required

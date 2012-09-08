@@ -13,7 +13,8 @@ $(document).ready(function() {
 //    '_http_accept': 'text/html',  //406error対策とかあったらがやっぱエラーになった
     'onQueueComplete': function (evt, data){
       alert('ファイルのアップロードが完了しました。');
-      location.reload();
+      //albums#showにuser_id付きでリクエストすることで、セッションが切れてログアウトされてしまった状態から自動でログインするようにする
+      location.href = '<%= album_url(@album, user_id: current_user.id) %>';
       <%#= remote_function(:url => {:controller => :albums, :action => :upload_complete, :id => @album.id},
         :complete => "alert(\" ファイルのアップロードが完了しました。\");location.reload()")
         #:complete => "alert(data['filesUploaded']+\" ファイルのアップロードが完了しました。\");location.reload()")
@@ -22,6 +23,7 @@ $(document).ready(function() {
 
   });
 
+  
   //colorbox
   colorbox_slideshow();
 

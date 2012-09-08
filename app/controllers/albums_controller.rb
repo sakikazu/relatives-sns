@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 class AlbumsController < ApplicationController
+  before_filter :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
   before_filter :authenticate_user!
   before_filter :set_title
 
@@ -145,5 +146,18 @@ class AlbumsController < ApplicationController
   def set_title
     @album = Album.find(params[:id]) if params[:id].present?
     @title = @album.title if @album.present?
+  end
+
+
+private
+
+  # user_idが入っていたら、Uploadifyでアップロードしてセッションが切れてしまった後に
+  # リダイレクトされてきたものと判断してログインする
+  # ※これやらないとログアウト状態なのでログイン画面に行ってしまう
+  def login_after_uploadify
+    if params[:user_id].present?
+      user = User.find_by_id(params[:user_id])
+      sign_in(user, :bypass => true)
+    end
   end
 end
