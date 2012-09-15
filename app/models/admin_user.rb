@@ -1,9 +1,15 @@
-# -*- coding: utf-8 -*-
 class AdminUser < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable,
+  # :lockable, :timeoutable and :omniauthable
 
-  ROLE = Typus::Configuration.roles.keys.sort
-  LOCALE = Typus.locales
+  # 管理者はフォームからは登録不可にする [except] registerable, recoverable
+  devise :database_authenticatable,
+         :rememberable, :trackable, :validatable,
+         :authentication_keys => [:email]
 
-  enable_as_typus_user
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :email, :password, :password_confirmation, :remember_me
+  # attr_accessible :title, :body
 
 end

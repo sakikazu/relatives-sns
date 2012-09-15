@@ -1,4 +1,8 @@
 ADan4::Application.routes.draw do
+  mount RailsAdmin::Engine => '/adamin', :as => 'rails_admin'
+
+  devise_for :admin_users
+
   resources :members do
     collection do
       get 'edit'

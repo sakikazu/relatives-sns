@@ -23,7 +23,7 @@ gem 'acts-as-taggable-on'
 gem 'simple_form'
 gem 'twitter-bootstrap-rails'
 
-gem 'typus'
+gem 'rails_admin'
 gem 'faker'
 
 gem 'jpmobile'
