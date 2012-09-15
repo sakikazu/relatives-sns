@@ -31,12 +31,12 @@ development:
   # password:
   # socket: /var/lib/mysql/mysql.sock
 
-# production:
-  # adapter: mysql2
-  # encoding: utf8
-  # reconnect: false
-  # database: adan
-  # pool: 5
-  # username: root
-  # password: saki0745
-  # socket: /var/lib/mysql/mysql.sock
+production:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: adan4_development
+  pool: 5
+  username: root
+  password: saki0745
+  socket: /var/lib/mysql/mysql.sock
