@@ -19,7 +19,7 @@
     <td width="100px"><%= history.user.dispname %></td>
     <td width="90px"><%= history.created_at.to_s(:date) %></td>
     <td width="45px"><%= link_to 'コメント', {:action => :new_comment, :history_id => history.id}, :class => colorbox_class %></td>
-    <% if editable(@current_user, history.user) -%>
+    <% if editable(current_user, history.user) -%>
       <td width="35px"><%= link_to '編集', edit_history_path(history), :class => colorbox_class %></td>
       <td width="35px"><%= link_to '削除', history, :confirm => '本当に削除してもよろしいですか？', :method => :delete %></td>
     <% end -%>
@@ -33,7 +33,7 @@
       <td><%= co.created_at.to_s(:date) %></td>
       <td colspan="2"></td>
       <td>
-        <% if editable(@current_user, history.user) -%>
+        <% if editable(current_user, history.user) -%>
           <%= link_to "削除", {:action => :destroy_comment, :id => co.id}, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
         <% end -%>
       </td>

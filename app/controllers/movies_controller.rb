@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 class MoviesController < ApplicationController
-  before_filter :require_user
-  before_filter :page_title
+  before_filter :authenticate_user!
 
   # GET /movies
   # GET /movies.xml
   def index
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
-    case @sort 
+    case @sort
     when 1
-      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).paginate(:page => params[:page], :per_page => 10, :order => "id DESC")
+      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).page(params[:page]).per(10)
     else
-      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).paginate(:page => params[:page], :per_page => 10, :order => "id DESC")
+      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).page(params[:page]).per(10)
     end
 
     respond_to do |format|
@@ -37,7 +36,7 @@ class MoviesController < ApplicationController
   # GET /movies/new
   # GET /movies/new.xml
   def new
-    @movie = Movie.new(:user_id => current_user.id)
+    @movie = Movie.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -62,8 +61,6 @@ class MoviesController < ApplicationController
         format.html { redirect_to(@movie, :notice => '作成しました') }
         format.xml  { render :xml => @movie, :status => :created, :location => @movie }
       else
-##sakikazu todo エラー日本語化 ってかi18n化
-        flash[:notice] = "動画ファイルを選択してください"
         format.html { render :action => "new" }
         format.xml  { render :xml => @movie.errors, :status => :unprocessable_entity }
       end
@@ -93,7 +90,7 @@ class MoviesController < ApplicationController
     @movie.destroy
 
     respond_to do |format|
-      format.html { redirect_to(movies_url) }
+      format.html { redirect_to(movies_url, notice: '削除しました') }
       format.xml  { head :ok }
     end
   end
@@ -108,7 +105,7 @@ class MoviesController < ApplicationController
     @movie.movie_comments.create(:user_id => current_user.id, :content => params[:comment])
 
     #UpdateHistory
-    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :assetable_id => @movie.id})
+    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :content_id => @movie.id})
     if uh
       uh.update_attributes(:updated_at => Time.now)
     else
@@ -117,15 +114,10 @@ class MoviesController < ApplicationController
   end
 
   def destroy_comment
-    @bcom = MovieComment.find(params[:id])
+    @bcom = MovieComment.find(params[:comment_id])
     movie = @bcom.movie
     @bcom.destroy
-    redirect_to :action => :show, :id => movie.id
-  end
-
-private
-  def page_title
-    @page_title = "動画"
+    redirect_to({:action => :show, :id => movie.id}, notice: "コメントを削除しました")
   end
 
 end

@@ -1,0 +1,14 @@
+<%= simple_form_for(@board, :html => form_html_option) do |f| %>
+  <% if @board.errors.any? %>
+    <div class="alert alert-error"><p>入力エラーがあります。下記のエラー内容を確認してください。</p></div>
+  <% end %>
+
+  <%= f.input :title, label: "タイトル" %>
+  <%= f.input :description, label: "内容", input_html: {class: "span7"} %>
+  <%= f.input :attach, label: "画像" %>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
+<% end %>
+

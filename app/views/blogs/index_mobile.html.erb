@@ -15,8 +15,8 @@
         <%= image_tag(image.image(:thumb)) if image.image? %>
       <% end -%>
       <p class="text">(本文抜粋)<%= truncate(blog.content, :length => 100) %></p>
-      <%= link_to '編集する', :action => :edit_mobile, :id => blog.id if editable(@current_user, blog.user) %>
-      <%= link_to '削除する', :action => :destroy_confirm_mobile, :id => blog.id if editable(@current_user, blog.user) %>
+      <%= link_to '編集する', :action => :edit_mobile, :id => blog.id if editable(current_user, blog.user) %>
+      <%= link_to '削除する', :action => :destroy_confirm_mobile, :id => blog.id if editable(current_user, blog.user) %>
       <br /><br />
     </div>
   </div>

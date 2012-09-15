@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 class HistoriesController < ApplicationController
-  before_filter :require_user
-  before_filter :page_title
+  before_filter :authenticate_user!
 
   # GET /histories
   # GET /histories.xml
   def index
     @histories = History.includes([{:user => :user_ext}, :history_comments]).all
-    @history = History.new(:user_id => current_user.id)
+    @history = History.new
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,7 +15,7 @@ class HistoriesController < ApplicationController
   end
 
   def new
-    @history = History.new(:user_id => current_user.id)
+    @history = History.new
     render "form", :layout => false
   end
 
@@ -29,6 +28,7 @@ class HistoriesController < ApplicationController
   # POST /histories
   # POST /histories.xml
   def create
+    params[:history][:user_id] = current_user.id
     @history = History.new(params[:history])
     if @history.save
       # format.html { redirect_to(@history, :notice => 'History was successfully created.') }
@@ -89,11 +89,6 @@ class HistoriesController < ApplicationController
     @comment = HistoryComment.find(params[:id])
     @comment.destroy
     redirect_to(histories_path, :notice => "コメントを削除しました")
-  end
-
-private
-  def page_title
-    @page_title = "年表"
   end
 
 end

@@ -1,21 +1,11 @@
-<h1>編集する</h1>
+<div class="form-actions">
+<%= link_to "掲示板一覧へ", boards_path, class: "btn" %>
+</div>
 
-<%= link_to '一覧へ戻る', boards_path %>
-<% form_for(@board, :html => form_html_option) do |f| %>
+<div class="page-header">
+  <h3>編集する</h3>
+</div>
 
-  <p>
-    <%= f.label :title, "タイトル" %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :description, "詳細" %><br />
-    <%= f.text_area :description, :size => "70x25" %>
-  </p>
-  <p>
-    <%= f.label :attach, "画像" %><br />
-    <%= f.file_field :attach %>
-  </p>
-  <p>
-    <%= f.submit '更新する' %>
-  </p>
-<% end %>
+
+<%= render :partial => 'form' %>
+

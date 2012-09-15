@@ -1,5 +1,10 @@
-<%= link_to '動画一覧へ戻る', movies_path %>
+<div class="form-actions">
+<%= link_to "動画一覧へ", movies_path, class: "btn" %>
+</div>
 
-<h1>新規作成</h1>
+<div class="page-header">
+  <h3>新規作成</h3>
+</div>
+
 
 <%= render :partial => 'form' %>

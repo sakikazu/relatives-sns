@@ -12,9 +12,9 @@ jQuery(document).ready(function(){
   });
 });
 </script>
-<h3><%= link_to "できごとを追加する", {:action => :new}, :class => colorbox_class + " normal-btn" %></h3>
+<h3><%= link_to "できごとを追加する", {:action => :new}, :class => colorbox_class + " btn btn-info" %></h3>
 
-<h3 class="normal">できごと一覧</h3>
+<div class="page-header"><h3>できごと一覧</h3></div>
 <div id="history_data">
   <%= render "data" %>
 </div>

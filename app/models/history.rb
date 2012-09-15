@@ -5,6 +5,8 @@ class History < ActiveRecord::Base
 
   validates :content, :presence => true
 
+  attr_accessible :user_id, :episode_year, :episode_month, :episode_day, :about_flg, :content, :src_user_name
+
   def hist_date
     if episode_year.blank?
       "時期不明"

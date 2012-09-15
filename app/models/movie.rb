@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
 class Movie < ActiveRecord::Base
+  acts_as_paranoid
+
   belongs_to :user
   has_many :movie_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
-  has_many :nices, :as => :nice
+  has_many :nices, :as => :asset
 
-  validates_presence_of :movie_file_name
+  default_scope order('id DESC')
 
-  acts_as_paranoid
+  attr_accessible :title, :description, :movie_type, :user_id, :movie, :thumb
+
+  validates :title, presence: true
+
+  # [knowhow] フィールド名は「movie」だけど、エラー変数に設定されるのは「movie_file_name」になるので、こちらの方にメッセージを設定しておく
+  validates :movie, presence: true
+  validates :movie_file_name, presence: {message: "動画ファイルを選択してください"}
+
 
   TYPE_NORMAL = 0
   TYPE_MODIFY = 1

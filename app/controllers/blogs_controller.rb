@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 class BlogsController < ApplicationController
-  before_filter :require_user
-  before_filter :page_title
+  before_filter :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
+  before_filter :set_title
 
   hankaku_filter
 
   # GET /blogs
   # GET /blogs.xml
   def index
-    if params[:username] && (params[:username] != current_user.login)
-      @user = User.find_by_login(params[:username])
-      @blogs = Blog.paginate(:conditions => {:user_id => @user.id}, :page => params[:page], :per_page => 10, :order => "id DESC")
+    if params[:username] && (params[:username] != current_user.username)
+      @user = User.find_by_username(params[:username])
+      @blogs = Blog.joins(:user).where(user_id: @user.id).page(params[:page]).per(15)
+      @page_title = "#{@user.dispname}の日記"
     else
-      @blogs = Blog.paginate(:conditions => {:user_id => current_user.id}, :page => params[:page], :per_page => 10, :order => "id DESC")
+      @blogs = Blog.joins(:user).where(user_id: current_user.id).page(params[:page]).per(15)
+      @page_title = "自分の日記"
     end
 
+    # ブログの最終作成日が直近の人の順に、ブログ記事のカウントとともにデータをセットする
     @blog_count_by_user = []
     tmp1 = Blog.count(:group => :user_id)
     tmp2 = Blog.maximum(:created_at, :group => :user_id, :order => "created_at DESC")
@@ -32,9 +35,9 @@ class BlogsController < ApplicationController
   def index_mobile
     if params[:username] && (params[:username] != current_user.login)
       @user = User.find_by_login(params[:username])
-      @blogs = Blog.paginate(:conditions => {:user_id => @user.id}, :page => params[:page], :per_page => 5, :order => "id DESC")
+      @blogs = Blog.joins(:user).where(user_id: @user.id).page(params[:page]).per(5)
     else
-      @blogs = Blog.paginate(:conditions => {:user_id => current_user.id}, :page => params[:page], :per_page => 5, :order => "id DESC")
+      @blogs = Blog.joins(:user).where(user_id: current_user.id).page(params[:page]).per(5)
     end
     @content_title = (@user ? @user.dispname : "自分") + "の日記"
 
@@ -64,27 +67,29 @@ class BlogsController < ApplicationController
   end
 
   # GET /blogs/1
-  # GET /blogs/1.xml
+  # GET /blogs/1.json
   def show
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
 
     @blog = Blog.find(params[:id])
 
+    @comment = BlogComment.new
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @blog }
+      format.json { render json: @blog }
     end
   end
 
+
   # GET /blogs/new
-  # GET /blogs/new.xml
+  # GET /blogs/new.json
   def new
     @blog = Blog.new
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @blog }
+      format.json { render json: @blog }
     end
   end
 
@@ -108,7 +113,7 @@ class BlogsController < ApplicationController
   end
 
   # POST /blogs
-  # POST /blogs.xml
+  # POST /blogs.json
   def create
     params[:blog][:user_id] = current_user.id
     @blog = Blog.new(params[:blog])
@@ -122,18 +127,17 @@ class BlogsController < ApplicationController
 
     respond_to do |format|
       if @blog.save
-        if params[:image]
-          image = BlogImage.new(params[:image])
-          @blog.blog_images << image
-        end
+        # if params[:image]
+          # image = BlogImage.new(params[:image])
+          # @blog.blog_images << image
+        # end
 
         @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
-
-        format.html { redirect_to(@blog, :notice => '作成しました') }
-        format.xml  { render :xml => @blog, :status => :created, :location => @blog }
+        format.html { redirect_to @blog, notice: '日記を投稿しました。' }
+        format.json { render json: @blog, status: :created, location: @blog }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @blog.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @blog.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -240,8 +244,9 @@ class BlogsController < ApplicationController
   end
 
 private
-  def page_title
-    @page_title = "日記"
+  def set_title
+    @blog = Blog.find(params[:id]) if params[:id].present?
+    @title = @blog.title if @blog.present?
   end
 
 end

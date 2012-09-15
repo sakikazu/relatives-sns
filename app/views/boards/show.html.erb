@@ -1,40 +1,46 @@
-<div id="show_board">
-  <%= link_to '一覧へ戻る', boards_path %>
-
-  <div class="once_content">
-    <div class="title">
-      <%= @board.title %> 
-      <%= link_to "(コメント数：#{@board.board_comments.size}）", "#comments" %>
-    </div>
-
-    <div class="info">
-      作成者：<%= @board.user.dispname %> | 
-      作成日時：<%= @board.created_at.to_s(:long) if @board.created_at %>
-    </div>
-    <div class="description">
-      <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach? %>
-      <p class="text"><%= sani_custom_br(@board.description) %></p>
-    </div>
-  </div>
-
-<div class="line_width100">
-  <a href="#comment_form" class="page_down">ページ最下部へ</a>
+<div class="form-actions">
+<%= link_to "掲示板一覧へ", boards_path, class: "btn" %>
 </div>
 
-<h3 class="normal">コメント</h3>
-<div id="comments">
+<div class="page-header">
+  <h3><%= @board.title %><small><%= link_to "(コメント数：#{@board.board_comments.size}）", "#comments" %></small></h3>
+</div>
+
+<div class="once_content span7">
+  <div class="info">
+    作成者：<%= @board.user.dispname %> | 
+    作成日時：<%= @board.created_at.to_s(:long) if @board.created_at %>
+  </div>
+  <div class="description">
+    <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach? %>
+    <p class="text"><%= sani_custom_br(@board.description) %></p>
+  </div>
+</div>
+<div class="clearfix"></div>
+
+<%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning" %>
+
+<div class="page-header">
+  <h3>コメント</h3>
+</div>
+
+<div id="comments" class="clearfix">
   <%= render :partial => "comments" %>
 </div>
 
-<h3 class="normal">新規コメント</h3>
+<div class="page-header">
+  <h3>新規コメント</h3>
+</div>
+
 <div id="comment_form">
 <!-- ※↓form_tagの時は、「multipart」属性は「:html =>」をつけないこと -->
 <%= form_tag({:action => :create_comment, :board_id => @board.id}, form_html_option) do %>
-  <%= text_area_tag :comment, nil, :size => "60x5" %><br />
+  <%= text_area_tag :comment, nil, class: "span6", rows: "5" %><br />
   <%= file_field_tag :attach %><br />
-  <br />
-  <%= submit_tag "投稿する" %>
+
+  <div class="form-actions">
+    <%= submit_tag "投稿する", class: "btn btn-primary" %>
+  </div>
 <% end -%>
 </div>
-</div> <!-- #show_board -->
 

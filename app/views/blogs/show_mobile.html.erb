@@ -18,7 +18,7 @@
     <p class="text"><%= sani_br(@blog.content) %></p>
     <br />
   </div>
-  <%= link_to '編集する', :action => :edit_mobile, :id => @blog.id if editable(@current_user, @blog.user) %>
+  <%= link_to '編集する', :action => :edit_mobile, :id => @blog.id if editable(current_user, @blog.user) %>
 </div>
 
 <br />
@@ -33,7 +33,7 @@
     <div class="content">
       <div class="text"><%= sani_br(co.content) %></div>
     </div>
-    <%= link_to "削除する", :action => :destroy_comment_confirm_mobile, :id => co.id if editable(@current_user, co.user) %><br />
+    <%= link_to "削除する", :action => :destroy_comment_confirm_mobile, :id => co.id if editable(current_user, co.user) %><br />
   <% end -%>
 
 <br />

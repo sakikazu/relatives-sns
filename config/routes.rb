@@ -10,9 +10,9 @@ ADan4::Application.routes.draw do
     end
   end
 
+  match 'blogs/user/:username' => 'blogs#index', as: :blogs_by_user
   resources :blogs do
     collection do
-      post :create_comment
       get :index_mobile
       get :everyone_mobile
       get :show_mobile
@@ -21,11 +21,22 @@ ADan4::Application.routes.draw do
       get :destroy_comment_confirm_mobile
       get :destroy_confirm_mobile
     end
+
+    # member do
+      # get 'new_images'
+      # post 'create_images'
+      # post 'symbol_images'
+    # end
+    # collection do
+      # delete 'destroy_image'
+    # end
+    resources :blog_comments, only: [:create, :destroy]
   end
 
   resources :movies do
     collection do
       post :create_comment
+      delete :destroy_comment
     end
   end
 

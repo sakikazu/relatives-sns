@@ -41,22 +41,23 @@
   // todo 整理したい
 
 //sakikazu RJSはまだprototype.js依存みたいだが、これを追加すればOK
-Element.update = function (element, html) {
-  $('#' + element).html(html);
-}
+// rails3.2なったらどうかな？コメントアウトして試してみる。てかもうRJS使ってないかも
+//Element.update = function (element, html) {
+//  $('#' + element).html(html);
+//}
 
 jQuery(document).ready(function(){
   //イイネしたメンバーをクリックで表示する
   nice_member = (function(){
     $('.nice_members').each(function(){
       $(this).css({'cursor' : 'pointer'});
-//      $(this).tipTip({
-//        content: $(this).attr('nice_members'),
-//        defaultPosition: "top",
-//        maxWidth: "auto",
-//        activation: "click",
-//        delay: 0,
-//      });
+      $(this).tipTip({
+        content: $(this).attr('nice_members'),
+        defaultPosition: "top",
+        maxWidth: "auto",
+        activation: "click",
+        delay: 0,
+      });
     });
   });
 
@@ -85,13 +86,6 @@ jQuery(document).ready(function(){
       arrowKey:false
     });
   });
-
-//  jQuery("#new_board_info").tipTip({
-//    content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
-//    defaultPosition: "right",
-//    maxWidth: "auto",
-//    delay: 0,
-//  });
 
   slide_effect = (function(){
     jQuery(".carousel-demo2").sliderkit({
@@ -214,7 +208,12 @@ jQuery(document).ready(function(){
            <ul class="nav">
              <li class="<%= controller.controller_name == "nices" ? "active" : "" %>"><%= link_to "人気", nices_path %></li>
              <li class="<%= controller.controller_name == "albums" ? "active" : "" %>"><%= link_to "アルバム", albums_path %></li>
+             <li class="<%= controller.controller_name == "blogs" ? "active" : "" %>"><%= link_to "日記", blogs_path %></li>
+             <li class="<%= controller.controller_name == "movies" ? "active" : "" %>"><%= link_to "動画", movies_path %></li>
+             <li class="<%= controller.controller_name == "boards" ? "active" : "" %>"><%= link_to "掲示板", boards_path %></li>
+             <li class="<%= controller.controller_name == "histories" ? "active" : "" %>"><%= link_to "年表", histories_path %></li>
              <li class="<%= controller.controller_name == "members" ? "active" : "" %>"><%= link_to "親戚データ", members_path %></li>
+
              <!-- todo ドロップダウンメニューに入れたら、httpメソッドがGETになってしまう？？ -->
              <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
              <li><a href="#" ><i class="icon-arrow-up"></i>&nbsp;TOP</a></li>
@@ -228,6 +227,7 @@ jQuery(document).ready(function(){
              <ul class="dropdown-menu">
                <li><a href="#">RSS</a></li>
                <li><a href="#">QRコード</a></li>
+               <li><%= link_to "その他", others_path %></li>
                <li class="divider"></li>
                <li><a href="#">HPについて</a></li>
              </ul>

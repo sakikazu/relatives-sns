@@ -1,4 +1,4 @@
 jQuery ->
   $("a[rel=popover]").popover()
-  $(".tooltip").tooltip()
-  $("a[rel=tooltip]").tooltip()
+  $(".tooltip").tooltip({'trigger' : 'click'})
+  $("a[rel=tooltip]").tooltip({'trigger' : 'click'})

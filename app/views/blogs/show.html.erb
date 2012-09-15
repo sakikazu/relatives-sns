@@ -1,45 +1,58 @@
-<div id="show_blog">
-  <%= link_to '自分の日記へ', blogs_path %> |
-  <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.login) unless @blog.user == current_user %>
-
-  <div class="once_content">
-    <div class="title">
-      <%= @blog.title %> 
-      <%= link_to "(コメント数：#{@blog.blog_comments.size}）", "#comments" %>
-    </div>
-
-    <div class="info">投稿日時：<%= @blog.created_at.to_s(:long) if @blog.created_at %></div>
-    <div class="description">
       <% @blog.blog_images.each do |image| -%>
         <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>
-        <%= link_to "削除", {:action => :destroy_image, :id => image.id}, :confirm => "画像を削除してもいいですか？" if image.image? && editable(@current_user, @blog.user) %>
+        <%= link_to "削除", {:action => :destroy_image, :id => image.id}, :confirm => "画像を削除してもいいですか？" if image.image? && editable(current_user, @blog.user) %>
       <% end -%>
-      <p class="text"><%= sani_custom_br(@blog.content) %></p>
+
+<%= link_to '自分の日記へ', blogs_path, class: "btn" %>
+<%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
+<%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
+<%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", :confirm => '本当に削除してもよろしいですか？' if editable(current_user, @blog.user) %>
+
+<div class="row">
+  <div class="span7">
+
+    <div class="page-header">
+      <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.blog_comments.size}）", "#comments" %></small></h3>
     </div>
-    <%= link_to '編集する', edit_blog_path(@blog) if editable(@current_user, @blog.user) %>
-    <div class="nice">
-      <span id="update_nice">
-        <%= nice_field(@blog, "blog", "#update_nice") %>
-      </span>
+
+    <div class="once_content">
+      <div class="info">
+        投稿者：<%= link_to @blog.user.dispname, blogs_path(user_id: @blog.user_id) %> | 
+        投稿日時：<%= @blog.created_at.to_s(:long) if @blog.created_at %>
+      </div>
+
+      <div class="description">
+        <div id="blog_images" class="cf">
+          <%# doc_images = @blog.asset_images.where(howuse_flg: 1) -%>
+          <%# doc_images.each do |asset| -%>
+            <%#= link_to image_tag(asset.image(:thumb)), asset.image(:large), {:class => 'colorbox'} if asset.image? %>
+            <%#= link_to "削除", {:action => :destroy_image, :id => image.id}, :confirm => "画像を削除してもいいですか？" if image.image? && editable(current_user, @blog.user) %>
+          <%# end -%>
+        </div>
+        <%#= "<hr>".html_safe if doc_images.present? %>
+        <p class="text"><%= @blog.content.html_safe %></p>
+      </div>
+      <div class="nice">
+        <span id="update_nice">
+          <%= nice_field(@blog, "blog", "#update_nice") %>
+        </span>
+      </div>
     </div>
-  </div>
 
-<div class="line_width100">
-  <a href="#comment_form" class="page_down">ページ最下部へ</a>
-</div>
+    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning" %>
 
-<h3 class="normal">コメント</h3>
-<div id="comments">
-  <%= render :partial => "comments" %>
-</div>
+    <div class="page-header"><h3>コメント</h3></div>
+    <div id="comments" style="width:550px">
+      <%= render :partial => "blog_comments/comments" %>
+    </div>
 
-<h3 class="normal">新規コメント</h3>
-<div id="comment_form">
-<%# form_tag :remote => true, :url => {:action => :create_comment, :blog_id => @blog.id}, :update => "comments", :condition => "$('#comment').val() != ''", :complete => "$('#comment').val('')" do %>
-<%= form_tag url_for(:action => :create_comment, :blog_id => @blog.id), :remote => true do %>
-  <%= text_area_tag :comment, nil, :size => "60x5" %><br />
-  <%= submit_tag "投稿する" %>
-<% end -%>
-</div>
-</div> <!-- #show_blog -->
+    <div class="page-header"><h3>新規コメント</h3></div>
+    <div id="comment_form">
+      <%= form_for @comment, url: blog_blog_comments_path(@blog.id), :remote => true do |f| %>
+        <%= f.text_area :content, rows: 5, class: "span5" %><br />
+        <%= f.submit "投稿する", class: "btn btn-primary" %>
+      <% end -%>
+    </div>
+  </div> <!-- .span -->
 
+</div> <!-- .row -->

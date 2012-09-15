@@ -228,6 +228,16 @@ footer {
  common
 **********************************************/
 
+.important {
+  font-weight: bold;
+  color: red;
+}
+.big {
+  font-size: 120%;
+}
+.block {
+  display: block;
+}
 .right {
   float: right;
 }
@@ -295,7 +305,7 @@ a.colorbox:hover img{
   color: black;
 }
 .once_content .for_index a {
-  color: black;
+  color: blueviolet;
  }
 .once_content .info{
   text-align: right;
@@ -392,7 +402,10 @@ a.colorbox:hover img{
   margin: auto;
 }
 
-
+/* history */
+#history_data td.comment{
+  background-color: #DCEAF4;
+}
 /*action_history*/
 #action_history .list{
   padding-top:7px;
@@ -438,5 +451,10 @@ a.colorbox:hover img{
 .mgn-t40 {
   margin-top: 40px;
 }
-
+.mgn-b20 {
+  margin-bottom: 20px;
+}
+.mgn-b40 {
+  margin-bottom: 40px;
+}
 

@@ -1,5 +1,9 @@
-<%= link_to '自分の日記へ', blogs_path %> | <%= link_to 'この日記を見る', @blog %>
+<%= link_to '自分の日記へ', blogs_path, class: "btn" %>
+<%= link_to 'この日記を見る', @blog, class: "btn" %>
+<div class="page-header">
+  <h3>日記を編集する<%= "<small>#{@page_desc}</small>" if @page_desc.present? %></h3>
+</div>
+<%#= link_to "画像をアップロードする", new_images_blog_path(@blog.id), class: "btn btn-success" if editable(current_user, @blog.user) %>
 
-<h1>編集する</h1>
+<%= render 'form' %>
 
-<%= render :partial => 'form' %>

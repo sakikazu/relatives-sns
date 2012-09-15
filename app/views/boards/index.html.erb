@@ -1,21 +1,32 @@
-<h3 class="normal"><%= link_to '新規作成', new_board_path %><span id="new_board_info" style="margin-left: 15px;font-size:75%;color:gray"><%= image_tag "info.png", :size => "20x20" %>日記との使い分け</span></h3> 
+<script>
+jQuery(document).ready(function(){
+  jQuery("#new_board_info").tipTip({
+    content: "<div style='font-size:17px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>",
+    defaultPosition: "right",
+    maxWidth: "auto",
+    delay: 0,
+  });
+});
+</script>
 
-<h3 class="normal">並び替える</h3>
+<%= link_to "新規作成", new_board_path, class: "btn btn-info" %>
+<a href="#" id="new_board_info"><i class="icon-exclamation-sign"></i>&nbsp;日記との使い分け</a>
+
+<div class="page-header"><h3>掲示板一覧</h3></div>
 <div class="select_menu clearfix">
   <% [["最新コメント順", 1], ["作成日時順", 2]].each do |n, i| -%>
     <% if @sort == i -%>
-      <%= link_to "<span class='selected'>#{n}</span>".html_safe, boards_path(:sort => i) %>
+      <%= link_to n, boards_path(:sort => i), class: "btn btn-danger disabled" %>
     <% else -%>
-      <%= link_to "<span>#{n}</span>".html_safe, boards_path(:sort => i) %>
+      <%= link_to n, boards_path(:sort => i), class: "btn btn-danger" %>
     <% end -%>
   <% end -%>
 </div>
 
-<%= will_paginate @boards, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
-<div id="board">
+<%= paginate @boards, window: 2 %>
 <% @boards.each do |board| %>
-  <div class="once_board">
-    <div class="title"><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", board %></div>
+  <div class="well">
+    <ul class="nav nav-list"><li class="nav-header"><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", board %></li></ul>
     <% if board.attach? -%> 
       <%= link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => colorbox_class} %>
       <br />
@@ -31,5 +42,4 @@
     </div>
   </div>
 <% end %>
-</div>
-<%= will_paginate @boards, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
+<%= paginate @boards, window: 2 %>

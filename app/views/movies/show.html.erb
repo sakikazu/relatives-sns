@@ -1,52 +1,56 @@
-<div id="show_movie">
-  <%= link_to '編集する', edit_movie_path(@movie) %> |
-  <%= link_to '動画一覧へ戻る', movies_path %>
+<div class="form-actions">
+  <%= link_to "動画一覧へ", movies_path, class: "btn" %>
+  <%= link_to '編集する', edit_movie_path(@movie), class: "btn btn-info" %>
+</div>
 
-  <div class="once_content">
-    <div class="title">
-      <%= @movie.title %> 
-      <%= link_to "(コメント数：#{@movie.movie_comments.size}）", "#comments" %>
-    </div>
+<div class="page-header">
+  <h3><%= @movie.title %><small><%= link_to "(コメント数：#{@movie.movie_comments.size}）", "#comments" %></small></h3>
+</div>
 
-    <div class="info">
-      作成者:<%= @movie.user.dispname %> | 
-      作成日時:<%= @movie.created_at.to_s(:long) if @movie.created_at %>
-    </div>
-    <div class="description">
-      <div id="container2"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>
-      <%= javascript_include_tag 'swfobject/swfobject' %>
-      <script type="text/javascript">
-        var s1 = new SWFObject("../../javascripts/swfobject/player.swf","ply","512","384","9","#FFFFFF");
-        s1.addParam("allowfullscreen","true");
-        s1.addParam("allowscriptaccess","always");
-        s1.addParam("flashvars","file=../../uploads/movie/<%= @movie.id %>/original/<%= @movie.movie_file_name %>&image=<%= @movie.thumb(:large) if @movie.thumb? %>");
-        s1.write("container2");
-        </script>
+<div class="once_content span7">
+  <div class="info">
+    作成者:<%= @movie.user.dispname %> | 
+    作成日時:<%= @movie.created_at.to_s(:long) if @movie.created_at %>
+  </div>
+  <div class="description">
+    <div id="container2"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>
+    <%= javascript_include_tag 'swfobject/swfobject' %>
+    <script type="text/javascript">
+      var s1 = new SWFObject("/assets/swfobject/player.swf","ply","512","384","9","#FFFFFF");
+      s1.addParam("allowfullscreen","true");
+      s1.addParam("allowscriptaccess","always");
+      s1.addParam("flashvars","file=/upload/movie/<%= @movie.id %>/original/<%= @movie.movie_file_name %>&image=<%= @movie.thumb(:large) if @movie.thumb? %>");
+      s1.write("container2");
+      </script>
       <div class="text"><%= sani_custom_br(@movie.description) %></div>
+  </div>
+  <div class="nice">
+    <span id="update_nice">
+      <%= nice_field(@movie, "movie", "#update_nice") %>
+    </span>
+  </div>
+</div>
+<div class="clearfix"></div>
+
+<a href="#comment_form" class="btn btn-warning">ページ最下部へ</a>
+
+<div class="page-header">
+  <h3>コメント</h3>
+</div>
+
+<div id="comments" class="clearfix">
+  <%= render :partial => "comments" %>
+</div>
+
+<div class="page-header">
+  <h3>新規コメント</h3>
+</div>
+
+<div id="comment_form">
+  <%= form_tag url_for(:action => :create_comment, :movie_id => @movie.id), :remote => true do %>
+    <%= text_area_tag :comment, nil, class: "span6", rows: "5" %><br />
+    <div class="form-actions">
+      <%= submit_tag "投稿する", class: "btn btn-primary" %>
     </div>
-    <div class="nice">
-      <span id="update_nice">
-        <%= nice_field(@movie, "movie", "#update_nice") %>
-      </span>
-    </div>
-  </div>
-
-  <div class="line_width100">
-    <a href="#comment_form" class="page_down">ページ最下部へ</a>
-  </div>
-
-  <h3 class="normal">コメント</h3>
-  <div id="comments">
-    <%= render :partial => "comments" %>
-  </div>
-
-  <h3 class="normal">新規コメント</h3>
-  <div id="comment_form">
-    <%# form_tag :remote => true, :url => {:action => :create_comment, :movie_id => @movie.id}, :update => "comments", :condition => "$('#comment').val() != ''", :complete => "$('#comment').val('')" do %>
-      <%= form_tag url_for(:action => :create_comment, :movie_id => @movie.id), :remote => true do %>
-        <%= text_area_tag :comment, nil, :size => "60x5" %><br />
-        <%= submit_tag "投稿する" %>
-      <% end -%>
-  </div>
-</div> <!-- #show_movie -->
-
+  <% end -%>
+</div>

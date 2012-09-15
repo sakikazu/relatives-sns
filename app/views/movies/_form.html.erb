@@ -1,28 +1,18 @@
-<%= form_for(@movie, :html => {:multipart => true}) do |f| %>
-   <p>
-    <%= f.label :title, "タイトル" %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :description, "説明" %><br />
-    <%= f.text_area :description %>
-  </p>
-  <p>
-    <%= f.label :movie, "動画 ※ファイル名に日本語を含めないようにしてね" %><br />
-    <%= f.file_field :movie %>
-  </p>
-  <p>
-    <%= f.label :thumb, "サムネイル(指定しなくてもいいです)" %><br />
-    <%= f.file_field :thumb %>
-  </p>
-  <p>
-    <%= f.label :movie_type, "編集動画 ※編集された動画ならチェックを入れてください" %><br />
-    <%= f.check_box :movie_type %>
-  </p>
+<%= simple_form_for(@movie, :html => form_html_option) do |f| %>
+  <% if @movie.errors.any? %>
+    <div class="alert alert-error"><p>入力エラーがあります。下記のエラー内容を確認してください。</p></div>
+  <% end %>
 
-   <p>
-    <%= f.submit %>
-  </p>
+  <%= f.input :title, label: "タイトル" %>
+  <%= f.input :description, label: "説明", input_html: {class: "span6", rows: 8} %>
+  <%= f.input :movie, label: "動画 ※ファイル名に日本語を含めないようにしてね", label_html: {class: "mgn-t20"} %>
+  <%= f.error :movie_file_name, class: 'important big' %>
+  <%= f.input :thumb, label: "サムネイル(指定しなくてもいいです)", label_html: {class: "mgn-t20"} %>
+  <%= f.input :movie_type, as: "radio_buttons", label: "編集された動画かどうか", label_html: {class: "mgn-t20"}, collection: [['はい', '1'] ,['いいえ', '0']] %>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
 <% end %>
 
 
@@ -46,7 +36,7 @@
 <b>おまかせ：iPad向け-H.264(低画質)</b><br />
 にすれば他の項目が自動で設定されます(画像参照)<br />
 <br />
-<%= link_to image_tag("/images/setting_BatchDooR.jpg"), "/images/setting_BatchDooR.jpg" %><br />
+<%= link_to image_tag("/assets/setting_BatchDooR.jpg"), "/assets/setting_BatchDooR.jpg" %><br />
 <br /> <br />
 
 ※下記がこうなってればOKです※<br />

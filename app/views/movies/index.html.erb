@@ -1,31 +1,33 @@
-<h3 class="normal"><%= link_to '新規作成 (動画準備の解説あり)', new_movie_path %></h3>
+<%= link_to "新規作成 (動画準備の解説あり)", new_movie_path, class: "btn btn-info" %>
 
-<h3 class="normal">動画一覧</h3>
+<div class="page-header"><h3>動画一覧</h3></div>
 <div class="select_menu clearfix">
   <% [["編集動画", 1], ["編集なし動画", 2]].each do |n, i| -%>
     <% if @sort == i -%>
-      <%= link_to "<span class='selected'>#{n}</span>".html_safe, movies_path(:sort => i) %>
+      <%= link_to n, movies_path(:sort => i), class: "btn btn-danger disabled" %>
     <% else -%>
-      <%= link_to "<span>#{n}</span>".html_safe, movies_path(:sort => i) %>
+      <%= link_to n, movies_path(:sort => i), class: "btn btn-danger" %>
     <% end -%>
   <% end -%>
 </div>
 
-
-<div id="movie">
-<%= will_paginate @movies, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
-<% @movies.each do |movie| -%>
-  <div class="once_movie">
-    <div class="title"><%= link_to "#{movie.title}(#{movie.movie_comments.size})", movie %></div>
-    <%= image_tag movie.thumb(:thumb) if movie.thumb? %>
-    <p class="bar">
-      作成者：<%= movie.user.dispname %><br />
-      作成日時：<%= movie.created_at.to_s(:short2) if movie.created_at %><br />
-      最終コメント日時：<%= movie.movie_comments.last.created_at.to_s(:short2) if movie.movie_comments.last && movie.movie_comments.last.created_at %><br />
-    </p>
-    <%= link_to '編集する', edit_movie_path(movie) if editable(@current_user, movie.user) %>
-    <%= link_to '削除する', movie, :confirm => '本当に削除してもよろしいですか？', :method => :delete if editable(@current_user, movie.user) %>
+<%= paginate @movies, window: 2 %>
+<% @movies.each do |movie| %>
+  <div class="well">
+    <ul class="nav nav-list"><li class="nav-header"><%= link_to "#{movie.title} (コメント数：#{movie.movie_comments.size})", movie %></li></ul>
+    <% if movie.thumb? -%> 
+      <%= image_tag(movie.thumb(:thumb)) %>
+      <br />
+    <% end -%>
+    <div class="bar">
+      <%= "作成者：#{movie.user.dispname}" %> | <%= "作成日時：#{movie.created_at.to_s(:short2)}" %>
+      <%= " | 最新コメント日時：#{movie.movie_comments.last.created_at.to_s(:short2)}" if movie.movie_comments.last && movie.movie_comments.last.created_at %>
+      <br />
+      <% if editable(current_user, movie.user) -%>
+        <%= link_to '編集', edit_movie_path(movie) %>
+        <%= link_to '削除', movie, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+      <% end -%>
+    </div>
   </div>
-<% end -%>
-<%= will_paginate @movies, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
-</div>
+<% end %>
+<%= paginate @movies, window: 2 %>

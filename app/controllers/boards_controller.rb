@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
 class BoardsController < ApplicationController
-  before_filter :require_user
+  before_filter :authenticate_user!
   before_filter :page_title
 
   # GET /boards
   # GET /boards.xml
   def index
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
-    case @sort 
+    case @sort
     when 1
       buf = BoardComment.maximum(:created_at, :group => :board_id)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
-      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.paginate(:page => params[:page], :per_page => 20)
+      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
+      @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(20)
     when 2
-      @boards = Board.paginate(:page => params[:page], :per_page => 20, :order => "created_at DESC")
+      @boards = Board.page(params[:page]).per(20)
     else
       buf = BoardComment.maximum(:created_at, :group => :board_id)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
-      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.paginate(:page => params[:page], :per_page => 20)
+      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
+      @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(20)
     end
 
     respond_to do |format|
@@ -33,13 +35,13 @@ class BoardsController < ApplicationController
     when 1
       buf = BoardComment.maximum(:created_at, :group => :board_id)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
-      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.paginate(:page => params[:page], :per_page => 7)
+      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.page(params[:page]).per(7)
     when 2
-      @boards = Board.paginate(:page => params[:page], :per_page => 7, :order => "created_at DESC")
+      @boards = Board.page(params[:page]).per(7)
     else
       buf = BoardComment.maximum(:created_at, :group => :board_id)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
-      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.paginate(:page => params[:page], :per_page => 7)
+      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.page(params[:page]).per(7)
     end
 
     set_header
@@ -62,7 +64,7 @@ class BoardsController < ApplicationController
 
   def show_mobile
     @board = Board.find(params[:id])
-    @board_comments = @board.board_comments.paginate(:page => params[:page], :per_page => 10, :order => "created_at DESC")
+    @board_comments = @board.board_comments.page(params[:page]).per(10)
     set_header
     render :action => :show_mobile, :layout => "mobile"
   end
@@ -124,7 +126,7 @@ class BoardsController < ApplicationController
     @board.destroy
 
     respond_to do |format|
-      format.html { redirect_to(boards_url) }
+      format.html { redirect_to(boards_url, notice: "削除しました") }
       format.xml  { head :ok }
     end
   end
@@ -134,7 +136,7 @@ class BoardsController < ApplicationController
     @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
 
     #UpdateHistory
-    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :assetable_id => @board.id})
+    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id})
     if uh
       uh.update_attributes(:updated_at => Time.now)
     else
@@ -150,7 +152,7 @@ class BoardsController < ApplicationController
     @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
 
     #UpdateHistory
-    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :assetable_id => @board.id})
+    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id})
     if uh
       uh.update_attributes(:updated_at => Time.now)
     else

@@ -1,11 +1,11 @@
 <% @movie.movie_comments.each do |co| -%>
-  <div class="once_comment">
-    <div class="bar">
-      <span class="name"><%= co.user.dispname %></span><span class="time">投稿日時：<%= co.created_at.to_s(:long) %></span>
+  <div class="once_comment span6">
+    <div class="info">
+      <span class="name"><%= co.user.try(:dispname) %></span><span class="time">投稿日時：<%= l co.created_at %></span>
     </div>
     <div class="content">
       <div class="text"><%= sani_custom_br(co.content) %></div>
     </div>
-    <%= link_to "削除する", destroy_comment_movie_path(:id => co.id), :confirm => "本当に削除してもよろしいですか？" if editable(@current_user, co.user) %>
+    <%= link_to "削除する", destroy_comment_movies_path(:comment_id => co.id), method: :delete, :confirm => "本当に削除してもよろしいですか？" if editable(current_user, co.user) %>
   </div>
 <% end -%>

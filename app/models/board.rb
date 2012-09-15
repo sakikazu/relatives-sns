@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 class Board < ActiveRecord::Base
+  acts_as_paranoid
+
   belongs_to :user
   has_many :board_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  attr_accessor :sort_at
+  default_scope order("created_at DESC")
 
-  acts_as_paranoid
+  attr_accessible :title, :description, :attach, :user_id
+  attr_accessor :sort_at
 
   content_name = "board"
   has_attached_file :attach,
