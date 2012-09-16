@@ -54,7 +54,7 @@
 .mutter_rows {
   padding: 0px;
   /* width: 620px; */
-  margin-left: 15px;
+  margin-left: 0px;
 }
 .mutter_rows .content {
   display: block;
@@ -107,15 +107,17 @@
 }
 
 ul.children {
-  border: 1px solid #EBEBEB;
-  border-radius: 4px 4px 4px 4px;
+  background: #DCEAF4;
   /* width: 550px; */
-  margin-left: 80px;
+  /* margin-left: 80px; */
+  margin: 15px;
 }
 
 ul.children li {
   background-color: #DCEAF4;
-  border: none;
+  border: 1px solid lightblue;
+  border-radius: 4px 4px 4px 4px;
+  margin-top: 0px;
 }
 
 #nichirei {
@@ -397,10 +399,6 @@ a.colorbox:hover img{
   /* border: solid 2px #161616; */
 }
 
-#slideshow_comment {
-  width: 550px;
-  margin: auto;
-}
 
 /* history */
 #history_data td.comment{

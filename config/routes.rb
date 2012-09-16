@@ -85,7 +85,7 @@ ADan4::Application.routes.draw do
 
   resources :others do
     collection do
-      get :old_site
+      get :about
       get :he
     end
   end

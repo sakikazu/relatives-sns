@@ -1,3 +1,6 @@
+<div class="row">
+  <div class="span7 offset2">
+
 <div class="form-actions">
 <%= link_to "掲示板一覧へ", boards_path, class: "btn" %>
 </div>
@@ -18,7 +21,7 @@
 </div>
 <div class="clearfix"></div>
 
-<%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning" %>
+<%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" %>
 
 <div class="page-header">
   <h3>コメント</h3>
@@ -28,14 +31,10 @@
   <%= render :partial => "comments" %>
 </div>
 
-<div class="page-header">
-  <h3>新規コメント</h3>
-</div>
-
 <div id="comment_form">
 <!-- ※↓form_tagの時は、「multipart」属性は「:html =>」をつけないこと -->
 <%= form_tag({:action => :create_comment, :board_id => @board.id}, form_html_option) do %>
-  <%= text_area_tag :comment, nil, class: "span6", rows: "5" %><br />
+  <%= text_area_tag :comment, nil, class: "span6", rows: "5", placeholder: "コメントする" %><br />
   <%= file_field_tag :attach %><br />
 
   <div class="form-actions">
@@ -44,3 +43,5 @@
 <% end -%>
 </div>
 
+ </div>
+</div>

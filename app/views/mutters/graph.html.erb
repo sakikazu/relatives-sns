@@ -1,18 +1,19 @@
-<% content_for :add_jscss do %>
-  <%= stylesheet_link_tag 'jquery.jqplot.min' %>
-  <%= javascript_include_tag 'jqplot/jquery.jqplot.min' %>
-  <%= javascript_include_tag 'jqplot/plugins/jqplot.cursor.min' %>
-  <%= javascript_include_tag 'jqplot/plugins/jqplot.highlighter.min' %>
-  <%= javascript_include_tag 'jqplot/plugins/jqplot.dateAxisRenderer.min' %>
-  <%= javascript_include_tag 'jqplot/plugins/jqplot.barRenderer.min' %>
-<% end %>
+<%# content_for :add_jscss do %>
+  <%#= stylesheet_link_tag 'jquery.jqplot.min' %>
+  <%#= javascript_include_tag 'jqplot/jquery.jqplot.min' %>
+  <%#= javascript_include_tag 'jqplot/excanvas.min' %>
+  <%#= javascript_include_tag 'jqplot/plugins/jqplot.cursor.min' %>
+  <%#= javascript_include_tag 'jqplot/plugins/jqplot.highlighter.min' %>
+  <%#= javascript_include_tag 'jqplot/plugins/jqplot.dateAxisRenderer.min' %>
+  <%#= javascript_include_tag 'jqplot/plugins/jqplot.barRenderer.min' %>
+<%# end %>
 
 <script>
 $(document).ready(function() {
 
   var line1=[
 <% @mutters_count.each do |data| -%>
-  <%= "['#{data[0]}', #{data[1]}]," %>
+  <%= "['#{data[0]}', #{data[1]}],".html_safe %>
 <% end -%>
   ];
   var plot = $.jqplot('chart', [line1], {
@@ -51,14 +52,14 @@ $(document).ready(function() {
 </script>
 
 <div id="mutter_graph">
-<%= form_tag graph_mutters_path, :method => "get" do %>
-  <%= select_tag "year", options_for_select(2008..Date.today.year) %>
-  <%= select_tag "month", options_for_select(1..12), :include_blank => true %>
-  <%= submit_tag "期間を選択して表示", :class => "button" %>
+<%= simple_form_for @mutter, url: graph_mutters_path, :method => "get" do |f| %>
+  <%= f.select "year", (2008..Date.today.year).map{|y| [y, y]}, input_html: {class: "span1"} %>
+  <%= f.select "month", (1..12).map{|m| [m, m]}, :include_blank => true, class: "span1" %>
+  <%= f.submit "期間を選択して表示", :class => "btn" %>
 <% end -%>
 <%= form_tag graph_mutters_path, :method => "get" do %>
   <%= hidden_field_tag :all, 1 %>
-  <%= submit_tag "全期間を表示", :class => "button" %>
+  <%= submit_tag "全期間を表示", :class => "btn" %>
 <% end -%>
 </div>
 

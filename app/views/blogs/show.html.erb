@@ -3,13 +3,14 @@
         <%= link_to "削除", {:action => :destroy_image, :id => image.id}, :confirm => "画像を削除してもいいですか？" if image.image? && editable(current_user, @blog.user) %>
       <% end -%>
 
-<%= link_to '自分の日記へ', blogs_path, class: "btn" %>
-<%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
-<%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
-<%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", :confirm => '本当に削除してもよろしいですか？' if editable(current_user, @blog.user) %>
-
 <div class="row">
-  <div class="span7">
+  <div class="span7 offset2">
+    <div class="form-actions">
+    <%= link_to '自分の日記へ', blogs_path, class: "btn" %>
+    <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
+    <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
+    <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", :confirm => '本当に削除してもよろしいですか？' if editable(current_user, @blog.user) %>
+    </div>
 
     <div class="page-header">
       <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.blog_comments.size}）", "#comments" %></small></h3>
@@ -39,17 +40,16 @@
       </div>
     </div>
 
-    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning" %>
+    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" %>
 
     <div class="page-header"><h3>コメント</h3></div>
-    <div id="comments" style="width:550px">
+    <div id="comments">
       <%= render :partial => "blog_comments/comments" %>
     </div>
 
-    <div class="page-header"><h3>新規コメント</h3></div>
     <div id="comment_form">
       <%= form_for @comment, url: blog_blog_comments_path(@blog.id), :remote => true do |f| %>
-        <%= f.text_area :content, rows: 5, class: "span5" %><br />
+        <%= f.text_area :content, rows: 5, class: "span5", placeholder: "コメントする" %><br />
         <%= f.submit "投稿する", class: "btn btn-primary" %>
       <% end -%>
     </div>

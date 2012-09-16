@@ -1,7 +1,7 @@
 <% if @action_flg != nil && @action_flg != 0 %>
-  <%= form_tag search_mutters_path, {:remote => true, :method => :get} do %>
-    <%= hidden_field_tag :action_flg, 0 %>
-    <%= submit_tag "検索結果を解除する", class: "btn" %>
+  <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
+    <%= f.hidden_field :action_flg, value: 0 %>
+    <%= f.submit "検索結果を解除する", class: "btn" %>
   <% end -%>
 <% end -%>
 <ul class="mutter_rows">

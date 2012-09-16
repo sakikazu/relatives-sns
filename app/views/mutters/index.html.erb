@@ -121,9 +121,7 @@ $(document).ready(function(){
 <div class="row">
   <div class="span4">
     <div class="well sidebar-nav">
-      <ul class="nav nav-list">
-        <li class="nav-header text-center">― 日齢 ― 生まれて何日？</li>
-      </ul>
+      <legend class="text-center">― 日齢 ― 生まれて何日？</legend>
       <div id="nichirei">
         <% if @nichirei -%>
           <div class="main"><%= @nichirei %>日</div>
@@ -137,10 +135,8 @@ $(document).ready(function(){
     </div><!--/.well -->
 
     <div class="well sidebar-nav">
-      <ul class="nav nav-list">
-        <li class="nav-header text-center">みんなの誕生記念日</li>
-      </ul>
-   <table>
+      <legend class="text-center">みんなの誕生記念日</legend>
+      <table>
     <% @kinen.each do |k| -%>
       <% if k[:count] == 0 -%>
         <tr>
@@ -173,21 +169,18 @@ $(document).ready(function(){
 
 
           <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header text-center">みんなの新着情報</li>
-    <div class="summary"><%= link_to '＜一気に見る＞', update_allview_mutters_path %></div>
-    <div class="list">
-      <%= render :partial => "update_history" %>
-    </div>
-    <b><%= link_to "すべて見る", :action => :update_history_all %></b>
-
-            </ul>
+            <legend class="text-center">みんなの新着情報</legend>
+            <%= link_to '一 気 に 見 る', update_allview_mutters_path, class: "btn btn-info btn-block" %>
+            <table class="table table-striped table-condensed mgn-t20">
+              <%= render :partial => "update_history" %>
+              <tr>
+                <td><%= link_to "すべて見る", {:action => :update_history_all}, class: "btn btn-success btn-block" %></td>
+              </tr>
+            </table>
           </div><!--/.well -->
 
           <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header text-center">みんなのアクセス情報</li>
-            </ul>
+              <legend class="text-center">みんなのアクセス情報</legend>
     <table class="table table-striped table-condensed">
     <% @login_users.each_with_index do |user, idx| -%>
 <% if idx > 20 -%>
@@ -200,7 +193,7 @@ $(document).ready(function(){
       </tr>
     <% end -%>
     </table>
-    <div id="link_recent_login_users" onclick="javascript:show_recent_login_users()">もっと見る(直近40人分)</div>
+    <div id="link_recent_login_users" class="btn btn-success btn-block" onclick="javascript:show_recent_login_users()">もっと見る(直近40人分)</div>
 
           </div><!--/.well -->
 
@@ -224,14 +217,19 @@ $(document).ready(function(){
     <%#= link_to '写真付きでつぶやく', :action => "new_from_mail" if request.smart_phone? %>
 
     <div id="form_search" class="well" style="padding-left:8px; padding-right:8px;">
-      <%= form_for @mutter, url: search_mutters_path(action_flg: 1), :remote => true, :method => :get do |f| %>
+      <div class="input-append span4">
+      <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
         <%= f.text_field :search_word, class: "span2" %>
+        <%= f.hidden_field :action_flg, value: 1 %>
         <%= f.submit "発言内容から検索する", class: "btn btn-info" %>
       <% end %>
-      <%= form_for @mutter, url: search_mutters_path(action_flg: 2), :remote => true, :method => :get do |f| %>
+      </div>
+      <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, class: "span2" do |f| %>
+        <%= f.hidden_field :action_flg, value: 2 %>
         <%= f.submit "画像が含まれる", class: "btn btn-info" %>
       <% end %>
-      <%= form_for @mutter, url: search_mutters_path(action_flg: 3), :remote => true, :method => :get do |f| %>
+      <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, class: "span2" do |f| %>
+        <%= f.hidden_field :action_flg, value: 3 %>
         <%= f.submit "URLが含まれる", class: "btn btn-info" %>
       <% end %>
     </div>
@@ -248,14 +246,5 @@ $(document).ready(function(){
     </div>
   </div> <!-- #mutter -->
 
-
-<ul>
-  <li><%= link_to "sqlbuddy", "http://182.163.58.103/sqlbuddy/#page=home" %></li>
-  <li><%= link_to "phpMyAdmin", "http://182.163.58.103/phpmyadmin/index.php?db=adan&target=db_structure.php&token=957d66fdcf377401bfc14c9f9ef8f0ec" %></li>
-  <li><%= link_to "old_a-dan", "http://182.163.58.103/a-dan" %></li>
-</ul>
-
         </div>
       </div><!--/row-->
-
-

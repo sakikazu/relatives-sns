@@ -8,6 +8,8 @@ class Board < ActiveRecord::Base
 
   default_scope order("created_at DESC")
 
+  validates :title, presence: true
+
   attr_accessible :title, :description, :attach, :user_id
   attr_accessor :sort_at
 

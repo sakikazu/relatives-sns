@@ -8,7 +8,14 @@ class MuttersController < ApplicationController
   cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
   def graph
-    if params[:all].present? or params[:year].blank?
+    # allが選択された時も、年月選択フィールドは今月を選択しておきたいので@mutterを設定しておく
+    if params[:mutter].blank? or params[:all].present?
+      @mutter = Mutter.new(year: Date.today.year, month: Date.today.month)
+    else
+      @mutter = Mutter.new(params[:mutter])
+    end
+
+    if params[:all].present?
       @mutters_count = Mutter.group("DATE_FORMAT(created_at, '%Y/%m')").count
       @mutters_count = @mutters_count.map{|m| ["#{m[0]}/01", m[1]]}
       @format = "%y年%m月"
@@ -17,15 +24,17 @@ class MuttersController < ApplicationController
       @range_for_title = "全期間：2008年 - #{Date.today.year}年"
       @flg = 0
     else
-      year = params[:year]
-      month = params[:month]
+      year = @mutter.year
+      month = @mutter.month
 
       if year.present? and month.present?
         @mutters_count = Mutter.where("created_at >= ? and created_at <= ?", "#{year}/#{month}/1", "#{year}/#{month}/31").group("DATE_FORMAT(created_at, '%Y/%m/%d')").count.to_a
         @format = "%#d日"
-        @min = "#{year}-#{month}-1" 
+        @min = "#{year}-#{month}-1"
         @interval = "1 day"
         @range_for_title = "#{year}年#{month}月"
+
+        # 初期表示(今月分を表示する）
       elsif year.present? and month.blank?
         @mutters_count = Mutter.where("created_at >= ? and created_at <= ?", "#{year}/1/1", "#{year}/12/31").group("DATE_FORMAT(created_at, '%Y/%m')").count
         @mutters_count = @mutters_count.map{|m| ["#{m[0]}/01", m[1]]}
@@ -61,6 +70,9 @@ class MuttersController < ApplicationController
     when 1
       str = params["mutter"][:search_word]
       @mutters = Mutter.includes_all.where('content like :q', :q => "%#{str}%").order('id DESC')
+
+      # 検索ワードを画面に表示し続けるため
+      @mutter = Mutter.new(params[:mutter])
     when 2
       @mutters = Mutter.includes_all.where('mutters.image_file_name IS NOT NULL').order('id DESC')
     when 3
@@ -93,8 +105,8 @@ class MuttersController < ApplicationController
       ai = UpdateHistory::ACTION_INFO[obj.action_type]
       time = obj.updated_at || obj.created_at
       @contents << {
-        :title => "[#{time.to_s(:short3)}] [#{ai[:content_name]}]#{obj.user.dispname}が「#{obj.assetable.title}」#{ai[:info]}",
-        :description => obj.assetable.title,
+        :title => "[#{time.to_s(:short3)}] [#{ai[:content_name]}]#{obj.user.dispname}が「#{obj.content.title}」#{ai[:info]}",
+        :description => obj.content.title,
         :updated_at => time}
     end
 
@@ -299,25 +311,25 @@ class MuttersController < ApplicationController
     ai = UpdateHistory::ACTION_INFO[up.action_type]
     case up.action_type
     when UpdateHistory::ALBUM_CREATE
-      redirect_to album_path(up.assetable, "sort" => 2, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(up.content, "sort" => 2, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUM_COMMENT
-      redirect_to album_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUMPHOTO_CREATE
-      redirect_to album_path(up.assetable, "sort" => 1, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(up.content, "sort" => 1, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO
-      redirect_to slideshow_photo_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to slideshow_photo_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::BOARD_CREATE, UpdateHistory::BOARD_COMMENT
-      redirect_to board_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to board_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::MOVIE_CREATE, UpdateHistory::MOVIE_COMMENT
-      redirect_to movie_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to movie_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::BLOG_CREATE, UpdateHistory::BLOG_COMMENT
-      redirect_to blog_path(up.assetable, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to blog_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     end
   end
 
   private
   def recursive_for_update_all_view(prev, current, next_page)
-    if prev.assetable == current.assetable
+    if prev.content == current.content
       next_page += 1
       up_next = UpdateHistory.view_offset(next_page).first
       recursive_for_update_all_view(current, up_next, next_page)

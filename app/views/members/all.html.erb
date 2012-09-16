@@ -1,3 +1,6 @@
+<div class="row">
+  <div class="span7 offset2">
+
 <div class="form-actions">
 <%= link_to "親戚データ一覧へ", members_path, class: "btn" %>
 </div>
@@ -11,9 +14,7 @@
 
 <% @users.each do |user| -%>
 <div id=<%= user.username %>>
-<hr />
-<h2><%= user.dispname(User::FULLNICK) %></h2>
-<br />
+<div class="page-header"><h3><%= user.dispname(User::FULLNICK) %></h3></div>
 <%= link_to((image_tag user.user_ext.image(:thumb)), user.user_ext.image.url(:large), {:class => colorbox_class}) if  user.user_ext.image? %>
 
 <table class="table table-striped table-bordered table-hover table-condensed">
@@ -27,7 +28,7 @@
   <tr><th>趣味</th><td><%= user.user_ext.hobby %></td></tr>
   <tr><th>特技</th><td><%= user.user_ext.skill %></td></tr>
   <tr><th>アピールとか</th><td><%= sani_custom_br(user.user_ext.free_text) %></td></tr>
-  <tr><th>関係する11兄弟</th><td><%= user.user_ext.root11_name %></td></tr>
+  <tr><th>関係する11兄弟</th><td><%= user.root11_name %></td></tr>
   <tr><th>generation</th><td></td></tr> <!--t.integer  "generation"-->
   <tr><th>性格</th><td><%= user.user_ext.character %></td></tr>
   <tr><th>自慢</th><td><%= user.user_ext.jiman %></td></tr>
@@ -50,3 +51,6 @@
 
 </div>
 <% end -%>
+
+ </div>
+</div>

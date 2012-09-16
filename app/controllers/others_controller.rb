@@ -5,7 +5,7 @@ class OthersController < ApplicationController
   def index
   end
 
-  def old_site
+  def about
   end
 
   def lab

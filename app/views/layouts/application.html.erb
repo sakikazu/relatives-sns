@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "ADan4" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "AdanHP" %></title>
     <%= csrf_meta_tags %>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -175,35 +175,20 @@ jQuery(document).ready(function(){
 });
 </script>
 
-<%#= calendar_date_select_includes %>
-<script type="text/javascript">
-  //calendar_date_select日本語化
-  _translations = {
-    "OK": "OK",
-    "Now": "現在",
-    "Today": "今日",
-    "Clear": "戻る"
-  }
-  //Date.weekdays = $w("日 月 火 水 木 金 土");
-  //Date.months = $w("1 2 3 4 5 6 7 8 9 10 11 12" );
-</script>
-
-
-
  </head>
  <body>
 
    <div class="navbar navbar-fixed-top navbar-inverse">
      <div class="navbar-inner">
        <div class="container">
-         <!-- スマホから見た時の小さいメニューボタン用 -->
+         <!-- 小さい画面で見た時の小さいメニューボタン用 -->
          <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
            <span class="icon-bar"></span>
            <span class="icon-bar"></span>
            <span class="icon-bar"></span>
          </a>
 
-         <a class="brand" href="/">ADan4</a>
+         <a class="brand" href="/">AdanHP</a>
          <div class="container nav-collapse">
            <ul class="nav">
              <li class="<%= controller.controller_name == "nices" ? "active" : "" %>"><%= link_to "人気", nices_path %></li>
@@ -213,35 +198,36 @@ jQuery(document).ready(function(){
              <li class="<%= controller.controller_name == "boards" ? "active" : "" %>"><%= link_to "掲示板", boards_path %></li>
              <li class="<%= controller.controller_name == "histories" ? "active" : "" %>"><%= link_to "年表", histories_path %></li>
              <li class="<%= controller.controller_name == "members" ? "active" : "" %>"><%= link_to "親戚データ", members_path %></li>
-
-             <!-- todo ドロップダウンメニューに入れたら、httpメソッドがGETになってしまう？？ -->
-             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
-             <li><a href="#" ><i class="icon-arrow-up"></i>&nbsp;TOP</a></li>
            </ul>
            <ul class="nav pull-right">
              <li><%= link_to current_user.dispname(User::FULLNAME), edit_ex_members_path if current_user.present? %></li>
-             <li><%= link_to '写真を入れ替える', "#" %></li>
+             <!-- todo ドロップダウンメニューに入れたら、httpメソッドがGETになってしまう？？ -->
+             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+
              <li class="divider-vertical"></li>
              <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown">その他メニュー<b class="caret"></b></a>
              <ul class="dropdown-menu">
-               <li><a href="#">RSS</a></li>
-               <li><a href="#">QRコード</a></li>
+               <li><a data-toggle="modal" href="#modalQR">QRコード</a></li>
                <li><%= link_to "その他", others_path %></li>
+               <li><strike>RSS</strike></li>
                <li class="divider"></li>
-               <li><a href="#">HPについて</a></li>
+               <li><%= link_to 'このサイトについて', about_others_path %></li>
              </ul>
              </li>
+             <li class="divider-vertical"></li>
+             <!-- todo こいつもAjaxだからかドロップダウンメニューに入れたらだめだな -->
+             <li><%= link_to '写真を入れ替える', slider_update_mutters_path, remote: true if @slideshow_visible %></li>
            </ul>
          </div><!--/.nav-collapse -->
        </div>
      </div>
    </div>
 
-
-    <% if @slideshow_visible -%>
-      <%= render "mutters/slider" %>
-    <% end -%>
+    <div id="slider_update_info" class="alert alert-success text-center important" style="display:none">↓ 変更しました ↓</div>
+  <div id="slider_photo">
+    <%= render "mutters/slider" if @slideshow_visible %>
+  </div>
 
     <div class="container">
 <% # コンテンツは"row"ブロックからレイアウトできるので自由がある(トップ画面など) -%>
@@ -267,6 +253,20 @@ jQuery(document).ready(function(){
 <% end -%>
 
     </div> <!-- /container -->
+
+<!-- モーダル -->
+<div class="modal" id="modalQR" style="display:none">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>このサイトのQRコード</h3>
+    </div>
+    <div class="modal-body">
+      <%= image_tag('QR_Code.jpg'); %>
+    </div>
+    <div class="modal-footer">
+      produced by たかひろ
+    </div>
+</div>
 
     <footer>
     <div id="desktopnotification"></div>

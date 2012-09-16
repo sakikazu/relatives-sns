@@ -1,13 +1,12 @@
 <% @updates.each do |up| -%>
-  <div class="once_row">
-    <div class="bar">
-      <span class="name"><%= up.user.dispname if up.user.present? %></span>
-      <span class="time"><%= up.updated_at.to_s(:long) if up.updated_at %></span>
-    </div>
-    <% p up -%>
-    <% p up.content -%>
+  <tr>
+    <td>
+      <strong class="left" style="color:gray"><%= up.user.dispname if up.user.present? %></strong>
+      <div class="right" style="color:gray"><%= up.updated_at.to_s(:long) if up.updated_at %></div>
+      <br>
     <% ai = action_info(up) -%>
-    <b>[<%= ai[:content_name] %>]<%= ai[:link] %></b>
+    <span class='label label-inverse'><%= ai[:content_name] %></span>　<%= ai[:link] %>
     <br /><%= ai[:info] %>
-  </div>
+    </td>
+  </tr>
 <% end -%>

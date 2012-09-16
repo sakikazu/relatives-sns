@@ -1,6 +1,7 @@
 <% if @from_top_flg %>
-  <div style="background-color:lightgray;padding-left:15px">
+  <div class="well">
   <% if editable(current_user, @photo.user) %>
+    <legend>写真情報の編集</legend>
     <%= form_for @photo, :url => update_from_slideshow_album_photo_path(@photo.album, @photo), :remote => true do |f| %>
       タイトル<br />
       <%= f.text_field :title %><br />
@@ -23,20 +24,16 @@
   <%= render :partial => "slidecontent" %>
 </div>
 
-<div id="slideshow_comment">
-  <h3 class="normal">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
-  <div id="photo_comments">
-    <%= render :partial => "photo_comments/comments" %>
-  </div>
+<h3 class="normal">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
+<div id="photo_comments">
+  <%= render :partial => "photo_comments/comments" %>
+</div>
 
-  <h3 class="normal">新規コメント</h3>
-  <div id="comment_form">
-    <%= form_for [@photo.album, @photo, @photo_comment], :remote => true do |f| %>
-      <%= f.text_area :content, rows: 5, class: "span5" %><br />
-      <%= f.hidden_field :user_id %>
-      <%= f.hidden_field :photo_id %>
-      <%= submit_tag "投稿する", class: "btn btn-primary" %>
-    <% end -%>
-    <br /><br />
-  </div>
+<div id="comment_form">
+  <%= form_for [@photo.album, @photo, @photo_comment], :remote => true do |f| %>
+    <%= f.text_area :content, rows: 5, class: "span5", placeholder: "コメントする" %><br />
+    <%= f.hidden_field :user_id %>
+    <%= f.hidden_field :photo_id %>
+    <%= submit_tag "投稿する", class: "btn btn-primary" %>
+  <% end -%>
 </div>

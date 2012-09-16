@@ -1,8 +1,11 @@
+<div class="row">
+  <div class="span9 offset1">
+
 <%= link_to "アルバム：#{@photo.album.title}に戻る", @photo.album, class: "btn" %>
 <%= link_to '編集する', edit_album_photo_path(@photo), class: "btn btn-info" %>
 
 <div class="once_content mgn-t40">
-  <div class="title">
+  <div class="title for_index">
     <%= "#{@photo.title} " %>
     <%= link_to "(コメント数：#{@photo.photo_comments.size}）", "#comment_area" %>
   </div>
@@ -30,14 +33,16 @@
     <%= render :partial => "photo_comments/comments" %>
   </div>
 
-  <h3 class="normal">新規コメント</h3>
   <div id="comment_form">
     <%= form_for [@photo.album, @photo, @photo_comment], :remote => true do |f| %>
-      <%= f.text_area :content, rows: 5, class: "span5" %><br />
+      <%= f.text_area :content, rows: 5, class: "span5", placeholder: "コメントする" %><br />
       <%= f.hidden_field :user_id %>
       <%= f.hidden_field :photo_id %>
       <%= submit_tag "投稿する", class: "btn btn-primary" %>
     <% end -%>
     <br /><br />
+  </div>
+</div>
+
   </div>
 </div>

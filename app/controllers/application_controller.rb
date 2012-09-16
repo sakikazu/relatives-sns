@@ -9,8 +9,8 @@ private
     if page.present? and ups_id.present?
       up = UpdateHistory.find(ups_id)
       ai = UpdateHistory::ACTION_INFO[up.action_type]
-      #ai.infoから先頭一文字(utf8)を除いて付加する
-      msg = "#{up.user.dispname}が#{ai[:info][3, ai[:info].length]}"
+      #ai.infoから先頭一文字(「に」とか入ってるから)を除く
+      msg = "#{up.user.dispname}が#{ai[:info][1, ai[:info].length]}"
       return page.to_i, msg
     else
       return nil, nil

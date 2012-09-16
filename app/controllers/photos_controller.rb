@@ -83,7 +83,9 @@ class PhotosController < ApplicationController
     @from_top_flg = true if params[:top].present?
     @photo = Photo.find(params[:id])
     @photo_comment = PhotoComment.new(:user_id => current_user.id, :photo_id => @photo.id)
-    render layout: false
+    unless request.smart_phone?
+      render layout: false
+    end
     #sakikazu PCからはJSをincludeしないレイアウトを読み込んで、Ajaxの多重書き込みを防ぐ(※スマホからは見づらいのでcolorboxは使用しない)
     # unless request.smart_phone?
       # render :layout => 'non_include'

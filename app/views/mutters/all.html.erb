@@ -26,28 +26,22 @@ $(document).ready(function() {
       <%= paginate @mutters, window: 2 %>
       <br />
 
-      <%
-      mutter1 = @mutter.dup
-      mutter1.action_flg = 1
-      mutter2 = @mutter.dup
-      mutter2.action_flg = 2
-      mutter3 = @mutter.dup
-      mutter3.action_flg = 3
-      %>
       <div id="form_search" class="well" style="padding-left:8px; padding-right:8px;">
-        <%= form_for mutter1, url: search_mutters_path, :method => :get do |f| %>
+      <div class="input-append">
+        <%= form_for @mutter, url: search_mutters_path, :method => :get do |f| %>
           <%= f.text_field :search_word, class: "span2" %>
-          <%= f.hidden_field :action_flg %>
+          <%= f.hidden_field :action_flg, value: 1 %>
           <%= f.submit "発言内容から検索する", class: "btn btn-info" %>
         <% end %>
-        <%= form_for mutter2, url: search_mutters_path, :method => :get do |f| %>
-          <%= f.hidden_field :action_flg %>
+        <%= form_for @mutter, url: search_mutters_path, :method => :get do |f| %>
+          <%= f.hidden_field :action_flg, value: 2 %>
           <%= f.submit "画像が含まれる", class: "btn btn-info" %>
         <% end %>
-        <%= form_for mutter3, url: search_mutters_path, :method => :get do |f| %>
-          <%= f.hidden_field :action_flg %>
+        <%= form_for @mutter, url: search_mutters_path, :method => :get do |f| %>
+          <%= f.hidden_field :action_flg, value: 3 %>
           <%= f.submit "URLが含まれる", class: "btn btn-info" %>
         <% end %>
+      </div>
       </div>
 
 
