@@ -27,7 +27,7 @@
     </span>
   </div>
   <span class='image'><%= link_to(image_tag(mutter_row.image(:thumb)), mutter_row.image(:large), {:class => colorbox_class}) if mutter_row.image? %></span>
-  <span class='content'><%= sani_custom(mutter_row.content) %></span>
+  <span class='content'><%= sani_custom(mutter_row.view_content) %></span>
   <div class="clear"></div>
   <span class='delete'><%= link_to("削除", mutter_row, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></span>
 </div>
@@ -61,7 +61,7 @@
         </span>
       </div>
       <span class='image'><%= link_to(image_tag(child.image(:thumb)), child.image(:large), {:class => colorbox_class}) if child.image? %></span>
-      <span class='content'><%= sani_custom(child.content) %></span>
+      <span class='content'><%= sani_custom(child.view_content) %></span>
       <div class="clear"></div>
       <span class='delete'><%= link_to("削除", child, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, child.user) %></span>
     </div>

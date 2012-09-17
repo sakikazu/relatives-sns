@@ -51,8 +51,8 @@ class Sanitize
         'ul'         => ['type'],
         'font'       => ['size', 'color', 'face'],
         'iframe'     => ['width', 'height', 'src', 'scrolling', 'frameborder'],
-        'div'        => ['style'],
-        'span'        => ['style'],
+        'div'        => ['style', 'class', 'id'],
+        'span'        => ['style', 'class', 'id'],
       },
 
       :protocols => {

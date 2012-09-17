@@ -52,7 +52,7 @@ class Mutter < ActiveRecord::Base
 
   def view_content
     if self.celebration.present?
-      "【祝】[#{self.celebration.user.dispname}さんへ] #{self.content}"
+      "<span class='badge badge-warning'>【祝】 #{self.celebration.user.dispname}さんへ</span> #{self.content}"
     else
       self.content
     end

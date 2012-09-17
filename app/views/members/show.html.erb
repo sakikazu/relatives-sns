@@ -42,7 +42,7 @@
   <tr><th>お祝い履歴</th><td>
     <% @user.celebrations.each do |c| %>
       <%= c.anniversary_at %>
-      <%= form_tag({:controller => :mutters, :action => :celebration, :celebration_id => c.id}, :remote => true) do %> 
+      <%= form_tag({:controller => :mutters, :action => :celebration, :celebration_id => c.id}, :remote => true, method: :get) do %> 
         <%= submit_tag 'お祝いを見る' %>
       <% end -%> 
       <br />

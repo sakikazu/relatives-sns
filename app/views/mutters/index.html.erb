@@ -136,35 +136,32 @@ $(document).ready(function(){
 
     <div class="well sidebar-nav">
       <legend class="text-center">みんなの誕生記念日</legend>
-      <table>
-    <% @kinen.each do |k| -%>
-      <% if k[:count] == 0 -%>
-        <tr>
-          <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" %></td>
-          <td>
-            <span class="honzitu">本日</span>
-          </td>
-          <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
-        </tr>
-        <tr class="anniversary"><td colspan=3>
-          <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id}, :class => colorbox_class + " normal-btn" %>
-          <%= link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id}, :remote => true, :class => "normal-btn" %>
-        </td></tr>
+      <div class="text-center" style="margin:auto">
+        <% @kinen.each do |k| -%>
+          <% if k[:count] == 0 || k[:count] == -1-%>
+            <p style="margin-bottom: 5px">
+            <i class="icon-music"></i> <%= "#{k[:user].dispname}さん" %>
+            <span class="important big"><%= k[:count] == 0 ? "本日" : "昨日" %></span>
+            <span class="main"><%= "#{k[:kinen_name]}" %></span> <i class="icon-music"></i>
+            </p>
+            <div class="mgn-b20">
+              <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id}, :class => colorbox_class + " btn btn-info" %>
+              <%= link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id}, :remote => true, :class => "btn btn-warning" %>
+            </div>
 
-      <% else -%>
-        <tr class="exist-border">
-          <td><%= "#{k[:user].dispname(User::FULLNAME)}さん" if k[:user].present? %></td>
-          <td>
-            <b><%= "あと#{k[:count]}日で" %></b>
-          </td>
-          <td><span class="main"><%= "#{k[:kinen_name]}" %></span></td>
-        </tr>
-      <% end -%>
-    <% end -%> 
-    </table>
-    <div style="margin-top:20px;text-align:center">(生年月日を登録している人のみ)</div>
+          <% else -%>
+            <p class="mgn-b20">
+            <i class="icon-music"></i> <%= "#{k[:user].dispname}さん" if k[:user].present? %>
+            <span class="important big"><%= "あと#{k[:count].to_i}日で" %></span>
+            <span class="main"><%= "#{k[:kinen_name]}" %></span> <i class="icon-music"></i>
+            </p>
+          <% end -%>
+        <% end -%>
+      </div>
 
-          </div><!--/.well -->
+      <div class="text-center mgn-t20">(生年月日を登録している人のみ)</div>
+
+    </div><!--/.well -->
 
 
 
@@ -246,5 +243,5 @@ $(document).ready(function(){
     </div>
   </div> <!-- #mutter -->
 
-        </div>
-      </div><!--/row-->
+  </div>
+</div><!--/row-->

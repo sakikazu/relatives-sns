@@ -1,24 +1,27 @@
-<div id="celebration_dialog">
+<div class="well">
   <% if @flag.present? -%>
-    <%= @celebration.user.dispname %>さんへのお祝い<br />
-    <hr />
-    <%= form_for @celebration, :url => {:action => :celebration_create}, :html => form_html_option do |f| %>
+    <div class="page-header">
+      <h3><%= @celebration.user.dispname %>さんへのお祝い</h3>
+    </div>
+    <%= form_for @celebration, :url => {:action => :celebration_create}, :html => {:multipart => true} do |f| %>
       <%= f.hidden_field :anniversary_at %>
       <%= f.hidden_field :user_id %>
 
       <%= fields_for @mutter do |ff| %>
-        <%= ff.label '自由に言葉を変えてください' %><br />
-        <%= ff.text_area :content, :size => "50x2" %><br />
+        <%= ff.label '自由にメッセージを変更してください' %><br />
+        <%= ff.text_area :content, class: "span4", rows: 2 %><br />
         <%= ff.file_field :image %>
         <%= ff.hidden_field :user_id %>
       <% end -%>
       <br />
-      <%= f.submit '祝う', :class => "post" %>
+      <%= f.submit '祝う', class: "btn btn-primary" %>
     <% end -%>
-    ・つぶやきにも追加されます。<br />
-    ・投稿後に削除したい場合、つぶやきから削除すればOKです。<br />
-    ・当日以降は、お祝いは親戚ページの各人ページで見れます。<br />
+    <ul>
+      <li>つぶやきにも追加されます。</li>
+      <li>投稿後に削除したい場合、つぶやきから削除すればOKです。</li>
+      <li>当日以降は、お祝いは親戚ページの各人ページで見れます。</li>
+    </ul>
   <% else -%>
-    今回は既にお祝いしてます。
+    <p class="big important">今回は既にお祝いしてます。</p>
   <% end -%>
 </div>

@@ -4,7 +4,7 @@ class MuttersController < ApplicationController
   # before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
   # after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
   before_filter :authenticate_user!, :except => :rss
-  before_filter :set_new_mutter_obj, only: [:index, :all, :search]
+  before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
   cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
   def graph
@@ -216,8 +216,9 @@ class MuttersController < ApplicationController
   end
 
   def celebration_new
+    # お祝いする対象ユーザーの今日か昨日のCelebrationデータを取得
     user = User.find(params[:user_id])
-    celeb = Celebration.where(:anniversary_at => Date.today, :user_id => user.id).first
+    celeb = Celebration.where(:anniversary_at => [Date.today, Date.today - 1.day], :user_id => user.id).first
     if celeb.present?
       if celeb.mutters.where(:user_id => current_user.id).present?
         @flag = false
@@ -249,7 +250,7 @@ class MuttersController < ApplicationController
     if params[:celebration_id].present?
       cel = Celebration.find(params[:celebration_id])
     else
-      cel = Celebration.where(:anniversary_at => Date.today, :user_id => params[:user_id]).first
+      cel = Celebration.where(:anniversary_at => [Date.today, Date.today - 1.day], :user_id => params[:user_id]).first
     end
     #ランダム抽出 -sample
     @celeb_mutters = cel.present? ? cel.mutters.sample(cel.mutters.size) : []

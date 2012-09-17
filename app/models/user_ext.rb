@@ -50,7 +50,7 @@ class UserExt < ActiveRecord::Base
 
   def nichirei
     mybirth = self.birth_day
-    if mybirth 
+    if mybirth
       nichirei = (Date.today - mybirth).to_i
       nichirei_future = []
     	[5000,7777,10000,11111,15000,20000,22222,25000,30000,33333,35000,40000,44444,45000,50000].each do |kinen|
@@ -77,11 +77,12 @@ class UserExt < ActiveRecord::Base
       ##--年齢--##
 
       #今年の誕生日が過ぎていたら来年の誕生日で計算する（例えば、本日が2008/12/25だったら、1/5の誕生日の人は2009/1/5で計算する）
-      if (birday_tmp - Date.today) < 0
+      # 誕生日が昨日であっても表示できるように、-1とした
+      if (birday_tmp - Date.today) < -1
         birday_tmp = birday_tmp + 1.year
       end
     
-      #記念日が10日以内なら表示
+      #記念日が10日～-1日（昨日）以内なら表示
       diffday = birday_tmp - Date.today
       if diffday <= 10
         #年齢が登録記念日に該当するなら記念日名を、そうでないなら「誕生日」と出力
@@ -93,8 +94,8 @@ class UserExt < ActiveRecord::Base
       ##--日齢--##
       kinenday_array.each do |k|
         diffday = k - (Date.today - ue.birth_day)
-        #記念日齢が10日以内なら表示
-        if diffday >= 0 and diffday <= 10
+        #記念日齢が10日～-1日（昨日）以内なら表示
+        if diffday >= -1 and diffday <= 10
           kinen_name = "#{k}日齢"
           kinen << {:user => ue.user, :count => diffday, :kinen_name => kinen_name}
           #初めの日齢のみ表示
@@ -104,6 +105,7 @@ class UserExt < ActiveRecord::Base
     end
     return kinen
   end
+
 
   def address
     "#{addr1}#{addr2}#{addr3}"
