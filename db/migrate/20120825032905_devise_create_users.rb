@@ -12,6 +12,9 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.integer :generation
       t.datetime :deleted_at
 
+      # authlogicからの移行用
+      t.string :password_salt
+
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120915103138) do
+ActiveRecord::Schema.define(:version => 20120918140931) do
 
   create_table "admin_users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
@@ -304,6 +304,7 @@ ActiveRecord::Schema.define(:version => 20120915103138) do
     t.integer  "root11"
     t.integer  "generation"
     t.datetime "deleted_at"
+    t.string   "password_salt"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

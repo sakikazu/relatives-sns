@@ -13,11 +13,11 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
+         :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic
          :authentication_keys => [:username]
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me
-  # attr_accessible :title, :body
 
   validates :username, presence: true, uniqueness: true
 

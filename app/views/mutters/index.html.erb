@@ -167,7 +167,7 @@ $(document).ready(function(){
 
           <div class="well sidebar-nav">
             <legend class="text-center">みんなの新着情報</legend>
-            <%= link_to '一 気 に 見 る', update_allview_mutters_path, class: "btn btn-info btn-block" %>
+            <%= link_to '一気に見る', update_allview_mutters_path, class: "btn btn-danger btn-block" %>
             <table class="table table-striped table-condensed mgn-t20">
               <%= render :partial => "update_history" %>
               <tr>
@@ -218,16 +218,16 @@ $(document).ready(function(){
       <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
         <%= f.text_field :search_word, class: "span2" %>
         <%= f.hidden_field :action_flg, value: 1 %>
-        <%= f.submit "発言内容から検索する", class: "btn btn-info" %>
+        <%= f.submit "発言内容から検索する", class: "btn" %>
       <% end %>
       </div>
       <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, class: "span2" do |f| %>
         <%= f.hidden_field :action_flg, value: 2 %>
-        <%= f.submit "画像が含まれる", class: "btn btn-info" %>
+        <%= f.submit "画像が含まれる", class: "btn" %>
       <% end %>
       <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, class: "span2" do |f| %>
         <%= f.hidden_field :action_flg, value: 3 %>
-        <%= f.submit "URLが含まれる", class: "btn btn-info" %>
+        <%= f.submit "URLが含まれる", class: "btn" %>
       <% end %>
     </div>
 
