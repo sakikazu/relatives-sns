@@ -1,4 +1,4 @@
-<%= will_paginate @lhs, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
+<%= paginate @lhs, window: 2 %>
 <table border="1" cellspacing="0" cellpadding="3">
   <tr><th>LoginHistory ID</th><th>time</th><th>name</th><th>ログイン回数</th><tr>
 <% @lhs.each do |lh| -%>
@@ -10,4 +10,4 @@
   </tr>
 <% end -%>
 </table>
-<%= will_paginate @lhs, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
+<%= paginate @lhs, window: 2 %>

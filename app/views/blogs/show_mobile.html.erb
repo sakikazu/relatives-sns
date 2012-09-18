@@ -39,8 +39,8 @@
 <br />
 <div style="text-align:center;background-color:#FF924D;color:#ffffff;font-size:medium">新規コメント</div>
 <div id="comment_form">
-<%= form_tag url_for(:action => :create_comment, :blog_id => @blog.id) do %>
-  <%= text_area_tag :comment, nil, :size => "60x5" %><br />
+<%= form_tag blog_blog_comments_path(@blog.id) do %>
+  <%= text_area_tag "[blog_comment][content]", nil, :size => "60x5" %><br />
   <%= submit_tag "投稿する" %>
 <% end -%>
 </div>

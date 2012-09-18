@@ -49,5 +49,5 @@
 <% end -%>
 
 <br /><br />
-<%= will_paginate @mutters, :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' %>
+<%= paginate @mutters, window: 2 %>
 </div>

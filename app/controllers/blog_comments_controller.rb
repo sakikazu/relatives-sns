@@ -17,6 +17,10 @@ class BlogCommentsController < ApplicationController
       @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT)
     end
 
+    # PCの場合はAjaxなのでcreate.jsが呼ばれる
+    if request.mobile?
+      redirect_to @blog, notice: 'コメントしました。'
+    end
   end
 
   def destroy

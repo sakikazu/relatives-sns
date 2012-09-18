@@ -36,6 +36,8 @@ ADan4::Application.routes.draw do
     # end
     resources :blog_comments, only: [:create, :destroy]
   end
+  # for mobile ※携帯だとmethod: :deleteが効いてくれないぽい？？指定してもGETメソッドになっちゃったので
+  match "/blogs/destroy_comment/:id" => "blogs#destroy_comment", :as => :destroy_comment
 
   resources :movies do
     collection do
@@ -124,6 +126,22 @@ ADan4::Application.routes.draw do
   # devise カスタマイズ版
   # devise_for :users, controllers: {registrations: "users"}
   devise_for :users
+
+
+  # for mobile
+  match "/m" => "mobile#index", :as => :mobile
+  match "/m/create" => "mobile#create", :as => :mobile_c
+  match "/m/destory" => "mobile#destroy", :as => :mobile_d
+  match "/m/update_history" => "mobile#update_history", :as => :mobile_uh
+  match "/m/celebration" => "mobile#celebration", :as => :mobile_uh
+  match "/m/celebration_new" => "mobile#celebration_new", :as => :mobile_uh
+  match "/m/celebration_create" => "mobile#celebration_create", :as => :mobile_uh
+
+  # method: :delete が効かないので
+  devise_scope :user do
+    match "/m/sign_out" => "devise/sessions#destroy", as: :mobile_sign_out
+  end
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

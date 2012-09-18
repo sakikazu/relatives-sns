@@ -41,7 +41,6 @@ class BlogsController < ApplicationController
     end
     @content_title = (@user ? @user.dispname : "自分") + "の日記"
 
-    set_header
     render :action => :index_mobile, :layout => "mobile"
   end
 
@@ -55,14 +54,12 @@ class BlogsController < ApplicationController
       @blog_count_by_user << [user, tmp1[user_id], val]
     end
 
-    set_header
     render :action => :everyone_mobile, :layout => "mobile"
   end
 
   def show_mobile
     @blog = Blog.find(params[:id])
     @content_title = @blog.user.dispname + "の日記"
-    set_header
     render :action => :show_mobile, :layout => "mobile"
   end
 
@@ -96,7 +93,6 @@ class BlogsController < ApplicationController
   def new_mobile
     @content_title = "日記を書く"
     @blog = Blog.new
-    set_header
     render :action => :new_mobile, :layout => "mobile"
   end
 
@@ -108,7 +104,6 @@ class BlogsController < ApplicationController
   def edit_mobile
     @content_title = "日記を編集する"
     @blog = Blog.find(params[:id])
-    set_header
     render :action => :edit_mobile, :layout => "mobile"
   end
 
@@ -182,14 +177,12 @@ class BlogsController < ApplicationController
     @blog = Blog.find(params[:id])
     @blog.destroy
 
-    set_header
     redirect_to :action => :index_mobile, :layout => "mobile"
   end
 
   def destroy_confirm_mobile
     @content_title = "削除の確認"
     @blog = Blog.find(params[:id])
-    set_header
     render :action => :destroy_confirm_mobile, :layout => "mobile"
   end
 
@@ -211,7 +204,6 @@ class BlogsController < ApplicationController
     end
 
     if request.mobile?
-      set_header
       render :action => :show_mobile, :layout => "mobile"
     end
   end
@@ -222,7 +214,6 @@ class BlogsController < ApplicationController
     @bcom.destroy
 
     if request.mobile?
-      set_header
       redirect_to :action => :show_mobile, :id => blog.id, :layout => "mobile"
     else
       redirect_to :action => :show, :id => blog.id
@@ -232,7 +223,6 @@ class BlogsController < ApplicationController
   def destroy_comment_confirm_mobile
     @content_title = "削除の確認"
     @bcom = BlogComment.find(params[:id])
-    set_header
     render :action => :destroy_comment_confirm_mobile, :layout => "mobile"
   end
 
@@ -245,7 +235,7 @@ class BlogsController < ApplicationController
 
 private
   def set_title
-    @blog = Blog.find(params[:id]) if params[:id].present?
+    @blog = Blog.find_by_id(params[:id]) if params[:id].present?
     @title = @blog.title if @blog.present?
   end
 

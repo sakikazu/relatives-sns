@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 class MuttersController < ApplicationController
   # mobile tmp
-  # before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
-  # after_filter :set_header, :only => [:new_from_mail, :create_from_mail]
+  before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
+
   before_filter :authenticate_user!, :except => :rss
   before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
   cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]

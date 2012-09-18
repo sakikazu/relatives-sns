@@ -65,7 +65,6 @@ class BoardsController < ApplicationController
   def show_mobile
     @board = Board.find(params[:id])
     @board_comments = @board.board_comments.page(params[:page]).per(10)
-    set_header
     render :action => :show_mobile, :layout => "mobile"
   end
 

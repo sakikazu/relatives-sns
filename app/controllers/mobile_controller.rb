@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 class MobileController < ApplicationController
-  before_filter :require_user
+  before_filter :authenticate_user!
 
   ## jpmobile memo
   #JpmobileではControllerにmobile_filterを指定することで DoCoMo、Au、SoftBankの絵文字を透過的に扱うことができる。
   #また、半角・全角の自動変換を用いる場合は 「 :hankaku=>true」
   ###update mobile_filter → hankaku_filter
   hankaku_filter
-  after_filter :set_header
 
   layout "mobile"
 
@@ -15,7 +14,7 @@ class MobileController < ApplicationController
     @content_title = "誕生記念日"
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
-    @mutters = Mutter.includes({:user => :user_ext}).paginate(:page => params[:page], :per_page => 7, :order => "id DESC")
+    @mutters = Mutter.includes({:user => :user_ext}).order("id DESC").page(params[:page]).per(7)
     @kinen = UserExt.kinen
   end
 
@@ -34,7 +33,7 @@ class MobileController < ApplicationController
 
   def update_history
     @content_title = "みんなの更新情報"
-    @updates = UpdateHistory.sort_updated.paginate(:page => params[:page], :per_page => 15)
+    @updates = UpdateHistory.sort_updated.page(params[:page]).per(15)
   end
 
   def celebration_new
