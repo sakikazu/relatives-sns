@@ -178,6 +178,7 @@ $(document).ready(function(){
 
           <div class="well sidebar-nav">
               <legend class="text-center">みんなのアクセス情報</legend>
+              <p class="important text-center">現在 <%= User::recent_request_count %> 人がログインしています</p>
     <table class="table table-striped table-condensed">
     <% @login_users.each_with_index do |user, idx| -%>
 <% if idx > 20 -%>
@@ -185,7 +186,7 @@ $(document).ready(function(){
 <% else -%>
       <tr>
 <% end -%>
-        <td><%= user.last_sign_in_at.present? ? user.last_sign_in_at.to_s(:short) : "ログインなし" %></td>
+        <td><%= user.last_request_at.present? ? user.last_request_at.to_s(:short) : "ログインなし" %></td>
         <td><%= user.dispname(User::FULLNICK) %></td>
       </tr>
     <% end -%>

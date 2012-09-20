@@ -13,11 +13,11 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic
+         :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic algorithm
          :authentication_keys => [:username]
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at
 
   validates :username, presence: true, uniqueness: true
 
@@ -96,6 +96,11 @@ class User < ActiveRecord::Base
 
   def rel_save
     self.user_ext ||= UserExt.create
+  end
+
+  # 指定時間（分指定）内にリクエストしたユーザー数
+  def self.recent_request_count(minute = 5)
+    where("last_request_at > ?", Time.now() - minute * 60).size
   end
 
 end

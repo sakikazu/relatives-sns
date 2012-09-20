@@ -304,6 +304,7 @@ ActiveRecord::Schema.define(:version => 20120918140931) do
     t.integer  "root11"
     t.integer  "generation"
     t.datetime "deleted_at"
+    t.datetime "last_request_at"
     t.string   "password_salt"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"

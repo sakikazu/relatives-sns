@@ -11,6 +11,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.integer :root11
       t.integer :generation
       t.datetime :deleted_at
+      t.datetime :last_request_at
 
       # authlogicからの移行用
       t.string :password_salt

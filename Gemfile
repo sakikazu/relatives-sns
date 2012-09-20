@@ -8,7 +8,7 @@ gem 'rails', '3.2.8'
 gem 'mysql2'
 
 gem 'devise'
-gem 'devise-encryptable' # for authlogic encrypt algorism
+gem 'devise-encryptable' # for authlogic encrypt algorithm
 # gem "rails3_acts_as_paranoid", "~>0.2.0"
 gem "rails3_acts_as_paranoid"
 gem 'exception_notification', :require => 'exception_notifier'

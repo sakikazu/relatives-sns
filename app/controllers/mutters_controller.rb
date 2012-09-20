@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 class MuttersController < ApplicationController
-  # mobile tmp
+  # for mobile
   before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
+  after_filter :update_request_at, only: [:index, :update_disp, :create]
 
   before_filter :authenticate_user!, :except => :rss
   before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
@@ -256,7 +257,10 @@ class MuttersController < ApplicationController
     @celeb_mutters = cel.present? ? cel.mutters.sample(cel.mutters.size) : []
   end
 
-  #つぶやき表示更新
+
+  # つぶやき表示更新
+  # (JSで一定時間ごとに呼び出している)
+  #
   def update_disp
     last_id = Mutter.last.id
     if cookies[:update_disp_id].blank?
@@ -275,7 +279,11 @@ class MuttersController < ApplicationController
     end
   end  
 
-  #つぶやき新着チェック
+
+  # つぶやき新着チェック
+  # (ブラウザのNotificationにて表示する用)
+  # (JSで一定時間ごとに呼び出している)
+  #
   def update_check
     if cookies[:update_check_id].blank?
       cookies[:update_check_id] = Mutter.last.id
@@ -343,4 +351,10 @@ class MuttersController < ApplicationController
   def set_new_mutter_obj
     @mutter = Mutter.new(:user_id => current_user.id)
   end
+
+  # ログインユーザーの最終リクエスト時間を更新する
+  def update_request_at
+    current_user.update_attributes(last_request_at: Time.now)
+  end
+
 end
