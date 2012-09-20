@@ -77,20 +77,29 @@ class User < ActiveRecord::Base
     Hash[*ROLE.flatten.reverse][self.role]
   end
 
+
+  # 表示名
+  # ※familynameとgivennameは、UserとUserExtともに存在するが、Userは基本管理者が設定するものなので、表示上はUserExtが優先される
+  #
+  # @param type
+  # @param trueにするとユーザーが設定していない設定値（管理者が登録するフルネームとか）は表示されない
+  #
   def dispname(type = NICKNAME, user_set_only = false)
     name = ""
     case type
     when NICKNAME
       name = self.user_ext.nickname if self.user_ext
     when FULLNAME
-      name = "#{self.familyname}#{self.givenname}"
+      name = "#{self.user_ext.familyname}#{self.user_ext.givenname}"
     when FULLNICK
-      name = "#{self.user_ext.nickname}(#{self.familyname}#{self.givenname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.familyname.blank? && !self.givenname.blank?
+      name = "#{self.user_ext.nickname}(#{self.user_ext.familyname}#{self.user_ext.givenname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.user_ext.familyname.blank? && !self.user_ext.givenname.blank?
     end
 
+    # 名前が設定されていなかったら、管理者設定の名前を使う
     if name.blank? and not user_set_only
       name = "#{self.familyname}#{self.givenname}"
     end
+
     return Sanitize.clean(name, Sanitize::Config::BASIC)
   end
 

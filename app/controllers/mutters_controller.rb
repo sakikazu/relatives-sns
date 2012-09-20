@@ -2,7 +2,7 @@
 class MuttersController < ApplicationController
   # for mobile
   before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
-  after_filter :update_request_at, only: [:index, :update_disp, :create]
+  before_filter :update_request_at, only: [:index, :update_disp, :create]
 
   before_filter :authenticate_user!, :except => :rss
   before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
@@ -354,7 +354,7 @@ class MuttersController < ApplicationController
 
   # ログインユーザーの最終リクエスト時間を更新する
   def update_request_at
-    current_user.update_attributes(last_request_at: Time.now)
+    current_user.update_attributes(last_request_at: Time.now) if current_user.present?
   end
 
 end

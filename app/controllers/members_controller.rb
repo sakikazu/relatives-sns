@@ -116,10 +116,13 @@ class MembersController < ApplicationController
 
   def edit_ex
     @user_ext = current_user.user_ext
+
+    # user_extに名前が登録されていなかったら、userの方から取得してくる
+    @user_ext.familyname = @user_ext.user.familyname if @user_ext.familyname.blank? && @user_ext.user.familyname.present?
+    @user_ext.givenname = @user_ext.user.givenname if @user_ext.givenname.blank? && @user_ext.user.givenname.present?
   end
 
   def update_ex
-    p params[:user_ext]
     current_user.user_ext.update_attributes(params[:user_ext])
     redirect_to({:action => :show, :id => current_user.user_ext.user.id}, notice: '更新しました.')
   end
