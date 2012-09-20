@@ -16,6 +16,7 @@ $(function(){
 
   <%= f.input :title, label: "タイトル", input_html: {class: "span7"} %><br>
   <%= f.input :content, label: "本文", input_html: {class: "span7"} %><br>
+    <%= file_field :image, :image %>
 
   <div class="form-actions">
     <%= f.button :submit, class: "btn btn-primary" %>

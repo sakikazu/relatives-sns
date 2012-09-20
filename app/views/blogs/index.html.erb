@@ -18,10 +18,9 @@
           <%= link_to "投稿者：#{blog.user.try(:dispname)}", blogs_by_user_path(blog.user.username) %> | <%= "投稿日時：#{l blog.created_at}" %>
           <%= " | 最新コメント日時：#{blog.blog_comments.try(:last).try(:created_at).try(:to_s, :long)}" %>
         </div>
-        <%# if blog.image? -%>
-        <%#= link_to image_tag(blog.image(:thumb)), blog.image(:large), {:class => colorbox_class} %>
-        <!-- <br /> -->
-        <%# end -%>
+        <% blog.blog_images.each do |image| -%>
+          <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>
+        <% end -%>
         <p class="text">(本文抜粋)<%= truncate_120_link(blog.content) %></p>
         <% if editable(current_user, blog.user) -%>
           <%= link_to '編集', edit_blog_path(blog) %>

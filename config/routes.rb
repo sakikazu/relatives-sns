@@ -24,6 +24,7 @@ ADan4::Application.routes.draw do
       get :edit_mobile
       get :destroy_comment_confirm_mobile
       get :destroy_confirm_mobile
+      delete :destroy_image
     end
 
     # member do

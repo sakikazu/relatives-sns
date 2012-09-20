@@ -122,10 +122,10 @@ class BlogsController < ApplicationController
 
     respond_to do |format|
       if @blog.save
-        # if params[:image]
-          # image = BlogImage.new(params[:image])
-          # @blog.blog_images << image
-        # end
+        if params[:image]
+          image = BlogImage.new(params[:image])
+          @blog.blog_images << image
+        end
 
         @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
         format.html { redirect_to @blog, notice: '日記を投稿しました。' }
