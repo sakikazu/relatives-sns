@@ -2,7 +2,7 @@
 class MuttersController < ApplicationController
   # for mobile
   before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
-  before_filter :update_request_at, only: [:index, :update_disp, :create]
+  after_filter :update_request_at, only: [:index, :update_disp, :create]
 
   before_filter :authenticate_user!, :except => :rss
   before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
@@ -67,7 +67,7 @@ class MuttersController < ApplicationController
     @action_flg = params["mutter"][:action_flg].to_i
     case @action_flg
     when 0
-      @mutters = Mutter.includes_all.order("id DESC")
+      @mutters = Mutter.includes_all.parents_mod
     when 1
       str = params["mutter"][:search_word]
       @mutters = Mutter.includes_all.where('content like :q', :q => "%#{str}%").order('id DESC')
@@ -122,7 +122,7 @@ class MuttersController < ApplicationController
     # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
 #sakimura ページネート時のフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
 #todo kaminariにしてみたけどincludeしたらどうなる？？
-    @mutters = Mutter.user_is(params[:user_id]).page(params[:page]).per(30)
+    @mutters = Mutter.user_is(params[:user_id]).parents_mod.page(params[:page]).per(30)
 
     unless read_fragment :mutter_by_user
       @users_mcnt = Mutter.group(:user_id).count
@@ -136,7 +136,7 @@ class MuttersController < ApplicationController
     @page_title = "トップ"
 
     @updates = UpdateHistory.view_normal.limit(10)
-    @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_sign_in_at DESC").limit(40)
+    @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(40)
 
     # from lesys
     @fix_title = ""
@@ -146,11 +146,9 @@ class MuttersController < ApplicationController
 
     # レスされた順に並び替え
     # unless read_fragment :mutter_data
-    @mutters = Mutter.includes(:user, :children).parents_mod.order('for_sort_at DESC').limit(20)
+    @mutters = Mutter.includes(:user, :children).parents_mod.limit(20)
     # end
 
-    # sakikazu 最終アクセス日がDeviseで取れればいいんだけど
-    @login_users = User.where("role != ?", User::TEST_USER).order("last_sign_in_at DESC").limit(20)
     @album_thumbs = Photo.rnd_photos
     @dispupdate_interval = 10 * 1000
 
@@ -167,7 +165,7 @@ class MuttersController < ApplicationController
     #現在のmutterの位置から前後5つずつのmutterを取得する
     num = 5
     count = Mutter.where("id < ?", @mutter.id).count
-    @mutters = Mutter.includes_all.offset(count - num).limit(num*2+1)
+    @mutters = Mutter.includes_all.offset(count - num).parents_mod.limit(num*2+1)
     @mutters = @mutters.reverse
   end
 
@@ -179,7 +177,7 @@ class MuttersController < ApplicationController
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
       @mutter.save
-      @mutters = Mutter.includes(:user, :children).parents_mod.order('for_sort_at DESC').limit(20)
+      @mutters = Mutter.includes(:user, :children).parents_mod.limit(20)
       # 新規post用に入れ替える
       @created_mutter = @mutter
       @mutter = Mutter.new(:user_id => current_user.id)
@@ -204,7 +202,7 @@ class MuttersController < ApplicationController
   def destroy
     @mutter = Mutter.find(params[:id])
     @mutter.destroy
-    @mutters = Mutter.includes(:user, :children).parents_mod.order('for_sort_at DESC').limit(20)
+    @mutters = Mutter.includes(:user, :children).parents_mod.limit(20)
     render "update_list.js"
   end
 
@@ -272,7 +270,7 @@ class MuttersController < ApplicationController
     prev_check = cookies[:update_disp_id].to_i
     if last_id > prev_check
       cookies[:update_disp_id] = last_id
-      @mutters = Mutter.includes_all.id_desc.limit(30)
+      @mutters = Mutter.includes_all.parents_mod.limit(20)
       render :partial => "list"
     else
       render :text => ""
@@ -326,7 +324,7 @@ class MuttersController < ApplicationController
     when UpdateHistory::ALBUMPHOTO_CREATE
       redirect_to album_path(up.content, "sort" => 1, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO
-      redirect_to slideshow_photo_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to slideshow_album_photo_path(up.content.album, up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::BOARD_CREATE, UpdateHistory::BOARD_COMMENT
       redirect_to board_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::MOVIE_CREATE, UpdateHistory::MOVIE_COMMENT
@@ -354,7 +352,8 @@ class MuttersController < ApplicationController
 
   # ログインユーザーの最終リクエスト時間を更新する
   def update_request_at
-    current_user.update_attributes(last_request_at: Time.now) if current_user.present?
+    # [memo] update_attributeだと、validateなしで更新することができる。update_attributesはvalidateあり。
+    current_user.update_attribute(:last_request_at, Time.now) if current_user.present?
   end
 
 end

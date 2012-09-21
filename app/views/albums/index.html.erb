@@ -17,6 +17,7 @@
 </div>
 
 <div id="album">
+<%= paginate @albums, :window => 2, :outer_window => 2 %><br>
 <% @albums.each do |album| %>
 <div class="once_photo">
   <div class="bar"><%= link_to album.title, album %></div>
@@ -34,5 +35,6 @@
 </div>
 <% end %>
 <div class="clear"></div>
+<%= paginate @albums, :window => 2, :outer_window => 2 %><br>
 </div>
 

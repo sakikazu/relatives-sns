@@ -31,9 +31,11 @@ class Mutter < ActiveRecord::Base
 
   scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
   scope :includes_all, includes([{:user => :user_ext}, :nices, :celebration])
-  scope :parents_mod, where("mutters.reply_id is null") #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
+  scope :parents_mod, where("mutters.reply_id IS NULL") #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
   scope :id_desc, order("mutters.id DESC")
   scope :id_asc, order("mutters.id ASC")
+
+  default_scope order("for_sort_at DESC")
 
 
   def trans_space

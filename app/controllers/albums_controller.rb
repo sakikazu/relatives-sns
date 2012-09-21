@@ -13,7 +13,7 @@ class AlbumsController < ApplicationController
     when 1
       @albums = Album.order("id DESC").page(params[:page])
     when 2
-      @albums = Album.sort_upload
+      @albums = Kaminari.paginate_array(Album.sort_upload).page(params[:page])
     else
       @albums = Album.order("id DESC").page(params[:page])
     end

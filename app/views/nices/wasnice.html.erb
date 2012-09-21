@@ -42,7 +42,7 @@ $(document).ready(function() {
 <h2 class="normal">人気の写真</h2>
 <div class="h2normal_content">
 <% @photo_data.each_with_index do |data, idx| -%>
-  <% obj = AlbumPhoto.find_by_id(data[:id]) -%>
+  <% obj = Photo.find_by_id(data[:id]) -%>
   <div class="nice_rank">
     <%= idx + 1 %>位：<%= data[:count] %> イイネ
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
