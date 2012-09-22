@@ -1,6 +1,6 @@
 #!/bin/sh
 
-db='adan'
+db='adan_v4'
 user='root'
 password='saki0745'
 

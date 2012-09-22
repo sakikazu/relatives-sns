@@ -122,7 +122,7 @@ class MuttersController < ApplicationController
     # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
 #sakimura ページネート時のフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
 #todo kaminariにしてみたけどincludeしたらどうなる？？
-    @mutters = Mutter.user_is(params[:user_id]).parents_mod.page(params[:page]).per(30)
+    @mutters = Mutter.includes_all.user_is(params[:user_id]).parents_mod.page(params[:page]).per(30)
 
     unless read_fragment :mutter_by_user
       @users_mcnt = Mutter.group(:user_id).count
@@ -135,8 +135,10 @@ class MuttersController < ApplicationController
     @slideshow_visible = true
     @page_title = "トップ"
 
-    @updates = UpdateHistory.view_normal.limit(10)
-    @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(40)
+    updates_count = request.smart_phone? ? 5 : 10
+    @updates = UpdateHistory.includes({:user => :user_ext}).view_normal.limit(updates_count)
+    login_users_count = request.smart_phone? ? 7 : 40
+    @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(login_users_count)
 
     # from lesys
     @fix_title = ""
@@ -144,9 +146,10 @@ class MuttersController < ApplicationController
     #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
     # @mutters = mutter.includes_all.id_desc.limit(30)
 
-    # レスされた順に並び替え
+    # つぶやき時間降順で親つぶやきのみを取得
     # unless read_fragment :mutter_data
-    @mutters = Mutter.includes(:user, :children).parents_mod.limit(20)
+    mutters_count = request.smart_phone? ? 7 : 20
+    @mutters = Mutter.includes_all.parents_mod.limit(mutters_count)
     # end
 
     @album_thumbs = Photo.rnd_photos
@@ -160,6 +163,7 @@ class MuttersController < ApplicationController
     ###誕生記念日(年齢／日齢)
     @kinen = UserExt.kinen
   end
+
 
   # nicesからのみ呼ばれる
   def show
@@ -179,7 +183,7 @@ class MuttersController < ApplicationController
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
       @mutter.save
-      @mutters = Mutter.includes(:user, :children).parents_mod.limit(20)
+      @mutters = Mutter.includes_all.parents_mod.limit(20)
       # 新規post用に入れ替える
       @created_mutter = @mutter
       @mutter = Mutter.new(:user_id => current_user.id)
@@ -204,7 +208,7 @@ class MuttersController < ApplicationController
   def destroy
     @mutter = Mutter.find(params[:id])
     @mutter.destroy
-    @mutters = Mutter.includes(:user, :children).parents_mod.limit(20)
+    @mutters = Mutter.includes_all.parents_mod.limit(20)
     render "update_list.js"
   end
 
@@ -258,11 +262,16 @@ class MuttersController < ApplicationController
   end
 
 
+  #
   # つぶやき表示更新
-  # (JSで一定時間ごとに呼び出している)
+  #
+  # 最後にされたつぶやきのIDをcookieに入れておき、
+  # その後、定期的なJSでの呼び出しによって新しいつぶやきがないかチェックし、
+  # 存在したら表示を更新する
   #
   def update_disp
-    last_id = Mutter.last.id
+    last_id = Mutter.unscoped.last.id
+
     if cookies[:update_disp_id].blank?
       cookies[:update_disp_id] = last_id
       render :text => ""

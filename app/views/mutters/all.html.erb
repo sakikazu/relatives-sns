@@ -61,7 +61,7 @@ $(document).ready(function() {
           <div class="page-header"><h3>メンバー<small>()内はつぶやき数</small></h3></div>
           <ul>
             <% @users.each do |user| -%>
-              <li><%= link_to user.dispname(User::FULLNAME), mutter_by_user_path(user.id) %>(<%= @users_mcnt[user.id] %>)</li>
+              <li><%= link_to user.try(:dispname, User::FULLNAME), mutter_by_user_path(user.id) %>(<%= @users_mcnt[user.id] %>)</li>
             <% end if @users.present? -%>
           </ul>
         </div>

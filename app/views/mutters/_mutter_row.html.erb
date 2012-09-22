@@ -36,7 +36,8 @@
 <!-- つぶやきへのレス -->
 <% if mutter_row.children.present? -%>
 <ul class="children">
-  <% mutter_row.children.id_asc.each do |child| -%>
+  <% #childrenはつぶやき時間昇順で表示する -%>
+  <% mutter_row.children.reverse.each do |child| -%>
     <li class="clearfix">
     <div class="icon span1" style="margin-left: 6px;">
       <p>
@@ -50,7 +51,7 @@
     <div class="span6">
       <div class="bar">
         <span class='label label-inverse'><%= useragent(child.ua) %></span>
-        <span class='name'>&nbsp;<%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
+        <span class='name'>&nbsp;<%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if child.user.present? %></span>
         <span class='time'><%= link_to (l child.created_at), mutter_path(child) %></span>
         <span class="nice">
           <span id='cont_<%= child.id %>'>

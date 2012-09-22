@@ -37,7 +37,7 @@
 <br />
 <% @mutters.each do |m| -%>
   <div style="background-color:#E1E1E1">
-    <%= m.created_at.to_s(:short) %>  <span style="font-weight:bold"><%= m.user.dispname %></span>
+    <%= m.created_at.to_s(:short) %>  <span style="font-weight:bold"><%= m.user.try(:dispname) %></span>
   </div>
   <% if m.image? -%>
     <%#= link_to(image_tag(m.image(:thumb)), m.image(:large)) %><br />

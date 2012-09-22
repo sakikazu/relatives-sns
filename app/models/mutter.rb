@@ -30,7 +30,10 @@ class Mutter < ActiveRecord::Base
     :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
   scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
-  scope :includes_all, includes([{:user => :user_ext}, :nices, :celebration])
+
+  # [memo]こうやってそれぞれにuser、user_extを指定するようにすると、最初のリクエスト時にはやっぱ時間短縮されてる。
+  # 二度目のリクエストではキャッシュされるらしく、それぞれに指定しなかった時と同じ速度になる。
+  scope :includes_all, includes([{:user => :user_ext}, {:children => {:nices => {:user => :user_ext}}}, {:nices => {:user => :user_ext}}])
   scope :parents_mod, where("mutters.reply_id IS NULL") #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
   scope :id_desc, order("mutters.id DESC")
   scope :id_asc, order("mutters.id ASC")
