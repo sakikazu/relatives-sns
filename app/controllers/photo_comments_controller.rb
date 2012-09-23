@@ -9,12 +9,20 @@ class PhotoCommentsController < ApplicationController
     @photo = @photo_comment.photo
     @photo.update_attributes(:last_comment_at => Time.now)
 
-    #UpdateHistory
+    #UpdateHistory(mutters#indexの更新一覧表示用。たぶん)
     action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT, :content_id => @photo.album.id).first
     if action
       action.update_attributes(:updated_at => Time.now)
     else
       @photo.album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT)
+    end
+
+    #UpdateHistory(更新内容一括表示機能のための更新データ)
+    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO, :content_id => @photo.id).first
+    if action
+      action.update_attributes(:updated_at => Time.now)
+    else
+      @photo.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO)
     end
 
    end

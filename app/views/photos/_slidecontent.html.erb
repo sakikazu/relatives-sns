@@ -4,7 +4,7 @@
     <%= link_to "(コメント数：#{@photo.photo_comments.size}）", "#comment_area" %>
   </div>
   <div class="info">
-    投稿者：<%= @photo.user.dispname %> | 
+    投稿者：<%= @photo.user.try(:dispname) %> | 
     投稿日時：<%= l @photo.created_at if @photo.created_at %> | 
     撮影日時：<%= l @photo.exif_at if @photo.exif_at %>
   </div>

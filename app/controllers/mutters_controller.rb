@@ -325,7 +325,7 @@ class MuttersController < ApplicationController
     when UpdateHistory::ALBUMPHOTO_CREATE
       redirect_to album_path(up.content, "sort" => 1, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO
-      redirect_to slideshow_album_photo_path(up.content.album, up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_photo_path(up.content.album, up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::BOARD_CREATE, UpdateHistory::BOARD_COMMENT
       redirect_to board_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::MOVIE_CREATE, UpdateHistory::MOVIE_COMMENT
@@ -334,6 +334,8 @@ class MuttersController < ApplicationController
       redirect_to blog_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     end
   end
+
+
 
   private
   def recursive_for_update_all_view(prev, current, next_page)

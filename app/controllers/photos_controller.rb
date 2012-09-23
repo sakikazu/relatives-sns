@@ -16,6 +16,9 @@ class PhotosController < ApplicationController
   # GET /photos/1
   # GET /photos/1.json
   def show
+    #更新情報一括閲覧用
+    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
+
     @photo = Photo.find(params[:id])
     @photo_comment = PhotoComment.new(:user_id => current_user.id, :photo_id => @photo.id)
 

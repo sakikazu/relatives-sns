@@ -89,6 +89,7 @@ jQuery(document).ready(function(){
       arrowKey:false
     });
   });
+  colorbox_slideshow();
 
   slide_effect = (function(){
     jQuery(".carousel-demo2").sliderkit({
@@ -174,8 +175,14 @@ jQuery(document).ready(function(){
     })
 <% end -%>
 
-
 });
+
+// つぶやきの非表示になっているコメントを表示/非表示
+function toggleComments(obj) {
+  //$(obj).siblings(":hidden").show();
+  $(obj).siblings().toggle();
+}
+
 </script>
 
  </head>

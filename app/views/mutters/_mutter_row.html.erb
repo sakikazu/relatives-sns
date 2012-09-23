@@ -37,8 +37,14 @@
 <% if mutter_row.children.present? -%>
 <ul class="children">
   <% #childrenはつぶやき時間昇順で表示する -%>
-  <% mutter_row.children.reverse.each do |child| -%>
-    <li class="clearfix">
+
+  <!-- レスが2つ以上ついていたら、1つしか表示しないようにする。そして全部表示するボタンを設ける -->
+  <% count = mutter_row.children.size -%>
+  <% if count > 1 -%>
+    <div class="btn btn-info btn-block" onclick="javascript:toggleComments(this)">全部見る</div>
+  <% end -%>
+  <% mutter_row.children.reverse.each_with_index do |child, idx| -%>
+    <li class="clearfix" <%= 'style=display:none' if idx+1 < count %>>
     <div class="icon span1" style="margin-left: 6px;">
       <p>
       <% if  child.user.present? && child.user.user_ext.image? -%>

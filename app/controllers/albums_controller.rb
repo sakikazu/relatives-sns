@@ -27,6 +27,9 @@ class AlbumsController < ApplicationController
   # GET /albums/1
   # GET /albums/1.json
   def show
+    #更新情報一括閲覧用
+    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
+
     @sort = (params[:sort] =~ /1|2|3|4/) ? params[:sort].to_i : 1
     case @sort 
     when 1

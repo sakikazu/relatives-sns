@@ -102,6 +102,8 @@ commentshow = function() {
 <div class="page-header">
 <h3>このアルバムへのコメント<span style="color:red;font-size:16px;margin-left:8px;">(<%= @album.album_comments.size %>)</span> / <%= link_to '表示', "javascript:commentshow();", {:id => 'showlink'} %></h3>
 </div>
+
+<!-- アルバムへのコメント -->
 <div style="width:600px">
   <div id="comment_area" style="display:none">
     <div id="comments">
@@ -143,8 +145,8 @@ commentshow = function() {
 <% end -%>
 
 <div class="autopagerize_page_element">
-<div id="photo">
 <%= paginate @photos, :window => 2, :outer_window => 2 %><br>
+<div id="photo" class="clearfix">
 <% @photos.each do |p| -%>
   <div class="once_photo">
     <div class="bar">
@@ -165,7 +167,6 @@ commentshow = function() {
     </div>
   </div>
 <% end -%>
-<div class="clear"></div>
-<%= paginate @photos, :window => 2, :outer_window => 2 %>
 </div>
+<%= paginate @photos, :window => 2, :outer_window => 2 %>
 </div> <!-- autopagerize_page_element -->

@@ -19,11 +19,12 @@ class UpdateHistory < ActiveRecord::Base
   ALBUMPHOTO_COMMENT_FOR_PHOTO = 11 #AlbumComment用。上の(4)は、Album用
 
   scope :sort_updated, order('updated_at DESC')
-  #ALBUMPHOTO_COMMENT_FOR_PHOTOのものは更新情報一覧には出さない。アルバムへの更新として出されているので→ALBUMPHOTO_COMMENT
+
+  # ALBUMPHOTO_COMMENT_FOR_PHOTOのものは、mutters#indexの更新情報一覧にはアルバムへの更新(ALBUMPHOTO_COMMENT)として出されているので、出さないようにする
   scope :reject_photo_comment, where("action_type != ?", ALBUMPHOTO_COMMENT_FOR_PHOTO)
   scope :view_normal, includes({:user => :user_ext}).reject_photo_comment.sort_updated
 
-  #ALBUMPHOTO_COMMENTのものはコンテンツがアルバムであり、出しても意味ないので無視する
+  # 更新内容一括表示機能用）ALBUMPHOTO_COMMENTのものはコンテンツがアルバムであり、出しても意味ないので無視する
   scope :view_offset, lambda{|n| where("action_type != ?", ALBUMPHOTO_COMMENT).order("updated_at DESC").limit(1).offset(n)}
 
 

@@ -24,6 +24,7 @@
   <%= render :partial => "slidecontent" %>
 </div>
 
+<div class="span6 offset1">
 <h3 class="normal">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
 <div id="photo_comments">
   <%= render :partial => "photo_comments/comments" %>
@@ -36,4 +37,5 @@
     <%= f.hidden_field :photo_id %>
     <%= submit_tag "投稿する", class: "btn btn-primary" %>
   <% end -%>
+</div>
 </div>
