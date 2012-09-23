@@ -270,23 +270,13 @@ class MuttersController < ApplicationController
   # 存在したら表示を更新する
   #
   def update_disp
-    last_id = Mutter.first.id #Mutter.unscoped.last.id だと、クエリーキャッシュのせいか最新のつぶやきが取れなかった
-
-    if cookies[:update_disp_id].blank?
-      cookies[:update_disp_id] = last_id
+    @mutters = Mutter.updated_datas(cookies)
+    if @mutters.blank?
       render :text => ""
-      return
-    end
-
-    prev_check = cookies[:update_disp_id].to_i
-    if last_id > prev_check
-      cookies[:update_disp_id] = last_id
-      @mutters = Mutter.includes_all.parents_mod.limit(20)
-      render :partial => "list"
     else
-      render :text => ""
+      render :partial => "list"
     end
-  end  
+  end
 
 
   # つぶやき新着チェック

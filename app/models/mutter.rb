@@ -132,4 +132,34 @@ class Mutter < ActiveRecord::Base
      content = parts.join(" ")
      content.blank? ? "(本文なし)" : content
    end
+
+
+
+   #
+   # 更新されたMutterデータを取得する（つぶやき自動表示更新用）
+   #
+   # @param モデルでCookieを使用するためインスタンスを渡してやる
+   # @return 更新されていた場合はデータを返す
+   #
+   def self.updated_datas(cookies)
+     last_id = self.uncached {
+       # [memo] self.unscoped.last.id だと、uncachedしているのに再ロードされず。クエリーキャッシュは使われてないんだけど、別の機構で保持されてる感じ
+       # [memo] ここではunscopedをしないと、for_sorted_atでソートされてしまうし、unscopedをした場合はid_descまでつけてやらないと再読み込みしてくれない
+       last_id = self.unscoped.id_desc.first.id
+     }
+
+     if cookies[:update_disp_id].blank?
+       cookies[:update_disp_id] = last_id
+       return false
+     end
+
+     prev_id = cookies[:update_disp_id].to_i
+     if last_id > prev_id
+       cookies[:update_disp_id] = last_id
+       return self.includes_all.parents_mod.limit(20)
+     else
+       return false
+     end
+   end
+
 end
