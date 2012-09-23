@@ -270,7 +270,7 @@ class MuttersController < ApplicationController
   # 存在したら表示を更新する
   #
   def update_disp
-    last_id = Mutter.unscoped.last.id
+    last_id = Mutter.first.id #Mutter.unscoped.last.id だと、クエリーキャッシュのせいか最新のつぶやきが取れなかった
 
     if cookies[:update_disp_id].blank?
       cookies[:update_disp_id] = last_id
