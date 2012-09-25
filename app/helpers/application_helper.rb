@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 module ApplicationHelper
 
+  #
   # UserAgentから各デバイス名を割り出す
+  #
   def useragent(ua)
     case ua
     when /iPhone OS (\d)/
       ret = "iOS#{$1}"
-    when /Android ([\d\.]*)/
-      ret = "Android #{$1}"
     when /Chrome\/([\d]*)/
       ret = "Chrome#{$1}"
+      ret += " [Android#{$1}]" if /Android ([\d\.\s]*)/ =~ ua
     when /Firefox\/([\d]*)/
       ret = "Firefox#{$1}"
-    when /Opera/
-      ret = "Opera"
+      ret += " [Android#{$1}]" if /Android([\d\.\s]*)/ =~ ua
+    when /Opera\/([\d]*)/
+      ret = "Opera#{$1}"
+      ret += " [Android#{$1}]" if /Android ([\d\.\s]*)/ =~ ua
+    when /Android ([\d\.]*)/
+      ret = "Android #{$1}"
     when /MSIE (\d)/
       ret = "IE#{$1}"
     else
@@ -23,7 +28,10 @@ module ApplicationHelper
   end
 
 
-  #何度もrenderされるので、無理にヘルパーにした
+  #
+  # イイネの表示フィールド
+  # 何度もrenderされるので、無理にヘルパーにした
+  #
   def nice_field(content, content_type, area)
     output = <<"EOS"
 <script>

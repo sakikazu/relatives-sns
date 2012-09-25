@@ -41,11 +41,21 @@ class AlbumsController < ApplicationController
     when 4
       photos = @album.photos.order("nices.created_at DESC").order("last_comment_at DESC")
     end
+
+    # [暫定機能] アップロード者でフィルタリング
+    if params[:user_id].present?
+      photos = @album.photos.where(user_id: params[:user_id]).order("id DESC")
+      @selected_uploader = User.find_by_id(params[:user_id])
+    end
+
     @photos = photos.includes(:nices).page(params[:page])
 
     @comment = AlbumComment.new(:album_id => @album.id)
 
     @photo_all_num = @album.photos.size
+
+    # アップロード者リスト(フィルタリングボタン用)
+    @uploader_list = @album.photos.includes(user: :user_ext).select('distinct user_id').map{|p| [p.user.id, p.user.dispname]}
 
     respond_to do |format|
       format.html # show.html.erb

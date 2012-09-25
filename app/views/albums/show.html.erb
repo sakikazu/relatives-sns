@@ -144,6 +144,25 @@ commentshow = function() {
   </div>
 <% end -%>
 
+<!-- アップロード者でフィルタリング -->
+<div class="btn-group">
+  <button class="btn">アップロード者</button>
+  <button class="btn dropdown-toggle" data-toggle="dropdown">
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <% @uploader_list.each do |list| -%>
+    <li><%= link_to list[1], action: "show", user_id: list[0] %></li>
+    <% end -%>
+  </ul>
+</div>
+<% if @selected_uploader.present? -%>
+  <br>
+  <div class="alert alert-success">
+  <h4>現在、<%= @selected_uploader.dispname %>がアップした写真が表示されています</h4>
+</div>
+<% end -%>
+
 <div class="autopagerize_page_element">
 <%= paginate @photos, :window => 2, :outer_window => 2 %><br>
 <div id="photo" class="clearfix">
@@ -152,7 +171,13 @@ commentshow = function() {
     <div class="bar">
       <%= "#{p.title} (コメント数：#{p.photo_comments.size}）" %>&nbsp;<%= nice_field_disp_only(p) %>
     </div>
-    <div class="photo"><%= link_to(image_tag(p.image(:thumb)), slideshow_album_photo_path(@album, p), {rel: "colorbox"}) if p.image? %></div>
+    <div class="photo">
+      <% if request.smart_phone? -%>
+        <%= link_to(image_tag(p.image(:thumb)), album_photo_path(@album, p)) if p.image? %>
+      <% else -%>
+        <%= link_to(image_tag(p.image(:thumb)), slideshow_album_photo_path(@album, p), {rel: "colorbox"}) if p.image? %>
+      <% end -%>
+    </div>
     <div class="info">
       投稿者：<%= p.user.try(:dispname) %><br />
       投稿日時：<%= l p.created_at if p.created_at %><br />

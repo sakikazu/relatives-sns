@@ -57,12 +57,12 @@
   margin-left: 0px;
 }
 .mutter_rows .content {
-  display: block;
+  /* display: block; */
   padding: 5px 4px;
   /* float: left; */
 }
-.mutter_rows .image {
-  float: left;
+.mutter_rows img {
+  /* float: left; */
   margin-right: 8px;
 }
 .mutter_rows .icon {

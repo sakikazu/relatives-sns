@@ -177,10 +177,9 @@ jQuery(document).ready(function(){
 
 });
 
-// つぶやきの非表示になっているコメントを表示/非表示
+// つぶやきのコメントのうち、最後のコメント以外をトグル表示
 function toggleComments(obj) {
-  //$(obj).siblings(":hidden").show();
-  $(obj).siblings().toggle();
+  $(obj).siblings(":not(.last_children)").toggle();
 }
 
 </script>

@@ -15,7 +15,7 @@
   </p>
 </div>
 <div class="span6" style="margin-left: 22px;">
-  <div class="bar">
+  <div class="bar clearfix">
     <span class='label label-inverse'><%= useragent(mutter_row.ua) %></span>
     <span class='name'>&nbsp;<%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
     <span class='time'><%= link_to (l mutter_row.created_at), mutter_path(mutter_row) %></span>
@@ -26,10 +26,11 @@
       <a data-toggle="modal" href="#myModal<%= mutter_row.id %>" ><i class="icon-comment"></i>&nbsp;レス</a>
     </span>
   </div>
-  <span class='image'><%= link_to(image_tag(mutter_row.image(:thumb)), mutter_row.image(:large), {:class => colorbox_class}) if mutter_row.image? %></span>
-  <span class='content'><%= sani_custom(mutter_row.view_content) %></span>
-  <div class="clear"></div>
-  <span class='delete'><%= link_to("削除", mutter_row, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></span>
+  <div class="content clearfix">
+    <%= link_to(image_tag(mutter_row.image(:thumb), align: :left), mutter_row.image(:large), {:class => colorbox_class}) if mutter_row.image? %>
+    <%= sani_custom(mutter_row.view_content) %>
+  </div>
+  <div class='delete'><%= link_to("削除", mutter_row, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></div>
 </div>
 </div>
 
@@ -41,10 +42,18 @@
   <!-- レスが2つ以上ついていたら、1つしか表示しないようにする。そして全部表示するボタンを設ける -->
   <% count = mutter_row.children.size -%>
   <% if count > 1 -%>
-    <div class="btn btn-info btn-block" onclick="javascript:toggleComments(this)">全部見る</div>
+    <div class="btn btn-block" onclick="javascript:toggleComments(this)"><i class="icon-plus"></i>全部見る<i class="icon-plus"></i></div>
   <% end -%>
   <% mutter_row.children.reverse.each_with_index do |child, idx| -%>
-    <li class="clearfix" <%= 'style=display:none' if idx+1 < count %>>
+    <% # 最後のコメントは常時表示させておく。中間のコメントはボタンによってトグル表示 -%>
+    <% if idx + 1 < count -%>
+      <li class="clearfix" style="display:none">
+    <% elsif idx + 1 == count -%>
+      <li class="clearfix last_children">
+    <% else -%>
+      <li class="clearfix">
+    <% end -%>
+
     <div class="icon span1" style="margin-left: 6px;">
       <p>
       <% if  child.user.present? && child.user.user_ext.image? -%>
@@ -55,7 +64,7 @@
       </p>
     </div>
     <div class="span6">
-      <div class="bar">
+      <div class="bar clearfix">
         <span class='label label-inverse'><%= useragent(child.ua) %></span>
         <span class='name'>&nbsp;<%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if child.user.present? %></span>
         <span class='time'><%= link_to (l child.created_at), mutter_path(child) %></span>
@@ -67,10 +76,11 @@
           <!-- <a data-toggle="modal" href="#myModal<%#= child.id %>" >レス</a> -->
         </span>
       </div>
-      <span class='image'><%= link_to(image_tag(child.image(:thumb)), child.image(:large), {:class => colorbox_class}) if child.image? %></span>
-      <span class='content'><%= sani_custom(child.view_content) %></span>
-      <div class="clear"></div>
-      <span class='delete'><%= link_to("削除", child, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, child.user) %></span>
+      <div class="content clearfix">
+        <%= link_to(image_tag(child.image(:thumb), align: :left), child.image(:large), {:class => colorbox_class}) if child.image? %>
+        <%= sani_custom(child.view_content) %>
+      </div>
+      <div class='delete'><%= link_to("削除", child, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, child.user) %></div>
     </div>
 
     </li>
