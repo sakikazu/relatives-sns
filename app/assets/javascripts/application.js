@@ -25,5 +25,6 @@
 //= require jquery.sliderkit.1.9.2.pack.js
 //= require jquery.mousewheel.min.js
 //= require jquery.tipTip.minified
-//= require desktopify.js
+//= require desktopify
+//= require bgstretcher
 //= require_tree ./jqplot

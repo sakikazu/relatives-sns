@@ -1,5 +1,36 @@
+<script>
+  jQuery(document).ready(function(){
+
+    <%
+      # bgStretcher用の画像パスの文字列を作る（JSでは配列として扱われる）
+      images = []
+      Dir.glob("public/files/other/bgstretcher/*").each{|fn|
+        if fn =~ /\.jpg$/
+          images << fn
+        end
+      }
+      list = ""
+      images.each do|i|
+        list += "\'#{i.sub("public", "")}\', "
+      end
+    %>
+
+    // [todo] 前後へのボタンがまだ動いてない
+    $('body').bgStretcher({
+      images: [<%= list.html_safe %>],
+      slideShowSpeed: 'slow',
+      nextSlideDelay: 8000,
+      buttonPrev: '#prev-btn',
+      buttonNext: '#next-btn',
+      imageWidth: 1600,
+      imageHeight: 1200
+    });
+
+  }); // jQuery(document).ready
+</script>
+
 <div class="row">
-  <div class="span7 offset2">
+  <div class="span7 offset2" id="about_contents">
 
     <div class="page-header">
       <h3>サイトを使ってもらう上で伝えたいこと</h3>

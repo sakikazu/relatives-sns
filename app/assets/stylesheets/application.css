@@ -48,6 +48,25 @@
   /* list-style: square; */
 /* } */
 
+
+/**********************************************
+ other
+**********************************************/
+#about_contents {
+  padding: 15px;
+  background-color: black;
+  opacity: 0.8;
+  color: white;
+  border-radius: 15px;
+}
+
+#prev-btn {
+  background-color: black;
+  opacity: 0.8;
+  color: white;
+  font-size: 20px;
+}
+
 /**********************************************
  mutter
 **********************************************/
