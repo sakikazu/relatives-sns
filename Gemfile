@@ -33,7 +33,12 @@ gem 'jpmobile'
 # todo これだけじゃダメだった
 # gem 'flash_cookie_session'
 #
+
+# 現在、ガラケーからのファイル添付のつぶやきにのみ使用
+# ※tmailを有効にしたらログインフォームでエラーになった。全く不明
 # gem 'tmail'
+gem 'ruby-gmail'
+
 
 # Gems used only for assets and not required
 # in production environments by default.
