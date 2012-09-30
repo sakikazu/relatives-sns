@@ -9,12 +9,12 @@
 </head>
 <body>
 
-<h1><%= link_to "AdanHP", root_path %></h1>
+  <h1><%= link_to "AdanHP", root_path %>&nbsp;<span style="font-size:small"><%= link_to '[最下へ]', '#bottom-anchor' %></span></h1>
 <% if !current_user %>
   <%= link_to "ログイン", new_user_session_path %> |
 <% else %>
-  <%= link_to "ログアウト", mobile_sign_out_path %>
   ユーザー：<%= current_user.username %>
+  <span style="font-size:small"><%= link_to "ログアウト", mobile_sign_out_path %></span>
 <% end %>
 
 <p style="color: green"><%= flash[:notice] %></p>
@@ -22,12 +22,14 @@
 <%= link_to "トップ", :controller => "mobile", :action => :index %> /
 <%= link_to "更新情報", :controller => "mobile", :action => :update_history %> /
 <%= link_to "日記", :controller => "blogs", :action => :index_mobile %> /
-<%#= link_to "掲示板", :controller => "boards", :action => :index_mobile %>
+<%= link_to "掲示板", :controller => "boards", :action => :index_mobile %>
 <br /><br />
 <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium"><%= @content_title.html_safe if @content_title.present? %></div>
 <br />
 
 <%= yield  %>
 
+<!-- 最下へジャンプするためのもの -->
+<div id="bottom-anchor"></div>
 </body>
 </html>

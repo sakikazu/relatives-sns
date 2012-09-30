@@ -1,5 +1,5 @@
 <%= link_to '自分の日記へ', :action => :index_mobile %> |
-<%= link_to "#{@blog.user.dispname}の日記一覧を見る", index_mobile_blogs_path(:username => @blog.user.login) unless @blog.user == current_user %>
+<%= link_to "#{@blog.user.dispname}の日記一覧を見る", index_mobile_blogs_path(:username => @blog.user.username) unless @blog.user == current_user %>
 
 <div id="show_blog">
   <p class="bar">
@@ -40,7 +40,7 @@
 <div style="text-align:center;background-color:#FF924D;color:#ffffff;font-size:medium">新規コメント</div>
 <div id="comment_form">
 <%= form_tag blog_blog_comments_path(@blog.id) do %>
-  <%= text_area_tag "[blog_comment][content]", nil, :size => "60x5" %><br />
+  <%= text_area_tag "[blog_comment][content]", nil, :size => "40x5" %><br />
   <%= submit_tag "投稿する" %>
 <% end -%>
 </div>

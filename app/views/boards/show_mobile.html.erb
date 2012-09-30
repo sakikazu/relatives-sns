@@ -12,8 +12,8 @@
   
   <div style="text-align:center;background-color: rgb(217, 41, 10);color:#ffffff;font-size:medium">新規コメント</div>
   <br />
-  <% form_tag({:action => :create_comment_mobile, :board_id => @board.id}) do %>
-    <%= text_area_tag :comment, nil, :size => "20x4" %><br />
+  <%= form_tag({:action => :create_comment_mobile, :board_id => @board.id}) do %>
+    <%= text_area_tag :comment, nil, :size => "30x4" %><br />
     <br />
     <%= submit_tag "投稿する" %>
   <% end -%>

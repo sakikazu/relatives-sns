@@ -35,7 +35,8 @@ class BoardsController < ApplicationController
     when 1
       buf = BoardComment.maximum(:created_at, :group => :board_id)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
-      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.page(params[:page]).per(7)
+      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
+      @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(7)
     when 2
       @boards = Board.page(params[:page]).per(7)
     else
@@ -44,7 +45,6 @@ class BoardsController < ApplicationController
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.page(params[:page]).per(7)
     end
 
-    set_header
     render :action => :index_mobile, :layout => "mobile"
   end
 

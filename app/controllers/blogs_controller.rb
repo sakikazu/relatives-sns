@@ -33,8 +33,8 @@ class BlogsController < ApplicationController
   end
 
   def index_mobile
-    if params[:username] && (params[:username] != current_user.login)
-      @user = User.find_by_login(params[:username])
+    if params[:username] && (params[:username] != current_user.username)
+      @user = User.find_by_username(params[:username])
       @blogs = Blog.joins(:user).where(user_id: @user.id).page(params[:page]).per(5)
     else
       @blogs = Blog.joins(:user).where(user_id: current_user.id).page(params[:page]).per(5)
@@ -113,13 +113,6 @@ class BlogsController < ApplicationController
     params[:blog][:user_id] = current_user.id
     @blog = Blog.new(params[:blog])
 
-    if request.mobile?
-      @blog.save
-      @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
-      redirect_to :action => :show_mobile, :id => @blog.id
-      return
-    end
-
     respond_to do |format|
       if @blog.save
         if params[:image]
@@ -128,7 +121,12 @@ class BlogsController < ApplicationController
         end
 
         @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
-        format.html { redirect_to @blog, notice: '日記を投稿しました。' }
+
+        if request.mobile?
+          format.html { redirect_to({:action => :show_mobile, :id => @blog.id}, notice: '日記を投稿しました。') }
+        else
+          format.html { redirect_to @blog, notice: '日記を投稿しました。' }
+        end
         format.json { render json: @blog, status: :created, location: @blog }
       else
         format.html { render action: "new" }

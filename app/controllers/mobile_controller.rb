@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 class MobileController < ApplicationController
   before_filter :authenticate_user!
+  after_filter :update_request_at, only: [:index]
 
   ## jpmobile memo
   #JpmobileではControllerにmobile_filterを指定することで DoCoMo、Au、SoftBankの絵文字を透過的に扱うことができる。

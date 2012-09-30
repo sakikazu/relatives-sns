@@ -88,7 +88,7 @@ class UserExt < ActiveRecord::Base
         #年齢が登録記念日に該当するなら記念日名を、そうでないなら「誕生日」と出力
         years = (birday_tmp - ue.birth_day) / 365
         kinen_name =  kinenbirth_array[years] || "誕生日"
-        kinen << {:user => ue.user, :count => diffday, :kinen_name => kinen_name}
+        kinen << {:user => ue.user, :count => diffday.to_i, :kinen_name => kinen_name}
       end
 
       ##--日齢--##
@@ -97,7 +97,7 @@ class UserExt < ActiveRecord::Base
         #記念日齢が10日～-1日（昨日）以内なら表示
         if diffday >= -1 and diffday <= 10
           kinen_name = "#{k}日齢"
-          kinen << {:user => ue.user, :count => diffday, :kinen_name => kinen_name}
+          kinen << {:user => ue.user, :count => diffday.to_i, :kinen_name => kinen_name}
           #初めの日齢のみ表示
           break 
         end

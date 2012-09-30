@@ -3,7 +3,7 @@
 <% @updates.each do |up| -%>
 <div class="onece">
   <div style="background-color:#E1E1E1"><%= up.updated_at.to_s(:short) if up.updated_at %></div>
-  <%= up.user.dispname %>が 
+  <%= up.user.try(:dispname) %>が 
   <% case up.action_type
      when UpdateHistory::ALBUM_CREATE -%>
     <b>[アルバム]<%= up.content.title%></b>
