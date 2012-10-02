@@ -2,13 +2,14 @@
   jQuery(document).ready(function(){
 
     <%
-      # bgStretcher用の画像パスの文字列を作る（JSでは配列として扱われる）
+      # bgStretcher用の画像パスの、JSの配列用文字列を作る
       images = []
       Dir.glob("public/files/other/bgstretcher/*").each{|fn|
         if fn =~ /\.jpg$/
           images << fn
         end
       }
+      images.sort_by{rand}  # 配列の中身をランダムにする
       list = ""
       images.each do|i|
         list += "\'#{i.sub("public", "")}\', "
@@ -23,14 +24,17 @@
       buttonPrev: '#prev-btn',
       buttonNext: '#next-btn',
       imageWidth: 1600,
-      imageHeight: 1200
+      imageHeight: 1064
     });
 
   }); // jQuery(document).ready
 </script>
 
 <div class="row">
-  <div class="span7 offset2" id="about_contents">
+  <div class="span6 offset6" id="about_contents">
+      <a href="javascript:;" id="prev-btn" class="btn btn-inverse">＜＜</a>
+      <a href="javascript:;" id="next-btn" class="btn btn-inverse">＞＞</a>
+
 
     <div class="page-header">
       <h3>サイトを使ってもらう上で伝えたいこと</h3>
@@ -77,4 +81,5 @@
     </ul>
 
   </div>
+
 </div>
