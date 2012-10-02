@@ -124,8 +124,10 @@ EOS
 
   #jsコード内に出力するときに改行コードがあるとjsコード自体が改行されてしまうのでスペースに変換する
   def sani_for_js(html)
-    html.gsub!(/[\r\n]+/, " ") unless html.blank?
-    auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
+    html.gsub!(/[\r\n]+/, " ") if html.present?
+    # これだとクォーテーションなどがそのままになり、JSの動作に不具合が生じた。タグを有効にしたかったんだろうけどとりあえずJS内ではデザインなしってことで無効。
+    # auto_link(Sanitize.clean(h(html), Sanitize::Config::BASIC)).html_safe
+    auto_link(h(html))
   end
 
   def action_info(up)

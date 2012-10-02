@@ -15,7 +15,7 @@ class MobileController < ApplicationController
     @content_title = "誕生記念日"
     @page_title = "トップ"
     @mutter = Mutter.new(:user_id => current_user.id)
-    @mutters = Mutter.includes({:user => :user_ext}).order("id DESC").page(params[:page]).per(7)
+    @mutters = Mutter.includes({:user => :user_ext}).order("id DESC").page(params[:page]).per(12)
     @kinen = UserExt.kinen
   end
 

@@ -246,6 +246,8 @@ class MuttersController < ApplicationController
       @celebration = Celebration.create(params[:celebration])
     end
     params[:mutter][:celebration_id] = @celebration.id
+    params[:mutter][:ua] = request.env["HTTP_USER_AGENT"]
+
     Mutter.create(params[:mutter])
     redirect_to({:action => :index}, :notice => 'お祝いをしました。「お祝いを見る」から確認できます。')
   end
