@@ -69,6 +69,7 @@ class Mutter < ActiveRecord::Base
   #
   # ref: ruby-gmailを使ってRubyからGmailのメールを受信して本文を取得 - Shoken OpenSource Society http://shoken.hatenablog.com/entry/20120401/p1
   # -------------------------------------
+  require 'gmail'
   def self.create_from_mail
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
     gmail = Gmail.new(config['username'], config['password'])
