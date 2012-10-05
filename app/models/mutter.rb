@@ -65,36 +65,17 @@ class Mutter < ActiveRecord::Base
 
   # -------------------------------------
   # メールからつぶやき、画像を取得する
+  # ※指定したラベルにある、未読のメールで、件名に特定の文字列が入っており、ファイルが添付されているメールが処理対象
+  #
+  # ref: ruby-gmailを使ってRubyからGmailのメールを受信して本文を取得 - Shoken OpenSource Society http://shoken.hatenablog.com/entry/20120401/p1
   # -------------------------------------
-  require 'net/imap'
   def self.create_from_mail
-    mail_uids = self.get_gmail_inbox_uids
-    mail_uids.each do |uid|
-      email = TMail::Mail.parse(@@imap.uid_fetch(uid,'RFC822').first.attr['RFC822'])
-      self.create_from_mail2(email)
-      # 一応明示的に既読にする(なくてもparseの時点で既読になる)
-      @@imap.store(uid,"+FLAGS",[:Seen])    #mail readed
-      # @@imap.store(uid,'+FLAGS',[:Deleted]) #delete mail
-      @@imap.expunge
-    end
-
-    # 切断する
-    @@imap.logout
-    p "IMAP LOGOUT"
-  end
-
-  # GmailにIMAPで接続し、未読メールを取得
-  def self.get_gmail_inbox_uids
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
-    @@imap = Net::IMAP.new(config['host'],config['port'],true)
-    @@imap.login(config['username'],config['password']) # ID、パスワード
-    p "IMAP LOGIN --------------------"
-
-    # 受信箱を開く
-    @@imap.select(config['gmail_label'])
-    p "IMAP SELECT #{config['gmail_label']} --------------------"
-    mail_uids = @@imap.uid_search(["UNSEEN"])
-    mail_uids
+    gmail = Gmail.new(config['username'], config['password'])
+    mails =  gmail.mailbox(config['gmail_label']).emails(:unread).each do |mail| #emailsの引数には:all,:read,:unreadがある
+      self.create_from_mail2(mail)
+    end
+    gmail.disconnect
   end
 
   # ファイルが添付されてないとMutterを作成しない
@@ -102,28 +83,39 @@ class Mutter < ActiveRecord::Base
     # check -- タイトルは正しいか、user_idは取得できたか、ファイルが添付されているか
     sub = email.subject
     title_check = [sub.index("[a-dan-hp]").present?, sub.index("[user_id]").present?].all?
-    u = email.subject.split("[user_id]")[1]
+    u = sub.split("[user_id]")[1]
     u_check = u.present? && u =~ /\d/
-    return if [title_check, u_check, email.has_attachments?].any?{|x| x.blank?}
-    p 'mail check ok -------------'
+    return if [title_check, u_check, email.attachments.present?].any?{|x| x.blank?}
+    p '### mail has attachments & title check ok -------------'
 
     user_id = u.to_i
     content = self.get_content(email)
-    p content
 
+    # todo 1メール中の複数ファイルって対応できるのかな？
+    # todo 現在、まずはファイルに保存してそれを読み込んでPaperclipに登録しているが、もっと簡易化できると思うんだけど
     #メールの判定などのコード(省略)  ←って何をすべきなんだろう？
-    img = email.attachments.first
-    mutter = self.new(:user_id => user_id, :content => content)
-    mutter.image = img #paperclip 関連が生成される(画像、ディレクトリ)
-    mutter.save
-    p "save one image"
+    email.attachments.each do |attach|
+      # p attach.content_type
+      # p attach.methods
+      # p attach.filename
+      imagefilename = '/tmp/adanhp_for_mutter_image.jpg'
+      File.open(imagefilename, "w+b", 0644) {|f| f.write attach.body.decoded}
+      image = File.new(imagefilename)
+      if attach.content_type.start_with?('image/')
+        mutter = self.new(:user_id => user_id, :content => content)
+        mutter.image = image #paperclip 関連が生成される(画像、ディレクトリ)
+        mutter.save
+        p "### save one image"
+      end
+    end
   end
 
    def self.get_content(email)
-     body = email.body.toutf8
+     body = email.text_part.decoded
      delim = $&
      parts = body.split(delim)
-     # bodyに「Attachment:」文字列が存在したら、
+     p parts
+     # bodyに「Attachment:」文字列が存在したら削除する（念のため2回）
      idx = parts.index("Attachment:")
      if idx.present?
        parts.delete_at(idx)
@@ -132,7 +124,6 @@ class Mutter < ActiveRecord::Base
      content = parts.join(" ")
      content.blank? ? "(本文なし)" : content
    end
-
 
 
    #

@@ -9,7 +9,7 @@
           images << fn
         end
       }
-      images.sort_by{rand}  # 配列の中身をランダムにする
+      images = images.sort_by{rand}  # 配列の中身をランダムにする
       list = ""
       images.each do|i|
         list += "\'#{i.sub("public", "")}\', "
