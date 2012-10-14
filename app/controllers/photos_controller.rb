@@ -15,6 +15,10 @@ class PhotosController < ApplicationController
 
   # GET /photos/1
   # GET /photos/1.json
+  #
+  # 使用時の注意：これは通常のレイアウトを使用するため、colorboxで使う用ではない。colorboxを使用するなら、layoutをオフにしてapplication.jsを読みこまないslideshowメソッドを使用する
+  # →colorboxにした場合にapplication.jsをバックとフロントでどちらも読み込んでしまうと、Ajaxで多重書き込みが起きてしまう
+  #
   def show
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
@@ -82,17 +86,15 @@ class PhotosController < ApplicationController
     # end
   end
 
+  # PCからはcolorboxで使用する前提。スマホからは一つのページとして表示する
   def slideshow
     @from_top_flg = true if params[:top].present?
     @photo = Photo.find(params[:id])
     @photo_comment = PhotoComment.new(:user_id => current_user.id, :photo_id => @photo.id)
+    #sakikazu PCからはJSをincludeしないようにレイアウトをオフにして、Ajaxの多重書き込みを防ぐ(※スマホからは見づらいのでcolorboxは使用しない)
     unless request.smart_phone?
       render layout: false
     end
-    #sakikazu PCからはJSをincludeしないレイアウトを読み込んで、Ajaxの多重書き込みを防ぐ(※スマホからは見づらいのでcolorboxは使用しない)
-    # unless request.smart_phone?
-      # render :layout => 'non_include'
-    # end
   end
 
   def update_from_slideshow
