@@ -85,9 +85,17 @@ commentshow = function() {
 <%= link_to 'アルバム一覧', albums_path, class: "btn" %>
 <%= link_to '編集する', edit_album_path(@album), class: "btn btn-info" %>
 
-<div class="page-header">
-  <h3><%= "#{@album.title} （写真数：#{@photo_all_num}）" %></h3>
+<div class="page-header ver2">
+  <h3><%= "#{h(@album.title)} <small>写真数：#{@photo_all_num}</small>".html_safe %></h3>
 </div>
+
+<!-- うーん、ちょっと違うなぁ
+<div class="navbar">
+  <div class="navbar-inner">
+    <p class="brand"><%#= "#{@album.title} （写真数：#{@photo_all_num}）" %></p>
+  </div>
+</div>
+-->
 
 <div style="width:700px">
   <div class="once_content">
@@ -130,6 +138,7 @@ commentshow = function() {
 <%= hidden_field_tag :user_id %>
 <%= hidden_field_tag :album_id %>
 <%= file_field_tag :uploadify %><br />
+<strong class="important">※スマホからはアップできません</strong>
 
 <% if @photos.size > 0 -%>
   <div class="page-header"><h3 class="normal">このアルバムの写真<small>写真をクリックするとスライドショーが開始されます</small></h3></div>

@@ -41,13 +41,13 @@ $(document).ready(function() {
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
-    <%= link_to(image_tag(obj.image(:thumb)), slideshow_album_photo_path(obj), {:class => colorbox_fix_size}) if obj.image?  %><br>
+    <%= link_to(image_tag(obj.image(:thumb)), album_photo_path(obj.album, obj), {:class => colorbox_fix_size}) if obj.image?  %><br>
     写真タイトル：<%= obj.title %> / アルバム：<%= link_to obj.album.title, obj.album %>
   <% else -%>
     削除されました.
   <% end -%>
   <hr>
-<% end if false -%>
+<% end -%>
 </div>
 
 <h2 class="normal">人気の日記</h2>
@@ -74,7 +74,7 @@ $(document).ready(function() {
 <% end -%>
 </div>
 
-<!-- <h2 class="normal">人気の動画</h2> -->
+<h2 class="normal">人気の動画</h2>
 <div class="h2normal_content">
 <% @movie_data.each_with_index do |data, idx| -%>
   <% obj = Movie.find_by_id(data[:id]) -%>

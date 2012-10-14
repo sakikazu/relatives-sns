@@ -7,7 +7,7 @@
     <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", :confirm => '本当に削除してもよろしいですか？' if editable(current_user, @blog.user) %>
     </div>
 
-    <div class="page-header">
+    <div class="page-header ver2">
       <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.blog_comments.size}）", "#comments" %></small></h3>
     </div>
 
@@ -36,7 +36,7 @@
 
     <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" %>
 
-    <div class="page-header"><h3>コメント</h3></div>
+    <div class="page-header ver2"><h3>コメント</h3></div>
     <div id="comments">
       <%= render :partial => "blog_comments/comments" %>
     </div>

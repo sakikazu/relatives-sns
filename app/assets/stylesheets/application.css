@@ -113,13 +113,13 @@
 }
 .mutter_rows li{
   list-style: none;
-  padding: 5px;
-  margin-top: 7px;
+  padding: 8px;
+  margin-top: 15px;
   /* border-radius: 7px 7px 7px 7px; */
   /* box-shadow: 1px 1px 3px #999999; */
   background-color: white;
   /* border: 1px outset gray; */
-  border: 1px solid lightgray;
+  border: 2px solid lightgray;
 }
 .mutter_rows li.even{
   background-color: MistyRose;
@@ -316,10 +316,6 @@ footer {
 }
 .text-center {
   text-align: center;
-}
-
-h1.title {
-  margin: 20px 0px;
 }
 
 table.th-vertical-top th {
@@ -524,3 +520,52 @@ a.colorbox:hover img{
   margin-bottom: 40px;
 }
 
+
+/**********************************************
+見出し h1, h2, h3, h4
+**********************************************/
+
+
+h1.title {
+  margin: 20px 0px;
+}
+
+h2.normal {
+  border-bottom: 4px solid #003F8E;
+  margin-top: 40px;
+
+  font-size: 25px;
+  color: #003F8E;
+  text-shadow: 1px 1px 0px white, 2px 2px 1px #B0D3FF;
+}
+
+/* 真面目系 */
+h2.normal2 {
+  margin-top: 40px;
+  font-size: 20px;
+  background: #F8F8F8;
+  border-left: 11px double #CCC;
+  padding: 0px 10px;
+}
+
+h2.normal3 {
+  color: #19417F;
+  border-bottom: 1px solid #19417F;
+  margin-top: 40px;
+  font-size: 20px;
+  border-left: 5px solid #19417F;
+  padding: 0px 10px;
+}
+
+/* AdanHPには合わない。つまりTwitterBootstrapには合わない */
+.headding04 {
+  margin:0 0 30px 0;
+  padding:12px 10px;
+  background: #1D8ADE;
+  color:#FFF;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  text-shadow:1px 1px 2px #333;
+  box-shadow:inset -1px -1px 2px rgba(0,0,0, 0.6),inset 1px 1px 2px rgba(255,255,255,0.8);
+}
