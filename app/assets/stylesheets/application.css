@@ -245,6 +245,55 @@ footer {
 /* } */
 
 
+
+
+/*------------------------
+ * nices
+ *-----------------------*/
+/* #nice_show { */
+  /* width: 650px; */
+  /* margin: auto; */
+/* } */
+/* #nice_show .nice_content { */
+  /* padding: 4px 4px 0px; */
+/* } */
+/* #nice_show .nice_content .mutter_rows { */
+  /* width:100%; */
+  /* margin-left:10px; */
+/* } */
+/* #nice_show .nice_content .mutter_rows .content { */
+  /* background:#E7E7DA; */
+  /* padding:5px; */
+  /* line-height:20px; */
+/* } */
+/* #nice_show_left { */
+  /* width: 650px; */
+  /* float: left; */
+/* } */
+.nice_rank {
+  font-weight:bold;
+  font-size: 120%;
+  color:red;
+  margin:25px 0px 5px;
+}
+.nice_user {
+  margin: 12px 0px;
+  color: olive;
+  font-weight: bold;
+  font-size: 14px;
+}
+.nice_rank .nice_user {
+  margin: 0px 0px 0px 7px;
+  font-size: 12px;
+}
+/* .nice_content_info { */
+  /* margin-top: 10px; */
+  /* color: gray; */
+/* } */
+
+
+
+
 /**********************************************
  common
 **********************************************/

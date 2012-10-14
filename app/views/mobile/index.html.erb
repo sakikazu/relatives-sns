@@ -49,5 +49,14 @@
 <% end -%>
 
 <br /><br />
-<%= paginate @mutters, window: 2 %>
+
+<% # KaminariのデフォルトVieweはulなので携帯だと改行されて使えない（CSS使えないから） -%>
+<%#= paginate @mutters, window: 2 %>
+<%#= will_paginate @mutters, :previous_label=>'&#171;前', :next_label=>'次&#187;' %>
+
+<% # カスタムテーマを使う方法もあるけどViewを作るのがめんどくせいのでまあいいや。やるならaタグのViewな。 -%>
+<%#= paginate @users, :theme => 'my_custom_theme' %>
+
+<%= link_to_previous_page @mutters, '<< 前へ' %>&nbsp;&nbsp;
+<%= link_to_next_page @mutters, '次へ >>' %>
 </div>

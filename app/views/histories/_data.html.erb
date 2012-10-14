@@ -43,7 +43,6 @@
   </tbody>
 </table>
 
-<%= javascript_include_tag 'tablesorter/jquery.tablesorter.min' %>
 <script type="text/javascript">
   $(document).ready(function(){ 
     //sakikazu memo Ajaxで追加された要素には、再度これをやらないと、プラグインが適用されない
@@ -51,5 +50,4 @@
     $('table#tablesorter').tablesorter();
   }); 
 </script>
-<%= stylesheet_link_tag '../javascripts/tablesorter/themes/blue/style' %>
 

@@ -350,7 +350,11 @@ class MuttersController < ApplicationController
     end
   end
 
-  #新規レス用のオブジェクト生成
+
+  #
+  # 新規レス用のオブジェクト生成
+  # ※トップページでは、メインつぶやきのオブジェクトにもなる
+  #
   def set_new_mutter_obj
     @mutter = Mutter.new(:user_id => current_user.id)
   end

@@ -93,6 +93,7 @@
 
 <!-- レス用モーダル -->
 <div class="modal" id="myModal<%= mutter_row.id %>" style="display:none">
+  <% @mutter ||= Mutter.new(user_id: current_user.id) -%>
   <% @mutter.reply_id = mutter_row.id -%>
   <%= form_for @mutter, html: {multi_part: true} do |f| %>
     <div class="modal-header">

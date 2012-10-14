@@ -19,3 +19,6 @@ public/upload
 public/assets
 *.DS_Store
 *.svn
+
+# Webからダウンロードしたライブラリなど
+_download

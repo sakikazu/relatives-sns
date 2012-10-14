@@ -10,6 +10,12 @@
   );
   $('#info')
     .show()
-    .html('追加しました');
+    .html('<br><br>追加しました')
+    .css({
+      'background-color': 'yellow',
+      'font-size' : '25px',
+      'text-align' : 'center',
+    })
+    .hide(4000);
   $('#his_form form textarea').val("");
 <% end %>

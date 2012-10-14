@@ -40,4 +40,6 @@
 </div>
 <% end -%>
 <br /><br />
-<%= paginate @updates, window: 2 %>
+<%#= paginate @updates, window: 2 %>
+<%= link_to_previous_page @updates, '<< 前へ' %>&nbsp;&nbsp;
+<%= link_to_next_page @updates, '次へ >>' %>

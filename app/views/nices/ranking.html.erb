@@ -14,8 +14,10 @@ $(document).ready(function() {
 <div class="h2normal_content">
 <% @mutter_data.each_with_index do |data, idx| -%>
   <% obj = Mutter.find_by_id(data[:id]) -%>
+  <% next if obj.blank? -%>
   <div class="nice_rank">
-    <%= idx + 1 %>位：<%= data[:count] %> イイネ
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:count] %> イイネ
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
@@ -25,7 +27,6 @@ $(document).ready(function() {
   <% else -%>
     削除されました.
   <% end -%>
-  <hr>
 <% end -%>
 </div>
 
@@ -33,8 +34,10 @@ $(document).ready(function() {
 <div class="h2normal_content">
 <% @photo_data.each_with_index do |data, idx| -%>
   <% obj = Photo.find_by_id(data[:id]) -%>
+  <% next if obj.blank? -%>
   <div class="nice_rank">
-    <%= idx + 1 %>位：<%= data[:count] %> イイネ
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:count] %> イイネ
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
@@ -51,8 +54,10 @@ $(document).ready(function() {
 <div class="h2normal_content">
 <% @blog_data.each_with_index do |data, idx| -%>
   <% obj = Blog.find_by_id(data[:id]) -%>
+  <% next if obj.blank? -%>
   <div class="nice_rank">
-    <%= idx + 1 %>位：<%= data[:count] %> イイネ
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:count] %> イイネ
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
@@ -73,8 +78,10 @@ $(document).ready(function() {
 <div class="h2normal_content">
 <% @movie_data.each_with_index do |data, idx| -%>
   <% obj = Movie.find_by_id(data[:id]) -%>
+  <% next if obj.blank? -%>
   <div class="nice_rank">
-    <%= idx + 1 %>位：<%= data[:count] %> イイネ
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:count] %> イイネ
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
