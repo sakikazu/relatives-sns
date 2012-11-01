@@ -1,0 +1,2 @@
+rvm use ruby-1.9.3-head@rails32
+rvm_trust_rvmrcs_flag=1

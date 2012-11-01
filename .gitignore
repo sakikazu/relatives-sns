@@ -22,3 +22,6 @@ public/assets
 
 # Webからダウンロードしたライブラリなど
 _download
+
+config/database.yml
+.rvmrc

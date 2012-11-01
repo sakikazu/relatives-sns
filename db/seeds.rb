@@ -20,3 +20,6 @@ members.each do |m|
   # def self.find_or_create2(username, password, familyname, givenname, email, role, root11, generation)
   User.find_or_create2(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7])
 end
+
+# for rails_admin
+AdminUser.create(email: 'sakikazu15@gmail.com', password: 'saki0745')
