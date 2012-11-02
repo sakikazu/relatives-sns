@@ -4,6 +4,12 @@
     <%= f.submit "検索結果を解除する", class: "btn" %>
   <% end -%>
 <% end -%>
-<ul class="mutter_rows">
-  <%= render :partial => 'mutter_row', :collection => @mutters %>
-</ul>
+
+<div class="autopagerize_page_element">
+  <ul class="mutter_rows">
+    <%= render :partial => 'mutter_row', :collection => @mutters %>
+  </ul>
+  <div style="display:none"><%= paginate @mutters, window: 2 %></div>
+  <%= link_to "すべて見る", {:action => :all}, class: "btn" %>
+</div> <!-- autopagerize_page_element -->
+

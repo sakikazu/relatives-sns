@@ -1,10 +1,4 @@
 <h2>ログイン <small>ログインができない方は、和孝に問い合わせてください（sakikazu15@gmail.com）</small></h2>
-  <% if notice.present? -%>
-    <p id="notice" class="notice"><%= notice %></p>
-  <% end -%>
-  <% if alert.present? -%>
-    <p class="alert"><%= alert %></p>
-  <% end -%>
 
 <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
   <div class="form-inputs">

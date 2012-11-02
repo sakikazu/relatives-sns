@@ -23,7 +23,10 @@
       <span id='cont_<%= mutter_row.id %>'>
         <%= nice_field(mutter_row, "mutter", "#cont_#{mutter_row.id}") %>
       </span> 
-      <a data-toggle="modal" href="#myModal<%= mutter_row.id %>" ><i class="icon-comment"></i>&nbsp;レス</a>
+      <% # 検索時などはmutter_rowが子である場合もある -%>
+      <% if mutter_row.children.present? -%>
+        <a data-toggle="modal" href="#myModal<%= mutter_row.id %>" ><i class="icon-comment"></i>&nbsp;レス</a>
+      <% end -%>
     </span>
   </div>
   <div class="content clearfix">

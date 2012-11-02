@@ -63,6 +63,12 @@ class MuttersController < ApplicationController
     redirect_to(mutters_path, :notice => 'メールからつぶやきました。それが表示されてないときは、前の画面に戻って再度「つぶやく」ボタンを押してください。')
   end
 
+
+  #
+  # つぶやき検索
+  # mutters#indexからはAjaxで呼ばれる
+  # mutters#allからはgetで呼ばれる
+  #
   def search
     @action_flg = params["mutter"][:action_flg].to_i
     case @action_flg
@@ -124,6 +130,9 @@ class MuttersController < ApplicationController
 #todo kaminariにしてみたけどincludeしたらどうなる？？
     @mutters = Mutter.includes_all.user_is(params[:user_id]).parents_mod.page(params[:page]).per(30)
 
+    # AutoPager対応
+    @autopagerable = true
+
     unless read_fragment :mutter_by_user
       @users_mcnt = Mutter.group(:user_id).count
       @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
@@ -148,8 +157,7 @@ class MuttersController < ApplicationController
 
     # つぶやき時間降順で親つぶやきのみを取得
     # unless read_fragment :mutter_data
-    mutters_count = request.smart_phone? ? 7 : 20
-    @mutters = Mutter.includes_all.parents_mod.limit(mutters_count)
+    @mutters = Mutter.includes_all.parents_mod.page(params[:page]).per(7)
     # end
 
     @album_thumbs = Photo.rnd_photos
@@ -162,17 +170,27 @@ class MuttersController < ApplicationController
 
     ###誕生記念日(年齢／日齢)
     @kinen = UserExt.kinen
+
+    # AutoPager対応
+    @autopagerable = true
+
   end
 
 
-  # nicesからのみ呼ばれる
+  #
+  # 選択されたmutterの位置から前後5つずつのmutterを取得する
+  # 子が選択された場合、その子の前後mutterを取得し、その中かから親をユニークで取得
+  #
   def show
-    @mutter = Mutter.find(params[:id])
-    #現在のmutterの位置から前後5つずつのmutterを取得する
+    mutter = Mutter.find(params[:id])
     num = 5
-    count = Mutter.where("id < ?", @mutter.id).count
-    @mutters = Mutter.includes_all.offset(count - num).parents_mod.limit(num*2+1)
-    @mutters = @mutters.reverse
+    min = mutter.id - num
+    max = mutter.id + num
+    mutters_arround = Mutter.where(id: min..max)
+    # 取得した前後のmutterの親IDを取得（自分が親なら自ID）
+    ids = mutters_arround.map{|m| m.reply_id || m.id}
+    mutter_ids = ids.uniq
+    @mutters = Mutter.includes_all.where(id: mutter_ids)
   end
 
   def create

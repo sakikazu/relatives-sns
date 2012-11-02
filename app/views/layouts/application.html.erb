@@ -175,12 +175,37 @@ jQuery(document).ready(function(){
     })
 <% end -%>
 
+
+  // AutoPager
+<% if @autopagerable -%>
+  $.autopager({
+    content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
+    //次ページリンクのセレクタ(Default: 'a[rel=next]')
+    //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
+    load: function(current, next) {
+      var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
+      //thisは読み込んだコンテンツ要素を指す
+      $(this).before(pageBreak);
+      //読み込んだページに再度colorboxを適用させる
+      $(".colorbox").colorbox();
+      colorbox_slideshow();
+      nice_member();
+    }
+  });
+<% end -%>
+
+
 }); // jQuery(document).ready
 
 
 // つぶやきのコメントのうち、最後のコメント以外をトグル表示
 function toggleComments(obj) {
   $(obj).siblings(":not(.last_children)").toggle();
+  if ($(obj).text() == '全部見る') {
+    $(obj).html('<i class="icon-minus"></i>隠す<i class="icon-minus""></i>');
+  } else {
+    $(obj).html('<i class="icon-plus"></i>全部見る<i class="icon-plus"></i>');
+  }
 }
 
 </script>

@@ -57,6 +57,9 @@ class AlbumsController < ApplicationController
     # アップロード者リスト(フィルタリングボタン用)
     @uploader_list = @album.photos.includes(user: :user_ext).select('distinct user_id').map{|p| [p.user.id, p.user.dispname]}
 
+    # AutoPager対応
+    @autopagerable = true
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @album }
