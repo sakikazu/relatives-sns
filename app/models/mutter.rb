@@ -154,4 +154,12 @@ class Mutter < ActiveRecord::Base
      end
    end
 
+   def parent?
+     self.reply_id.blank?
+   end
+
+   def child?
+     self.reply_id.present?
+   end
+
 end
