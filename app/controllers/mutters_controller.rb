@@ -201,7 +201,7 @@ class MuttersController < ApplicationController
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
       @mutter.save
-      @mutters = Mutter.includes_all.parents_mod.limit(20)
+      @mutters = Mutter.includes_all.parents_mod.page(params[:page]).per(7)
       # 新規post用に入れ替える
       @created_mutter = @mutter
       @mutter = Mutter.new(:user_id => current_user.id)

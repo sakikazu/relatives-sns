@@ -1,12 +1,13 @@
 <script>
+// ログインユーザー表示数制御
 show_recent_login_users = function(){
   $link = $('#link_recent_login_users')
   if($link.text() != '隠す'){
     $('.hide_row').show();
-    $link.text('隠す');  
+    $link.text('隠す');
   }else{
     $('.hide_row').hide();
-    $link.text('もっと見る(直近40人分)');  
+    $link.text('もっと見る(直近40人分)');
   }
 }
 
@@ -43,7 +44,7 @@ $(document).ready(function(){
     //        $('#show_more').text('もっと見る');
     //      }
 //    });
-  });
+//  });
 
 
   // submit押下時、ファイルが添付されてなかったら、AjaxでPOSTする
@@ -87,7 +88,7 @@ $(document).ready(function(){
   }, <%= @dispupdate_interval %>);
 <% end %>
 
-});
+}); // document.ready
 </script>
 
 <div class="row">
