@@ -1,0 +1,20 @@
+<% @blog_data.each_with_index do |data, idx| -%>
+  <% content = data.content -%>
+  <div class="nice_rank">
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:count] %> イイネ
+    <span class="nice_user">(イイネした人： <%= content.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
+  </div>
+  <% if content.present? -%>
+    <%# if content.blog_images.size > 0 -%>
+      <%# b_image = content.blog_images.first -%>
+      <%#= image_tag(b_image.image(:thumb)) if b_image.image? %><br>
+    <%# end -%>
+    日記：<%= link_to content.title, blog_path(content) %><br>
+    <%= nice_author_and_created_at(content) %>
+  <% else -%>
+    削除されました.
+  <% end -%>
+  <hr>
+<% end -%>
+<%= paginate @blog_data, remote: true, params: {action: 'ranking', content_type: 3} %>

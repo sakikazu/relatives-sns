@@ -58,24 +58,30 @@ class NicesController < ApplicationController
   end
 
   def ranking
-    contents = {}
-    # 一つのコンテンツの評価人数を取得(type(Mutterなど)とIDでグループ化したときのそれぞれの個数)
-    data = Nice.group(:asset_type, :asset_id).count
-    data2 = data.map{|d| {:type => d[0][0], :id => d[0][1], :count => d[1]}}
-    # ブロック中の正規表現のグループで分ける。「$1」はマッチ文字列を返すようにするため
-    data3 = data2.group_by{|d| d[:type] =~ /(Mutter|Photo|Movie|Blog)/;$1}
-    ["Mutter", "Photo", "Movie", "Blog"].each do |c|
-      next if data3[c].blank?
-      # 評価人数でソートして降順にする
-      data4 = data3[c].sort_by{|d| d[:count]}.reverse
-      # 上位10個のみ取得
-      contents[c] = data4.slice(0,10)
+    ct = params[:content_type].to_i
+    if ct == 1 || ct == 0
+      @mutter_data = Ranking.total.mutter.page(params[:page]).per(10)
+      @content_name = "mutter"
     end
-    @mutter_data = contents["Mutter"] || []
-    @movie_data = contents["Movie"] || []
-    @photo_data = contents["Photo"] || []
-    @blog_data = contents["Blog"] || []
+    if ct == 2 || ct == 0
+      @photo_data = Ranking.total.photo.page(params[:page]).per(10)
+      @content_name = "photo"
+    end
+    if ct == 3 || ct == 0
+      @blog_data = Ranking.total.blog.page(params[:page]).per(10)
+      @content_name = "blog"
+    end
+    if ct == 4 || ct == 0
+      @movie_data = Ranking.total.movie.page(params[:page]).per(10)
+      @content_name = "movie"
+    end
+
     @sort = 2
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def create

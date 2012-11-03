@@ -226,7 +226,7 @@ class MuttersController < ApplicationController
   def destroy
     @mutter = Mutter.find(params[:id])
     @mutter.destroy
-    @mutters = Mutter.includes_all.parents_mod.limit(20)
+    @mutters = Mutter.includes_all.parents_mod.page(params[:page]).per(7)
     render "update_list.js"
   end
 

@@ -1,0 +1,16 @@
+<% @mutter_data.each_with_index do |data, idx| -%>
+  <% content = data.content -%>
+  <div class="nice_rank">
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:nice_count] %> イイネ
+    <span class="nice_user">(イイネした人： <%= content.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
+  </div>
+  <% if content.present? -%>
+    <ul class="mutter_rows">
+      <%= render :partial => 'mutters/mutter_row', :locals => {:mutter_row => content} %>
+    </ul>
+  <% else -%>
+    削除されました.
+  <% end -%>
+<% end -%>
+<%= paginate @mutter_data, remote: true, params: {action: 'ranking', content_type: 1} %>
