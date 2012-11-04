@@ -2,7 +2,7 @@
   <% content = data.content -%>
   <div class="nice_rank">
     <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
-    <%= data[:count] %> イイネ
+    <%= data[:nice_count] %> イイネ
     <span class="nice_user">(イイネした人： <%= content.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if content.present? -%>
