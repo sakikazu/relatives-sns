@@ -18,6 +18,7 @@ gem 'exifr'
 gem "rails_autolink"
 gem 'kaminari'
 gem 'acts-as-taggable-on'
+gem 'whenever', :require => false
 
 # gem 'formtastic'
 # gem 'formtastic-bootstrap'
