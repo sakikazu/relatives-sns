@@ -2,7 +2,7 @@
   <div class="span8">
     <div id="mutter">
       <div class="page-header"><h3>つぶやき総数: <%= @mutters.total_count %></h3></div>
-      <div><%= link_to 'グラフを見る', graph_mutters_path, :class => "button" %></div>
+      <div><%= link_to 'グラフを見る', graph_mutters_path, :class => "btn" %></div>
       <%= paginate @mutters, window: 2 %>
       <br />
 

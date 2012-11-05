@@ -17,7 +17,7 @@ $(document).ready(function(){
   //mutter表示行数制限
 // AutoPagerにしたことで不要になった
 //  data_toggle = (function(){
-//    $hidden_data = $('ul.mutter_rows>li:gt(<%= Mutter::MUTTER_DATA_VISIBLE %>)');
+//    $hidden_data = $('ul.mutter_rows>li:gt(<%#= Mutter::MUTTER_DATA_VISIBLE %>)');
 //    $hidden_data.hide();
 //    $show_btn = $('#show_more');
 //    $show_btn.data('show', false);
@@ -87,6 +87,14 @@ $(document).ready(function(){
     });
   }, <%= @dispupdate_interval %>);
 <% end %>
+
+// つぶやき検索
+$(document).on('click', 'a.js_search_mutter', function() {
+  $form = $('#form_search form');
+  $('#mutter_action_flg', $form).val($(this).attr('rel'));
+  $form.submit();
+  return false;
+});
 
 }); // document.ready
 </script>
@@ -172,7 +180,7 @@ $(document).ready(function(){
         <div class="span8">
 
    <div id="mutter" class="clearfix well well2">
-    <div id="form" class="clearfix">
+    <div id="form" class="row clearfix">
       <%= simple_form_for @mutter, :html => {:multipart => true} do |f| -%>
         <div class="span5">
         <%= f.text_area :content, rows: 3, class: "span5", placeholder: "つぶやき" %><br>
@@ -187,22 +195,30 @@ $(document).ready(function(){
     </div>
     <%#= link_to '写真付きでつぶやく', :action => "new_from_mail" if request.smart_phone? %>
 
-    <div id="form_search" class="well" style="padding-left:8px; padding-right:8px;">
-      <div class="input-append span4">
-      <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
-        <%= f.text_field :search_word, class: "span2" %>
-        <%= f.hidden_field :action_flg, value: 1 %>
-        <%= f.submit "発言内容から検索する", class: "btn" %>
-      <% end %>
+    <div id="form_search" class="row well well2 text-center">
+      <div class="input-append">
+        <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
+          <% # [memo] このinput textはspanX指定のみだとAndroidのChromeでフォームが横に飛び出してしまった。
+             #   text_fieldではデフォルトでsizeが30になるらしく、Androidではそれが影響していた。
+             #   なので、sizeを小さめにして最小のサイズとしつつ、spanXが最大のサイズとして設定されるようにした -%>
+          <%= f.text_field :search_word, size: 15, class: "span4" %>
+          <%= f.hidden_field :action_flg %>
+        <% end %>
+
+        <div class="btn-group">
+          <button class="btn dropdown-toggle" data-toggle="dropdown">
+           検索
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><%= link_to "発言内容から検索", "#", {class: "js_search_mutter", rel: "1"} %></li>
+            <li><%= link_to "画像を含むものを検索", "#", {class: "js_search_mutter", rel: "2"} %></li>
+            <li><%= link_to "URLを含むものを検索", "#", {class: "js_search_mutter", rel: "3"} %></li>
+            <li class="divider"></li>
+            <li><strike><%= link_to "詳細検索", action: :all %></strike>まだできてない</li>
+          </ul>
+        </div>
       </div>
-      <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, class: "span2" do |f| %>
-        <%= f.hidden_field :action_flg, value: 2 %>
-        <%= f.submit "画像が含まれる", class: "btn" %>
-      <% end %>
-      <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, class: "span2" do |f| %>
-        <%= f.hidden_field :action_flg, value: 3 %>
-        <%= f.submit "URLが含まれる", class: "btn" %>
-      <% end %>
     </div>
 
     <div id="mutter_data">

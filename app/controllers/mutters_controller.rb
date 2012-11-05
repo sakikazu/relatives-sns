@@ -66,26 +66,30 @@ class MuttersController < ApplicationController
 
   #
   # つぶやき検索
+  # (親子構造にせず、フラットに表示する）
   # mutters#indexからはAjaxで呼ばれる
   # mutters#allからはgetで呼ばれる
   #
   def search
     @action_flg = params["mutter"][:action_flg].to_i
-    case @action_flg
-    when 0
-      @mutters = Mutter.includes_all.parents_mod
-    when 1
-      str = params["mutter"][:search_word]
-      @mutters = Mutter.includes_all.where('content like :q', :q => "%#{str}%").order('id DESC')
+    search_word = params["mutter"][:search_word]
 
-      # 検索ワードを画面に表示し続けるため
-      @mutter = Mutter.new(params[:mutter])
-    when 2
+    case @action_flg
+    when 0 # 検索結果解除
+      @mutters = Mutter.includes_all.parents_mod
+    when 1 # ワードから検索
+      @mutters = Mutter.includes_all.where('content like :q', :q => "%#{search_word}%").order('id DESC')
+    when 2 # 画像を含むものを検索
       @mutters = Mutter.includes_all.where('mutters.image_file_name IS NOT NULL').order('id DESC')
-    when 3
+      @mutters = @mutters.where('content like :q', :q => "%#{search_word}%") if search_word.present?
+    when 3 # URLを含むものを検索
       @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC')
+      @mutters = @mutters.where('content like :q', :q => "%#{search_word}%") if search_word.present?
     end
-    @mutters = @mutters.page(params[:page]).per(30)
+    @mutters = @mutters.page(params[:page]).per(20)
+
+    # 検索ワードを画面に表示し続けるため
+    @mutter = Mutter.new(params[:mutter])
 
     # 検索時は右サイドバーを出さないように（理由は忘れた）
     @action_is_search = true
@@ -128,7 +132,7 @@ class MuttersController < ApplicationController
     # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
 #sakimura ページネート時のフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
 #todo kaminariにしてみたけどincludeしたらどうなる？？
-    @mutters = Mutter.includes_all.user_is(params[:user_id]).parents_mod.page(params[:page]).per(30)
+    @mutters = Mutter.includes_all.user_is(params[:user_id]).parents_mod.page(params[:page]).per(15)
 
     # AutoPager対応
     @autopagerable = true
@@ -157,7 +161,7 @@ class MuttersController < ApplicationController
 
     # つぶやき時間降順で親つぶやきのみを取得
     # unless read_fragment :mutter_data
-    @mutters = Mutter.includes_all.parents_mod.page(params[:page]).per(7)
+    @mutters = Mutter.includes_all.parents_mod.page(params[:page])
     # end
 
     @album_thumbs = Photo.rnd_photos
@@ -201,7 +205,7 @@ class MuttersController < ApplicationController
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
       @mutter.save
-      @mutters = Mutter.includes_all.parents_mod.page(params[:page]).per(7)
+      @mutters = Mutter.includes_all.parents_mod.page(params[:page])
       # 新規post用に入れ替える
       @created_mutter = @mutter
       @mutter = Mutter.new(:user_id => current_user.id)
@@ -226,7 +230,7 @@ class MuttersController < ApplicationController
   def destroy
     @mutter = Mutter.find(params[:id])
     @mutter.destroy
-    @mutters = Mutter.includes_all.parents_mod.page(params[:page]).per(7)
+    @mutters = Mutter.includes_all.parents_mod.page(params[:page])
     render "update_list.js"
   end
 
@@ -294,6 +298,7 @@ class MuttersController < ApplicationController
     if @mutters.blank?
       render :text => ""
     else
+      @mutters = @mutters.page(params[:page])
       render :partial => "list"
     end
   end

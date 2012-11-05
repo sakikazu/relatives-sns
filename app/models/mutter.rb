@@ -2,6 +2,9 @@
 class Mutter < ActiveRecord::Base
   acts_as_paranoid
 
+  # kaminari
+  paginates_per 7
+
   belongs_to :user
   belongs_to :celebration
   belongs_to :parent, class_name: "Mutter", foreign_key: "reply_id"
@@ -14,8 +17,6 @@ class Mutter < ActiveRecord::Base
   attr_accessor :search_word, :action_flg, :year, :month
 
   attr_accessible :user_id, :content, :reply_id, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :created_at, :updated_at, :celebration_id, :image, :for_sort_at, :year, :month, :search_word, :action_flg, :ua
-
-  MUTTER_DATA_VISIBLE = 12
 
   @@imap = nil
 
@@ -148,7 +149,7 @@ class Mutter < ActiveRecord::Base
      prev_id = cookies[:update_disp_id].to_i
      if last_id > prev_id
        cookies[:update_disp_id] = last_id
-       return self.includes_all.parents_mod.limit(20)
+       return self.includes_all.parents_mod
      else
        return false
      end
