@@ -71,27 +71,36 @@ class MuttersController < ApplicationController
   # mutters#allからはgetで呼ばれる
   #
   def search
-    @action_flg = params["mutter"][:action_flg].to_i
-    search_word = params["mutter"][:search_word]
+    if params["mutter"].blank? # mutters#indexでAutoPagerで読み込まれた場合
+      @action_flg = 0
+    else
+      @action_flg = params["mutter"][:action_flg].to_i
+      @search_word = params["mutter"][:search_word]
+      @user_id = params["mutter"][:user_id]
+    end
 
     case @action_flg
     when 0 # 検索結果解除
       @mutters = Mutter.includes_all.parents_mod
     when 1 # ワードから検索
-      @mutters = Mutter.includes_all.where('content like :q', :q => "%#{search_word}%").order('id DESC')
+      @mutters = Mutter.includes_all.order('id DESC')
     when 2 # 画像を含むものを検索
       @mutters = Mutter.includes_all.where('mutters.image_file_name IS NOT NULL').order('id DESC')
-      @mutters = @mutters.where('content like :q', :q => "%#{search_word}%") if search_word.present?
     when 3 # URLを含むものを検索
       @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC')
-      @mutters = @mutters.where('content like :q', :q => "%#{search_word}%") if search_word.present?
     end
-    @mutters = @mutters.page(params[:page]).per(20)
+
+    # 検索時の共通処理(解除操作の場合はパラメータがないので通らない)
+    @mutters = @mutters.where(user_id: @user_id) if @user_id.present?
+    @mutters = @mutters.where('content like :q', :q => "%#{@search_word}%") if @search_word.present?
+
+    @mutters = @mutters.page(params[:page]).per(15)
 
     # 検索ワードを画面に表示し続けるため
-    @mutter = Mutter.new(params[:mutter])
+    @mutter = Mutter.new(params[:mutter]) if params[:mutter].present?
 
-    # 検索時は右サイドバーを出さないように（理由は忘れた）
+    # 検索時は右サイドバーを出さないように
+    # （理由は右サイドバーを表示するためのデータ取得をやりたくないからだったはず）
     @action_is_search = true
 
     respond_to do |format|

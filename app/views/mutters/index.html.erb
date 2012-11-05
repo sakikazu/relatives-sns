@@ -201,7 +201,8 @@ $(document).on('click', 'a.js_search_mutter', function() {
           <% # [memo] このinput textはspanX指定のみだとAndroidのChromeでフォームが横に飛び出してしまった。
              #   text_fieldではデフォルトでsizeが30になるらしく、Androidではそれが影響していた。
              #   なので、sizeを小さめにして最小のサイズとしつつ、spanXが最大のサイズとして設定されるようにした -%>
-          <%= f.text_field :search_word, size: 15, class: "span4" %>
+          <%= f.text_field :search_word, size: 15, class: "span3" %>
+          <%= f.select :user_id, User.all.map{|u| [u.dispname, u.id]}, {include_blank: true}, {class: "span2"} %>
           <%= f.hidden_field :action_flg %>
         <% end %>
 

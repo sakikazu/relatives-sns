@@ -9,7 +9,13 @@
   <ul class="mutter_rows">
     <%= render :partial => 'mutter_row', :collection => @mutters %>
   </ul>
-  <div style="display:none"><%= paginate @mutters, window: 2 %></div>
+  <% if @action_flg.to_i > 0 # 検索時 -%>
+    <% # [memo] ここはsearchメソッドの中でformat JSとしたいがためにremoteにしておく %>
+    <%= paginate @mutters, remote: true, params: {action: "search"} %>
+  <% else # 通常時はページネーションは表示せず、AutoPagerによって読み込まれる -%>
+    <div style="display:none"><%= paginate @mutters %></div>
+  <% end -%>
+
   <%= link_to "すべて見る", {:action => :all}, class: "btn" %>
 </div> <!-- autopagerize_page_element -->
 
