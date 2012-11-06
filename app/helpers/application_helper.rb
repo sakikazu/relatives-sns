@@ -131,6 +131,8 @@ EOS
   end
 
   def action_info(up)
+    return nil if up.content.blank?
+
     ai = UpdateHistory::ACTION_INFO[up.action_type]
     case up.action_type
     when UpdateHistory::ALBUM_CREATE
