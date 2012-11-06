@@ -134,13 +134,14 @@ EOS
     ai = UpdateHistory::ACTION_INFO[up.action_type]
     case up.action_type
     when UpdateHistory::ALBUM_CREATE
-      ai.merge(:link => (link_to up.content.title, album_path(up.content, :sort => 2)))
+      ai.merge(:link => (link_to up.content.title, album_path(up.content)))
     when UpdateHistory::ALBUM_COMMENT
       ai.merge(:link => (link_to up.content.title, album_path(up.content)))
     when UpdateHistory::ALBUMPHOTO_CREATE
-      ai.merge(:link => (link_to up.content.title, album_path(up.content, :sort => 1)))
+      # 写真が投稿された時のアップデートリンクは、その投稿者のアップロード順でアルバム表示
+      ai.merge(:link => (link_to up.content.title, album_path(up.content, "album[sort_flg]" => 1, "album[user_id]" => up.user_id)))
     when UpdateHistory::ALBUMPHOTO_COMMENT
-      ai.merge(:link => (link_to up.content.title, album_path(up.content, :sort => 3)))
+      ai.merge(:link => (link_to up.content.title, album_path(up.content, "album[sort_flg]" => 3)))
     when UpdateHistory::BOARD_CREATE
       ai.merge(:link => (link_to up.content.title, board_path(up.content)))
     when UpdateHistory::BOARD_COMMENT

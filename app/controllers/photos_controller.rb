@@ -74,7 +74,7 @@ class PhotosController < ApplicationController
     end
 
     @photo.save
-    
+
     # respond_to do |format|
       # if @photo.save
         # format.html { redirect_to([@photo.album, @photo], :notice => 'Photo was successfully created.') }

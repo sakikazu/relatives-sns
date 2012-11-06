@@ -30,8 +30,13 @@ class AlbumsController < ApplicationController
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
 
-    @sort = (params[:sort] =~ /1|2|3|4/) ? params[:sort].to_i : 1
-    case @sort 
+    uploader = params[:album].present? ? params[:album][:user_id] : nil
+    # 初期表示は「撮影日時順」
+    @sort_flg = (params[:album].present? && params[:album][:sort_flg] =~ /1|2|3|4/) ? params[:album][:sort_flg].to_i : 2
+    @album4sort = Album.new(sort_flg: @sort_flg, user_id: uploader)
+
+    # ソート順
+    case @sort_flg
     when 1
       photos = @album.photos.order("id DESC")
     when 2
@@ -42,10 +47,10 @@ class AlbumsController < ApplicationController
       photos = @album.photos.order("nices.created_at DESC").order("last_comment_at DESC")
     end
 
-    # [暫定機能] アップロード者でフィルタリング
-    if params[:user_id].present?
-      photos = @album.photos.where(user_id: params[:user_id]).order("id DESC")
-      @selected_uploader = User.find_by_id(params[:user_id])
+    # アップロード者でフィルタリング
+    if uploader.present?
+      photos = photos.where(user_id: uploader)
+      @selected_uploader = User.find_by_id(uploader)
     end
 
     @photos = photos.includes(:nices).page(params[:page])
@@ -54,7 +59,7 @@ class AlbumsController < ApplicationController
 
     @photo_all_num = @album.photos.size
 
-    # アップロード者リスト(フィルタリングボタン用)
+    # アップロード者リスト
     @uploader_list = @album.photos.includes(user: :user_ext).select('distinct user_id').map{|p| [p.user.id, p.user.dispname]}
 
     # AutoPager対応

@@ -14,7 +14,7 @@
   <% end -%>
   </p>
 </div>
-<div class="span6" style="margin-left: 22px;">
+<div class="span">
   <div class="bar clearfix">
     <span class='label label-inverse'><%= useragent(mutter_row.ua) %></span>
     <span class='name'>&nbsp;<%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
@@ -66,7 +66,7 @@
       <% end -%>
       </p>
     </div>
-    <div class="span6">
+    <div class="span">
       <div class="bar clearfix">
         <span class='label label-inverse'><%= useragent(child.ua) %></span>
         <span class='name'>&nbsp;<%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if child.user.present? %></span>

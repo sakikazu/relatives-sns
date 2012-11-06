@@ -5,13 +5,13 @@ class Album < ActiveRecord::Base
   has_many :photos
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  attr_accessible :title, :description, :thumb_id, :user_id
+  attr_accessible :title, :description, :thumb_id, :user_id, :sort_flg
 
   validates :title, presence: true
 
-  #sakikazu ↓これがあると、このモデルの関連ができなくなり、処理にめっちゃ時間がかかり、Stackがあふれたみたいなエラーが出る…なぜ
-  # acts_as_paranoid
-  attr_accessor :sort_at
+  acts_as_paranoid
+
+  attr_accessor :sort_at, :sort_flg
 
   #写真がアップされた日時の降順でアルバムをソートする
   def self.sort_upload

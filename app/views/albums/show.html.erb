@@ -14,7 +14,7 @@ $(document).ready(function() {
     'onQueueComplete': function (evt, data){
       alert('ファイルのアップロードが完了しました。');
       //albums#showにuser_id付きでリクエストすることで、セッションが切れてログアウトされてしまった状態から自動でログインするようにする
-      location.href = '<%= album_url(@album, user_id: current_user.id) %>';
+      location.href = '<%= album_url(@album, "album[sort_flg]" => 1, "album[user_id]" => current_user.id) %>';
       <%#= remote_function(:url => {:controller => :albums, :action => :upload_complete, :id => @album.id},
         :complete => "alert(\" ファイルのアップロードが完了しました。\");location.reload()")
         #:complete => "alert(data['filesUploaded']+\" ファイルのアップロードが完了しました。\");location.reload()")
@@ -56,6 +56,7 @@ $(document).ready(function() {
         }
       })
   }
+
 }); //jquery#ready
 
 commentshow = function() {
@@ -128,35 +129,26 @@ commentshow = function() {
 
 <% if @photos.size > 0 -%>
   <div class="page-header"><h3 class="normal">このアルバムの写真<small>写真をクリックするとスライドショーが開始されます</small></h3></div>
-  <div class="select_menu clearfix">
-    <% [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]].each do |n, i| -%>
-      <% if @sort == i -%>
-        <%= link_to n, album_path(:sort => i), class: "btn btn-danger" %>
-      <% else -%>
-        <%= link_to n, album_path(:sort => i), class: "btn" %>
-      <% end -%>
-    <% end -%>
+
+  <!-- ソート機能 -->
+  <% #sort_list = [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]] -%>
+  <% sort_list = {"1" => "アップロード順", "2" => "撮影日時順", "3" => "コメント順", "4" => "イイネされた順"} -%>
+  <div class="input-append">
+    <%= form_for @album4sort, url: album_path, :method => :get do |f| %>
+      <%= f.select :user_id, @uploader_list.map{|u| [u[1], u[0]]}, {include_blank: "＜アップロード者＞"}, {class: "span3"} %>
+      <%= f.select :sort_flg, sort_list.map{|s| [s[1], s[0]]}, {include_blank: "＜並び替え順＞"}, {class: "span3"} %>
+      <%= f.submit "並び替え", class: "btn" %>
+    <% end %>
   </div>
+
+  <div class="alert alert-success">
+    <h4><%= "#{@selected_uploader.dispname}がアップした写真が" if @selected_uploader.present? %>
+      <%= sort_list[@sort_flg.to_s] %>で表示されています</h4>
+  </div>
+
 <% end -%>
 
-<!-- アップロード者でフィルタリング -->
-<div class="btn-group">
-  <button class="btn">アップロード者</button>
-  <button class="btn dropdown-toggle" data-toggle="dropdown">
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu">
-    <% @uploader_list.each do |list| -%>
-    <li><%= link_to list[1], action: "show", user_id: list[0] %></li>
-    <% end -%>
-  </ul>
-</div>
-<% if @selected_uploader.present? -%>
-  <br>
-  <div class="alert alert-success">
-  <h4>現在、<%= @selected_uploader.dispname %>がアップした写真が表示されています</h4>
-</div>
-<% end -%>
+
 
 <div class="autopagerize_page_element">
 <%= paginate @photos, :window => 2, :outer_window => 2 %><br>
