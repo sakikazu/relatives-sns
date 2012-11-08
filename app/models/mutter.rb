@@ -135,6 +135,8 @@ class Mutter < ActiveRecord::Base
    # @return 更新されていた場合はデータを返す
    #
    def self.updated_datas(cookies)
+     return if self.count == 0
+
      last_id = self.uncached {
        # [memo] self.unscoped.last.id だと、uncachedしているのに再ロードされず。クエリーキャッシュは使われてないんだけど、別の機構で保持されてる感じ
        # [memo] ここではunscopedをしないと、for_sorted_atでソートされてしまうし、unscopedをした場合はid_descまでつけてやらないと再読み込みしてくれない
