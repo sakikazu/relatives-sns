@@ -23,5 +23,8 @@ set :output, {:error => 'log/cron-error.log', :standard => 'log/cron.log'}
 
 # every 1.minutes do
 every 1.day, at: '2:00 am' do
-  runner "Ranking.create_total"
+  command "cd /usr/local/site/a-dan_v4; lib/create_ranking_total.sh"
+
+  # モデルのメソッドを呼び出す形式は、RVMの影響でgemが読み込めなかった
+  # runner "Ranking.create_total"
 end

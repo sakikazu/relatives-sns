@@ -1,3 +1,7 @@
-・人気ランキングのデータ生成はWheneverからcron登録しているが、
-　現状、RVM環境が読み込めないので、systemのgemをアプリのgemと合わせることで対処している
-　まあ、cron実行する処理で使用するgemが変わらない限りは問題起きないかな
+#
+# よく使うコマンド
+#
+
+# crontab update
+bundle exec whenever -i
+
