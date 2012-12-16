@@ -42,7 +42,7 @@ gem 'ruby-gmail'
 
 # なんかエラー出たから対処
 gem 'less-rails'
-gem 'therubyracer'
+gem 'therubyracer', '0.10.2'
 
 # Gems used only for assets and not required
 # in production environments by default.
