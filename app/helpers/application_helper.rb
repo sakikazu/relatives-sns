@@ -104,6 +104,13 @@ EOS
     login_user.role == 0 or login_user.role == 1 or (content_user.present? and (login_user.id == content_user.id))
   end
 
+  #
+  # 下のSanitizeのgemのやつだと、iframeとかimgとか表示されなくなっていた（すべてサニタイズされちゃってる？）ので、
+  # デフォルトのsanitizeメソッドを使うようにした
+  def sani_org(html)
+    auto_link(sanitize(html, tags: %w(a img iframe span h1 h2 h3 h4 b i p del)))
+  end
+
   def sani(html)
     auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
   end
