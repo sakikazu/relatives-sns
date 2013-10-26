@@ -1,3 +1,7 @@
+<script>
+  videojs.options.flash.swf = "/assets/video-js/video-js.swf";
+</script>
+
 <div class="row">
   <div class="span7 offset2">
 
@@ -16,15 +20,15 @@
     作成日時:<%= @movie.created_at.to_s(:long) if @movie.created_at %>
   </div>
   <div class="description">
-    <div id="container2"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>
-    <script type="text/javascript">
-      var s1 = new SWFObject("/assets/swfobject/player.swf","ply","512","384","9","#FFFFFF");
-      s1.addParam("allowfullscreen","true");
-      s1.addParam("allowscriptaccess","always");
-      s1.addParam("flashvars","file=/upload/movie/<%= @movie.id %>/original/<%= @movie.movie_file_name %>&image=<%= @movie.thumb(:large) if @movie.thumb? %>");
-      s1.write("container2");
-      </script>
-      <div class="text"><%= sani_custom_br(@movie.description) %></div>
+    <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="512" height="384"
+    poster="<%= @movie.thumb(:large) if @movie.thumb? %>"
+    data-setup="{}">
+    <source src="/upload/movie/<%= @movie.id %>/original/<%= @movie.movie_file_name %>" type='video/mp4' />
+    <!-- キャプション機能
+    <track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>
+    --> <!-- Tracks need an ending tag thanks to IE9 -->
+    </video>
+    <div class="text"><%= sani_custom_br(@movie.description) %></div>
   </div>
   <div class="nice">
     <span id="update_nice">
