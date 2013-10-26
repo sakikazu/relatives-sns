@@ -38,7 +38,7 @@ gem 'jpmobile'
 # 現在、ガラケーからのファイル添付のつぶやきにのみ使用
 # ※tmailを有効にしたらログインフォームでエラーになった。全く不明
 # gem 'tmail'
-gem 'ruby-gmail'
+gem 'ruby-gmail', '0.3.0'
 
 # なんかエラー出たから対処
 gem 'less-rails'
