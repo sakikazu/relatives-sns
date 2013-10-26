@@ -21,7 +21,7 @@
   </div>
   <div class="description">
     <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="512" height="384"
-    poster="<%= @movie.thumb(:large) if @movie.thumb? %>"
+    poster="<%= @movie.thumb? ? @movie.thumb(:large) : "/assets/movie_thumb.jpg" %>"
     data-setup="{}">
     <source src="/upload/movie/<%= @movie.id %>/original/<%= @movie.movie_file_name %>" type='video/mp4' />
     <!-- キャプション機能
