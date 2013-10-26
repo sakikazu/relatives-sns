@@ -41,8 +41,8 @@ gem 'jpmobile'
 gem 'ruby-gmail', '0.3.0'
 
 # なんかエラー出たから対処
-gem 'less-rails'
-gem 'therubyracer', '0.10.2'
+gem 'less-rails', git: 'git://github.com/metaskills/less-rails.git'
+gem 'therubyracer'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -1,6 +1,6 @@
 listen '/tmp/unicorn.sock', :backlog => 1024
 #listen "127.0.0.1:8080"
-pid '/tmp/unicorn.pid'
+pid 'tmp/unicorn.pid'
 
 # worker_processes 2
 
