@@ -42,14 +42,14 @@
 <ul class="children">
   <% #childrenはつぶやき時間昇順で表示する -%>
 
-  <!-- レスが2つ以上ついていたら、1つしか表示しないようにする。そして全部表示するボタンを設ける -->
+  <% initial_visible_count = 5 -%>
   <% count = mutter_row.children.size -%>
-  <% if count > 1 -%>
-    <div class="btn btn-block" onclick="javascript:toggleComments(this)"><i class="icon-plus"></i>全部見る<i class="icon-plus"></i></div>
+  <% if count > initial_visible_count -%>
+    <div class="btn btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i>全部見る<i class="icon-plus"></i></div>
   <% end -%>
   <% mutter_row.children.reverse.each_with_index do |child, idx| -%>
     <% # 最後のコメントは常時表示させておく。中間のコメントはボタンによってトグル表示 -%>
-    <% if idx + 1 < count -%>
+    <% if idx + initial_visible_count < count -%>
       <li class="clearfix" style="display:none">
     <% elsif idx + 1 == count -%>
       <li class="clearfix last_children">

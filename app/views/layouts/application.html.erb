@@ -200,6 +200,11 @@ function toggleComments(obj) {
     $(obj).html('<i class="icon-plus"></i>全部見る<i class="icon-plus"></i>');
   }
 }
+// 表示したらしっぱなしパターン
+function showComments(obj) {
+  $(obj).siblings(":hidden").show();
+  $(obj).html('全表示');
+}
 
 </script>
 
