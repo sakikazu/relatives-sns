@@ -5,25 +5,34 @@ module ApplicationHelper
   # UserAgentから各デバイス名を割り出す
   #
   def useragent(ua)
+
+    # browser
     case ua
-    when /iPhone OS (\d)/
-      ret = "iOS#{$1}"
     when /Chrome\/([\d]*)/
       ret = "Chrome#{$1}"
-      ret += " [Android#{$1}]" if /Android ([\d\.\s]*)/ =~ ua
     when /Firefox\/([\d]*)/
       ret = "Firefox#{$1}"
-      ret += " [Android#{$1}]" if /Android([\d\.\s]*)/ =~ ua
     when /Opera\/([\d]*)/
       ret = "Opera#{$1}"
-      ret += " [Android#{$1}]" if /Android ([\d\.\s]*)/ =~ ua
-    when /Android ([\d\.]*)/
-      ret = "Android #{$1}"
+    when /Safari/
+      tmp =~ /Version\/(\d)/
+      ret = "Safari#{$1}"
     when /MSIE (\d)/
       ret = "IE#{$1}"
     else
       ret = " 不明 "
     end
+
+    # OS
+    case ua
+    when /iPhone OS (\d)/
+      ret += " [iOS#{$1}]"
+    when /Android ([\d\.\s]*)/
+      ret += " [Android #{$1}]"
+    when /Mac OS X (\d+)_(\d+)/
+      ret += " [MacOSX #{$1.$2}]"
+    end
+
     return ret
   end
 
