@@ -15,7 +15,7 @@ module ApplicationHelper
     when /Opera\/([\d]*)/
       ret = "Opera#{$1}"
     when /Safari/
-      tmp =~ /Version\/(\d)/
+      ua =~ /Version\/(\d)/
       ret = "Safari#{$1}"
     when /MSIE (\d)/
       ret = "IE#{$1}"
@@ -30,7 +30,7 @@ module ApplicationHelper
     when /Android ([\d\.\s]*)/
       ret += " [Android #{$1}]"
     when /Mac OS X (\d+)_(\d+)/
-      ret += " [MacOSX #{$1.$2}]"
+      ret += " [MacOSX #{$1}.#{$2}]"
     end
 
     return ret
