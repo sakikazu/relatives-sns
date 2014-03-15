@@ -57,7 +57,6 @@ gem 'jquery-rails'
 group :development do
   gem 'mongrel', '>= 1.2.0.pre2'
 
-  gem 'ruby-debug19'
   gem 'rails-erd'
   gem 'rails-footnotes'
   gem 'pry-rails'

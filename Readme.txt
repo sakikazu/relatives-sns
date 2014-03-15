@@ -10,6 +10,8 @@ rvmバージョンアップで、.rvmrcから.ruby-versionに移行したらし�
 # よく使うコマンド
 #
 
+bundle exec rake assets:precompile RAILS_ENV=production
+
 # crontab update
 bundle exec whenever -i
 

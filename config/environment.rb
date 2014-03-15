@@ -12,5 +12,5 @@ ADan4::Application.initialize!
     :domain => "hogehoge",
     :authentication => :plain,
     :user_name => "sakikazu15@gmail.com",
-    :password => 'saki0745'
+    :password => 'saki074515'
 }
