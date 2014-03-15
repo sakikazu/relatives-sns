@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.15'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -52,7 +52,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '2.1.3'
+gem 'jquery-ui-rails', '2.0.2'
 
 group :development do
   gem 'mongrel', '>= 1.2.0.pre2'
@@ -60,6 +61,12 @@ group :development do
   gem 'rails-erd'
   gem 'rails-footnotes'
   gem 'pry-rails'
+  gem 'pry-byebug'
+  gem 'pry-doc'
+  # PryでのSQLの結果を綺麗に表示
+  gem 'hirb'
+  gem 'hirb-unicode'
+  gem 'awesome_print'
 end
 
 group :development, :test do
@@ -86,6 +93,7 @@ end
 
 # Use unicorn as the app server
 gem 'unicorn'
+gem 'foreman'
 
 # Deploy with Capistrano
 # gem 'capistrano'

@@ -25,3 +25,7 @@ _download
 
 config/database.yml
 .rvmrc
+.ruby-version
+.ruby-gemset
+
+tags
