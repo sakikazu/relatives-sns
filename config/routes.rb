@@ -1,7 +1,8 @@
 ADan4::Application.routes.draw do
-  mount RailsAdmin::Engine => '/adamin', :as => 'rails_admin'
+  # 2014-03-15 tmp
+  # mount RailsAdmin::Engine => '/adamin', :as => 'rails_admin'
 
-  devise_for :admin_users
+  # devise_for :admin_users
 
   resources :members do
     collection do

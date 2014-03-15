@@ -11,7 +11,9 @@ gem 'devise'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
 # gem "rails3_acts_as_paranoid", "~>0.2.0"
 gem "rails3_acts_as_paranoid"
-gem 'exception_notification', :require => 'exception_notifier'
+
+# 2014-03-15  tmp
+# gem 'exception_notification', :require => 'exception_notifier'
 gem "sanitize"
 gem 'paperclip'
 gem 'exifr'
@@ -25,7 +27,8 @@ gem 'whenever', :require => false
 gem 'simple_form'
 gem 'twitter-bootstrap-rails'
 
-gem 'rails_admin'
+# 2014-03-15  tmp
+# gem 'rails_admin'
 gem 'faker'
 
 gem 'jpmobile'
@@ -41,11 +44,13 @@ gem 'jpmobile'
 gem 'ruby-gmail', '0.3.0'
 
 # なんかエラー出たから対処
-gem 'less-rails', git: 'git://github.com/metaskills/less-rails.git'
-gem 'therubyracer'
+gem 'less-rails'
+gem 'therubyracer', platforms: :ruby
 
 # Gems used only for assets and not required
 # in production environments by default.
+
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
@@ -70,15 +75,16 @@ group :development do
 end
 
 group :development, :test do
-  gem "rspec"
-  gem "rspec-rails"
-  # gem "factory_girl_rails" // 2012-08-25現在、r g scaffoldにてエラーになる
-  gem "rails3-generators"
-  gem "rr"
-  gem "capybara"
-  gem 'spork'
-  gem "guard-spork"
-  gem "guard-rspec"
+# 2014-03-15  tmp
+  # gem "rspec"
+  # gem "rspec-rails"
+  # # gem "factory_girl_rails" // 2012-08-25現在、r g scaffoldにてエラーになる
+  # gem "rails3-generators"
+  # gem "rr"
+  # gem "capybara"
+  # gem 'spork'
+  # gem "guard-spork"
+  # gem "guard-rspec"
 
   # gem "hocus_pocus"
 end

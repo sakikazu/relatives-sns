@@ -10,7 +10,7 @@ ADan4::Application.configure do
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
   # todo sakikazu これはNginxに静的ファイルをさばいてもらう設定のはずだけど、falseにしてると、静的ファイルが404になってしまう・・
-  # config.serve_static_assets = false
+  config.serve_static_assets = false
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
@@ -67,9 +67,10 @@ ADan4::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
 
+# 2014-03-15  tmp
   # エラー通知
-    config.middleware.use ExceptionNotifier,
-      :email_prefix => "[AdanHP] ", # Subjectのprefix
-      :sender_address => %("AdanHP_notifier" <notifier@example.com>), # 送信元 ※これは適当アドレスだが、environment.rbでGmailの設定をしているのでGmailが送信元になって送られた
-      :exception_recipients => %w(sakikazu15@gmail.com) # あて先の配列
+    # config.middleware.use ExceptionNotifier,
+      # :email_prefix => "[AdanHP] ", # Subjectのprefix
+      # :sender_address => %("AdanHP_notifier" <notifier@example.com>), # 送信元 ※これは適当アドレスだが、environment.rbでGmailの設定をしているのでGmailが送信元になって送られた
+      # :exception_recipients => %w(sakikazu15@gmail.com) # あて先の配列
 end
