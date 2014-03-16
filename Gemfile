@@ -12,8 +12,7 @@ gem 'devise-encryptable' # for authlogic encrypt algorithm
 # gem "rails3_acts_as_paranoid", "~>0.2.0"
 gem "rails3_acts_as_paranoid"
 
-# 2014-03-15  tmp
-# gem 'exception_notification', :require => 'exception_notifier'
+gem 'exception_notification', "~> 4.0.1"
 gem "sanitize"
 gem 'paperclip'
 gem 'exifr'
