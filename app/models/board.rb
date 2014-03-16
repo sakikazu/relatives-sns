@@ -23,4 +23,5 @@ class Board < ActiveRecord::Base
     :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
+  validates_attachment :attach, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "application/octet-stream"] }
 end

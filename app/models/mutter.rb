@@ -30,6 +30,8 @@ class Mutter < ActiveRecord::Base
     :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
+  validates_attachment :image, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "application/octet-stream"] }
+
   scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
 
   # [memo]こうやってそれぞれにuser、user_extを指定するようにすると、最初のリクエスト時にはやっぱ時間短縮されてる。

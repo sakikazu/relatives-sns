@@ -15,4 +15,5 @@ class BoardComment < ActiveRecord::Base
     :url => "/upload/#{content_name}/:board/_res/:id/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:board/_res/:id/:style/:basename.:extension"
 
+  validates_attachment :attach, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "application/octet-stream"] }
 end

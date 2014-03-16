@@ -26,6 +26,8 @@ class Movie < ActiveRecord::Base
     :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
+  validates_attachment :movie, content_type: { content_type: [/video?/, "application/octet-stream"] }
+
   has_attached_file :thumb,
     :styles => {
       :thumb => "250x250>",
@@ -35,4 +37,5 @@ class Movie < ActiveRecord::Base
     :url => "/upload/#{content_name}/:id/thumb/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/thumb/:style/:basename.:extension"
 
+  validates_attachment :thumb, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "application/octet-stream"] }
 end
