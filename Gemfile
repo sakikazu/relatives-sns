@@ -1,16 +1,39 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.15'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.1.0'
+# Use mysql as the database for Active Record
 gem 'mysql2'
+# Use SCSS for stylesheets
+# gem 'sass-rails', '~> 4.0.3'
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
+# Use CoffeeScript for .js.coffee assets and views
+# gem 'coffee-rails', '~> 4.0.0'
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'therubyracer',  platforms: :ruby
+
+# Use jquery as the JavaScript library
+gem 'jquery-rails'
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+gem 'turbolinks'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 2.0'
+# bundle exec rake doc:rails generates the API under doc/api.
+gem 'sdoc', '~> 0.4.0',          group: :doc
+
+# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+gem 'spring',        group: :development
+
+# Use ActiveModel has_secure_password
+# gem 'bcrypt', '~> 3.1.7'
+
+# --- above defaults ---
+
 
 gem 'devise'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
-# gem "rails3_acts_as_paranoid", "~>0.2.0"
-gem "rails3_acts_as_paranoid"
+gem 'rails4_acts_as_paranoid'
 gem 'exception_notification', :require => 'exception_notifier'
 gem "sanitize"
 gem 'paperclip'
@@ -40,64 +63,74 @@ gem 'jpmobile'
 # gem 'tmail'
 gem 'ruby-gmail', '0.3.0'
 
-# なんかエラー出たから対処
-gem 'less-rails', git: 'git://github.com/metaskills/less-rails.git'
-gem 'therubyracer'
+gem 'less-rails'
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>= 1.0.3'
-end
+# gem 'jquery-rails', '2.1.3'
+# gem 'jquery-ui-rails', '2.0.2'
 
-gem 'jquery-rails', '2.1.3'
-gem 'jquery-ui-rails', '2.0.2'
+# 定数管理
+gem 'rails_config'
 
-group :development do
-  gem 'mongrel', '>= 1.2.0.pre2'
 
-  # gem 'ruby-debug19'
-  gem 'rails-erd'
-  gem 'rails-footnotes'
+group :development, :test do
+  # Railsコンソールの多機能版
   gem 'pry-rails'
+
+  # pryの入力に色付け
+  gem 'pry-coolline'
+
+  # デバッカー
   gem 'pry-byebug'
+
+  # Pryでの便利コマンド
   gem 'pry-doc'
+
   # PryでのSQLの結果を綺麗に表示
   gem 'hirb'
   gem 'hirb-unicode'
-  gem 'awesome_print'
-end
 
-group :development, :test do
-  gem "rspec"
-  gem "rspec-rails"
-  # gem "factory_girl_rails" // 2012-08-25現在、r g scaffoldにてエラーになる
-  gem "rails3-generators"
+  # pryの色付けをしてくれる
+  gem 'awesome_print'
+
+  # テスト環境のテーブルをきれいにする
+  gem 'database_rewinder'
+
+  # デバッグ情報をフッターに出してくれる
+  # 2013-12-28現在、「Hash#diff」のWarningが大量に出るので対処
+  gem 'rails-footnotes', git: 'git://github.com/tommireinikainen/rails-footnotes.git'
+
+  gem 'rails-erd'
+
+  # for test
+  gem 'rspec-rails'
+  gem "factory_girl_rails"
   gem "rr"
   gem "capybara"
   gem 'spork'
   gem "guard-spork"
   gem "guard-rspec"
 
-  # gem "hocus_pocus"
+  # erbからhamlに変換
+  gem 'erb2haml'
+
+  # for deploy
+  # Use Capistrano for deployment
+  # gem 'capistrano'
+  # gem 'capistrano-bundler'
+  gem 'rvm1-capistrano3', require: false
+
 end
 
-
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+# Use ActiveModel has_secure_password
+# gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
 gem 'unicorn'
 gem 'foreman'
 
-# Deploy with Capistrano
-# gem 'capistrano'
+# Use Capistrano for deployment
+gem 'capistrano-rails', group: :development
 
-# To use debugger
-# gem 'debugger'
+# Use debugger
+# gem 'debugger', group: [:development, :test]
+
