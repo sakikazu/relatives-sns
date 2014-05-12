@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class User < ActiveRecord::Base
   acts_as_paranoid
 
@@ -15,9 +14,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic algorithm
          :authentication_keys => [:username]
-
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at
 
   validates :username, presence: true, uniqueness: true
 

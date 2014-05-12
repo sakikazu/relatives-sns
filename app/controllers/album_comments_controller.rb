@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 class AlbumCommentsController < ApplicationController
   before_filter :authenticate_user!
 
   # POST /album_comments
   # POST /album_comments.json
   def create
-    @album_comment = AlbumComment.new(params[:album_comment])
+    @album_comment = AlbumComment.new(album_comment_params)
     @album_comment.user_id = current_user.id
     @album_comment.save
     @album = @album_comment.album
@@ -28,5 +27,11 @@ class AlbumCommentsController < ApplicationController
     @album = @album_comment.album
     @destroy_flg = true
     render 'create.js'
+  end
+
+  private
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def album_comment_params
+    params.require(:album_comment).permit(:album_id, :content)
   end
 end

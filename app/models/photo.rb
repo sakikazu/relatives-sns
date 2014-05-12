@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Photo < ActiveRecord::Base
   acts_as_paranoid
 
@@ -7,8 +6,6 @@ class Photo < ActiveRecord::Base
   has_many :photo_comments
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
-
-  attr_accessible :image, :exif_at, :user_id, :album_id, :title, :last_comment_at, :description
 
   content_name = "album"
   has_attached_file :image,
@@ -28,6 +25,5 @@ class Photo < ActiveRecord::Base
     photos.delete_if{|p| p == nil}
     photos
   end
-
 
 end

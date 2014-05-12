@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Blog < ActiveRecord::Base
   acts_as_paranoid
 
@@ -8,7 +7,5 @@ class Blog < ActiveRecord::Base
   has_many :update_histories, :as => :content, :dependent => :destroy
   has_many :nices, :as => :asset
 
-  default_scope order("created_at DESC")
-
-  attr_accessible :title, :content, :user_id
+  default_scope {order("created_at DESC")}
 end

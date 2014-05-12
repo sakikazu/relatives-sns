@@ -50,7 +50,6 @@ $(document).ready(function(){
   // submit押下時、ファイルが添付されてなかったら、AjaxでPOSTする
   $m_form = $('form#new_mutter:first');
   $m_form.submit(function(event) {
-    console.log(event);
     if($('#mutter_content', $m_form).val() == "") {
       event.preventDefault();
       alert('つぶやきを入力しないと投稿できません');
@@ -66,7 +65,6 @@ $(document).ready(function(){
           $('#mutter_data').html(data);
           $(document).ready(function(){
             $(".colorbox").colorbox();
-            data_toggle();
           })
         }
       );
@@ -81,7 +79,6 @@ $(document).ready(function(){
         $("#mutter_data").html(data);
         $(document).ready(function(){
           $(".colorbox").colorbox();
-          data_toggle();
         })
       }
     });

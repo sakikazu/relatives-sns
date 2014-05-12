@@ -47,11 +47,10 @@ jQuery(document).ready(function(){
   nice_member = (function(){
     $('.nice_members').each(function(){
       $(this).css({'cursor' : 'pointer'});
-      $(this).tipTip({
-        content: $(this).attr('nice_members'),
-        defaultPosition: "top",
-        maxWidth: "auto",
-        activation: "click",
+      $(this).tooltip({
+        title: $(this).attr('nice_members'),
+        placement: 'top',
+        trigger: 'click',
         delay: 0,
       });
     });

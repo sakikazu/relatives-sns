@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Mutter < ActiveRecord::Base
   acts_as_paranoid
 
@@ -16,8 +15,6 @@ class Mutter < ActiveRecord::Base
   validates_presence_of :content
   attr_accessor :search_word, :action_flg, :year, :month
 
-  attr_accessible :user_id, :content, :reply_id, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :created_at, :updated_at, :celebration_id, :image, :for_sort_at, :year, :month, :search_word, :action_flg, :ua
-
   @@imap = nil
 
   content_name = "mutter"
@@ -34,12 +31,12 @@ class Mutter < ActiveRecord::Base
 
   # [memo]こうやってそれぞれにuser、user_extを指定するようにすると、最初のリクエスト時にはやっぱ時間短縮されてる。
   # 二度目のリクエストではキャッシュされるらしく、それぞれに指定しなかった時と同じ速度になる。
-  scope :includes_all, includes([{:user => :user_ext}, {:children => {:nices => {:user => :user_ext}}}, {:nices => {:user => :user_ext}}])
-  scope :parents_mod, where("mutters.reply_id IS NULL") #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
-  scope :id_desc, order("mutters.id DESC")
-  scope :id_asc, order("mutters.id ASC")
+  scope :includes_all, lambda { includes([{:user => :user_ext}, {:children => {:nices => {:user => :user_ext}}}, {:nices => {:user => :user_ext}}]) }
+  scope :parents_mod, lambda { where("mutters.reply_id IS NULL") } #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
+  scope :id_desc, lambda { order("mutters.id DESC") }
+  scope :id_asc, lambda { order("mutters.id ASC") }
 
-  default_scope order("for_sort_at DESC")
+  default_scope {order("for_sort_at DESC")}
 
 
   def trans_space

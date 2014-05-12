@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 # これは、db:seedからしかユーザー登録できないときの機能。既存のユーザーに対して、パスワードなどを変更することが登録となるもの。
+
 
 # AdanHP4では使用していない
 class UsersController < Devise::RegistrationsController

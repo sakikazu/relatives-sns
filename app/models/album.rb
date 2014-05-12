@@ -5,8 +5,6 @@ class Album < ActiveRecord::Base
   has_many :photos
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  attr_accessible :title, :description, :thumb_id, :user_id, :sort_flg
-
   validates :title, presence: true
 
   acts_as_paranoid

@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
 class UserExt < ActiveRecord::Base
   require 'net/http'
 
   belongs_to :user
-
-  attr_accessible :familyname, :givenname, :nickname, :sex, :blood, :email, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :job, :hobby, :skill, :free_text, :image, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id
 
   attr_accessor :lat, :lng
 

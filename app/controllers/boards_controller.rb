@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 class BoardsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :page_title
+  before_action :set_board, only: [:show, :edit, :update, :destroy, :show_mobile]
 
   # GET /boards
   # GET /boards.xml
@@ -54,8 +54,6 @@ class BoardsController < ApplicationController
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
 
-    @board = Board.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @board }
@@ -63,7 +61,6 @@ class BoardsController < ApplicationController
   end
 
   def show_mobile
-    @board = Board.find(params[:id])
     @board_comments = @board.board_comments.page(params[:page]).per(10)
     render :action => :show_mobile, :layout => "mobile"
   end
@@ -81,14 +78,13 @@ class BoardsController < ApplicationController
 
   # GET /boards/1/edit
   def edit
-    @board = Board.find(params[:id])
   end
 
   # POST /boards
   # POST /boards.xml
   def create
     params[:board][:user_id] = current_user.id
-    @board = Board.new(params[:board])
+    @board = Board.new(board_params)
 
     respond_to do |format|
       if @board.save
@@ -105,10 +101,8 @@ class BoardsController < ApplicationController
   # PUT /boards/1
   # PUT /boards/1.xml
   def update
-    @board = Board.find(params[:id])
-
     respond_to do |format|
-      if @board.update_attributes(params[:board])
+      if @board.update_attributes(board_params)
         format.html { redirect_to(@board, :notice => '更新しました') }
         format.xml  { head :ok }
       else
@@ -121,7 +115,6 @@ class BoardsController < ApplicationController
   # DELETE /boards/1
   # DELETE /boards/1.xml
   def destroy
-    @board = Board.find(params[:id])
     @board.destroy
 
     respond_to do |format|
@@ -132,7 +125,7 @@ class BoardsController < ApplicationController
 
   def create_comment
     @board = Board.find(params[:board_id])
-    @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
+    @board.board_comments.create(:user_id => current_user.id, :content => params.permit(:comment), :attach => params.permit(:attach))
 
     #UpdateHistory
     uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id})
@@ -148,7 +141,7 @@ class BoardsController < ApplicationController
 
   def create_comment_mobile
     @board = Board.find(params[:board_id])
-    @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
+    @board.board_comments.create(:user_id => current_user.id, :content => params.permit(:comment), :attach => params.permit(:attach))
 
     #UpdateHistory
     uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id})
@@ -173,7 +166,18 @@ class BoardsController < ApplicationController
     end
   end
 
-private
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_board
+      @board = Board.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def board_params
+      params.require(:board).permit(:title, :description, :attach, :user_id)
+  end
+
   def page_title
     @page_title = "掲示板"
   end

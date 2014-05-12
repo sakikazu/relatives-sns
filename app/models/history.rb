@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 class History < ActiveRecord::Base
   belongs_to :user
   has_many :history_comments
 
   validates :content, :presence => true
-
-  attr_accessible :user_id, :episode_year, :episode_month, :episode_day, :about_flg, :content, :src_user_name
 
   def hist_date
     if episode_year.blank?

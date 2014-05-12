@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 class BlogImage < ActiveRecord::Base
   belongs_to :user
   belongs_to :blog
-
-  attr_accessible :image
 
   content_name = "blog"
   has_attached_file :image,

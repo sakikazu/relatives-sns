@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class NicesController < ApplicationController
   before_filter :authenticate_user!
 

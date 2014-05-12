@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 class BlogsController < ApplicationController
   before_filter :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
-  before_filter :set_title
+  before_action :set_blog, only: [:show, :edit, :update, :destroy, :show_mobile, :destroy_mobile, :edit_mobile, :destroy_confirm_mobile]
 
   hankaku_filter
 
@@ -24,7 +23,7 @@ class BlogsController < ApplicationController
     tmp2.each do |user_id, val|
       user = User.find_by_id(user_id)
       @blog_count_by_user << [user, tmp1[user_id], val]
-    end
+    end if tmp2.present?
 
     respond_to do |format|
       format.html # index.html.erb
@@ -58,7 +57,6 @@ class BlogsController < ApplicationController
   end
 
   def show_mobile
-    @blog = Blog.find(params[:id])
     @content_title = @blog.user.dispname + "の日記"
     render :action => :show_mobile, :layout => "mobile"
   end
@@ -68,8 +66,6 @@ class BlogsController < ApplicationController
   def show
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
-    @blog = Blog.find(params[:id])
 
     @comment = BlogComment.new
     respond_to do |format|
@@ -98,12 +94,10 @@ class BlogsController < ApplicationController
 
   # GET /blogs/1/edit
   def edit
-    @blog = Blog.find(params[:id])
   end
 
   def edit_mobile
     @content_title = "日記を編集する"
-    @blog = Blog.find(params[:id])
     render :action => :edit_mobile, :layout => "mobile"
   end
 
@@ -111,7 +105,7 @@ class BlogsController < ApplicationController
   # POST /blogs.json
   def create
     params[:blog][:user_id] = current_user.id
-    @blog = Blog.new(params[:blog])
+    @blog = Blog.new(blog_params)
 
     respond_to do |format|
       if @blog.save
@@ -138,16 +132,14 @@ class BlogsController < ApplicationController
   # PUT /blogs/1
   # PUT /blogs/1.xml
   def update
-    @blog = Blog.find(params[:id])
-
     if request.mobile?
-      @blog.update_attributes(params[:blog])
+      @blog.update_attributes(blog_params)
       redirect_to :action => :show_mobile, :id => @blog.id
       return
     end
 
     respond_to do |format|
-      if @blog.update_attributes(params[:blog])
+      if @blog.update_attributes(blog_params)
         if params[:image]
           image = BlogImage.new(params[:image])
           @blog.blog_images << image
@@ -165,7 +157,6 @@ class BlogsController < ApplicationController
   # DELETE /blogs/1
   # DELETE /blogs/1.xml
   def destroy
-    @blog = Blog.find(params[:id])
     @blog.destroy
 
     redirect_to(blogs_url)
@@ -180,7 +171,6 @@ class BlogsController < ApplicationController
 
   def destroy_confirm_mobile
     @content_title = "削除の確認"
-    @blog = Blog.find(params[:id])
     render :action => :destroy_confirm_mobile, :layout => "mobile"
   end
 
@@ -231,10 +221,18 @@ class BlogsController < ApplicationController
     redirect_to :action => :show, :id => blog.id
   end
 
-private
-  def set_title
-    @blog = Blog.find_by_id(params[:id]) if params[:id].present?
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_blog
+    @blog = Blog.find(params[:id])
     @title = @blog.title if @blog.present?
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def blog_params
+    params.require(:blog).permit(:title, :content, :user_id)
   end
 
 end

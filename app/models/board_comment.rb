@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 class BoardComment < ActiveRecord::Base
   belongs_to :user
   belongs_to :board
-
-  attr_accessible :user_id, :content, :attach
 
   content_name = "board"
   has_attached_file :attach,

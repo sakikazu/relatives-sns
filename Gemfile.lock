@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/tommireinikainen/rails-footnotes.git
-  revision: 2f6f38808b052ba7e1b59107acdc6144a3ec448e
-  specs:
-    rails-footnotes (3.7.9)
-      rails (>= 3.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -159,11 +152,11 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.9.2)
-    less (2.4.0)
+    less (2.5.0)
       commonjs (~> 0.2.7)
-    less-rails (2.4.2)
+    less-rails (2.5.0)
       actionpack (>= 3.1)
-      less (~> 2.4.0)
+      less (~> 2.5.0)
     libv8 (3.16.14.3)
     listen (2.7.4)
       celluloid (>= 0.15.2)
@@ -230,6 +223,8 @@ GEM
       activesupport (>= 3.0)
       choice (~> 0.1.6)
       ruby-graphviz (~> 1.0.4)
+    rails-footnotes (4.0.0)
+      rails (>= 3.2)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
     rails4_acts_as_paranoid (0.1.4)
@@ -328,14 +323,14 @@ GEM
       term-ansicolor
     term-ansicolor (1.3.0)
       tins (~> 1.0)
-    therubyracer (0.12.0)
+    therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
       ref
     thor (0.19.1)
     thread_safe (0.3.3)
     tilt (1.4.1)
     timers (1.1.0)
-    tins (1.1.0)
+    tins (1.2.0)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -399,7 +394,7 @@ DEPENDENCIES
   pry-rails
   rails (= 4.1.0)
   rails-erd
-  rails-footnotes!
+  rails-footnotes (>= 4.0.0, < 5)
   rails4_acts_as_paranoid
   rails_admin
   rails_autolink

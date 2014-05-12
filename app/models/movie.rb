@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Movie < ActiveRecord::Base
   acts_as_paranoid
 
@@ -7,9 +6,7 @@ class Movie < ActiveRecord::Base
   has_many :update_histories, :as => :content, :dependent => :destroy
   has_many :nices, :as => :asset
 
-  default_scope order('id DESC')
-
-  attr_accessible :title, :description, :movie_type, :user_id, :movie, :thumb
+  default_scope {order('id DESC')}
 
   validates :title, presence: true
 

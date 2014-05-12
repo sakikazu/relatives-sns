@@ -16,18 +16,18 @@
 //= require twitter/bootstrap
 //= require bootstrap
 //= require_tree ./uploadify
-//= require_tree ./jPlayer
-//= require video-js/video
+//= //require_tree ./jPlayer
+//= //require video-js/video
 //= require jquery.colorbox-min
-//= require jquery.cleditor.min
+//= //require jquery.cleditor.min
 //= require jquery.autopager-1.0.0.min
-//= require jquery.tablesorter.min
+//= //require jquery.tablesorter.min
 //= require jquery.sliderkit.1.9.2.pack.js
+// mousewheel is required by sliderkit
 //= require jquery.mousewheel.min.js
-//= require jquery.tipTip.minified
-//= require desktopify
+//= //require desktopify
 //= require bgstretcher
-//= require_tree ./jqplot
+//= //require_tree ./jqplot
 
 
 // メソッドが多くなってきたら別ファイルに切り出す

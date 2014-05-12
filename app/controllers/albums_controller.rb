@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 class AlbumsController < ApplicationController
   before_filter :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
   before_filter :authenticate_user!
-  before_filter :set_title
+  before_action :set_album, only: [:show, :edit, :update, :destroy, :download]
 
   # GET /albums
   # GET /albums.json
@@ -90,7 +89,7 @@ class AlbumsController < ApplicationController
   # POST /albums
   # POST /albums.json
   def create
-    @album = Album.new(params[:album])
+    @album = Album.new(album_params)
     @album.user_id = current_user.id
 
     respond_to do |format|
@@ -109,7 +108,7 @@ class AlbumsController < ApplicationController
   # PUT /albums/1.json
   def update
     respond_to do |format|
-      if @album.update_attributes(params[:album])
+      if @album.update_attributes(album_params)
         format.html { redirect_to @album, notice: 'アルバム情報を更新しました。' }
         format.json { head :ok }
       else
@@ -138,11 +137,10 @@ class AlbumsController < ApplicationController
   end
 
   def download
-    album = Album.find(params[:id])
     tmp = Tempfile.new('album')
     tmp_dir = tmp.path + '.dir'
     FileUtils.mkdir(tmp_dir)
-    album.photos.each do |photo|
+    @album.photos.each do |photo|
       if File.exist?(photo.image.path)
         FileUtils.cp photo.image.path, tmp_dir
       elsif File.exist?(photo.image.path(:large))
@@ -152,11 +150,11 @@ class AlbumsController < ApplicationController
 
     ### tar.gz 形式の場合
     #`cd #{tmp_dir}; tar cvfz #{tarfile} *`
-    #send_data File.open(tarfile).read, :filename => "#{album.title}.tar.gz", :type => 'application/x-gzip'
+    #send_data File.open(tarfile).read, :filename => "#{@album.title}.tar.gz", :type => 'application/x-gzip'
 
     zipfile = "#{tmp_dir}.zip"
     `cd #{tmp_dir}; zip #{zipfile} *`
-    send_data File.open(zipfile).read, :filename => "#{album.title}.zip"
+    send_data File.open(zipfile).read, :filename => "#{@album.title}.zip"
 
   ensure
     FileUtils.rm_rf(tmp_dir) if File.exist?(tmp_dir)
@@ -164,13 +162,20 @@ class AlbumsController < ApplicationController
     FileUtils.rm(zipfile) if File.exist?(zipfile)
   end
 
-  def set_title
-    @album = Album.find(params[:id]) if params[:id].present?
+
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_album
+    @album = Album.find(params[:id])
     @title = @album.title if @album.present?
   end
 
-
-private
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def album_params
+    params.require(:album).permit(:title, :description, :thumb_id, :user_id, :sort_flg)
+  end
 
   # user_idが入っていたら、Uploadifyでアップロードしてセッションが切れてしまった後に
   # リダイレクトされてきたものと判断してログインする

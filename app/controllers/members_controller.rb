@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class MembersController < ApplicationController
   before_filter :authenticate_user!
   before_filter :page_title
@@ -6,7 +5,7 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @users = User.all(:include => "user_ext", :order => "users.root11, users.id")
+    @users = User.includes("user_ext").order("users.root11, users.id")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -15,7 +14,7 @@ class MembersController < ApplicationController
   end
 
   def all
-    @users = User.all(:include => "user_ext", :order => "user_exts.updated_at DESC")
+    @users = User.includes("user_ext").order("user_exts.updated_at DESC")
   end
 
   def login_history
@@ -82,7 +81,7 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
-    @user = User.new(params[:member])
+    @user = User.new(member_params)
 
     respond_to do |format|
       if @user.save
@@ -104,7 +103,7 @@ class MembersController < ApplicationController
     @user = current_user
 
     respond_to do |format|
-      if @user.update_attributes(params[:member])
+      if @user.update_attributes(member_params)
         format.html { redirect_to member_path(@user), notice: '更新しました.' }
         format.json { head :no_content }
       else
@@ -123,7 +122,7 @@ class MembersController < ApplicationController
   end
 
   def update_ex
-    current_user.user_ext.update_attributes(params[:user_ext])
+    current_user.user_ext.update_attributes(user_ext_params)
     redirect_to({:action => :show, :id => current_user.user_ext.user.id}, notice: '更新しました.')
   end
 
@@ -143,6 +142,15 @@ class MembersController < ApplicationController
 private
   def page_title
     @page_title = "親戚データ"
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def member_params
+      params.require(:member).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at)
+  end
+
+  def user_ext_params
+      params.require(:user_ext).permit(:familyname, :givenname, :nickname, :sex, :blood, :email, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :job, :hobby, :skill, :free_text, :image, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id)
   end
 
 end

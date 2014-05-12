@@ -1,19 +1,16 @@
-# -*- coding: utf-8 -*-
 class Ranking < ActiveRecord::Base
-  attr_accessible :classification, :content_id, :content_type, :nice_count
-
   belongs_to :content, :polymorphic => true
 
   # [memo] ここで各コンテンツが「content」でincludeできるんだ！！すげー(polymorphic)
-  default_scope includes(:content => {:nices => {:user => :user_ext}}).order("nice_count DESC")
-  scope :total, where(classification: 1)
-  scope :month, where(classification: 2)
+  default_scope {includes(:content => {:nices => {:user => :user_ext}}).order("nice_count DESC")}
+  scope :total, lambda {where(classification: 1)}
+  scope :month, lambda {where(classification: 2)}
 
   # 各コンテンツフィルタ
-  scope :mutter, where(content_type: "Mutter")
-  scope :photo, where(content_type: "Photo")
-  scope :movie, where(content_type: "Movie")
-  scope :blog, where(content_type: "Blog")
+  scope :mutter, lambda {where(content_type: "Mutter")}
+  scope :photo, lambda {where(content_type: "Photo")}
+  scope :movie, lambda {where(content_type: "Movie")}
+  scope :blog, lambda {where(content_type: "Blog")}
 
 
   #

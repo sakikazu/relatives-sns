@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class MuttersController < ApplicationController
   # for mobile
   before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
@@ -6,7 +5,10 @@ class MuttersController < ApplicationController
 
   before_filter :authenticate_user!, :except => :rss
   before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
-  cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
+  # todo 2014-05-12
+  # cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
+
+  before_action :set_mutter, only: [:destroy]
 
   def graph
     # allが選択された時も、年月選択フィールドは今月を選択しておきたいので@mutterを設定しておく
@@ -158,7 +160,7 @@ class MuttersController < ApplicationController
     @page_title = "トップ"
 
     updates_count = request.smart_phone? ? 5 : 10
-    @updates = UpdateHistory.includes({:user => :user_ext}).view_normal.limit(updates_count)
+    @updates = UpdateHistory.view_normal.limit(updates_count)
     login_users_count = request.smart_phone? ? 7 : 40
     @login_users = User.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(login_users_count)
 
@@ -207,7 +209,7 @@ class MuttersController < ApplicationController
   end
 
   def create
-    @mutter = Mutter.new(params[:mutter])
+    @mutter = Mutter.new(mutter_params)
     ua = request.env["HTTP_USER_AGENT"]
     @mutter.ua = ua
 
@@ -237,7 +239,6 @@ class MuttersController < ApplicationController
   end
 
   def destroy
-    @mutter = Mutter.find(params[:id])
     @mutter.destroy
     @mutters = Mutter.includes_all.parents_mod.page(params[:page])
     render "update_list.js"
@@ -272,14 +273,14 @@ class MuttersController < ApplicationController
   end
 
   def celebration_create
-    @celebration = Celebration.where(params[:celebration]).first
+    @celebration = Celebration.where(celebration_params).first
     if @celebration.blank?
-      @celebration = Celebration.create(params[:celebration])
+      @celebration = Celebration.create(celebration_params)
     end
     params[:mutter][:celebration_id] = @celebration.id
     params[:mutter][:ua] = request.env["HTTP_USER_AGENT"]
 
-    Mutter.create(params[:mutter])
+    Mutter.create(mutter_params)
     redirect_to({:action => :index}, :notice => 'お祝いをしました。「お祝いを見る」から確認できます。')
   end
 
@@ -391,4 +392,17 @@ class MuttersController < ApplicationController
     @mutter = Mutter.new(:user_id => current_user.id)
   end
 
+  # Use callbacks to share common setup or constraints between actions.
+  def set_mutter
+      @mutter = Mutter.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def mutter_params
+      params.require(:mutter).permit(:user_id, :content, :reply_id, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :created_at, :updated_at, :celebration_id, :image, :for_sort_at, :year, :month, :search_word, :action_flg, :ua)
+  end
+
+  def celebration_params
+      params.require(:celebration).permit(:anniversary_at, :user_id)
+  end
 end

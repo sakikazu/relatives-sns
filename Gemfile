@@ -48,6 +48,12 @@ gem 'whenever', :require => false
 gem 'simple_form'
 gem 'twitter-bootstrap-rails'
 
+
+# memo jquery 1.9以上になるとliveが使えずエラーになるのでバージョン指定
+# gem 'jquery-rails', '2.1.3'
+# gem 'jquery-ui-rails', '2.0.2'
+
+# jquery-railsをバージョン指定するとこれがエラーになるぞ？？（2014/05/12）
 gem 'rails_admin'
 gem 'faker'
 
@@ -64,9 +70,6 @@ gem 'jpmobile'
 gem 'ruby-gmail', '0.3.0'
 
 gem 'less-rails'
-
-# gem 'jquery-rails', '2.1.3'
-# gem 'jquery-ui-rails', '2.0.2'
 
 # 定数管理
 gem 'rails_config'
@@ -96,8 +99,7 @@ group :development, :test do
   gem 'database_rewinder'
 
   # デバッグ情報をフッターに出してくれる
-  # 2013-12-28現在、「Hash#diff」のWarningが大量に出るので対処
-  gem 'rails-footnotes', git: 'git://github.com/tommireinikainen/rails-footnotes.git'
+  gem 'rails-footnotes', '>= 4.0.0', '<5'
 
   gem 'rails-erd'
 

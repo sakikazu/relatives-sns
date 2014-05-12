@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Board < ActiveRecord::Base
   acts_as_paranoid
 
@@ -6,11 +5,10 @@ class Board < ActiveRecord::Base
   has_many :board_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  default_scope order("created_at DESC")
+  default_scope {order("created_at DESC")}
 
   validates :title, presence: true
 
-  attr_accessible :title, :description, :attach, :user_id
   attr_accessor :sort_at
 
   content_name = "board"

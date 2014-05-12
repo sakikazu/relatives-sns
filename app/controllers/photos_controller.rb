@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
 class PhotosController < ApplicationController
   before_filter :authenticate_user!, :except => [:create]  #sakikazu これがないとcreateできない。 for uploadify
+  before_action :set_photo, only: [:show, :edit, :update, :destroy, :slideshow, :update_from_slideshow]
 
   # GET /photos
   # GET /photos.json
@@ -23,7 +23,6 @@ class PhotosController < ApplicationController
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
 
-    @photo = Photo.find(params[:id])
     @photo_comment = PhotoComment.new(:user_id => current_user.id, :photo_id => @photo.id)
 
     respond_to do |format|
@@ -45,12 +44,12 @@ class PhotosController < ApplicationController
 
   # GET /photos/1/edit
   def edit
-    @photo = Photo.find(params[:id])
   end
 
   # POST /photos
   # POST /photos.json
   def create
+    p params
     params[:photo] = {}
     params[:photo][:image] = params['Filedata'] #paperclip
     #memo 「date_time」だと、写真の更新日付になってしまうことがあった。「exif.date_time_digitized」で取得すること
@@ -62,7 +61,7 @@ class PhotosController < ApplicationController
     params[:photo][:user_id] = params['user_id']
     params[:photo][:album_id] = params['album_id']
     params[:photo][:title] = "[無題]"
-    @photo = Photo.new(params[:photo])
+    @photo = Photo.new(photo_params)
 
 # ここは認証を解除しているからcurrent_userは使えないので、@photo.userを使う
     #UpdateHistory
@@ -89,7 +88,6 @@ class PhotosController < ApplicationController
   # PCからはcolorboxで使用する前提。スマホからは一つのページとして表示する
   def slideshow
     @from_top_flg = true if params[:top].present?
-    @photo = Photo.find(params[:id])
     @photo_comment = PhotoComment.new(:user_id => current_user.id, :photo_id => @photo.id)
     #sakikazu PCからはJSをincludeしないようにレイアウトをオフにして、Ajaxの多重書き込みを防ぐ(※スマホからは見づらいのでcolorboxは使用しない)
     unless request.smart_phone?
@@ -98,7 +96,6 @@ class PhotosController < ApplicationController
   end
 
   def update_from_slideshow
-    @photo = Photo.find(params[:id])
     @photo.update_attributes(params[:photo])
   end
 
@@ -106,10 +103,8 @@ class PhotosController < ApplicationController
   # PUT /photos/1
   # PUT /photos/1.json
   def update
-    @photo = Photo.find(params[:id])
-
     respond_to do |format|
-      if @photo.update_attributes(params[:photo])
+      if @photo.update_attributes(photo_params)
         format.html { redirect_to [@photo.album, @photo], notice: '写真情報を変更しました。' }
         format.json { head :ok }
       else
@@ -122,7 +117,6 @@ class PhotosController < ApplicationController
   # DELETE /photos/1
   # DELETE /photos/1.json
   def destroy
-    @photo = Photo.find(params[:id])
     @photo.destroy
     @album = @photo.album
 
@@ -131,4 +125,16 @@ class PhotosController < ApplicationController
       format.json { head :ok }
     end
   end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_photo
+      @photo = Photo.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def photo_params
+      params.require(:photo).permit(:image, :exif_at, :user_id, :album_id, :title, :last_comment_at, :description)
+  end
+
 end

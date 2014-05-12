@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
 class MoviesController < ApplicationController
   before_filter :authenticate_user!
+  before_action :set_movie, only: [:show, :edit, :update, :destroy]
 
   # GET /movies
   # GET /movies.xml
@@ -25,8 +25,6 @@ class MoviesController < ApplicationController
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
 
-    @movie = Movie.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @movie }
@@ -46,14 +44,13 @@ class MoviesController < ApplicationController
 
   # GET /movies/1/edit
   def edit
-    @movie = Movie.find(params[:id])
   end
 
   # POST /movies
   # POST /movies.xml
   def create
     params[:movie][:user_id] = current_user.id
-    @movie = Movie.new(params[:movie])
+    @movie = Movie.new(movie_params)
 
     respond_to do |format|
       if @movie.save
@@ -70,10 +67,8 @@ class MoviesController < ApplicationController
   # PUT /movies/1
   # PUT /movies/1.xml
   def update
-    @movie = Movie.find(params[:id])
-
     respond_to do |format|
-      if @movie.update_attributes(params[:movie])
+      if @movie.update_attributes(movie_params)
         format.html { redirect_to(@movie, :notice => '更新しました') }
         format.xml  { head :ok }
       else
@@ -86,7 +81,6 @@ class MoviesController < ApplicationController
   # DELETE /movies/1
   # DELETE /movies/1.xml
   def destroy
-    @movie = Movie.find(params[:id])
     @movie.destroy
 
     respond_to do |format|
@@ -102,7 +96,7 @@ class MoviesController < ApplicationController
     end
 
     @movie = Movie.find(params[:movie_id])
-    @movie.movie_comments.create(:user_id => current_user.id, :content => params[:comment])
+    @movie.movie_comments.create(:user_id => current_user.id, :content => params.permit(:comment))
 
     #UpdateHistory
     uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :content_id => @movie.id})
@@ -118,6 +112,17 @@ class MoviesController < ApplicationController
     movie = @bcom.movie
     @bcom.destroy
     redirect_to({:action => :show, :id => movie.id}, notice: "コメントを削除しました")
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_movie
+      @movie = Movie.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def movie_params
+      params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb)
   end
 
 end

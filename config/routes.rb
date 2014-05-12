@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
   end
 
-  match 'blogs/user/:username' => 'blogs#index', as: :blogs_by_user
+  get 'blogs/user/:username' => 'blogs#index', as: :blogs_by_user
   resources :blogs do
     collection do
       get :index_mobile
@@ -38,7 +38,7 @@ Rails.application.routes.draw do
     resources :blog_comments, only: [:create, :destroy]
   end
   # for mobile ※携帯だとmethod: :deleteが効いてくれないぽい？？指定してもGETメソッドになっちゃったので
-  match "/blogs/destroy_comment/:id" => "blogs#destroy_comment", :as => :destroy_comment
+  delete "/blogs/destroy_comment/:id" => "blogs#destroy_comment", :as => :destroy_comment
 
   resources :movies do
     collection do
@@ -66,7 +66,7 @@ Rails.application.routes.draw do
 
   # match "/albums/upload_complete/:id" => "albums#upload_complete", :as => :album_up_comp
 
-  match "/boards/destroy_comment/:id" => "boards#destroy_comment", :as => :destroy_comment_board
+  delete "/boards/destroy_comment/:id" => "boards#destroy_comment", :as => :destroy_comment_board
   resources :boards do
     collection do
       post :create_comment
@@ -101,9 +101,9 @@ Rails.application.routes.draw do
       get :wasnice
     end
   end
-  match "nices" => "nices#recent"
+  get "nices" => "nices#recent"
 
-  match "/mutters/user/:user_id" => "mutters#all", :as => :mutter_by_user
+  get "/mutters/user/:user_id" => "mutters#all", :as => :mutter_by_user
   resources :mutters do
     collection do
       get :graph
@@ -130,17 +130,18 @@ Rails.application.routes.draw do
 
 
   # for mobile
-  match "/m" => "mobile#index", :as => :mobile
-  match "/m/create" => "mobile#create", :as => :mobile_c
-  match "/m/destory" => "mobile#destroy", :as => :mobile_d
-  match "/m/update_history" => "mobile#update_history", :as => :mobile_uh
-  match "/m/celebration" => "mobile#celebration", :as => :mobile_uh
-  match "/m/celebration_new" => "mobile#celebration_new", :as => :mobile_uh
-  match "/m/celebration_create" => "mobile#celebration_create", :as => :mobile_uh
+  # 2014/05/12, routingが間違ってるのでエラーになるけど、もう使わないと思うので削除しようかな
+  # get "/m" => "mobile#index", :as => :mobile
+  # post "/m/create" => "mobile#create", :as => :mobile_c
+  # delete "/m/destory" => "mobile#destroy", :as => :mobile_d
+  # get "/m/update_history" => "mobile#update_history", :as => :mobile_uh
+  # get "/m/celebration" => "mobile#celebration", :as => :mobile_uh
+  # get "/m/celebration_new" => "mobile#celebration_new", :as => :mobile_uh
+  # post "/m/celebration_create" => "mobile#celebration_create", :as => :mobile_uh
 
   # method: :delete が効かないので
   devise_scope :user do
-    match "/m/sign_out" => "devise/sessions#destroy", as: :mobile_sign_out
+    delete "/m/sign_out" => "devise/sessions#destroy", as: :mobile_sign_out
   end
 
   root :to => 'mutters#index'

@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
 class PhotoCommentsController < ApplicationController
   before_filter :authenticate_user!
+  before_action :set_photo_comment, only: [:destroy]
 
   # POST /photo_comments
   # POST /photo_comments.json
   def create
-    @photo_comment = PhotoComment.create(params[:photo_comment])
+    @photo_comment = PhotoComment.create(photo_comment_params)
     @photo = @photo_comment.photo
     @photo.update_attributes(:last_comment_at => Time.now)
 
@@ -30,10 +30,20 @@ class PhotoCommentsController < ApplicationController
   # DELETE /photo_comments/1
   # DELETE /photo_comments/1.json
   def destroy
-    @photo_comment = PhotoComment.find(params[:id])
     @photo_comment.destroy
     @photo = @photo_comment.photo
     @destroy_flg = true
     render 'create.js'
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_photo_comment
+      @photo_comment = PhotoComment.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def photo_comment_params
+      params.require(:photo_comment).permit(:user_id, :photo_id, :content)
   end
 end

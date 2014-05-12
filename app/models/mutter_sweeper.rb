@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class MutterSweeper < ActionController::Caching::Sweeper
   observe Mutter
 
