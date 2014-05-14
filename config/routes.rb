@@ -124,9 +124,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # devise カスタマイズ版
-  # devise_for :users, controllers: {registrations: "users"}
-  devise_for :users
+  devise_for :users, controllers: {sessions: 'users/sessions'}
 
 
   # for mobile

@@ -18,12 +18,12 @@ class BlogsController < ApplicationController
 
     # ブログの最終作成日が直近の人の順に、ブログ記事のカウントとともにデータをセットする
     @blog_count_by_user = []
-    tmp1 = Blog.count(:group => :user_id)
-    tmp2 = Blog.maximum(:created_at, :group => :user_id, :order => "created_at DESC")
+    tmp1 = Blog.group(:user_id).count
+    tmp2 = Blog.group(:user_id).order("created_at DESC").maximum(:created_at)
     tmp2.each do |user_id, val|
       user = User.find_by_id(user_id)
       @blog_count_by_user << [user, tmp1[user_id], val]
-    end if tmp2.present?
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -109,10 +109,11 @@ class BlogsController < ApplicationController
 
     respond_to do |format|
       if @blog.save
-        if params[:image]
-          image = BlogImage.new(params[:image])
-          @blog.blog_images << image
-        end
+        # todo imageの持ち方を変えるので、現状のこのエラーは無視（2014/05/14）
+        # if params[:image]
+          # image = BlogImage.new(params[:image])
+          # @blog.blog_images << image
+        # end
 
         @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
 
@@ -184,7 +185,7 @@ class BlogsController < ApplicationController
     @blog.blog_comments.create(:user_id => current_user.id, :content => params[:comment])
 
     #UpdateHistory
-    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT, :assetable_id => @blog.id})
+    uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT, :assetable_id => @blog.id).first
     if uh
       uh.update_attributes(:updated_at => Time.now)
     else

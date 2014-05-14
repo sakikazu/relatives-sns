@@ -17,6 +17,9 @@ class Photo < ActiveRecord::Base
     :url => "/upload/#{content_name}/:album/:id/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:basename.:extension"
 
+  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
+
+
   #全写真からただランダムに抽出する
   def self.rnd_photos
     photos = self.includes(:album).order("RAND()").limit(15).map{|photo| photo if photo.album.present?}

@@ -4,7 +4,7 @@
     <%= link_to '自分の日記へ', blogs_path, class: "btn" %>
     <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
     <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
-    <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", :confirm => '本当に削除してもよろしいですか？' if editable(current_user, @blog.user) %>
+    <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @blog.user) %>
     </div>
 
     <div class="page-header ver2">
@@ -21,7 +21,7 @@
         <div id="blog_images" class="cf">
           <% @blog.blog_images.each do |image| -%>
             <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>
-            <%= link_to "削除", {:action => :destroy_image, :id => image.id}, method: "delete", confirm: "画像を削除してもいいですか？" if image.image? && editable(current_user, @blog.user) %>
+            <%= link_to "削除", {:action => :destroy_image, :id => image.id}, method: "delete", data: {confirm: "画像を削除してもいいですか？"} if image.image? && editable(current_user, @blog.user) %>
           <% end -%>
         </div>
         <%= "<hr>".html_safe if @blog.blog_images.present? %>

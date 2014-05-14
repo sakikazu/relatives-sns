@@ -72,7 +72,9 @@ class PhotosController < ApplicationController
       @photo.album.update_histories << UpdateHistory.create(:user_id => @photo.user.id, :action_type => UpdateHistory::ALBUMPHOTO_CREATE)
     end
 
-    @photo.save
+    # memo Ajaxでのpostはsaveのエラーが画面には表示されないので、自分で出力してあげる
+    # logger.debug @photo.errors.full_messages.inspect
+    # logger.debug @photo.errors.full_messages.to_sentence
 
     # respond_to do |format|
       # if @photo.save

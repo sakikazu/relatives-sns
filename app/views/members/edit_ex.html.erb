@@ -15,7 +15,7 @@ th {
   <h3>情報を変更する(好きなとこだけ設定すればいいよ)</h3>
 </div>
 
-<%= form_for @user_ext, html: form_html_option, url: update_ex_members_path do |f| %>
+<%= form_for @user_ext, html: form_html_option, url: update_ex_members_path, method: "put" do |f| %>
 <table class="table table-striped table-bordered table-hover">
   <tr><th>姓</th><td><%= f.text_field :familyname %></td></tr>
   <tr><th>名</th><td><%= f.text_field :givenname %></td></tr>

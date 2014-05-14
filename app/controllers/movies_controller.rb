@@ -96,10 +96,10 @@ class MoviesController < ApplicationController
     end
 
     @movie = Movie.find(params[:movie_id])
-    @movie.movie_comments.create(:user_id => current_user.id, :content => params.permit(:comment))
+    @movie.movie_comments.create(:user_id => current_user.id, :content => params[:comment])
 
     #UpdateHistory
-    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :content_id => @movie.id})
+    uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :content_id => @movie.id).first
     if uh
       uh.update_attributes(:updated_at => Time.now)
     else

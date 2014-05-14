@@ -33,7 +33,7 @@
     <%= link_to(image_tag(mutter_row.image(:thumb), align: :left), mutter_row.image(:large), {:class => colorbox_class}) if mutter_row.image? %>
     <%= sani_org(mutter_row.view_content) %>
   </div>
-  <div class='delete'><%= link_to("削除", mutter_row, :confirm => "本当に削除してもよろしいですか？", :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></div>
+  <div class='delete'><%= link_to("削除", mutter_row, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></div>
 </div>
 </div>
 

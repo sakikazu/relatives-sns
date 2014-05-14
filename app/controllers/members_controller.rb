@@ -18,7 +18,7 @@ class MembersController < ApplicationController
   end
 
   def login_history
-    @lhs = LoginHistory.paginate(:page => params[:page], :per_page => 100, :order => "created_at DESC")
+    @lhs = LoginHistory.order("created_at DESC").page(params[:page]).per(100)
   end
 
   def map

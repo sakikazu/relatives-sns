@@ -1,0 +1,16 @@
+ja:
+  simple_form:
+    labels:
+      defaults:
+        username: "ユーザー名def"
+        password: "パスワードdef"
+
+      user:
+        email: "メールアドレス"
+        fullpath: "(管理者用)フルネーム"
+        role: "権限"
+        username: "ユーザー名"
+        password: "パスワード"
+        password_confirmation: "パスワード(再入力)"
+        remember_me: "次回からパスワード入力を省く"
+

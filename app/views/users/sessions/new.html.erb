@@ -1,6 +1,6 @@
 <h2>ログイン <small>ログインができない方は、和孝に問い合わせてください（sakikazu15@gmail.com）</small></h2>
 
-<%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+<%= simple_form_for(resource_name, :as => resource_name, :url => session_path(resource_name)) do |f| %>
   <div class="form-inputs">
     <%= f.input :username, :required => false, :autofocus => true %>
     <%= f.input :password, :required => false %>

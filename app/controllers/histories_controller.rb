@@ -68,7 +68,7 @@ class HistoriesController < ApplicationController
   end
 
   def new_comment
-    @comment = HistoryComment.new(:user_id => current_user.id, :history_id => params.permit(:history_id))
+    @comment = HistoryComment.new(:user_id => current_user.id, :history_id => params[:history_id])
     render :layout => false
   end
 

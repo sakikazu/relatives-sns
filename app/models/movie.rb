@@ -23,6 +23,9 @@ class Movie < ActiveRecord::Base
     :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
+  # "vide"で始まるContentType
+  validates_attachment_content_type :movie, :content_type => /\Avide.?\/.*\Z/
+
   has_attached_file :thumb,
     :styles => {
       :thumb => "250x250>",
@@ -32,4 +35,5 @@ class Movie < ActiveRecord::Base
     :url => "/upload/#{content_name}/:id/thumb/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/thumb/:style/:basename.:extension"
 
+  validates_attachment_content_type :thumb, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
 end

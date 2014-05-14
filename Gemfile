@@ -49,6 +49,7 @@ gem 'simple_form'
 gem 'twitter-bootstrap-rails'
 
 
+# todo 問題なさげ？このまま大丈夫ならここ削除
 # memo jquery 1.9以上になるとliveが使えずエラーになるのでバージョン指定
 # gem 'jquery-rails', '2.1.3'
 # gem 'jquery-ui-rails', '2.0.2'

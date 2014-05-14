@@ -11,7 +11,7 @@
   <%= f.input :movie_type, as: "radio_buttons", label: "編集された動画かどうか", label_html: {class: "mgn-t20"}, collection: [['はい', '1'] ,['いいえ', '0']] %>
 
   <div class="form-actions">
-    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= f.button :submit, class: "btn btn-primary", :data => {:disable_with => "Uploading..."} %>
   </div>
 <% end %>
 

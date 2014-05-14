@@ -125,10 +125,10 @@ class BoardsController < ApplicationController
 
   def create_comment
     @board = Board.find(params[:board_id])
-    @board.board_comments.create(:user_id => current_user.id, :content => params.permit(:comment), :attach => params.permit(:attach))
+    @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
 
     #UpdateHistory
-    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id})
+    uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id).first
     if uh
       uh.update_attributes(:updated_at => Time.now)
     else
@@ -141,7 +141,7 @@ class BoardsController < ApplicationController
 
   def create_comment_mobile
     @board = Board.find(params[:board_id])
-    @board.board_comments.create(:user_id => current_user.id, :content => params.permit(:comment), :attach => params.permit(:attach))
+    @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
 
     #UpdateHistory
     uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id})

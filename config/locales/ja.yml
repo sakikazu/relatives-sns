@@ -155,12 +155,6 @@ ja:
       Sign in: "ログイン"
       Sign up: "ユーザー登録"
 
-    label:
-      user_session:
-        login: "ユーザーID"
-        password: "パスワード"
-        remember_me: "次回からパスワード入力を省略する"
-
   errors:
     format: "%{attribute} %{message}"
 

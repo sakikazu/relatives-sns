@@ -2,7 +2,7 @@
 
 
 # AdanHP4では使用していない
-class UsersController < Devise::RegistrationsController
+class Users::RegistrationsController < Devise::RegistrationsController
   def new
     render action: "registrations/new"
   end
