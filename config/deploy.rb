@@ -23,7 +23,7 @@ set :scm, :git
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml .ruby-version .ruby-gemset}
+set :linked_files, %w{.env config/mysqldump.ini .ruby-version .ruby-gemset}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log tmp/cache tmp/sockets vendor/bundle public/upload}

@@ -89,6 +89,8 @@ GEM
       devise (>= 2.1.0)
     diff-lcs (1.2.5)
     dotenv (0.7.0)
+    dotenv-rails (0.7.0)
+      dotenv (= 0.7.0)
     erb2haml (0.1.5)
       html2haml
     erubis (2.7.0)
@@ -371,6 +373,7 @@ DEPENDENCIES
   database_rewinder
   devise
   devise-encryptable
+  dotenv-rails
   erb2haml
   exception_notification
   exifr

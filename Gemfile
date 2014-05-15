@@ -42,6 +42,7 @@ gem "rails_autolink"
 gem 'kaminari'
 gem 'acts-as-taggable-on'
 gem 'whenever', :require => false
+gem 'dotenv-rails'
 
 # gem 'formtastic'
 # gem 'formtastic-bootstrap'
