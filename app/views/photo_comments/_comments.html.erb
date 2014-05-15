@@ -2,6 +2,6 @@
   <div class="well well-small">
     <legend><%= co.user.try(:dispname) %>　投稿日時：<%= l co.created_at %></legend>
     <p><%= sani_custom_br(co.content) %></p>
-    <%= link_to "削除する", album_photo_photo_comment_path(@photo.album, @photo, co), :method => :delete, :remote => true, :confirm => "本当に削除してもよろしいですか？" if editable(current_user, co.user) %>
+    <%= link_to "削除する", album_photo_photo_comment_path(@photo.album, @photo, co), :method => :delete, :remote => true, data: {confirm: "本当に削除してもよろしいですか？"} if editable(current_user, co.user) %>
   </div>
 <% end -%>

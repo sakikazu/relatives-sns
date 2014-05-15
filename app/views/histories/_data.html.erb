@@ -21,7 +21,7 @@
     <td width="45px"><%= link_to 'コメント', {:action => :new_comment, :history_id => history.id}, :class => colorbox_class %></td>
     <% if editable(current_user, history.user) -%>
       <td width="35px"><%= link_to '編集', edit_history_path(history), :class => colorbox_class %></td>
-      <td width="35px"><%= link_to '削除', history, :confirm => '本当に削除してもよろしいですか？', :method => :delete %></td>
+      <td width="35px"><%= link_to '削除', history, data: {confirm: '本当に削除してもよろしいですか？'}, :method => :delete %></td>
     <% end -%>
   </tr>
   <% history.history_comments.each do |co| -%>
@@ -34,7 +34,7 @@
       <td colspan="2"></td>
       <td>
         <% if editable(current_user, history.user) -%>
-          <%= link_to "削除", {:action => :destroy_comment, :id => co.id}, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+          <%= link_to "削除", {:action => :destroy_comment, :id => co.id}, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
         <% end -%>
       </td>
     </tr>

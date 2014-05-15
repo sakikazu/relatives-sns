@@ -5,6 +5,8 @@ class HistoriesController < ApplicationController
   # GET /histories
   # GET /histories.xml
   def index
+    # todo
+    # 「内容」をクリックしたらcolorboxか別ページで表示して、コメントはそこでできるように。一覧ではコメント数は表示する
     @histories = History.includes([{:user => :user_ext}, :history_comments]).all
     @history = History.new
 

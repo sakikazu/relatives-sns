@@ -23,7 +23,7 @@
         <br />
         <% if editable(current_user, board.user) -%>
           <%= link_to '編集', edit_board_path(board) %>
-          <%= link_to '削除', board, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+          <%= link_to '削除', board, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
         <% end -%>
       </div>
     </div>

@@ -29,7 +29,7 @@
     <br />
     <% if editable(current_user, album.user) -%>
       <%= link_to '編集', edit_album_path(album) %> | 
-      <%= link_to '削除', album, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+      <%= link_to '削除', album, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
     <% end -%>
   </div>
 </div>

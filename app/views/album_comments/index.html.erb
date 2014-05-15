@@ -17,7 +17,7 @@
     <td><%= album_comment.content %></td>
     <td><%= link_to 'Show', album_comment %></td>
     <td><%= link_to 'Edit', edit_album_comment_path(album_comment) %></td>
-    <td><%= link_to 'Destroy', album_comment, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Destroy', album_comment, data: {confirm: 'Are you sure?'}, method: :delete %></td>
   </tr>
 <% end %>
 </table>

@@ -9,14 +9,14 @@ class BoardsController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
-      buf = BoardComment.maximum(:created_at, :group => :board_id)
+      buf = BoardComment.group(:board_id).maximum(:created_at)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
       @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(20)
     when 2
       @boards = Board.page(params[:page]).per(20)
     else
-      buf = BoardComment.maximum(:created_at, :group => :board_id)
+      buf = BoardComment.group(:board_id).maximum(:created_at)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
       @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(20)
@@ -33,14 +33,14 @@ class BoardsController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort 
     when 1
-      buf = BoardComment.maximum(:created_at, :group => :board_id)
+      buf = BoardComment.group(:board_id).maximum(:created_at)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
       @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(7)
     when 2
       @boards = Board.page(params[:page]).per(7)
     else
-      buf = BoardComment.maximum(:created_at, :group => :board_id)
+      buf = BoardComment.group(:board_id).maximum(:created_at)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}.page(params[:page]).per(7)
     end

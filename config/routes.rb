@@ -58,7 +58,7 @@ Rails.application.routes.draw do
     resources :photos do
       member do
         get 'slideshow'
-        put 'update_from_slideshow'
+        patch 'update_from_slideshow'
       end
       resources :photo_comments, only: [:create, :destroy]
     end

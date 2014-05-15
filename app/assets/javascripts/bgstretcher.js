@@ -156,11 +156,12 @@
 			if ($('BODY').hasClass('bgStretcher-container')) {
 				winW = $(window).width();
 				winH = $(window).height(); 
-				if (($.browser.msie) && (parseInt(jQuery.browser.version) == 6)) {
-					$(window).scroll(function(){
-						$('#'+settings.imageContainer).css('top', $(window).scrollTop());
-					});					
-				}
+        // sakikazu memo 「msie」がundefinedでエラーになるのでなんかIE6関連と思うのでコメントアウト！
+				// if (($.browser.msie) && (parseInt(jQuery.browser.version) == 6)) {
+					// $(window).scroll(function(){
+						// $('#'+settings.imageContainer).css('top', $(window).scrollTop());
+					// });					
+				// }
 			} else {
 				$('.bgstretcher').css('position', 'absolute').css('top', '0px');
 				winW = body_content.width();

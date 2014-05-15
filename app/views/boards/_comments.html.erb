@@ -8,6 +8,6 @@
     </div>
 
     <p><%= sani_custom_br(co.content) %></p>
-    <%= link_to "削除する", destroy_comment_board_path(:id => co.id), method: :delete, confirm: "本当に削除してもよろしいですか？" if editable(current_user, co.user) %>
+    <%= link_to "削除する", destroy_comment_board_path(:id => co.id), method: :delete, data: {confirm: "本当に削除してもよろしいですか？"} if editable(current_user, co.user) %>
   </div>
 <% end -%>

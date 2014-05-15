@@ -16,7 +16,7 @@
 //= require twitter/bootstrap
 //= require bootstrap
 //= require_tree ./uploadify
-//= //require_tree ./jPlayer
+//= require_tree ./jPlayer
 //= //require video-js/video
 //= require jquery.colorbox-min
 //= //require jquery.cleditor.min
@@ -27,7 +27,7 @@
 //= require jquery.mousewheel.min.js
 //= //require desktopify
 //= require bgstretcher
-//= //require_tree ./jqplot
+//= require_tree ./jqplot
 
 
 // メソッドが多くなってきたら別ファイルに切り出す

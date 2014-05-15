@@ -28,7 +28,7 @@
       <br />
       <% if editable(current_user, movie.user) -%>
         <%= link_to '編集', edit_movie_path(movie) %>
-        <%= link_to '削除', movie, :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+        <%= link_to '削除', movie, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
       <% end -%>
     </div>
   </div>

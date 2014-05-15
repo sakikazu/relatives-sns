@@ -176,7 +176,7 @@ commentshow = function() {
       <%= link_to '別ページで見る', album_photo_path(@album, p) %>
       <% if editable(current_user, p.user) -%>
         | <%= link_to '編集', edit_album_photo_path(@album, p) %>
-        | <%= link_to '削除', album_photo_path(@album, p), :method => :delete, :confirm => '本当に削除してもよろしいですか？' %>
+      | <%= link_to '削除', album_photo_path(@album, p), :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
       <% end -%>
     </div>
   </div>

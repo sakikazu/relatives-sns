@@ -49,7 +49,6 @@ class PhotosController < ApplicationController
   # POST /photos
   # POST /photos.json
   def create
-    p params
     params[:photo] = {}
     params[:photo][:image] = params['Filedata'] #paperclip
     #memo 「date_time」だと、写真の更新日付になってしまうことがあった。「exif.date_time_digitized」で取得すること
@@ -73,6 +72,7 @@ class PhotosController < ApplicationController
     end
 
     # memo Ajaxでのpostはsaveのエラーが画面には表示されないので、自分で出力してあげる
+    # あと、pメソッドでログに出力されないため、loggerを使用する
     # logger.debug @photo.errors.full_messages.inspect
     # logger.debug @photo.errors.full_messages.to_sentence
 
@@ -98,7 +98,7 @@ class PhotosController < ApplicationController
   end
 
   def update_from_slideshow
-    @photo.update_attributes(params[:photo])
+    @photo.update_attributes(photo_params)
   end
 
 

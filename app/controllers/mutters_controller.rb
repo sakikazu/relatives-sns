@@ -15,7 +15,7 @@ class MuttersController < ApplicationController
     if params[:mutter].blank? or params[:all].present?
       @mutter = Mutter.new(year: Date.today.year, month: Date.today.month)
     else
-      @mutter = Mutter.new(params[:mutter])
+      @mutter = Mutter.new(mutter_params)
     end
 
     if params[:all].present?
@@ -99,7 +99,7 @@ class MuttersController < ApplicationController
     @mutters = @mutters.page(params[:page]).per(15)
 
     # 検索ワードを画面に表示し続けるため
-    @mutter = Mutter.new(params[:mutter]) if params[:mutter].present?
+    @mutter = Mutter.new(mutter_params) if params[:mutter].present?
 
     # 検索時は右サイドバーを出さないように
     # （理由は右サイドバーを表示するためのデータ取得をやりたくないからだったはず）
@@ -197,6 +197,9 @@ class MuttersController < ApplicationController
   # 子が選択された場合、その子の前後mutterを取得し、その中かから親をユニークで取得
   #
   def show
+    # todo
+    # このときのMutter一覧の中で削除すると、_mutter_row.html.erbがホームでの削除前提なのか、動的にViewが更新されない。削除はされる。気が向いたら修正しよう
+    # ここでレスしたら、この画面で更新されてほしいがホームに行ってしまう。これもー。
     mutter = Mutter.find(params[:id])
     num = 5
     min = mutter.id - num
