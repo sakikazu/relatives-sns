@@ -1,7 +1,7 @@
 ja:
   admin:
     home:
-      name: "サイト"
+      name: "ホーム"
     pagination:
       previous: "&laquo; 前"
       next: "次 &raquo;"
@@ -127,4 +127,3 @@ ja:
         default_col_sep: ","
         col_sep: "区切り文字"
         col_sep_help: "空白の場合は'%{value}'区切りです" # value is default_col_sep
-

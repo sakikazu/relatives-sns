@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  # mount RailsAdmin::Engine => '/adamin', :as => 'rails_admin'
-
   devise_for :admin_users
+  mount RailsAdmin::Engine => '/adamin', as: 'rails_admin'
 
   resources :members do
     collection do

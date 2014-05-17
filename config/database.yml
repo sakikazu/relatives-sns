@@ -52,4 +52,4 @@ production:
   database: adan_v4
   username: root
   password: <%= ENV['ADAN_DATABASE_PASSWORD'] %>
-  socket: /var/lib/mysql/mysql.sock
+  socket: <%= ENV['DATABASE_SOCKET'] %>
