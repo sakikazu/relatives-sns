@@ -86,12 +86,12 @@ commentshow = function() {
 </div>
 -->
 
-<div style="width:700px">
-  <div class="once_content">
-    <div class="info">
+<div class="clearfix">
+  <div class="well well-small span6 clearfix">
+    <h5 class="pull-right">
       作成者：<%= @album.user.try(:dispname) %> | 
       作成日時：<%= l @album.created_at if @album.created_at %>
-    </div>
+    </h5>
     <div class="description"><%= sani_custom_br(@album.description) %></div>
   </div>
 </div>
@@ -101,7 +101,8 @@ commentshow = function() {
 </div>
 
 <!-- アルバムへのコメント -->
-<div style="width:600px">
+<div class="clearfix">
+<div class="span6">
   <div id="comment_area" style="display:none">
     <div id="comments">
       <%= render "album_comments/comments" %>
@@ -117,6 +118,7 @@ commentshow = function() {
       </div>
     <% end -%>
   </div>
+</div>
 </div>
 
 <div class="page-header">

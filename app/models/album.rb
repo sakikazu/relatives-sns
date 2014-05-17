@@ -13,7 +13,7 @@ class Album < ActiveRecord::Base
 
   #写真がアップされた日時の降順でアルバムをソートする
   def self.sort_upload
-    buf = Photo.maximum(:created_at, :group => :album_id)
+    buf = Photo.group(:album_id).maximum(:created_at)
     albums = Album.all.map{|a| a.sort_at = (buf[a.id] || a.created_at); a}
     albums.sort{|a,b| b.sort_at <=> a.sort_at}
   end

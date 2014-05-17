@@ -132,8 +132,8 @@ class AlbumsController < ApplicationController
 
   def title_index
     @albums = Album.sort_upload
-    @photo_count = Photo.count(:group => :album_id)
-    @last_comment_at = Photo.maximum(:last_comment_at, :group => :album_id)
+    @photo_count = Photo.group(:album_id).count
+    @last_comment_at = Photo.group(:album_id).maximum(:last_comment_at)
   end
 
   def download

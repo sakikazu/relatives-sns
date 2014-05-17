@@ -20,7 +20,8 @@ $ bundle exec unicorn -E production -c config/unicorn.conf.rb -D
 
 
 ## sidekiq
-[todo] capistranoで再起動できるようにしたい。デーモンにしたい
+[todo] capistranoで再起動できるようにしたい
+[todo] デーモン化は？
 ```
 $ bundle exec sidekiq -C config/sidekiq.yml -e production
 ```

@@ -4,7 +4,7 @@
   <% end %>
 
   <%= f.input :title, label: "タイトル" %>
-  <%= f.input :description, label: "説明", input_html: {class: "span7"} %>
+  <%= f.input :description, label: "説明", input_html: {class: "span7", rows: 15} %>
   <%= f.input :thumb_id, as: :select, collection: @album.photos.map{|p| ["#{p.id}(#{p.title})", p.id]}, label: "アルバムトップに表示する写真" %>
 
   <div class="form-actions">

@@ -21,21 +21,23 @@
   </div>
   <div class="description">
     <% if @movie.is_ready? %>
-    <video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="none" width="512" height="384"
+    <video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="none" width="100%" height="400"
       poster="<%= @movie.thumb? ? @movie.thumb(:large) : "/assets/movie_thumb.jpg" %>"
       data-setup="{}">
       <source src="<%= @movie.uploaded_full_path.html_safe %>" type='video/mp4' />
     </video>
-    <script>
-    $(function() {
-    if(!videojs.Flash.isSupported()) {
-      var myPlayer = videojs("example_video_1");
-      myPlayer.on("click", function() {
-        $("#showModal").click();
-      });
-    }
-    })
-    </script>
+      <% unless request.smart_phone? %>
+      <script>
+      $(function() {
+      if(!videojs.Flash.isSupported()) {
+        var myPlayer = videojs("example_video_1");
+        myPlayer.on("click", function() {
+          $("#showModal").click();
+        });
+      }
+      })
+      </script>
+      <% end %>
     <% else %>
       <div class="well">
         ただいま動画準備中（エンコード）です。<br>
