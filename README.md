@@ -1,5 +1,13 @@
-# Updates
-* [2014/05/11] Rails4に。configなどの内容もちゃんと合わせた
+# Issues
+
+* 2014/05/17、Firefoxでアルバムの写真アップロード（Uploadify(flash)を使って）が422エラー。Photo#createメソッドに対策記事などメモってる
+* 下記削除。ファイルが存在するだけでRailsAdminでエラーになっていたので。これ何のためなんだっけ？必要ないのか？
+```
+mutter_sweeper.rb
+nice_sweeper.rb
+update_history_sweeper.rb
+```
+
 
 # よく使うコマンド
 
@@ -36,8 +44,6 @@ rootで
 $ nginx -s reload
 
 
-# Issues
-
-* 2014/05/17、Firefoxでアルバムの写真アップロード（Uploadify(flash)を使って）が422エラー。Photo#createメソッドに対策記事などメモってる
-
+# Updates
+* [2014/05/11] Rails4に。configなどの内容もちゃんと合わせた
 
