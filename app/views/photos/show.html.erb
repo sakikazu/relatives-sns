@@ -2,7 +2,7 @@
   <div class="span9 offset1">
 
 <%= link_to "アルバム：#{@photo.album.title}に戻る", @photo.album, class: "btn" %>
-<%= link_to '編集する', edit_album_photo_path(@photo), class: "btn btn-info" %>
+<%= link_to '編集する', edit_album_photo_path(@photo.album, @photo), class: "btn btn-info" %>
 
 <div class="once_content mgn-t40">
   <div class="title for_index">

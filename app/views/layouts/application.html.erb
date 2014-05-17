@@ -186,6 +186,15 @@ jQuery(document).ready(function(){
   });
 <% end -%>
 
+  // form inputをBootstrapデザインにする
+  // memo 現在、1つのformにつき1つのfilefieldのみ対応
+  $('.bootstrap_file_field input[type=file]').on("change", function() {
+      $(this).siblings(".file_value").val($(this).val());
+  });
+  $('.bootstrap_file_field>*').on("click", function() {
+    $(this).siblings('input[type=file]:first').click();
+  });
+
 
 }); // jQuery(document).ready
 

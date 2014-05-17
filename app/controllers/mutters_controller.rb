@@ -341,7 +341,7 @@ class MuttersController < ApplicationController
     end
   end
 
-  #更新情報一括閲覧
+  # 更新情報一括閲覧
   def update_allview
     next_page = params[:ups_page].blank? ? 0 : params[:ups_page].to_i
     if next_page > 0
@@ -350,6 +350,11 @@ class MuttersController < ApplicationController
       up, next_page = recursive_for_update_all_view(up_prev, up_current, next_page)
     else
       up = UpdateHistory.view_offset(next_page).first
+    end
+
+    if up.blank?
+      redirect_to root_path
+      return
     end
 
     @ups_page = next_page + 1
@@ -377,6 +382,7 @@ class MuttersController < ApplicationController
 
   private
   def recursive_for_update_all_view(prev, current, next_page)
+    return nil, nil if prev.blank? or current.blank?
     if prev.content == current.content
       next_page += 1
       up_next = UpdateHistory.view_offset(next_page).first

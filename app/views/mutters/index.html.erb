@@ -181,8 +181,12 @@ $(document).on('click', 'a.js_search_mutter', function() {
       <%= simple_form_for @mutter, :html => {:multipart => true} do |f| -%>
         <div class="span5">
         <%= f.text_area :content, rows: 3, class: "span5", placeholder: "つぶやき" %><br>
-        <%= f.file_field :image %>
         <%= f.hidden_field :user_id %>
+        <div class="bootstrap_file_field input-append">
+          <%= f.file_field :image, style: "display: none" %>
+          <input class="file_value input-large span4" type="text" placeholder="写真や動画がアップロードできます">
+          <a class="btn">ファイル選択</a>
+        </div>
         </div>
         <div class="span1">
           <br>
