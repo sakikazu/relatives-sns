@@ -7,6 +7,11 @@
 # よく使うコマンド
 #
 
+* todo capistranoで再起動できるようにしたい。デーモンにしたい
+```
+$ bundle exec sidekiq -C config/sidekiq.yml -e production
+```
+
 # crontab update
 bundle exec whenever -i
 
@@ -27,7 +32,7 @@ $ nginx -s reload
 # Require
 
 * redis
-'''
+```
 sudo /etc/init.d/redis start
-'''
+```
 

@@ -7,7 +7,7 @@
 
 db='adan_v4'
 user='root'
-password_file='/usr/local/site/adan/config/mysqldump.ini'
+password_file='/usr/local/site/adan/current/config/mysqldump.ini'
 
 # バックアップファイルを何日分残しておくか
 period=7

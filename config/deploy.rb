@@ -8,6 +8,7 @@ set :repo_url, 'git@bitbucket.org:sakikazu15/adan.git'
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # for sidekiq that perform a proccess asyncronously
+# todo 動いてない。（2014/05/17）
 require 'sidekiq/capistrano'
 set :sidekiq_role, :web
 
