@@ -7,19 +7,24 @@
 # よく使うコマンド
 #
 
-* todo capistranoで再起動できるようにしたい。デーモンにしたい
+* unicorn再起動
+$ cat tmp/unicorn.pid | xargs kill -USR2
+
+* unicorn再起動(こっちじゃないと反映されないことがあるが・・。capistranoの影響？)
+$ cat /tmp/unicorn.adan.pid  | xargs kill -QUIT
+$ bundle exec unicorn -E production -c config/unicorn.conf.rb -D
+
+
+* [todo] capistranoで再起動できるようにしたい。デーモンにしたい
 ```
 $ bundle exec sidekiq -C config/sidekiq.yml -e production
 ```
 
-# crontab update
+* crontab update
 bundle exec whenever -i
 
-# unicorn再起動
-$ cat tmp/unicorn.pid | xargs kill -USR2
 
-
-# Nginx再起動
+* Nginx再起動
 rootで
 $ nginx -s reload
 
@@ -34,5 +39,7 @@ $ nginx -s reload
 * redis
 ```
 sudo /etc/init.d/redis start
+# mac
+redis-server
 ```
 

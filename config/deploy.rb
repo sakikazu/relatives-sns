@@ -31,7 +31,7 @@ set :scm, :git
 set :linked_files, %w{.env config/mysqldump.ini .ruby-version .ruby-gemset}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log tmp/cache tmp/sockets vendor/bundle public/upload}
+set :linked_dirs, %w{log tmp/cache tmp/sockets vendor/bundle public/upload public/assets/font}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
