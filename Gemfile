@@ -34,7 +34,7 @@ gem 'spring',        group: :development
 gem 'devise'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
 gem 'rails4_acts_as_paranoid'
-gem 'exception_notification', :require => 'exception_notifier'
+gem 'exception_notification'
 gem "sanitize"
 gem 'paperclip'
 gem 'exifr'
@@ -58,7 +58,8 @@ gem 'sidekiq'
 # gem 'jquery-ui-rails', '2.0.2'
 
 # jquery-railsをバージョン指定するとこれがエラーになるぞ？？（2014/05/12）
-gem 'rails_admin'
+# todo productionでなんらかエラーになるのでコメントアウト。ちゃんと調べてない
+# gem 'rails_admin'
 gem 'faker'
 
 gem 'jpmobile'

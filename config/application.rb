@@ -26,5 +26,18 @@ module Adan4
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :ja
+
+    # Gmail設定
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.smtp_settings = {
+      :enable_starttls_auto => true,
+      :address => 'smtp.gmail.com',
+      :port => '587',
+      :domain => 'smtp.gmail.com',
+      :authentication => 'plain',
+      :user_name => 'sakikazu15@gmail.com',
+      :password => 'saki074515'
+    }
   end
 end
