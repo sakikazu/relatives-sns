@@ -5,6 +5,10 @@
   <%= link_to "動画一覧へ", movies_path, class: "btn" %>
 </div>
 
+<div>
+<%= image_tag @movie.thumb(:large) if @movie.thumb? %>
+</div>
+
 <div class="page-header">
   <h3>編集</h3>
 </div>

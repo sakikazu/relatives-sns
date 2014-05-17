@@ -7,6 +7,10 @@ set :repo_url, 'git@bitbucket.org:sakikazu15/adan.git'
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
+# for sidekiq that perform a proccess asyncronously
+require 'sidekiq/capistrano'
+set :sidekiq_role, :web
+
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/usr/local/site/adan'
 

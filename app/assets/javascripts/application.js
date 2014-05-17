@@ -17,7 +17,7 @@
 //= require bootstrap
 //= require_tree ./uploadify
 //= require_tree ./jPlayer
-//= //require video-js/video
+//= require video-js/video
 //= require jquery.colorbox-min
 //= //require jquery.cleditor.min
 //= require jquery.autopager-1.0.0.min

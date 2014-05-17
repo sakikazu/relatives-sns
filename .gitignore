@@ -20,6 +20,7 @@ public/upload
 public/assets
 *.DS_Store
 *.svn
+dump.rdb
 
 # Webからダウンロードしたライブラリなど
 _download

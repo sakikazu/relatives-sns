@@ -8,9 +8,9 @@ class MoviesController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
-      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).page(params[:page]).per(10)
-    else
       @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).page(params[:page]).per(10)
+    else
+      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).page(params[:page]).per(10)
     end
 
     respond_to do |format|
@@ -50,16 +50,18 @@ class MoviesController < ApplicationController
   # POST /movies.xml
   def create
     params[:movie][:user_id] = current_user.id
+    params[:movie][:is_ready] = false
     @movie = Movie.new(movie_params)
 
     respond_to do |format|
-      if @movie.save
+      if @movie.save and @movie.ffmp.valid?
+        EncodeWorker.perform_async @movie.id
         @movie.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_CREATE)
-        format.html { redirect_to(@movie, :notice => '作成しました') }
-        format.xml  { render :xml => @movie, :status => :created, :location => @movie }
+        format.html { redirect_to @movie, notice: '動画をアップロードしました.' }
+        format.json { render :show, status: :created, location: @movie }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @movie.errors, :status => :unprocessable_entity }
+        format.html { render :new }
+        format.json { render json: @movie.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -67,8 +69,16 @@ class MoviesController < ApplicationController
   # PUT /movies/1
   # PUT /movies/1.xml
   def update
+    # 動画が指定されなかったら動画エンコードを行わない
+    selected_movie = params[:movie][:movie]
+    if selected_movie.present?
+      params[:movie][:is_ready] = false
+    end
     respond_to do |format|
-      if @movie.update_attributes(movie_params)
+      if @movie.update_attributes(movie_params) and @movie.ffmp.valid?
+        if selected_movie.present?
+          EncodeWorker.perform_async @movie.id
+        end
         format.html { redirect_to(@movie, :notice => '更新しました') }
         format.xml  { head :ok }
       else
@@ -122,7 +132,7 @@ class MoviesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def movie_params
-      params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb)
+      params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb, :is_ready)
   end
 
 end

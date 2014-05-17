@@ -18,3 +18,16 @@ $ cat tmp/unicorn.pid | xargs kill -USR2
 rootで
 $ nginx -s reload
 
+
+# Issues
+
+* 2014/05/17、Firefoxでアルバムの写真アップロード（Uploadify(flash)を使って）が422エラー。Photo#createメソッドに対策記事などメモってる
+
+
+# Require
+
+* redis
+'''
+sudo /etc/init.d/redis start
+'''
+

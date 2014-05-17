@@ -5,7 +5,7 @@
 
 <div class="page-header"><h3>動画一覧</h3></div>
 <div class="select_menu clearfix">
-  <% [["編集動画", 1], ["編集なし動画", 2]].each do |n, i| -%>
+  <% [["編集なし動画", 1], ["編集動画", 2]].each do |n, i| -%>
     <% if @sort == i -%>
       <%= link_to n, movies_path(:sort => i), class: "btn btn-danger disabled" %>
     <% else -%>

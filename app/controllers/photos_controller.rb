@@ -48,6 +48,10 @@ class PhotosController < ApplicationController
 
   # POST /photos
   # POST /photos.json
+  # todo 2014/05/17 Firefoxだと422エラーになる件
+  # 下記対策が有用そうだけど、大変ぽいので・・断念
+  # ref: Uploadify with Paperclip on Rails Tutorial | Old Blind Pew http://martinjhawkins.wordpress.com/2013/10/07/uploadify-with-paperclip-on-rails-tutorial/
+  # ref: Rails 4 + Uploadify + Paperclip | Vignesh's Blog http://vignesh.info/blog/rails-4-uploadify-paperclip/
   def create
     params[:photo] = {}
     params[:photo][:image] = params['Filedata'] #paperclip
@@ -76,15 +80,7 @@ class PhotosController < ApplicationController
     # logger.debug @photo.errors.full_messages.inspect
     # logger.debug @photo.errors.full_messages.to_sentence
 
-    # respond_to do |format|
-      # if @photo.save
-        # format.html { redirect_to([@photo.album, @photo], :notice => 'Photo was successfully created.') }
-        # format.xml  { render :xml => @photo, :status => :created, :location => @photo }
-      # else
-        # format.html { render :action => "new" }
-        # format.xml  { render :xml => @photo.errors, :status => :unprocessable_entity }
-      # end
-    # end
+    @photo.save
   end
 
   # PCからはcolorboxで使用する前提。スマホからは一つのページとして表示する

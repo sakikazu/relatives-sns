@@ -7,7 +7,11 @@
   <%= f.input :description, label: "説明", input_html: {class: "span6", rows: 8} %>
   <%= f.input :movie, label: "動画", label_html: {class: "mgn-t20"} %>
   <%= f.error :movie_file_name, class: 'important big' %>
-  <%= f.input :thumb, label: "サムネイル(指定しなくてもいいです)", label_html: {class: "mgn-t20"} %>
+  <%= f.input :thumb, label: "サムネイル(未指定の場合は自動作成されます)", label_html: {class: "mgn-t20"} %>
+  <% # todo やっぱ面倒くさい。やめた！動画更新時に、サムネイルは更新されないけど、まあ、ね。面倒くさいのは、今非同期でサムネイル作成やっていて、作成するかどうかの判断をMovieモデルに保存して、その処理に渡す必要あるし、、まあサムネイル作成だけ非同期じゃなくすれば良いだけかもだけど、なんかファイルが存在するしないのタイミングがあったらと思って怖い %>
+  <% #if @movie.id.present? %>
+    <%#= f.input :is_update_thumb, as: "radio_buttons", collection: [['はい', '1'] ,['いいえ', '0']], label: "動画からサムネイルを再作成", label_html: {class: "mgn-t20"} %>
+  <% #end %>
   <%= f.input :movie_type, as: "radio_buttons", label: "編集された動画かどうか", label_html: {class: "mgn-t20"}, collection: [['はい', '1'] ,['いいえ', '0']] %>
 
   <div class="form-actions">

@@ -48,6 +48,8 @@ gem 'dotenv-rails'
 # gem 'formtastic-bootstrap'
 gem 'simple_form'
 gem 'twitter-bootstrap-rails'
+gem 'streamio-ffmpeg'
+gem 'sidekiq'
 
 
 # todo 問題なさげ？このまま大丈夫ならここ削除
