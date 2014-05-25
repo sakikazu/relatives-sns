@@ -190,6 +190,8 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.3)
       mime-types
+    paranoia (2.0.2)
+      activerecord (~> 4.0)
     polyglot (0.3.4)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -228,11 +230,6 @@ GEM
       ruby-graphviz (~> 1.0.4)
     rails-footnotes (4.0.0)
       rails (>= 3.2)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
-    rails4_acts_as_paranoid (0.1.4)
-      activerecord (>= 4.0.0.beta1)
-      rails-observers
     rails_admin (0.6.2)
       builder (~> 3.1)
       coffee-rails (~> 4.0)
@@ -403,6 +400,7 @@ DEPENDENCIES
   less-rails
   mysql2
   paperclip
+  paranoia (~> 2.0)
   pry-byebug
   pry-coolline
   pry-doc
@@ -410,7 +408,6 @@ DEPENDENCIES
   rails (= 4.1.0)
   rails-erd
   rails-footnotes (>= 4.0.0, < 5)
-  rails4_acts_as_paranoid
   rails_admin
   rails_autolink
   rails_config

@@ -33,7 +33,7 @@ gem 'spring',        group: :development
 
 gem 'devise'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
-gem 'rails4_acts_as_paranoid'
+gem "paranoia", "~> 2.0"
 gem 'exception_notification'
 gem "sanitize"
 gem 'paperclip'
