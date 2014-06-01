@@ -1,5 +1,9 @@
 class History < ActiveRecord::Base
   belongs_to :user
+  belongs_to :mutter
+  has_many :comments, as: :parent
+
+  # todo
   has_many :history_comments
 
   validates :content, :presence => true

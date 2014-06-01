@@ -2,6 +2,10 @@ class Board < ActiveRecord::Base
   acts_as_paranoid
 
   belongs_to :user
+  belongs_to :mutter
+  has_many :comments, as: :parent
+
+  # todo
   has_many :board_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
 

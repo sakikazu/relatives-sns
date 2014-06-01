@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :mutters
   has_many :celebrations
   has_one :user_ext
+  has_one :my_album, class_name: "Album", foreign_key: "owner_id"
 
   after_save :rel_save
 

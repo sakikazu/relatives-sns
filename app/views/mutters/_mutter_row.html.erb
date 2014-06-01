@@ -30,8 +30,7 @@
     </span>
   </div>
   <div class="content clearfix">
-    <%= link_to(image_tag(mutter_row.image(:thumb), align: :left), mutter_row.image(:large), {:class => colorbox_class}) if mutter_row.image? %>
-    <%= sani_org(mutter_row.view_content) %>
+    <%= raw draw_content(mutter_row) %>
   </div>
   <div class='delete'><%= link_to("削除", mutter_row, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></div>
 </div>
@@ -80,8 +79,7 @@
         </span>
       </div>
       <div class="content clearfix">
-        <%= link_to(image_tag(child.image(:thumb), align: :left), child.image(:large), {:class => colorbox_class}) if child.image? %>
-        <%= sani_custom(child.view_content) %>
+        <%= raw draw_content(child) %>
       </div>
       <div class='delete'><%= link_to("削除", child, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) if editable(current_user, child.user) %></div>
     </div>

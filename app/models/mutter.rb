@@ -10,24 +10,32 @@ class Mutter < ActiveRecord::Base
   has_many :children, class_name: "Mutter", foreign_key: "reply_id"
   has_many :nices, :as => :asset
 
+  has_one :movie
+  has_one :photo
+  has_one :album
+  has_one :blog
+  has_one :board
+  has_one :history
+
   before_save :trans_space
+  after_save :save_related_media
   after_create :update_sort_at
   validates_presence_of :content
-  attr_accessor :search_word, :action_flg, :year, :month
+  attr_accessor :search_word, :action_flg, :year, :month, :image, :is_save_related_media
 
   @@imap = nil
 
-  content_name = "mutter"
-  has_attached_file :image,
-    :styles => {
-      :thumb => "150x150>",
-      :large => "800x800>"
-    },
-    :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
-    :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
+  # content_name = "mutter"
+  # has_attached_file :image,
+    # :styles => {
+      # :thumb => "150x150>",
+      # :large => "800x800>"
+    # },
+    # :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
+    # :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
+    # :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
-  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
+  # validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
 
   scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
 
@@ -44,6 +52,33 @@ class Mutter < ActiveRecord::Base
   def trans_space
     #auto_linkでURLの後に全角スペースが入るとリンクが延長されてしまうため、半角スペースに変換
     self.content.gsub!("　", " ")
+  end
+
+  def save_related_media
+    return if self.is_save_related_media.present? or self.image.blank?
+
+    self.is_save_related_media = true
+    photo_type = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
+    movie_type = /\Avide.?\/.*\Z/
+
+    # todo メソッド切り出し
+    current_user = self.user
+    Album.create_having_owner(current_user) if current_user.my_album.blank?
+    current_user.reload
+
+    if photo_type.include?(self.image.content_type)
+      photo = Photo.new(mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id)
+      photo.image = self.image
+      photo.save
+    elsif self.image.content_type =~ movie_type
+      movie = Movie.new(title: "つぶやきから投稿", mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id)
+      movie.movie = self.image
+      if movie.save and movie.ffmp.valid?
+        EncodeWorker.perform_async movie.id
+      else
+        # p movie.errors.full_messages
+      end
+    end
   end
 
   # ソート用の日時カラムを更新。レスされた親のも更新する。

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140517025151) do
+ActiveRecord::Schema.define(version: 20140530133432) do
 
   create_table "admin_users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 20140517025151) do
     t.datetime "deleted_at"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "mutter_id"
+    t.integer  "owner_id"
   end
 
   create_table "blog_comments", force: true do |t|
@@ -74,6 +76,7 @@ ActiveRecord::Schema.define(version: 20140517025151) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "mutter_id"
   end
 
   create_table "board_comments", force: true do |t|
@@ -99,6 +102,7 @@ ActiveRecord::Schema.define(version: 20140517025151) do
     t.datetime "deleted_at"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.integer  "mutter_id"
   end
 
   create_table "celebrations", force: true do |t|
@@ -106,6 +110,17 @@ ActiveRecord::Schema.define(version: 20140517025151) do
     t.date     "anniversary_at"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+  end
+
+  create_table "comments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "mutter_id"
+    t.integer  "photo_id"
+    t.integer  "parent_id"
+    t.string   "parent_type"
+    t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "geocodes", force: true do |t|
@@ -126,6 +141,7 @@ ActiveRecord::Schema.define(version: 20140517025151) do
     t.string   "src_user_name"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "mutter_id"
   end
 
   create_table "history_comments", force: true do |t|
@@ -168,6 +184,8 @@ ActiveRecord::Schema.define(version: 20140517025151) do
     t.integer  "movie_type"
     t.integer  "is_ready",                 default: 0
     t.string   "original_movie_file_name"
+    t.integer  "mutter_id"
+    t.integer  "album_id"
   end
 
   create_table "mutters", force: true do |t|
@@ -218,6 +236,7 @@ ActiveRecord::Schema.define(version: 20140517025151) do
     t.datetime "image_updated_at"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "mutter_id"
   end
 
   create_table "rails_admin_histories", force: true do |t|

@@ -2,9 +2,13 @@ class Movie < ActiveRecord::Base
   acts_as_paranoid
 
   belongs_to :user
+  belongs_to :mutter
+  has_many :comments, as: :parent
+  has_many :nices, :as => :asset
+
+  # todo
   has_many :movie_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
-  has_many :nices, :as => :asset
 
   default_scope {order('id DESC')}
 
