@@ -1,40 +1,10 @@
 <% if mutter_row == @created_mutter -%>
-  <li class="clearfix" <%= "style='border:3px solid red'" %>>
+  <li <%= "style='border:3px solid red'" %>>
 <% else -%>
-  <li class="clearfix">
+  <li>
 <% end -%>
 
-<div class="clearfix">
-<div class="icon span1" style="margin-left: 6px;">
-  <p>
-  <% if  mutter_row.user.present? && mutter_row.user.user_ext.image? -%>
-    <%= image_tag mutter_row.user.user_ext.image(:small), :size => "50x50"  %>
-  <% else -%>
-    <%= image_tag 'noimage.gif', :size => "50x50"  %>
-  <% end -%>
-  </p>
-</div>
-<div class="span">
-  <div class="bar clearfix">
-    <span class='label label-inverse'><%= useragent(mutter_row.ua) %></span>
-    <span class='name'>&nbsp;<%= link_to mutter_row.user.dispname, mutter_by_user_path(mutter_row.user.id), {:title => mutter_row.user.dispname(User::FULLNAME)} if mutter_row.user.present? %></span>
-    <span class='time'><%= link_to (l mutter_row.created_at), mutter_path(mutter_row) %></span>
-    <span class="nice">
-      <span id='cont_<%= mutter_row.id %>'>
-        <%= nice_field(mutter_row, "mutter", "#cont_#{mutter_row.id}") %>
-      </span> 
-      <% # 検索時などはmutter_rowが子である場合もあるので要判定 -%>
-      <% if mutter_row.parent? -%>
-        <a data-toggle="modal" href="#myModal<%= mutter_row.id %>" ><i class="icon-comment"></i>&nbsp;レス</a>
-      <% end -%>
-    </span>
-  </div>
-  <div class="content clearfix">
-    <%= raw draw_content(mutter_row) %>
-  </div>
-  <div class='delete'><%= link_to("削除", mutter_row, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) if editable(current_user, mutter_row.user) %></div>
-</div>
-</div>
+<%= render 'mutter', mutter: mutter_row %>
 
 <!-- つぶやきへのレス -->
 <% if mutter_row.children.present? -%>
@@ -56,34 +26,7 @@
       <li class="clearfix">
     <% end -%>
 
-    <div class="icon span1" style="margin-left: 6px;">
-      <p>
-      <% if  child.user.present? && child.user.user_ext.image? -%>
-        <%= image_tag child.user.user_ext.image(:small), :size => "50x50"  %>
-      <% else -%>
-        <%= image_tag 'noimage.gif', :size => "50x50"  %>
-      <% end -%>
-      </p>
-    </div>
-    <div class="span">
-      <div class="bar clearfix">
-        <span class='label label-inverse'><%= useragent(child.ua) %></span>
-        <span class='name'>&nbsp;<%= link_to child.user.dispname, mutter_by_user_path(child.user.id), {:title => child.user.dispname(User::FULLNAME)} if child.user.present? %></span>
-        <span class='time'><%= link_to (l child.created_at), mutter_path(child) %></span>
-        <span class="nice">
-          <span id='cont_<%= child.id %>'>
-            <%= nice_field(child, "mutter", "#cont_#{child.id}") %>
-          </span>
-          <!-- sakikazu とりあえずできない -->
-          <!-- <a data-toggle="modal" href="#myModal<%#= child.id %>" >レス</a> -->
-        </span>
-      </div>
-      <div class="content clearfix">
-        <%= raw draw_content(child) %>
-      </div>
-      <div class='delete'><%= link_to("削除", child, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) if editable(current_user, child.user) %></div>
-    </div>
-
+      <%= render 'mutter', mutter: child %>
     </li>
   <% end -%>
 </ul>

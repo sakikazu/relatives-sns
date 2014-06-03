@@ -1,0 +1,38 @@
+<div class="mutter_content">
+  <div class="icon">
+    <p>
+    <% if mutter.user.present? && mutter.user.user_ext.image? -%>
+      <%= image_tag mutter.user.user_ext.image(:small), :size => "50x50"  %>
+  <% else -%>
+      <%= image_tag 'noimage.gif', :size => "50x50"  %>
+  <% end -%>
+    </p>
+  </div>
+  <div class="content-area">
+    <div class="info-area">
+      <div class="info-left">
+        <span class='label label-inverse'><%= useragent(mutter.ua) %></span>
+        <span class='name'>&nbsp;<%= link_to mutter.user.dispname, mutter_by_user_path(mutter.user.id), {:title => mutter.user.dispname(User::FULLNAME)} if mutter.user.present? %></span>
+        <span class='time'><%= link_to (l mutter.created_at), mutter_path(mutter) %></span>
+      </div>
+      <div class="info-right">
+        <span class="nice">
+          <span id='cont_<%= mutter.id %>'>
+            <%= nice_field(mutter, "mutter", "#cont_#{mutter.id}") %>
+          </span>
+          <% # 検索時などはmutterが子である場合もあるので要判定 -%>
+          <% if mutter.parent? -%>
+            <a data-toggle="modal" href="#myModal<%= mutter.id %>" ><i class="icon-comment"></i>&nbsp;レス</a>
+        <% end -%>
+        </span>
+      </div>
+    </div> <!-- info-area -->
+
+    <div class="content">
+      <%= raw draw_content(mutter) %>
+    </div>
+    <div class='delete'>
+      <p><%= link_to("削除", mutter, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) if editable(current_user, mutter.user) %></p>
+    </div>
+  </div>
+</div>
