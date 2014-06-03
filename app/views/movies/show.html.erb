@@ -5,16 +5,14 @@
 <div class="row">
   <div class="span7 offset2">
 
-<div class="form-actions">
   <%= link_to "動画一覧へ", movies_path, class: "btn" %>
   <%= link_to '編集する', edit_movie_path(@movie), class: "btn btn-info" %>
-</div>
 
 <div class="page-header">
   <h3><%= @movie.title %><small><%= link_to "(コメント数：#{@movie.movie_comments.size}）", "#comments" %></small></h3>
 </div>
 
-<div class="once_content span7">
+<div class="once_content">
   <div class="info">
     作成者:<%= @movie.user.dispname %> | 
     作成日時:<%= @movie.created_at.to_s(:long) if @movie.created_at %>
@@ -66,7 +64,7 @@
 
 <div id="comment_form">
   <%= form_tag url_for(:action => :create_comment, :movie_id => @movie.id), :remote => true do %>
-    <%= text_area_tag :comment, nil, class: "span6", rows: "5", placeholder: "コメントする" %><br />
+    <%= text_area_tag :comment, nil, class: "span7", rows: "5", placeholder: "コメントする" %><br />
     <div class="form-actions">
       <%= submit_tag "投稿する", class: "btn btn-primary" %>
     </div>

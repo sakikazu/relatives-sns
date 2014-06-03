@@ -1,5 +1,7 @@
 <script>
 $(document).ready(function() {
+  $('a[data-toggle="tab"]:first').tab('show');
+
   //uploadify
   $('#uploadify').uploadify({
     'swf' : '/assets/uploadify/uploadify.swf',
@@ -61,78 +63,79 @@ $(document).ready(function() {
 
 }); //jquery#ready
 
-commentshow = function() {
-  $("#comment_area").toggle();
-  if($("#showlink").text() == "表示") {
-    $("#showlink").text("非表示");
-  } else {
-    $("#showlink").text("表示");
-  }
-}
+//commentshow = function() {
+//  $("#comment_area").toggle();
+//  if($("#showlink").text() == "表示") {
+//    $("#showlink").text("非表示");
+//  } else {
+//    $("#showlink").text("表示");
+//  }
+//}
 </script>
 
+<div class="mb-50">
 <%= link_to 'アルバム一覧', albums_path, class: "btn" %>
 <%= link_to '編集する', edit_album_path(@album), class: "btn btn-info" %>
-
-<div class="page-header ver2">
-  <h3><%= "#{h(@album.title)} <small>写真数：#{@photo_all_num}</small>".html_safe %></h3>
 </div>
 
-<!-- うーん、ちょっと違うなぁ
-<div class="navbar">
-  <div class="navbar-inner">
-    <p class="brand"><%#= "#{@album.title} （写真数：#{@photo_all_num}）" %></p>
-  </div>
-</div>
--->
+<ul class="nav nav-tabs">
+  <li><a href="#tab-description" data-toggle="tab"><i class="icon-list-alt"></i> <%= @album.title %></a></li>
+  <li><a href="#tab-comments" data-toggle="tab"><i class="icon-comment"></i> アルバムへのコメント</a></li>
+  <li><a href="#tab-upload" data-toggle="tab"><i class="icon-upload"></i> 写真アップロード</a></li>
+</ul>
 
-<div class="clearfix">
-  <div class="well well-small span6 clearfix">
-    <h5 class="pull-right">
-      作成者：<%= @album.user.try(:dispname) %> | 
-      作成日時：<%= l @album.created_at if @album.created_at %>
-    </h5>
+<div class="tab-content well well-small">
+  <div id="tab-description" class="tab-pane">
+    <h3>
+      <%= "写真数：#{@photo_all_num}</small>".html_safe %>
+      <small> 作成者：<%= @album.user.try(:dispname) %> | 作成日時：<%= l @album.created_at if @album.created_at %></small>
+    </h3>
     <div class="description"><%= sani_custom_br(@album.description) %></div>
   </div>
-</div>
 
-<div class="page-header">
-<h3>このアルバムへのコメント<span style="color:red;font-size:16px;margin-left:8px;">(<%= @album.album_comments.size %>)</span> / <%= link_to '表示', "javascript:commentshow();", {:id => 'showlink'} %></h3>
-</div>
-
-<!-- アルバムへのコメント -->
-<div class="clearfix">
-<div class="span6">
-  <div id="comment_area" style="display:none">
-    <div id="comments">
-      <%= render "album_comments/comments" %>
+  <div id="tab-comments" class="tab-pane">
+    <div class="page-header">
+      <h3><small>コメント数：<%= @album.album_comments.size %></small></h3>
     </div>
 
-    <%= form_for([@album, @comment], :remote => true) do |f| %>
-      <div class="field">
-        <%= f.text_area :content, rows: 4, class: "span6" %>
+    <!-- アルバムへのコメント -->
+    <div class="clearfix">
+      <div class="span6">
+        <div id="comment_area">
+          <div id="comments">
+            <%= render "album_comments/comments" %>
+          </div>
+
+          <%= form_for([@album, @comment], :remote => true) do |f| %>
+            <div class="field">
+            <%= f.text_area :content, rows: 4, class: "span6" %>
+          </div>
+          <%= f.hidden_field :album_id %>
+          <div class="actions">
+            <%= f.submit "コメントする", class: "btn btn-primary" %>
+          </div>
+        <% end -%>
+        </div>
       </div>
-      <%= f.hidden_field :album_id %>
-      <div class="actions">
-        <%= f.submit "コメントする", class: "btn btn-primary" %>
-      </div>
-    <% end -%>
+    </div>
   </div>
-</div>
-</div>
 
-<div class="page-header">
-  <h3>写真をアップロードする<small>複数ファイル選択可能</small></h3>
-</div>
+  <div id="tab-upload" class="tab-pane">
+    <div class="page-header">
+      <h3><small>複数ファイル選択可能</small></h3>
+    </div>
 
-<div id="fileQueue"></div>
-<%= hidden_field_tag :user_id %>
-<%= hidden_field_tag :album_id %>
-<%= file_field_tag :uploadify %><br />
-<strong class="important">※スマホからはアップできません</strong>
+    <div id="fileQueue"></div>
+    <%= hidden_field_tag :user_id %>
+    <%= hidden_field_tag :album_id %>
+    <%= file_field_tag :uploadify %><br />
+    <strong class="important">※スマホからはアップできません</strong>
+  </div>
+</div> <!-- .tab-content -->
+
 
 <% if @photos.size > 0 -%>
-  <div class="page-header"><h3 class="normal">このアルバムの写真<small>写真をクリックするとスライドショーが開始されます</small></h3></div>
+  <div class="page-header mt-50"><h3 class="normal">このアルバムの写真<small>写真をクリックするとスライドショーが開始されます</small></h3></div>
 
   <!-- ソート機能 -->
   <% #sort_list = [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]] -%>
@@ -149,9 +152,7 @@ commentshow = function() {
     <h4><%= "#{@selected_uploader.dispname}がアップした写真が" if @selected_uploader.present? %>
       <%= sort_list[@sort_flg.to_s] %>で表示されています</h4>
   </div>
-
 <% end -%>
-
 
 
 <div class="autopagerize_page_element">

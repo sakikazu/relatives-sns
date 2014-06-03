@@ -1,6 +1,7 @@
 class BlogsController < ApplicationController
   before_filter :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
   before_action :set_blog, only: [:show, :edit, :update, :destroy, :show_mobile, :destroy_mobile, :edit_mobile, :destroy_confirm_mobile]
+  before_action :init
 
   hankaku_filter
 
@@ -224,11 +225,14 @@ class BlogsController < ApplicationController
 
 
   private
+  def init
+    @page_content_type = "日記"
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_blog
     @blog = Blog.find(params[:id])
-    @title = @blog.title if @blog.present?
+    @page_content_title = @blog.title if @blog.present?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,6 +1,7 @@
 class MoviesController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_movie, only: [:show, :edit, :update, :destroy]
+  before_action :init
 
   # GET /movies
   # GET /movies.xml
@@ -125,9 +126,14 @@ class MoviesController < ApplicationController
   end
 
   private
+  def init
+    @page_content_type = "動画"
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_movie
-      @movie = Movie.find(params[:id])
+    @movie = Movie.find(params[:id])
+    @page_content_title = @movie.title if @movie.present?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

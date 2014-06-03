@@ -2,11 +2,12 @@ class AlbumsController < ApplicationController
   before_filter :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
   before_filter :authenticate_user!
   before_action :set_album, only: [:show, :edit, :update, :destroy, :download]
+  before_action :init
 
   # GET /albums
   # GET /albums.json
   def index
-    @title = "一覧"
+    @page_title = "アルバム一覧"
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
@@ -17,10 +18,29 @@ class AlbumsController < ApplicationController
       @albums = Album.order("id DESC").page(params[:page])
     end
 
+    @album_users = []
+    Album.where("owner_id is not NULL").each do |album|
+      @album_users << {name: album.owner.try(:dispname), photo_count: album.photos.count, album_id: album.id}
+    end
+    p @album_users
+  end
+
+  def top
+    @page_title = "アルバムトップ"
+    @albums = Album.order("id DESC").page(params[:page])
+    @movies = Movie.order("id DESC").limit(8)
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @albums }
     end
+
+  end
+
+  def movies
+    @page_title = "動画一覧"
+    @movies = Movie.order("id DESC").page(params[:page]).per(16)
+    render 'movies/index'
   end
 
   # GET /albums/1
@@ -166,10 +186,14 @@ class AlbumsController < ApplicationController
 
   private
 
+  def init
+    @page_content_type = "アルバム"
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_album
     @album = Album.find(params[:id])
-    @title = @album.title if @album.present?
+    @page_content_title = @album.title if @album.present?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

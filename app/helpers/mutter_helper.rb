@@ -15,8 +15,6 @@ module MutterHelper
   end
 
 
-  private
-
   def videojs(movie)
     thumb_src = movie.thumb? ? movie.thumb(:large) : "/assets/movie_thumb.jpg"
     movie_src = movie.uploaded_full_path.html_safe

@@ -1,11 +1,9 @@
 <div class="row">
   <div class="span7 offset2">
-    <div class="form-actions">
     <%= link_to '自分の日記へ', blogs_path, class: "btn" %>
     <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
     <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
     <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @blog.user) %>
-    </div>
 
     <div class="page-header ver2">
       <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.blog_comments.size}）", "#comments" %></small></h3>
@@ -43,8 +41,10 @@
 
     <div id="comment_form">
       <%= form_for @comment, url: blog_blog_comments_path(@blog.id), :remote => true do |f| %>
-        <%= f.text_area :content, rows: 5, class: "span5", placeholder: "コメントする" %><br />
+        <%= f.text_area :content, rows: 5, class: "span7", placeholder: "コメントする" %><br />
+        <div class="form-actions">
         <%= f.submit "投稿する", class: "btn btn-primary" %>
+        </div>
       <% end -%>
     </div>
   </div> <!-- .span -->

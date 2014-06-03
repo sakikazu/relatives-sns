@@ -7,7 +7,7 @@
     <!--
     <title><%#= content_for?(:title) ? yield(:title) : "AdanHP" %></title>
     -->
-    <title><%= "[dev]" if Rails.env != "production" %>A団HP | <%= "#{@page_title || controller.controller_name} > #{controller.action_name}" %></title>
+    <title><%= page_title %></title>
     <%= csrf_meta_tags %>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -235,9 +235,8 @@ function showComments(obj) {
          <div class="container nav-collapse">
            <ul class="nav">
              <li class="<%= controller.controller_name == "nices" ? "active" : "" %>"><%= link_to "人気", nices_path %></li>
-             <li class="<%= controller.controller_name == "albums" ? "active" : "" %>"><%= link_to "アルバム", albums_path %></li>
+             <li class="<%= controller.controller_name =~ /albums|movies/ ? "active" : "" %>"><%= link_to "アルバム", top_albums_path %></li>
              <li class="<%= controller.controller_name == "blogs" ? "active" : "" %>"><%= link_to "日記", blogs_path %></li>
-             <li class="<%= controller.controller_name == "movies" ? "active" : "" %>"><%= link_to "動画", movies_path %></li>
              <li class="<%= controller.controller_name == "boards" ? "active" : "" %>"><%= link_to "掲示板", boards_path %></li>
              <li class="<%= controller.controller_name == "histories" ? "active" : "" %>"><%= link_to "年表", histories_path %></li>
              <li class="<%= controller.controller_name == "members" ? "active" : "" %>"><%= link_to "親戚データ", members_path %></li>

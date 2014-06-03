@@ -1,40 +1,53 @@
-<%= link_to '新規作成', new_album_path, class: "btn btn-info" %>
+<%= link_to "アルバムトップへ", top_albums_path, class: "btn" %>
 
-<div class="page-header"><h3>アルバム詳細一覧<small>写真のダウンロードも可能</small></h3></div>
-<div id="title_index">
-  <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn" %>
-</div>
-
-<div class="page-header"><h3>アルバム一覧</h3></div>
-<div class="select_menu clearfix">
-  <% [["アルバム作成順", 1], ["最新写真アップ順", 2]].each do |n, i| -%>
-    <% if @sort == i -%>
-      <%= link_to n, albums_path(:sort => i), class: "btn btn-danger disabled" %>
-    <% else -%>
-      <%= link_to n, albums_path(:sort => i), class: "btn btn-danger" %>
-    <% end -%>
-  <% end -%>
-</div>
-
-<div id="album">
-<%= paginate @albums, :window => 2, :outer_window => 2 %><br>
-<% @albums.each do |album| %>
-<div class="once_photo">
-  <div class="bar"><%= link_to album.title, album %></div>
-  <div class="photo"><%= link_to(image_tag(album.thumb.image(:thumb)), album) if album.thumb.present? %></div>
-  <div class="info">
-    作成者：<%= album.user.try(:dispname) %><br />
-    作成日時：<%= l album.created_at if album.created_at %><br />
-    最新アップ日時：<%= l album.sort_at if album.sort_at %>
-    <br />
-    <% if editable(current_user, album.user) -%>
-      <%= link_to '編集', edit_album_path(album) %> | 
-      <%= link_to '削除', album, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
-    <% end -%>
+<div class="row">
+  <div class="span2">
+    <div class="page-header"><h3>個人のアルバム</h3></div>
+    <div class="well well-small">
+      <ul class="unstyled">
+        <% @album_users.each do |user| %>
+          <li><%= link_to "#{user[:name]}(#{user[:photo_count]})", album_path(user[:album_id]) %></li>
+        <% end %>
+      </ul>
+    </div>
   </div>
-</div>
-<% end %>
-<div class="clear"></div>
-<%= paginate @albums, :window => 2, :outer_window => 2 %><br>
-</div>
 
+  <div class="span9">
+    <div class="page-header"><h3>アルバム詳細一覧<small>写真のダウンロードも可能</small></h3></div>
+    <div id="title_index">
+      <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn" %>
+    </div>
+
+    <div class="page-header"><h3>アルバム一覧</h3></div>
+    <div class="select_menu clearfix">
+      <% [["アルバム作成順", 1], ["最新写真アップ順", 2]].each do |n, i| -%>
+        <% if @sort == i -%>
+          <%= link_to n, albums_path(:sort => i), class: "btn btn-danger disabled" %>
+        <% else -%>
+          <%= link_to n, albums_path(:sort => i), class: "btn btn-danger" %>
+        <% end -%>
+      <% end -%>
+    </div>
+
+    <div id="album">
+    <%= paginate @albums, :window => 2, :outer_window => 2 %><br>
+    <% @albums.each do |album| %>
+    <div class="once_photo">
+      <div class="bar"><%= link_to album.title, album %></div>
+      <div class="photo"><%= link_to(image_tag(album.thumb.image(:thumb)), album) if album.thumb.present? %></div>
+      <div class="info">
+        作成者：<%= album.user.try(:dispname) %><br />
+        作成日時：<%= l album.created_at if album.created_at %><br />
+        最新アップ日時：<%= l album.sort_at if album.sort_at %>
+        <br />
+        <% if editable(current_user, album.user) -%>
+          <%= link_to '編集', edit_album_path(album) %> | 
+          <%= link_to '削除', album, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
+        <% end -%>
+      </div>
+    </div>
+    <% end %>
+    <div class="clear"></div>
+    <%= paginate @albums, :window => 2, :outer_window => 2 %><br>
+    </div>
+</div>

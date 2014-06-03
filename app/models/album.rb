@@ -4,6 +4,7 @@ class Album < ActiveRecord::Base
   belongs_to :thumb, :class_name => "Photo", :foreign_key => :thumb_id
   has_many :album_comments
   has_many :photos
+  has_many :movies
   has_many :update_histories, :as => :content, :dependent => :destroy
 
   validates :title, presence: true
@@ -21,6 +22,6 @@ class Album < ActiveRecord::Base
 
   # 各ユーザーがアルバム機能以外からアップする写真専用のアルバムを作成する
   def self.create_having_owner(user)
-    self.create(title: user.dispname + "のアルバム", owner_id: user.id)
+    self.create(title: user.dispname + "のアルバム", owner_id: user.id, user_id: user.id)
   end
 end

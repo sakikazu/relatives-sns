@@ -1,5 +1,20 @@
 module ApplicationHelper
 
+  def page_title
+    title = ""
+    title += "[dev]" if Rails.env != "production"
+    title += "A団HP | "
+    if @page_title.present?
+      title += @page_title
+    else
+      title += @page_content_type.presence || controller.controller_name
+      title += " > "
+      title += @page_content_title.presence || controller.action_name
+    end
+    title
+  end
+
+
   #
   # UserAgentから各デバイス名を割り出す
   #
