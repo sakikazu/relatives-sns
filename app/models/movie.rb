@@ -25,6 +25,13 @@ class Movie < ActiveRecord::Base
   TYPE_NORMAL = 0
   TYPE_MODIFY = 1
 
+  # ffmpeg rotation values
+  # 0 = 90CounterCLockwise and Vertical Flip (default)
+  # 1 = 90Clockwise
+  # 2 = 90CounterClockwise
+  # 3 = 90Clockwise and Vertical Flip
+  ROTATION = {"90" => 1, "180" => 2, "270" => 3}
+
   content_name = "movie"
   has_attached_file :movie,
     :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
@@ -52,10 +59,33 @@ class Movie < ActiveRecord::Base
     # EncodeWorker.perform_async self.id
   # end
 
+  # Classで分けたいな todo
   def encode
     generate_thumb
     encoded_path = "#{Rails.root}/public/upload/movie/#{id}/original/encoded.mp4"
-    ffmp.transcode("#{encoded_path}", "-vcodec libx264 -b 500k -acodec libfaac -ab 96k")
+    # p "rotation: #{ffmp.rotation}"
+    transpose = "-vf transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
+
+    max_video_wid_hei = 640
+    p "original size: width: #{ffmp.width} / height: #{ffmp.height}"
+    if ffmp.width.present? and ffmp.height.present? and (ffmp.width > max_video_wid_hei || ffmp.height > max_video_wid_hei)
+      if ffmp.height > ffmp.width
+        ratio = max_video_wid_hei.to_f / ffmp.height
+        height = max_video_wid_hei
+        width = (ffmp.width * ratio).to_i
+      else
+        ratio = max_video_wid_hei.to_f / ffmp.width
+        width = max_video_wid_hei 
+        height = (ffmp.height * ratio).to_i
+      end
+      size = "-s #{width}x#{height}"
+      p "computed size: #{size}"
+    end
+
+    max_video_bitrate = 500
+    vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
+
+    ffmp.transcode("#{encoded_path}", "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose}")
     original_name = self.movie_file_name
     update_attributes(is_ready: true, movie: File.open("#{encoded_path}", "r"), original_movie_file_name: original_name)
     p self.errors.full_messages
