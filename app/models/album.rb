@@ -11,12 +11,22 @@ class Album < ActiveRecord::Base
 
   acts_as_paranoid
 
-  attr_accessor :sort_at, :sort_flg
+  attr_accessor :sort_at, :sort_flg, :media_filter
 
-  #写真がアップされた日時の降順でアルバムをソートする
+  scope :without_owner, lambda {where("owner_id is NULL")}
+  scope :with_owner, lambda {where("owner_id is not NULL")}
+
+  # 写真、動画がアップされた日時の降順でアルバムをソートする
   def self.sort_upload
-    buf = Photo.group(:album_id).maximum(:created_at)
-    albums = Album.all.map{|a| a.sort_at = (buf[a.id] || a.created_at); a}
+    photo = Photo.group(:album_id).maximum(:created_at)
+    movie = Movie.group(:album_id).maximum(:created_at)
+    albums = Album.all.map do |a|
+      if photo[a.id].present? or movie[a.id].present?
+        media_max_created_at = [(photo[a.id] || Time.mktime(0)), (movie[a.id] || Time.mktime(0))].max
+      end
+      a.sort_at = (media_max_created_at || a.created_at);
+      a
+    end
     albums.sort{|a,b| b.sort_at <=> a.sort_at}
   end
 

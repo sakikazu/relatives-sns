@@ -21,7 +21,7 @@
 //= require jquery.colorbox-min
 //= //require jquery.cleditor.min
 //= require jquery.autopager-1.0.0.min
-//= //require jquery.tablesorter.min
+//= require jquery.tablesorter.min
 //= require jquery.sliderkit.1.9.2.pack.js
 // mousewheel is required by sliderkit
 //= require jquery.mousewheel.min.js

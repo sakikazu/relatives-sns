@@ -10,11 +10,13 @@ class Movie < ActiveRecord::Base
   has_many :movie_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  default_scope {order('id DESC')}
+  # default_scope {order('movies.id DESC')}
+  scope :includes_all, lambda {includes(:movie_comments, :nices)}
 
   attr_accessor :ffmp_obj, :is_update_thumb
 
   validates :title, presence: true
+
 
   # [knowhow] フィールド名は「movie」だけど、エラー変数に設定されるのは「movie_file_name」になるので、こちらの方にメッセージを設定しておく
   validates :movie, presence: true

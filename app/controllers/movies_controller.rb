@@ -9,9 +9,9 @@ class MoviesController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
-      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).page(params[:page]).per(10)
+      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).order('id DESC').page(params[:page]).per(10)
     else
-      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).page(params[:page]).per(10)
+      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).order('id DESC').page(params[:page]).per(10)
     end
 
     respond_to do |format|
@@ -138,7 +138,7 @@ class MoviesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def movie_params
-      params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb, :is_ready)
+      params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb, :is_ready, :album_id)
   end
 
 end

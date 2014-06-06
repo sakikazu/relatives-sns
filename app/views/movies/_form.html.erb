@@ -13,6 +13,7 @@
     <%#= f.input :is_update_thumb, as: "radio_buttons", collection: [['はい', '1'] ,['いいえ', '0']], label: "動画からサムネイルを再作成", label_html: {class: "mgn-t20"} %>
   <% #end %>
   <%= f.input :movie_type, as: "radio_buttons", label: "編集された動画かどうか", label_html: {class: "mgn-t20"}, collection: [['はい', '1'] ,['いいえ', '0']] %>
+  <%= f.input :album_id, as: "hidden" %>
 
   <div class="form-actions">
     <%= f.button :submit, class: "btn btn-primary", :data => {:disable_with => "Uploading..."} %>

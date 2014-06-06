@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" %>
+    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" if @blog.blog_comments.size > 5 %>
 
     <div class="page-header ver2"><h3>コメント</h3></div>
     <div id="comments">

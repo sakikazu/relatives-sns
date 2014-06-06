@@ -11,6 +11,8 @@ class Photo < ActiveRecord::Base
   has_many :update_histories, :as => :content, :dependent => :destroy
   has_many :photo_comments
 
+  scope :includes_all, lambda {includes(:photo_comments, :nices)}
+
   content_name = "album"
   has_attached_file :image,
     :styles => {

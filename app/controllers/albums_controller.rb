@@ -11,15 +11,15 @@ class AlbumsController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
-      @albums = Album.order("id DESC").page(params[:page])
+      @albums = Album.without_owner.order("id DESC").page(params[:page])
     when 2
-      @albums = Kaminari.paginate_array(Album.sort_upload).page(params[:page])
+      @albums = Kaminari.paginate_array(Album.without_owner.sort_upload).page(params[:page])
     else
-      @albums = Album.order("id DESC").page(params[:page])
+      @albums = Album.without_owner.order("id DESC").page(params[:page])
     end
 
     @album_users = []
-    Album.where("owner_id is not NULL").each do |album|
+    Album.with_owner.each do |album|
       @album_users << {name: album.owner.try(:dispname), photo_count: album.photos.count, album_id: album.id}
     end
     p @album_users
@@ -27,7 +27,7 @@ class AlbumsController < ApplicationController
 
   def top
     @page_title = "アルバムトップ"
-    @albums = Album.order("id DESC").page(params[:page])
+    @albums = Kaminari.paginate_array(Album.sort_upload).page(params[:page])
     @movies = Movie.order("id DESC").limit(8)
 
     respond_to do |format|
@@ -49,40 +49,68 @@ class AlbumsController < ApplicationController
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
 
-    uploader = params[:album].present? ? params[:album][:user_id] : nil
-    # 初期表示は「撮影日時順」
-    @sort_flg = (params[:album].present? && params[:album][:sort_flg] =~ /1|2|3|4/) ? params[:album][:sort_flg].to_i : 2
-    @album4sort = Album.new(sort_flg: @sort_flg, user_id: uploader)
+    uploader = nil
+    @sort_flg = 2
+    @media_filter = 1
+    if params[:album].present?
+      uploader = params[:album][:user_id]
+      # 初期表示は「撮影日時順」
+      @sort_flg = params[:album][:sort_flg] =~ /1|2|3|4/ ? params[:album][:sort_flg].to_i : 2
+      # 写真か動画のフィルタリング
+      @media_filter = params[:album][:media_filter].blank? ? 1 : params[:album][:media_filter].to_i
+    end
+    @album4sort = Album.new(sort_flg: @sort_flg, user_id: uploader, media_filter: @media_filter)
 
     # ソート順
     case @sort_flg
     when 1
       photos = @album.photos.order("id DESC")
+      movies = @album.movies.order("id DESC")
     when 2
       photos = @album.photos.order("exif_at ASC")
+      movies = @album.movies.order("id DESC")
+      # movies = @album.movies.order("exif_at ASC") # todo exif取れないよね？対応しなくていっかなー
     when 3
       photos = @album.photos.order("last_comment_at DESC")
+      movies = @album.movies.order("movie_comments.id DESC")
     when 4
       photos = @album.photos.order("nices.created_at DESC").order("last_comment_at DESC")
+      movies = @album.movies.order("nices.created_at DESC")
     end
 
     # アップロード者でフィルタリング
     if uploader.present?
       photos = photos.where(user_id: uploader)
+      movies = movies.where(user_id: uploader)
       @selected_uploader = User.find_by_id(uploader)
     end
 
-    @photos = photos.includes(:nices).page(params[:page])
+    case @media_filter
+    when 1
+      @medias = movies.includes_all + photos.includes_all
+      @media_name  = "写真と動画"
+    when 2
+      @medias = photos.includes_all
+      @media_name  = "写真"
+    when 3
+      @medias = movies.includes_all
+      @media_name  = "動画"
+    end
+
+    @medias = Kaminari.paginate_array(@medias).page(params[:page])
 
     @comment = AlbumComment.new(:album_id => @album.id)
 
-    @photo_all_num = @album.photos.size
+    @medias_all_num = @album.photos.size + @album.movies.size
 
     # アップロード者リスト
     @uploader_list = @album.photos.includes(user: :user_ext).select('distinct user_id').map{|p| [p.user.id, p.user.dispname]}
 
     # AutoPager対応
     @autopagerable = true
+
+    # 動画アップロード用
+    @movie = @album.movies.build
 
     respond_to do |format|
       format.html # show.html.erb

@@ -12,10 +12,12 @@ class Mutter < ActiveRecord::Base
 
   has_one :movie
   has_one :photo
-  has_one :album
-  has_one :blog
-  has_one :board
-  has_one :history
+
+  # 2014/06/05、とりあえず、つぶやきにひもづけるのはphotoとmovieのみ
+  # has_one :album
+  # has_one :blog
+  # has_one :board
+  # has_one :history
 
   before_save :trans_space
   after_save :save_related_media
@@ -41,7 +43,10 @@ class Mutter < ActiveRecord::Base
 
   # [memo]こうやってそれぞれにuser、user_extを指定するようにすると、最初のリクエスト時にはやっぱ時間短縮されてる。
   # 二度目のリクエストではキャッシュされるらしく、それぞれに指定しなかった時と同じ速度になる。
-  scope :includes_all, lambda { includes([{:user => :user_ext}, {:children => {:nices => {:user => :user_ext}}}, {:nices => {:user => :user_ext}}]) }
+  # 2014/06/05、とりあえず、つぶやきにひもづけるのはphotoとmovieのみ
+  # scope :includes_all, lambda { includes(:photo, :movie, :album, :blog, :board, {:user => :user_ext}, {:nices => {:user => :user_ext}}, {children: [:photo, :movie, :album, :blog, :board, {nices: {user: :user_ext}}]}) }
+  scope :includes_all, lambda { includes(:photo, :movie, {:user => :user_ext}, {:nices => {:user => :user_ext}}, {children: [:photo, :movie, {nices: {user: :user_ext}}]}) }
+
   scope :parents_mod, lambda { where("mutters.reply_id IS NULL") } #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
   scope :id_desc, lambda { order("mutters.id DESC") }
   scope :id_asc, lambda { order("mutters.id ASC") }

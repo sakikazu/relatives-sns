@@ -1,0 +1,32 @@
+<% if movies.present? %>
+<div id="movies" class="clearfix">
+  <% movies.each do |movie| -%>
+    <div class="thumb">
+      <div class="title">
+        <%= link_to "#{movie.title} (コメント数：#{movie.movie_comments.size})", movie %>
+        <br><%= nice_field_disp_only(movie) %>
+      </div>
+      <div class="image"><%= link_to image_tag(movie.thumb(:thumb)), movie_path(movie) %></div>
+      <div class="info">
+        <div>
+          <%= "作成者：#{movie.user.dispname}" %><br><%= "作成日時：#{movie.created_at.to_s(:short2)}" %>
+        </div>
+        <% if movie.movie_comments.last.try(:created_at) %>
+        <div>
+          <%= "最新コメント：#{movie.movie_comments.last.created_at.to_s(:short2)}" %>
+        </div>
+        <% end %>
+      </div>
+
+      <% if editable(current_user, movie.user) -%>
+      <div class="actions">
+        <%= link_to '編集', edit_movie_path(movie) %>
+        <%= link_to '削除', movie, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
+      </div>
+      <% end -%>
+
+    </div>
+<% end %>
+</div>
+<% end %>
+

@@ -5,6 +5,7 @@
 <div class="row">
   <div class="span7 offset2">
 
+  <%= link_to "アルバムへ", album_path(@movie.album_id), class: "btn" if @movie.album_id.present? %>
   <%= link_to "動画一覧へ", movies_path, class: "btn" %>
   <%= link_to '編集する', edit_movie_path(@movie), class: "btn btn-info" %>
 
@@ -52,7 +53,7 @@
 </div>
 <div class="clearfix"></div>
 
-<a href="#comment_form" class="btn btn-warning btn-block">ページ最下部へ</a>
+<%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" if @movie.movie_comments.size > 5 %>
 
 <div class="page-header">
   <h3>コメント</h3>

@@ -182,6 +182,10 @@ jQuery(document).ready(function(){
       $(".colorbox").colorbox();
       colorbox_slideshow();
       nice_member();
+      $("#autopager_loading").hide();
+    },
+    start: function() {
+      $("#autopager_loading").show();
     }
   });
 <% end -%>

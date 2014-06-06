@@ -20,9 +20,9 @@
 
     <div class="page-header"><h3>アルバム一覧</h3></div>
     <div class="select_menu clearfix">
-      <% [["アルバム作成順", 1], ["最新写真アップ順", 2]].each do |n, i| -%>
+      <% [["最新写真アップ順", 1], ["アルバム作成順", 2]].each do |n, i| -%>
         <% if @sort == i -%>
-          <%= link_to n, albums_path(:sort => i), class: "btn btn-danger disabled" %>
+          <%= link_to n, "javascript:void()", class: "btn btn-danger disabled" %>
         <% else -%>
           <%= link_to n, albums_path(:sort => i), class: "btn btn-danger" %>
         <% end -%>

@@ -80,14 +80,15 @@ $(document).ready(function() {
 
 <ul class="nav nav-tabs">
   <li><a href="#tab-description" data-toggle="tab"><i class="icon-list-alt"></i> <%= @album.title %></a></li>
-  <li><a href="#tab-comments" data-toggle="tab"><i class="icon-comment"></i> アルバムへのコメント</a></li>
-  <li><a href="#tab-upload" data-toggle="tab"><i class="icon-upload"></i> 写真アップロード</a></li>
+  <li><a href="#tab-comments" data-toggle="tab"><i class="icon-comment"></i> アルバムへのコメント(<%= @album.album_comments.size %>)</a></li>
+  <li><a href="#tab-photo-upload" data-toggle="tab"><i class="icon-camera"></i> 写真アップロード</a></li>
+  <li><a href="#tab-movie-upload" data-toggle="tab"><i class="icon-facetime-video"></i> 動画アップロード</a></li>
 </ul>
 
 <div class="tab-content well well-small">
   <div id="tab-description" class="tab-pane">
     <h3>
-      <%= "写真数：#{@photo_all_num}</small>".html_safe %>
+      <%= "写真数(動画含む)：#{@medias_all_num}</small>".html_safe %>
       <small> 作成者：<%= @album.user.try(:dispname) %> | 作成日時：<%= l @album.created_at if @album.created_at %></small>
     </h3>
     <div class="description"><%= sani_custom_br(@album.description) %></div>
@@ -95,7 +96,7 @@ $(document).ready(function() {
 
   <div id="tab-comments" class="tab-pane">
     <div class="page-header">
-      <h3><small>コメント数：<%= @album.album_comments.size %></small></h3>
+      <h3>このアルバムへのコメント<small>コメント数：<%= @album.album_comments.size %></small></h3>
     </div>
 
     <!-- アルバムへのコメント -->
@@ -120,9 +121,9 @@ $(document).ready(function() {
     </div>
   </div>
 
-  <div id="tab-upload" class="tab-pane">
+  <div id="tab-photo-upload" class="tab-pane">
     <div class="page-header">
-      <h3><small>複数ファイル選択可能</small></h3>
+      <h3>このアルバムに写真をアップする<small>複数ファイル選択可能</small></h3>
     </div>
 
     <div id="fileQueue"></div>
@@ -131,11 +132,32 @@ $(document).ready(function() {
     <%= file_field_tag :uploadify %><br />
     <strong class="important">※スマホからはアップできません</strong>
   </div>
+
+  <div id="tab-movie-upload" class="tab-pane">
+    <div class="page-header">
+      <h3>このアルバムに動画をアップする</h3>
+    </div>
+    <%= render :partial => 'movies/form' %>
+  </div>
+
 </div> <!-- .tab-content -->
 
 
-<% if @photos.size > 0 -%>
-  <div class="page-header mt-50"><h3 class="normal">このアルバムの写真<small>写真をクリックするとスライドショーが開始されます</small></h3></div>
+<% if @medias.size > 0 -%>
+  <div class="page-header mt-50"><h3 class="normal">このアルバムの写真・動画<small>写真をクリックするとスライドショーが開始されます</small></h3></div>
+
+  <div class="mb-30 clearfix">
+  <% [["写真と動画", 1], ["写真のみ", 2], ["動画のみ", 3]].each do |n, i| -%>
+    <% if @media_filter == i -%>
+      <%= link_to n, "javascript:void()", class: "btn btn-danger disabled" %>
+    <% else -%>
+      <% sort_params = {id: @album.id, album: {media_filter: i}} %>
+      <% sort_params[:album]["user_id"] = @album4sort.user_id if @album4sort.present? %>
+      <% sort_params[:album]["sort_flg"] = @album4sort.sort_flg if @album4sort.present? %>
+      <%= link_to n, album_path(sort_params), class: "btn btn-danger" %>
+    <% end -%>
+  <% end -%>
+  </div>
 
   <!-- ソート機能 -->
   <% #sort_list = [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]] -%>
@@ -144,21 +166,25 @@ $(document).ready(function() {
     <%= form_for @album4sort, url: album_path, :method => :get do |f| %>
       <%= f.select :user_id, @uploader_list.map{|u| [u[1], u[0]]}, {include_blank: "＜アップロード者＞"}, {class: "span3"} %>
       <%= f.select :sort_flg, sort_list.map{|s| [s[1], s[0]]}, {include_blank: "＜並び替え順＞"}, {class: "span3"} %>
+      <%= f.hidden_field :media_filter %>
       <%= f.submit "並び替え", class: "btn" %>
     <% end %>
   </div>
 
   <div class="alert alert-success">
-    <h4><%= "#{@selected_uploader.dispname}がアップした写真が" if @selected_uploader.present? %>
+    <h4><%= "#{@selected_uploader.dispname}がアップした#{@media_name}が" if @selected_uploader.present? %>
       <%= sort_list[@sort_flg.to_s] %>で表示されています</h4>
   </div>
 <% end -%>
 
 
 <div class="autopagerize_page_element">
-<%= paginate @photos, :window => 2, :outer_window => 2 %><br>
+<%= paginate @medias, :window => 2, :outer_window => 2 %><br>
+
+<%= render 'movies/index', movies: @medias.select{|n| n.class == Movie} %>
+
 <div id="photo" class="clearfix">
-<% @photos.each do |p| -%>
+  <% @medias.select{|n| n.class == Photo}.each do |p| -%>
   <div class="once_photo">
     <div class="bar">
       <%= "#{p.title} (コメント数：#{p.photo_comments.size}）" %>&nbsp;<%= nice_field_disp_only(p) %>
@@ -185,5 +211,7 @@ $(document).ready(function() {
   </div>
 <% end -%>
 </div>
-<%= paginate @photos, :window => 2, :outer_window => 2 %>
+<%= paginate @medias, :window => 2, :outer_window => 2 %>
 </div> <!-- autopagerize_page_element -->
+
+<div id="autopager_loading" class="btn btn-warning btn-block" style="display:none">次のページを読込中です</div>
