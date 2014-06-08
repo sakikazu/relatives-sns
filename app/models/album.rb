@@ -2,10 +2,11 @@ class Album < ActiveRecord::Base
   belongs_to :user
   belongs_to :owner, :class_name => "User", :foreign_key => :owner_id
   belongs_to :thumb, :class_name => "Photo", :foreign_key => :thumb_id
-  has_many :album_comments
   has_many :photos
   has_many :movies
   has_many :update_histories, :as => :content, :dependent => :destroy
+  has_many :album_comments
+  has_many :comments, as: :parent
 
   validates :title, presence: true
 

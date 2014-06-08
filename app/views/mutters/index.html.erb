@@ -65,6 +65,7 @@ $(document).ready(function(){
           $('#mutter_data').html(data);
           $(document).ready(function(){
             $(".colorbox").colorbox();
+            $("#create_notification").show().fadeOut(3000);
           })
         }
       );
@@ -179,8 +180,8 @@ $(document).on('click', 'a.js_search_mutter', function() {
         <!-- start main mutter -->
         <div class="span8">
 
-   <div id="mutter" class="clearfix well well2">
-    <div id="form" class="row clearfix">
+   <div id="mutter" class="clearfix">
+    <div id="form" class="clearfix well well2">
       <%= simple_form_for @mutter, :html => {:multipart => true} do |f| -%>
         <div class="span5">
         <%= f.text_area :content, rows: 3, class: "span5", placeholder: "つぶやき" %><br>
@@ -191,15 +192,18 @@ $(document).on('click', 'a.js_search_mutter', function() {
           <a class="btn">ファイル選択</a>
         </div>
         </div>
-        <div class="span1">
+        <div class="span2">
           <br>
           <%= f.submit "投稿する", class: "btn btn-primary btn-large" %>
+          <div class="leave_me"><%= f.check_box :leave_me, value: "1" %><%= f.label :leave_me, "ひとりごと" %></div>
         </div>
       <% end -%>
     </div>
     <%#= link_to '写真付きでつぶやく', :action => "new_from_mail" if request.smart_phone? %>
 
-    <div id="form_search" class="row well well2 text-center">
+    <div id="create_notification" class="alert alert-success text-center important" style="display:none">つぶやきを投稿しました<%#= @create_notification %></div>
+
+    <div id="form_search" class="row well text-center">
       <div class="input-append">
         <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
           <% # [memo] このinput textはspanX指定のみだとAndroidのChromeでフォームが横に飛び出してしまった。
@@ -217,8 +221,8 @@ $(document).on('click', 'a.js_search_mutter', function() {
           </button>
           <ul class="dropdown-menu">
             <li><%= link_to "発言内容から検索", "#", {class: "js_search_mutter", rel: "1"} %></li>
-            <li><%= link_to "画像を含むものを検索", "#", {class: "js_search_mutter", rel: "2"} %></li>
-            <li><%= link_to "URLを含むものを検索", "#", {class: "js_search_mutter", rel: "3"} %></li>
+            <li><%= link_to "画像か動画を含むもの", "#", {class: "js_search_mutter", rel: "2"} %></li>
+            <li><%= link_to "URLを含むもの", "#", {class: "js_search_mutter", rel: "3"} %></li>
             <li class="divider"></li>
             <li><strike><%= link_to "詳細検索", action: :all %></strike>まだできてない</li>
           </ul>
@@ -226,15 +230,16 @@ $(document).on('click', 'a.js_search_mutter', function() {
       </div>
     </div>
 
+
     <div id="mutter_data">
       <%# cache :mutter_data do -%>
         <%= render :partial => "list" %>
-        <%# end -%>
+      <%# end -%>
     </div>
 
     <div class="mgn-t40 text-center">
       <%#= link_to "もっと見る", "javascript:void(0)", {id: "show_more", class: "left btn"} %>
-      <i class="icon-refresh"></i>　自動読み込み　<i class="icon-refresh"></i>
+      <div id="autopager_loading" class="btn btn-warning btn-block"><i class="icon-refresh"></i>　次のページを読込中です　<i class="icon-refresh"></i></div>
     </div>
 
   </div> <!-- #mutter -->

@@ -76,9 +76,11 @@ class MuttersController < ApplicationController
     if params["mutter"].blank? # mutters#indexでAutoPagerで読み込まれた場合
       @action_flg = 0
     else
-      @action_flg = params["mutter"][:action_flg].to_i
-      @search_word = params["mutter"][:search_word]
-      @user_id = params["mutter"][:user_id]
+      params[:mutter] = params["mutter"]
+      @action_flg = params[:mutter][:action_flg].to_i
+      @search_word = params[:mutter][:search_word]
+      @user_id = params[:mutter][:user_id]
+      @leave_me = params[:leave_me].blank? ? false : true
     end
 
     case @action_flg
@@ -86,8 +88,10 @@ class MuttersController < ApplicationController
       @mutters = Mutter.includes_all.parents_mod
     when 1 # ワードから検索
       @mutters = Mutter.includes_all.order('id DESC')
-    when 2 # 画像を含むものを検索
-      @mutters = Mutter.includes_all.where('mutters.image_file_name IS NOT NULL').order('id DESC')
+    when 2 # 画像か動画を含むものを検索
+      mutter_ids_with_photo = Photo.pluck("mutter_id").compact
+      mutter_ids_with_photo += Movie.pluck("mutter_id").compact
+      @mutters = Mutter.includes_all.where(id: mutter_ids_with_photo).order('id DESC')
     when 3 # URLを含むものを検索
       @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC')
     end
@@ -95,6 +99,9 @@ class MuttersController < ApplicationController
     # 検索時の共通処理(解除操作の場合はパラメータがないので通らない)
     @mutters = @mutters.where(user_id: @user_id) if @user_id.present?
     @mutters = @mutters.where('content like :q', :q => "%#{@search_word}%") if @search_word.present?
+
+    # 「ひとりごと」
+    @mutters = @mutters.where(leave_me: @leave_me)
 
     @mutters = @mutters.page(params[:page]).per(15)
 
@@ -175,6 +182,17 @@ class MuttersController < ApplicationController
     @mutters = Mutter.includes_all.parents_mod.page(params[:page])
     # end
 
+    @leave_me = params[:leave_me].blank? ? false : true
+    if @leave_me.present?
+      current_user.save_extension(UserExtension::LAST_READ_LEAVE_ME_AT, Time.now())
+      @count_unread_leave_me_mutters = 0
+    else
+      ext = current_user.find_extension(UserExtension::LAST_READ_LEAVE_ME_AT)
+      last_read_at = ext.present? ? ext[:value] : Time.parse("2000/1/1")
+      @count_unread_leave_me_mutters = @mutters.where(leave_me: true).where.not(user_id: current_user.id).where("created_at > ?", last_read_at).count
+    end
+    @mutters = @mutters.where(leave_me: @leave_me)
+
     @album_thumbs = Photo.rnd_photos
 
     # つぶやきの表示更新時間（ミリ秒指定）
@@ -216,10 +234,22 @@ class MuttersController < ApplicationController
     ua = request.env["HTTP_USER_AGENT"]
     @mutter.ua = ua
 
+    if @mutter.leave_me.blank?
+      leave_me_option = {}
+      @leave_me = false
+    else
+      leave_me_option = {leave_me: 1}
+      @leave_me = true
+    end
+
     # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
     if request.xhr?
       @mutter.save
       @mutters = Mutter.includes_all.parents_mod.page(params[:page])
+      # todo こういうところとかリファクタリングしたい〜〜。allメソッドやsearchとの関連をまとめたい
+      @mutters = @mutters.where(leave_me: @mutter.leave_me)
+      # @create_notification = "に投稿しました"
+
       # 新規post用に入れ替える
       @created_mutter = @mutter
       @mutter = Mutter.new(:user_id => current_user.id)
@@ -227,7 +257,7 @@ class MuttersController < ApplicationController
     else
       respond_to do |format|
         if @mutter.save
-          format.html { redirect_to mutters_path, notice: 'つぶやきを投稿しました。' }
+          format.html { redirect_to mutters_path(leave_me_option), notice: 'つぶやきを投稿しました。' }
           format.json { render json: @mutter, status: :created, location: @mutter }
         else
           format.html { redirect_to(mutters_path, :notice => 'つぶやきを入力しないと投稿できません') }
@@ -242,8 +272,10 @@ class MuttersController < ApplicationController
   end
 
   def destroy
+    mutter = @mutter
     @mutter.destroy
     @mutters = Mutter.includes_all.parents_mod.page(params[:page])
+    @mutters = @mutters.where(leave_me: mutter.leave_me)
     render "update_list.js"
   end
 
@@ -408,7 +440,7 @@ class MuttersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def mutter_params
-      params.require(:mutter).permit(:user_id, :content, :reply_id, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :created_at, :updated_at, :celebration_id, :image, :for_sort_at, :year, :month, :search_word, :action_flg, :ua)
+      params.require(:mutter).permit(:user_id, :content, :reply_id, :created_at, :updated_at, :celebration_id, :image, :for_sort_at, :year, :month, :search_word, :action_flg, :ua, :leave_me)
   end
 
   def celebration_params

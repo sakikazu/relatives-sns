@@ -1,3 +1,12 @@
+<ul class="nav nav-tabs">
+  <li<%= " class=active" if @leave_me.blank? %>>
+  <%= link_to "みんなの", root_path %>
+  </li>
+  <li<%= " class=active" if @leave_me.present? %>>
+  <%= link_to "ひとりごと <span class='badge badge-warning'>#{@count_unread_leave_me_mutters}</span>".html_safe, mutters_path(leave_me: true) %>
+  </li>
+</ul>
+
 <% if @action_flg != nil && @action_flg != 0 %>
   <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
     <%= f.hidden_field :action_flg, value: 0 %>
@@ -5,17 +14,18 @@
   <% end -%>
 <% end -%>
 
+<div class="well">
 <div class="autopagerize_page_element">
   <ul class="mutter_rows">
     <%= render :partial => 'mutter_row', :collection => @mutters %>
   </ul>
-  <% if @action_flg.to_i > 0 # 検索時 -%>
-    <% # [memo] ここはsearchメソッドの中でformat JSとしたいがためにremoteにしておく %>
-    <%= paginate @mutters, remote: true, params: {action: "search"} %>
-  <% else # 通常時はページネーションは表示せず、AutoPagerによって読み込まれる -%>
-    <div style="display:none"><%= paginate @mutters %></div>
-  <% end -%>
+  <% if @mutter.present? %>
+    <% query = {action_flg: @action_flg, search_word: @search_word} %>
+  <% end %>
+  <% # [memo] ここはsearchメソッドの中でformat JSとしたいがためにremoteにしておく %>
+  <% # 通常時はページネーションは表示せず、AutoPagerによって読み込まれる -%>
+  <div style="display:none"><%= paginate @mutters, remote: true, params: {action: "search", mutter: query, leave_me: @leave_me} %></div>
 
   <%= link_to "すべて見る", {:action => :all}, class: "btn" %>
 </div> <!-- autopagerize_page_element -->
-
+</div>

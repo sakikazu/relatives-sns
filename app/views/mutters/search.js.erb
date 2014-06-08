@@ -1,5 +1,5 @@
 $('#mutter_data').html(
-  '<%= escape_javascript(render :partial => "list", :locals => {:mutters => @mutters}) %>'
+  '<%= escape_javascript(render :partial => "list", :locals => {mutters: @mutters, mutter: @mutter}) %>'
 );
 
 // 多分、DOM構築を待つようにしたほうがいいかと思って$(functionで囲んだ

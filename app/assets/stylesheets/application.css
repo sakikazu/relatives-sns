@@ -70,6 +70,14 @@
 /**********************************************
  mutter
 **********************************************/
+#mutter .leave_me {
+  margin-top: 15px;
+}
+#mutter .leave_me label {
+  display: inline;
+  margin-left: 7px;
+}
+
 .mutter_rows {
   padding: 0px;
   /* width: 620px; */

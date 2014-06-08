@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140530133432) do
+ActiveRecord::Schema.define(version: 20140608011039) do
 
   create_table "admin_users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -200,8 +200,9 @@ ActiveRecord::Schema.define(version: 20140530133432) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "deleted_at"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "leave_me",           default: false
   end
 
   create_table "nices", force: true do |t|
@@ -237,6 +238,7 @@ ActiveRecord::Schema.define(version: 20140530133432) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "mutter_id"
+    t.integer  "comment_id"
   end
 
   create_table "rails_admin_histories", force: true do |t|
@@ -278,6 +280,14 @@ ActiveRecord::Schema.define(version: 20140530133432) do
     t.string   "content_type"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "user_extensions", force: true do |t|
+    t.integer  "user_id"
+    t.string   "key"
+    t.text     "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "user_exts", force: true do |t|

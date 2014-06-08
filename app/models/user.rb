@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :mutters
   has_many :celebrations
   has_one :user_ext
+  has_many :user_extensions
   has_one :my_album, class_name: "Album", foreign_key: "owner_id"
 
   after_save :rel_save
@@ -107,6 +108,19 @@ class User < ActiveRecord::Base
   # 指定時間（分指定）内にリクエストしたユーザー数
   def self.recent_request_count(minute = 5)
     where("last_request_at > ?", Time.now() - minute * 60).size
+  end
+
+
+  def save_extension(key, value)
+    ext = UserExtension.where(user_id: self.id, key: key).first
+    if ext.present?
+      ext.update_attributes(value: value)
+    else
+      UserExtension.create(user_id: self.id, key: key, value: value)
+    end
+  end
+  def find_extension(key)
+    self.user_extensions.where(key: key).first
   end
 
 end
