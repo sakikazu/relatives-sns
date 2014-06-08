@@ -2,7 +2,7 @@
   <div class="icon">
     <p>
     <% if mutter.user.present? && mutter.user.user_ext.image? -%>
-      <%= image_tag mutter.user.user_ext.image(:small), :size => "50x50"  %>
+      <%= image_tag mutter.user.user_ext.image(:small), :size => "50x50", alt: "アイコン画像" %>
   <% else -%>
       <%= image_tag 'noimage.gif', :size => "50x50"  %>
   <% end -%>
