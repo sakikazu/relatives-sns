@@ -265,6 +265,7 @@ GEM
       redis (~> 3.0.4)
     ref (1.0.5)
     remotipart (1.2.1)
+    rmagick (2.13.2)
     rr (1.1.2)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
@@ -411,6 +412,7 @@ DEPENDENCIES
   rails_admin
   rails_autolink
   rails_config
+  rmagick
   rr
   rspec-rails
   ruby-gmail (= 0.3.0)

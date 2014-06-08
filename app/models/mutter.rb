@@ -76,7 +76,8 @@ class Mutter < ActiveRecord::Base
       photo.image = self.image
       photo.save
     elsif self.image.content_type =~ movie_type
-      movie = Movie.new(title: "(つぶやきから)", mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: self.content)
+      truncated_title = self.content.size > 10 ? self.content[0..9] + "..." : self.content
+      movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: self.content + "\n\n" + "(つぶやきから投稿)")
       movie.movie = self.image
       if movie.save and movie.ffmp.valid?
         EncodeWorker.perform_async movie.id

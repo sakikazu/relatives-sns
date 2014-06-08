@@ -61,7 +61,7 @@ class Movie < ActiveRecord::Base
 
   # Classで分けたいな todo
   def encode
-    generate_thumb
+    generate_thumb(ffmp.rotation.to_i)
     encoded_path = "#{Rails.root}/public/upload/movie/#{id}/original/encoded.mp4"
     # p "rotation: #{ffmp.rotation}"
     transpose = "-vf transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
@@ -105,12 +105,17 @@ class Movie < ActiveRecord::Base
 
   # サムネイルがフォームから指定されていないときは動画から生成する
   # [memo] saveの前に実行する時は、サムネイルが指定されたときはスルーする判別の必要がある
-  def generate_thumb
+  def generate_thumb(rotate)
     if self.thumb.blank?
       tmp_path = "#{Rails.root}/public/upload/movie/#{id}/tmp/thumb.jpg"
       system("mkdir -p #{Pathname.new(tmp_path).dirname.to_s}")
       self.ffmp.screenshot(tmp_path)
-      update(thumb: File.open(tmp_path, "r"))
+      if rotate > 0
+        image = Magick::ImageList.new(tmp_path)
+        image.rotate(rotate).write(tmp_path)
+      end
+      thumb = File.open(tmp_path, "r")
+      update(thumb: thumb)
     end
   end
 
