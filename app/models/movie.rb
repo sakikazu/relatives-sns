@@ -5,13 +5,10 @@ class Movie < ActiveRecord::Base
   belongs_to :mutter
   has_many :comments, as: :parent
   has_many :nices, :as => :asset
-
-  # todo
-  has_many :movie_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
 
   # default_scope {order('movies.id DESC')}
-  scope :includes_all, lambda {includes(:movie_comments, :nices)}
+  scope :includes_all, lambda {includes(:comments, :nices)}
 
   attr_accessor :ffmp_obj, :is_update_thumb
 

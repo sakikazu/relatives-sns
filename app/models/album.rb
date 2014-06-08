@@ -5,7 +5,6 @@ class Album < ActiveRecord::Base
   has_many :photos
   has_many :movies
   has_many :update_histories, :as => :content, :dependent => :destroy
-  has_many :album_comments
   has_many :comments, as: :parent
 
   validates :title, presence: true

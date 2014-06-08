@@ -11,12 +11,12 @@
 
     <% @blogs.each do |blog| %>
       <div class="once_content">
-        <div class="title for_index"><%= link_to "#{blog.title} (コメント数：#{blog.blog_comments.size})", blog %>
+        <div class="title for_index"><%= link_to "#{blog.title} (コメント数：#{blog.comments.size})", blog %>
         </div>
 
         <div class="info">
           <%= link_to "投稿者：#{blog.user.try(:dispname)}", blogs_by_user_path(blog.user.username) %> | <%= "投稿日時：#{l blog.created_at}" %>
-          <%= " | 最新コメント日時：#{blog.blog_comments.try(:last).try(:created_at).try(:to_s, :long)}" %>
+          <%= " | 最新コメント日時：#{blog.comments.try(:last).try(:created_at).try(:to_s, :long)}" %>
         </div>
         <% blog.blog_images.each do |image| -%>
           <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>

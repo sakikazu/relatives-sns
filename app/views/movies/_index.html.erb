@@ -3,7 +3,7 @@
   <% movies.each do |movie| -%>
     <div class="thumb">
       <div class="title">
-        <%= link_to "#{movie.title} (コメント数：#{movie.movie_comments.size})", movie %>
+        <%= link_to "#{movie.title} (コメント数：#{movie.comments.size})", movie %>
         <br><%= nice_field_disp_only(movie) %>
       </div>
       <div class="image"><%= link_to image_tag(movie.thumb(:thumb)), movie_path(movie) %></div>
@@ -11,9 +11,9 @@
         <div>
           <%= "作成者：#{movie.user.dispname}" %><br><%= "作成日時：#{movie.created_at.to_s(:short2)}" %>
         </div>
-        <% if movie.movie_comments.last.try(:created_at) %>
+        <% if movie.comments.last.try(:created_at) %>
         <div>
-          <%= "最新コメント：#{movie.movie_comments.last.created_at.to_s(:short2)}" %>
+          <%= "最新コメント：#{movie.comments.last.created_at.to_s(:short2)}" %>
         </div>
         <% end %>
       </div>

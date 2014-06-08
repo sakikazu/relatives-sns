@@ -99,7 +99,7 @@ class AlbumsController < ApplicationController
 
     @medias = Kaminari.paginate_array(@medias).page(params[:page])
 
-    @comment = AlbumComment.new(:album_id => @album.id)
+    @new_comment = @album.comments.build
 
     @medias_all_num = @album.photos.size + @album.movies.size
 
@@ -210,6 +210,28 @@ class AlbumsController < ApplicationController
     FileUtils.rm(zipfile) if File.exist?(zipfile)
   end
 
+  def create_comment
+    @comment = Comment.new(comment_params)
+    @comment.user_id = current_user.id
+    @comment.save
+    @album = @comment.parent
+
+    #UpdateHistory
+    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT, :content_id => @album.id).first
+    if action
+      action.update_attributes(:updated_at => Time.now)
+    else
+      @album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT)
+    end
+  end
+
+  def destroy_comment
+    @comment = Comment.find(params[:id])
+    @album = @comment.parent
+    @comment.destroy
+    @destroy_flg = true
+    render 'create_comment.js'
+  end
 
 
   private
@@ -227,6 +249,10 @@ class AlbumsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def album_params
     params.require(:album).permit(:title, :description, :thumb_id, :user_id, :sort_flg)
+  end
+
+  def comment_params
+    params.require(:comment).permit(:user_id, :parent_id, :parent_type, :content)
   end
 
   # user_idが入っていたら、Uploadifyでアップロードしてセッションが切れてしまった後に

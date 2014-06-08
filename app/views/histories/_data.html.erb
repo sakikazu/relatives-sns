@@ -24,7 +24,7 @@
       <td width="35px"><%= link_to '削除', history, data: {confirm: '本当に削除してもよろしいですか？'}, :method => :delete %></td>
     <% end -%>
   </tr>
-  <% history.history_comments.each do |co| -%>
+  <% history.comments.each do |co| -%>
     <tr>
       <td class="comment">コメント</td>
       <td><%= sani_custom_br(co.content) %></td>

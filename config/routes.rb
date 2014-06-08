@@ -26,21 +26,22 @@ Rails.application.routes.draw do
       delete :destroy_image
     end
 
-    # member do
+    member do
+      post :create_comment
+      delete :destroy_comment
       # get 'new_images'
       # post 'create_images'
       # post 'symbol_images'
-    # end
+    end
     # collection do
       # delete 'destroy_image'
     # end
-    resources :blog_comments, only: [:create, :destroy]
   end
   # for mobile ※携帯だとmethod: :deleteが効いてくれないぽい？？指定してもGETメソッドになっちゃったので
   delete "/blogs/destroy_comment/:id" => "blogs#destroy_comment", :as => :destroy_comment
 
   resources :movies do
-    collection do
+    member do
       post :create_comment
       delete :destroy_comment
     end
@@ -55,14 +56,16 @@ Rails.application.routes.draw do
     end
     member do
       get :download
+      post :create_comment
+      delete :destroy_comment
     end
-    resources :album_comments, only: [:create, :destroy]
     resources :photos do
       member do
         get 'slideshow'
         patch 'update_from_slideshow'
+        post :create_comment
+        delete :destroy_comment
       end
-      resources :photo_comments, only: [:create, :destroy]
     end
   end
 

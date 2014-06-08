@@ -401,8 +401,6 @@ a.colorbox:hover img, a.colorbox_fix_size img {
 .once_content{
   background-color: white;
   clear: both;
-  margin: 5px 10px 30px;
-  width: 95%;
   border: 1px solid #CCCCCC;
 }
 .once_content .title{

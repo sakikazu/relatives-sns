@@ -8,6 +8,6 @@
   <%= f.input :thumb_id, as: :select, collection: @album.photos.map{|p| ["#{p.id}(#{p.title})", p.id]}, label: "アルバムトップに表示する写真" %>
 
   <div class="form-actions">
-    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= f.button :submit, class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
   </div>
 <% end %>

@@ -3,10 +3,9 @@ class History < ActiveRecord::Base
   belongs_to :mutter
   has_many :comments, as: :parent
 
-  # todo
-  has_many :history_comments
-
   validates :content, :presence => true
+
+  scope :includes_all, lambda {includes([{:user => :user_ext}, :comments])}
 
   def hist_date
     if episode_year.blank?

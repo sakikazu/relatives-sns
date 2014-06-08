@@ -7,7 +7,7 @@ class HistoriesController < ApplicationController
   def index
     # todo
     # 「内容」をクリックしたらcolorboxか別ページで表示して、コメントはそこでできるように。一覧ではコメント数は表示する
-    @histories = History.includes([{:user => :user_ext}, :history_comments]).all
+    @histories = History.includes_all
     @history = History.new
 
     respond_to do |format|
@@ -41,7 +41,7 @@ class HistoriesController < ApplicationController
       # format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
     end
 
-    @histories = History.includes([{:user => :user_ext}, :history_comments]).all
+    @histories = History.includes_all
   end
 
   # PUT /histories/1
@@ -55,7 +55,7 @@ class HistoriesController < ApplicationController
       # format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
     end
 
-    @histories = History.includes([{:user => :user_ext}, :history_comments]).all
+    @histories = History.includes_all
   end
 
   # DELETE /histories/1
@@ -70,12 +70,14 @@ class HistoriesController < ApplicationController
   end
 
   def new_comment
-    @comment = HistoryComment.new(:user_id => current_user.id, :history_id => params[:history_id])
+    @history = History.find(params[:history_id])
+    @comment = @history.comments.build
     render :layout => false
   end
 
   def create_comment
-    @comment = HistoryComment.new(history_comment_params)
+    @comment = Comment.new(comment_params)
+    @comment.user_id = current_user.id
     if @comment.save
       redirect_to(histories_path, :notice => "コメントしました")
     else
@@ -84,7 +86,7 @@ class HistoriesController < ApplicationController
   end
 
   def destroy_comment
-    @comment = HistoryComment.find(params[:id])
+    @comment = Comment.find(params[:id])
     @comment.destroy
     redirect_to(histories_path, :notice => "コメントを削除しました")
   end
@@ -92,16 +94,16 @@ class HistoriesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_history
-      @history = History.find(params[:id])
+    @history = History.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def history_params
-      params.require(:history).permit(:user_id, :episode_year, :episode_month, :episode_day, :about_flg, :content, :src_user_name)
+    params.require(:history).permit(:user_id, :episode_year, :episode_month, :episode_day, :about_flg, :content, :src_user_name)
   end
 
-  def history_comment_params
-      params.require(:history_comment).permit(:user_id, :history_id, :content)
+  def comment_params
+    params.require(:comment).permit(:user_id, :parent_id, :parent_type, :content)
   end
 
 end

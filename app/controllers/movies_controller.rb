@@ -25,6 +25,7 @@ class MoviesController < ApplicationController
   def show
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
+    @new_comment = @movie.comments.build
 
     respond_to do |format|
       format.html # show.html.erb
@@ -101,13 +102,15 @@ class MoviesController < ApplicationController
   end
 
   def create_comment
-    if params[:comment].blank?
+    if params[:comment][:content].blank?
       render :text => "", :status => 500
       return
     end
 
-    @movie = Movie.find(params[:movie_id])
-    @movie.movie_comments.create(:user_id => current_user.id, :content => params[:comment])
+    @comment = Comment.new(comment_params)
+    @comment.user_id = current_user.id
+    @comment.save
+    @movie = @comment.parent
 
     #UpdateHistory
     uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :content_id => @movie.id).first
@@ -119,10 +122,10 @@ class MoviesController < ApplicationController
   end
 
   def destroy_comment
-    @bcom = MovieComment.find(params[:comment_id])
-    movie = @bcom.movie
-    @bcom.destroy
-    redirect_to({:action => :show, :id => movie.id}, notice: "コメントを削除しました")
+    @comment = Comment.find(params[:id])
+    @movie = @comment.parent
+    @comment.destroy
+    render 'create_comment.js'
   end
 
   private
@@ -139,6 +142,10 @@ class MoviesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def movie_params
       params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb, :is_ready, :album_id)
+  end
+
+  def comment_params
+    params.require(:comment).permit(:user_id, :parent_id, :parent_type, :content)
   end
 
 end

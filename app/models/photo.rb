@@ -6,12 +6,9 @@ class Photo < ActiveRecord::Base
   belongs_to :mutter
   has_many :comments, as: :parent
   has_many :nices, :as => :asset
-
-  # todo
   has_many :update_histories, :as => :content, :dependent => :destroy
-  has_many :photo_comments
 
-  scope :includes_all, lambda {includes(:photo_comments, :nices)}
+  scope :includes_all, lambda {includes(:comments, :nices)}
 
   content_name = "album"
   has_attached_file :image,

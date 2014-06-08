@@ -1,6 +1,6 @@
 <% if @destroy_flg.blank? -%>
-  if($('#album_comment_content').val() != ''){
-    $('#album_comment_content').val('');
+  if($('#comment_content').val() != ''){
+    $('#comment_content').val('');
     $('#comments').html(
         '<%= escape_javascript(render "comments") %>'
     );

@@ -7,7 +7,7 @@
 <div class="once_content mgn-t40">
   <div class="title for_index">
     <%= "#{@photo.title} " %>
-    <%= link_to "(コメント数：#{@photo.photo_comments.size}）", "#comment_area" %>
+    <%= link_to "(コメント数：#{@photo.comments.select{|n| n.id.present?}.size}）", "#comment_area" %>
   </div>
   <div class="info">
     投稿者：<%= @photo.user.dispname %> | 
@@ -15,8 +15,7 @@
     撮影日時：<%= l @photo.exif_at if @photo.exif_at %>
   </div>
   <div class="description">
-    <%= image_tag(@photo.image(:large)) if @photo.image? %>
-    <br />
+    <div style="text-align:center""><%= image_tag(@photo.image(:large)) if @photo.image? %></div>
     <%= link_to "元画像", @photo.image(:original) if @photo.image? %>
     <p class="text"><%= sani_custom_br(@photo.description) %></p>
   </div>
@@ -30,15 +29,15 @@
 <div id="slideshow_comment">
   <h3 class="normal">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
   <div id="photo_comments">
-    <%= render :partial => "photo_comments/comments" %>
+    <%= render :partial => "comments" %>
   </div>
 
-  <div id="comment_form">
-    <%= form_for [@photo.album, @photo, @photo_comment], :remote => true do |f| %>
+  <div id="photo_comment_form">
+    <%= form_for @new_comment, url: create_comment_album_photo_path(@photo.album, @photo), remote: true do |f| %>
       <%= f.text_area :content, rows: 5, class: "span5", placeholder: "コメントする" %><br />
-      <%= f.hidden_field :user_id %>
-      <%= f.hidden_field :photo_id %>
-      <%= submit_tag "投稿する", class: "btn btn-primary" %>
+      <%= f.hidden_field :parent_id %>
+      <%= f.hidden_field :parent_type %>
+      <%= submit_tag "投稿する", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
     <% end -%>
     <br /><br />
   </div>
@@ -46,3 +45,4 @@
 
   </div>
 </div>
+

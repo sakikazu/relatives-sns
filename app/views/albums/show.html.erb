@@ -80,7 +80,7 @@ $(document).ready(function() {
 
 <ul class="nav nav-tabs">
   <li><a href="#tab-description" data-toggle="tab"><i class="icon-list-alt"></i> <%= @album.title %></a></li>
-  <li><a href="#tab-comments" data-toggle="tab"><i class="icon-comment"></i> アルバムへのコメント(<%= @album.album_comments.size %>)</a></li>
+  <li><a href="#tab-comments" data-toggle="tab"><i class="icon-comment"></i> アルバムへのコメント(<%= @album.comments.select{|n| n.id.present?}.size %>)</a></li>
   <li><a href="#tab-photo-upload" data-toggle="tab"><i class="icon-camera"></i> 写真アップロード</a></li>
   <li><a href="#tab-movie-upload" data-toggle="tab"><i class="icon-facetime-video"></i> 動画アップロード</a></li>
 </ul>
@@ -96,7 +96,7 @@ $(document).ready(function() {
 
   <div id="tab-comments" class="tab-pane">
     <div class="page-header">
-      <h3>このアルバムへのコメント<small>コメント数：<%= @album.album_comments.size %></small></h3>
+      <h3>このアルバムへのコメント<small>コメント数：<%= @album.comments.select{|n| n.id.present?}.size %></small></h3>
     </div>
 
     <!-- アルバムへのコメント -->
@@ -104,16 +104,17 @@ $(document).ready(function() {
       <div class="span6">
         <div id="comment_area">
           <div id="comments">
-            <%= render "album_comments/comments" %>
+            <%= render "comments" %>
           </div>
 
-          <%= form_for([@album, @comment], :remote => true) do |f| %>
+          <%= form_for @new_comment, url: create_comment_album_path(@album), remote: true do |f| %>
             <div class="field">
             <%= f.text_area :content, rows: 4, class: "span6" %>
+            <%= f.hidden_field :parent_id %>
+            <%= f.hidden_field :parent_type %>
           </div>
-          <%= f.hidden_field :album_id %>
           <div class="actions">
-            <%= f.submit "コメントする", class: "btn btn-primary" %>
+            <%= f.submit "コメントする", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
           </div>
         <% end -%>
         </div>
@@ -187,7 +188,7 @@ $(document).ready(function() {
   <% @medias.select{|n| n.class == Photo}.each do |p| -%>
   <div class="once_photo">
     <div class="bar">
-      <%= "#{p.title} (コメント数：#{p.photo_comments.size}）" %>&nbsp;<%= nice_field_disp_only(p) %>
+      <%= "#{p.title} (コメント数：#{p.comments.size}）" %>&nbsp;<%= nice_field_disp_only(p) %>
     </div>
     <div class="photo">
       <% if request.smart_phone? -%>

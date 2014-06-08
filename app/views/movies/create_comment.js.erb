@@ -1,6 +1,4 @@
-if($('#comment').val() != ''){
-  $('#comment').val('');
-  $('#comments').html(
-    '<%= escape_javascript(render "comments") %>'
-  );
-}
+$('#comment_content').val('');
+$('#comments').html(
+  '<%= escape_javascript(render "comments") %>'
+);

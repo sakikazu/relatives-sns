@@ -3,9 +3,8 @@ class Board < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :mutter
-  has_many :comments, as: :parent
-
-  # todo
+  # todo BoardCommentは画像持ちなので、汎用化はちょっと置いとこう
+  # has_many :comments, as: :parent
   has_many :board_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
 

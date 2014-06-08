@@ -6,7 +6,7 @@
     <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @blog.user) %>
 
     <div class="page-header ver2">
-      <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.blog_comments.size}）", "#comments" %></small></h3>
+      <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.comments.select{|n| n.id.present?}.size}）", "#comments" %></small></h3>
     </div>
 
     <div class="once_content">
@@ -32,16 +32,18 @@
       </div>
     </div>
 
-    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" if @blog.blog_comments.size > 5 %>
+    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" if @blog.comments.select{|n| n.id.present?}.size > 5 %>
 
     <div class="page-header ver2"><h3>コメント</h3></div>
     <div id="comments">
-      <%= render :partial => "blog_comments/comments" %>
+      <%= render :partial => "comments" %>
     </div>
 
     <div id="comment_form">
-      <%= form_for @comment, url: blog_blog_comments_path(@blog.id), :remote => true do |f| %>
+      <%= form_for @new_comment, url: create_comment_blog_path(@blog.id), :remote => true do |f| %>
         <%= f.text_area :content, rows: 5, class: "span7", placeholder: "コメントする" %><br />
+        <%= f.hidden_field :parent_id %>
+        <%= f.hidden_field :parent_type %>
         <div class="form-actions">
         <%= f.submit "投稿する", class: "btn btn-primary" %>
         </div>

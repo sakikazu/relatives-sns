@@ -67,8 +67,8 @@ class BlogsController < ApplicationController
   def show
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
+    @new_comment = @blog.comments.build
 
-    @comment = BlogComment.new
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @blog }
@@ -177,42 +177,41 @@ class BlogsController < ApplicationController
   end
 
   def create_comment
-    if params[:comment].blank?
+    if params[:comment][:content].blank?
       render :text => "", :status => 500
       return
     end
 
-    @blog = Blog.find(params[:blog_id])
-    @blog.blog_comments.create(:user_id => current_user.id, :content => params[:comment])
+    @comment = Comment.new(comment_params)
+    @comment.user_id = current_user.id
+    @comment.save
+    @blog = @comment.parent
 
     #UpdateHistory
-    uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT, :assetable_id => @blog.id).first
-    if uh
-      uh.update_attributes(:updated_at => Time.now)
+    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT, :content_id => @blog.id).first
+    if action
+      action.update_attributes(:updated_at => Time.now)
     else
       @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT)
     end
 
+    # PCの場合はAjaxなのでcreate.jsが呼ばれる
     if request.mobile?
-      render :action => :show_mobile, :layout => "mobile"
+      redirect_to @blog, notice: 'コメントしました。'
     end
   end
 
   def destroy_comment
-    @bcom = BlogComment.find(params[:id])
-    blog = @bcom.blog
+    @bcom = Comment.find(params[:id])
+    @blog = @bcom.parent
     @bcom.destroy
 
-    if request.mobile?
-      redirect_to :action => :show_mobile, :id => blog.id, :layout => "mobile"
-    else
-      redirect_to :action => :show, :id => blog.id
-    end
+    render "create_comment.js"
   end
 
   def destroy_comment_confirm_mobile
     @content_title = "削除の確認"
-    @bcom = BlogComment.find(params[:id])
+    @bcom = Comment.find(params[:id])
     render :action => :destroy_comment_confirm_mobile, :layout => "mobile"
   end
 
@@ -238,6 +237,10 @@ class BlogsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def blog_params
     params.require(:blog).permit(:title, :content, :user_id)
+  end
+
+  def comment_params
+    params.require(:comment).permit(:user_id, :parent_id, :parent_type, :content)
   end
 
 end
