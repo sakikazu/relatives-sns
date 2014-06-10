@@ -11,7 +11,7 @@
 <ul class="children">
   <% #childrenはつぶやき時間昇順で表示する -%>
 
-  <% initial_visible_count = 5 -%>
+  <% initial_visible_count = 3 -%>
   <% count = mutter_row.children.size -%>
   <% if count > initial_visible_count -%>
     <div class="btn btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i>全部見る<i class="icon-plus"></i></div>
@@ -36,10 +36,10 @@
 
 
 <!-- レス用モーダル -->
-<div class="modal" id="myModal<%= mutter_row.id %>" style="display:none">
+<div class="modal modal-mutter-reply" id="myModal<%= mutter_row.id %>" style="display:none">
   <% @mutter ||= Mutter.new(user_id: current_user.id) -%>
   <% @mutter.reply_id = mutter_row.id -%>
-  <%= form_for @mutter, html: {multi_part: true} do |f| %>
+  <%= form_for @mutter, html: {multi_part: true}, remote: true do |f| %>
     <div class="modal-header">
       <a class="close" data-dismiss="modal">×</a>
       <h3>返信</h3>

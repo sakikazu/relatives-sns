@@ -412,6 +412,7 @@ DEPENDENCIES
   rails_admin
   rails_autolink
   rails_config
+  remotipart (~> 1.2)
   rmagick
   rr
   rspec-rails

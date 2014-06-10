@@ -44,18 +44,17 @@
 
   // todo 整理したい
 jQuery(document).ready(function(){
-  //イイネしたメンバーをクリックで表示する
-  nice_member = (function(){
-    $('.nice_members').each(function(){
-      $(this).css({'cursor' : 'pointer'});
-      $(this).tooltip({
-        title: $(this).attr('nice_members'),
-        placement: 'top',
-        trigger: 'click',
-        delay: 0,
-      });
-    });
-  });
+
+  // Ajax用エラーハンドリング
+  //$("form#new_mutter:first").bind('ajax:error', function(XMLHttpRequest, textStatus, errorThrown) {
+  //  console.log("XMLHttpRequest :");
+  //  console.log(XMLHttpRequest);
+  //  console.log("textStatus:");
+  //  console.log(textStatus);
+  //  console.log("errorThrown : ");
+  //  console.log(errorThrown);
+  //});
+
 
   //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
   $(".colorbox").colorbox();

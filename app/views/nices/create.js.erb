@@ -1,3 +1,7 @@
 $("<%= @update_area %>").html(
-  '<%= escape_javascript(nice_field(@content, @content_type, @update_area)) %>'
+  "<%= escape_javascript(nice_field(@content, @content_type, @update_area)) %>"
 );
+
+$(function(){
+  nice_member();
+});

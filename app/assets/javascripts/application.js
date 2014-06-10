@@ -28,8 +28,28 @@
 //= //require desktopify
 //= require bgstretcher
 //= require_tree ./jqplot
+//= require jquery.remotipart
 
 
+$(function(){
+  //イイネしたメンバーをクリックで表示する
+  nice_member = (function(){
+    $('.nice_members').each(function(){
+      $(this).css({'cursor' : 'pointer'});
+      $(this).tooltip({
+        title: $(this).attr('nice_members'),
+        placement: 'top',
+        trigger: 'click',
+        delay: 0,
+      });
+    });
+  });
+  nice_member();
+
+});
+
+
+// todo 下記jQueryの構文って、ライブラリ作る用ってことだったけ？readyの構文は上のやつだしな
 // メソッドが多くなってきたら別ファイルに切り出す
 (function($){
 

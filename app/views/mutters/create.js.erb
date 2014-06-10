@@ -1,0 +1,19 @@
+<% if @status == "error" %>
+  alert('つぶやきを入力しないと投稿できません');
+  return
+
+<% else %>
+$('.modal-mutter-reply').modal('hide');
+$('#mutter_content').val('');
+$("#mutter_image").siblings().val('')
+$("#create_notification").show().fadeOut(3000);
+
+$('#mutter_data').html(
+  "<%= escape_javascript(render :partial => 'list', :locals => {mutters: @mutters, mutter: @mutter}) %>"
+);
+
+$(function(){
+  $(".colorbox").colorbox();
+});
+
+<% end %>

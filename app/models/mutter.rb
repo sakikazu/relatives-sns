@@ -45,7 +45,7 @@ class Mutter < ActiveRecord::Base
   # 二度目のリクエストではキャッシュされるらしく、それぞれに指定しなかった時と同じ速度になる。
   # 2014/06/05、とりあえず、つぶやきにひもづけるのはphotoとmovieのみ
   # scope :includes_all, lambda { includes(:photo, :movie, :album, :blog, :board, {:user => :user_ext}, {:nices => {:user => :user_ext}}, {children: [:photo, :movie, :album, :blog, :board, {nices: {user: :user_ext}}]}) }
-  scope :includes_all, lambda { includes(:photo, :movie, {:user => :user_ext}, {:nices => {:user => :user_ext}}, {children: [:photo, :movie, {nices: {user: :user_ext}}]}) }
+  scope :includes_all, lambda { includes(:photo, :movie, {:user => :user_ext}, {nices: {user: :user_ext}}, {children: [{user: :user_ext}, :photo, :movie, {nices: {user: :user_ext}}]}) }
 
   scope :parents_mod, lambda { where("mutters.reply_id IS NULL") } #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
   scope :id_desc, lambda { order("mutters.id DESC") }

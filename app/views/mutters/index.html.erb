@@ -47,31 +47,6 @@ $(document).ready(function(){
 //  });
 
 
-  // submit押下時、ファイルが添付されてなかったら、AjaxでPOSTする
-  $m_form = $('form#new_mutter:first');
-  $m_form.submit(function(event) {
-    if($('#mutter_content', $m_form).val() == "") {
-      event.preventDefault();
-      alert('つぶやきを入力しないと投稿できません');
-      return false; //preventDefault()してても、下記処理に入らないようにreturnしておく
-    }
-    if($(':file:first', $m_form).val() == "") {
-      event.preventDefault();
-      $.post(
-        '/mutters',
-        $('input, textarea', $m_form).serialize(),
-        function(data) {
-          $('#mutter_content', $m_form).val('');
-          $('#mutter_data').html(data);
-          $(document).ready(function(){
-            $(".colorbox").colorbox();
-            $("#create_notification").show().fadeOut(3000);
-          })
-        }
-      );
-    }
-  });
-
   // つぶやき表示更新
 <% if Rails.env == "production" %>
   setInterval(function(){
@@ -182,7 +157,7 @@ $(document).on('click', 'a.js_search_mutter', function() {
 
    <div id="mutter" class="clearfix">
     <div id="form" class="clearfix well well2">
-      <%= simple_form_for @mutter, :html => {:multipart => true} do |f| -%>
+      <%= simple_form_for @mutter, html: {multipart: true}, remote: true do |f| -%>
         <div class="span5">
         <%= f.text_area :content, rows: 3, class: "span5", placeholder: "つぶやき" %><br>
         <%= f.hidden_field :user_id %>

@@ -230,6 +230,12 @@ class MuttersController < ApplicationController
   end
 
   def create
+    if params[:mutter][:content].blank?
+      @status = "error"
+      render 'create.js'
+      return
+    end
+
     @mutter = Mutter.new(mutter_params)
     ua = request.env["HTTP_USER_AGENT"]
     @mutter.ua = ua
@@ -242,8 +248,8 @@ class MuttersController < ApplicationController
       @leave_me = true
     end
 
-    # mutterにファイルが添付されなかったら、AjaxでPOSTされてくる
-    if request.xhr?
+    # memo remotipart_submittedは、ファイルなしのAjaxポストではtrueにならないので、xhrの判定も必要
+    if request.xhr? or remotipart_submitted?
       @mutter.save
       @mutters = Mutter.includes_all.parents_mod.page(params[:page])
       # todo こういうところとかリファクタリングしたい〜〜。allメソッドやsearchとの関連をまとめたい
@@ -253,7 +259,8 @@ class MuttersController < ApplicationController
       # 新規post用に入れ替える
       @created_mutter = @mutter
       @mutter = Mutter.new(:user_id => current_user.id)
-      render :partial => "list"
+      render 'create.js'
+      return
     else
       respond_to do |format|
         if @mutter.save
