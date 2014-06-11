@@ -27,8 +27,9 @@ class AlbumsController < ApplicationController
 
   def top
     @page_title = "アルバムトップ"
-    @albums = Kaminari.paginate_array(Album.sort_upload).page(params[:page])
-    @movies = Movie.order("id DESC").limit(8)
+    # @albums = Kaminari.paginate_array(Album.sort_upload).page(params[:page]).per(10)
+    @albums = Album.sort_upload[0..9]
+    @movies = Movie.order("id DESC").limit(10)
 
     respond_to do |format|
       format.html # index.html.erb

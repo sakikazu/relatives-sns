@@ -55,6 +55,7 @@ jQuery(document).ready(function(){
   //  console.log(errorThrown);
   //});
 
+  myThumbnail();
 
   //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
   $(".colorbox").colorbox();
@@ -175,13 +176,16 @@ jQuery(document).ready(function(){
     //次ページリンクのセレクタ(Default: 'a[rel=next]')
     //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
     load: function(current, next) {
+      var autopager_area = this;
       var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
       //thisは読み込んだコンテンツ要素を指す
       $(this).before(pageBreak);
-      //読み込んだページに再度colorboxを適用させる
-      $(".colorbox").colorbox();
-      colorbox_slideshow();
-      nice_member();
+      $(function() {
+        $(".colorbox").colorbox();
+        colorbox_slideshow();
+        nice_member();
+        myThumbnail(autopager_area);
+      })
       $("#autopager_loading").hide();
     },
     start: function() {

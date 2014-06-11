@@ -8,7 +8,7 @@ class Movie < ActiveRecord::Base
   has_many :update_histories, :as => :content, :dependent => :destroy
 
   # default_scope {order('movies.id DESC')}
-  scope :includes_all, lambda {includes(:comments, :nices)}
+  scope :includes_all, lambda {includes({comments: {user: :user_ext}}, {user: :user_ext}, {nices: {user: :user_ext}})}
 
   attr_accessor :ffmp_obj, :is_update_thumb
 

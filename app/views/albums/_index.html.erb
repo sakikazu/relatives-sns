@@ -1,0 +1,31 @@
+<% if albums.present? %>
+<div id="medias" class="clearfix">
+  <% albums.each do |album| -%>
+    <div class="thumb">
+      <div class="title">
+        <h4><span class="label label-danger">アルバム</span> <%= link_to album.title, album %></h4>
+        <div class="extra">
+          <i class='icon icon-comment'></i> <%= album.comments.size %>
+        </div>
+      </div>
+      <div class="image jthumbnails"><%= link_to(image_tag(album.thumb.image(:thumb)), album) if album.thumb.present? %></div>
+      <div class="info">
+        <div>
+          作成者：<%= album.user.try(:dispname) %><br />
+          作成：<%= l album.created_at if album.created_at %><br />
+          最新アップ：<%= l album.sort_at if album.sort_at %>
+        </div>
+      </div>
+
+      <% if editable(current_user, album.user) -%>
+      <div class="actions">
+        <%= link_to '編集', edit_album_path(album) %>
+        <%= link_to '削除', album, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
+      </div>
+      <% end -%>
+
+    </div>
+<% end %>
+</div>
+<% end %>
+

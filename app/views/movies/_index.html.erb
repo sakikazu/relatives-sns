@@ -1,15 +1,19 @@
 <% if movies.present? %>
-<div id="movies" class="clearfix">
+<div id="medias" class="clearfix">
   <% movies.each do |movie| -%>
     <div class="thumb">
       <div class="title">
-        <%= link_to "#{movie.title} (コメント数：#{movie.comments.size})", movie %>
-        <br><%= nice_field_disp_only(movie) %>
+        <h4><span class="label label-success">動画</span> <%= link_to movie.title, movie %></h4>
+        <div class="extra">
+          <i class='icon icon-comment'></i> <%= movie.comments.size %>
+          <br><%= nice_field_disp_only(movie) %>
+        </div>
       </div>
-      <div class="image"><%= link_to image_tag(movie.thumb(:thumb)), movie_path(movie) %></div>
+      <div class="image jthumbnails"><%= link_to image_tag(movie.thumb(:thumb)), movie_path(movie) %></div>
       <div class="info">
         <div>
-          <%= "作成者：#{movie.user.dispname}" %><br><%= "作成日時：#{movie.created_at.to_s(:short2)}" %>
+          <%= "投稿者：#{movie.user.dispname}" %><br>
+          <%= "投稿：#{movie.created_at.to_s(:short2)}" %>
         </div>
         <% if movie.comments.last.try(:created_at) %>
         <div>

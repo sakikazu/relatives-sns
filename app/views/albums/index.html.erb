@@ -31,23 +31,7 @@
 
     <div id="album">
     <%= paginate @albums, :window => 2, :outer_window => 2 %><br>
-    <% @albums.each do |album| %>
-    <div class="once_photo">
-      <div class="bar"><%= link_to album.title, album %></div>
-      <div class="photo"><%= link_to(image_tag(album.thumb.image(:thumb)), album) if album.thumb.present? %></div>
-      <div class="info">
-        作成者：<%= album.user.try(:dispname) %><br />
-        作成日時：<%= l album.created_at if album.created_at %><br />
-        最新アップ日時：<%= l album.sort_at if album.sort_at %>
-        <br />
-        <% if editable(current_user, album.user) -%>
-          <%= link_to '編集', edit_album_path(album) %> | 
-          <%= link_to '削除', album, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
-        <% end -%>
-      </div>
-    </div>
-    <% end %>
-    <div class="clear"></div>
+    <%= render 'albums/index', albums: @albums %>
     <%= paginate @albums, :window => 2, :outer_window => 2 %><br>
     </div>
 </div>

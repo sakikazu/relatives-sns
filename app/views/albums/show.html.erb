@@ -184,34 +184,8 @@ $(document).ready(function() {
 
 <%= render 'movies/index', movies: @medias.select{|n| n.class == Movie} %>
 
-<div id="photo" class="clearfix">
-  <% @medias.select{|n| n.class == Photo}.each do |p| -%>
-  <div class="once_photo">
-    <div class="bar">
-      <%= "#{p.title} (コメント数：#{p.comments.size}）" %>&nbsp;<%= nice_field_disp_only(p) %>
-    </div>
-    <div class="photo">
-      <% if request.smart_phone? -%>
-        <%= link_to(image_tag(p.image(:thumb)), album_photo_path(@album, p)) if p.image? %>
-      <% else -%>
-        <%= link_to(image_tag(p.image(:thumb)), slideshow_album_photo_path(@album, p), {rel: "colorbox"}) if p.image? %>
-      <% end -%>
-    </div>
-    <div class="info">
-      投稿者：<%= p.user.try(:dispname) %><br />
-      投稿日時：<%= l p.created_at if p.created_at %><br />
-      撮影日時：<%= l p.exif_at if p.exif_at %><br />
-      最新コメント日時：<%= l p.last_comment_at if p.last_comment_at %><br />
+<%= render 'photos/index', album: @album, photos: @medias.select{|n| n.class == Photo} %>
 
-      <%= link_to '別ページで見る', album_photo_path(@album, p) %>
-      <% if editable(current_user, p.user) -%>
-        | <%= link_to '編集', edit_album_photo_path(@album, p) %>
-      | <%= link_to '削除', album_photo_path(@album, p), :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
-      <% end -%>
-    </div>
-  </div>
-<% end -%>
-</div>
 <%= paginate @medias, :window => 2, :outer_window => 2 %>
 </div> <!-- autopagerize_page_element -->
 

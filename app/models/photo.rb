@@ -8,7 +8,7 @@ class Photo < ActiveRecord::Base
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  scope :includes_all, lambda {includes(:comments, :nices)}
+  scope :includes_all, lambda {includes({comments: {user: :user_ext}}, {user: :user_ext}, {nices: {user: :user_ext}})}
 
   content_name = "album"
   has_attached_file :image,
@@ -18,7 +18,8 @@ class Photo < ActiveRecord::Base
     },
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
     :url => "/upload/#{content_name}/:album/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:basename.:extension"
+    :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:basename.:extension",
+    default_url: "/images/missing.gif"
 
   validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
 

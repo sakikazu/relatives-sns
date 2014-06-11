@@ -1,0 +1,40 @@
+<% if photos.present? %>
+
+<div id="medias" class="clearfix">
+  <% photos.each do |photo| -%>
+    <div class="thumb">
+      <div class="title">
+        <h4><span class="label label-info">写真</span> <%= link_to photo.title, album_photo_path(album, photo) %></h4>
+        <div class="extra">
+          <i class='icon icon-comment'></i> <%= photo.comments.size %>
+          <br><%= nice_field_disp_only(photo) %>
+        </div>
+      </div>
+      <div class="image jthumbnails">
+      <% if request.smart_phone? -%>
+        <%= link_to(image_tag(photo.image(:thumb)), album_photo_path(album, photo)) if photo.image? %>
+      <% else -%>
+        <%= link_to(image_tag(photo.image(:thumb)), slideshow_album_photo_path(album, photo), {rel: "colorbox"}) if photo.image? %>
+      <% end -%>
+      </div>
+      <div class="info">
+        <div>
+          投稿者：<%= photo.user.try(:dispname) %><br />
+          投稿：<%= l photo.created_at if photo.created_at %><br />
+          撮影：<%= l photo.exif_at if photo.exif_at %><br />
+          最新コメント：<%= l photo.last_comment_at if photo.last_comment_at %><br />
+        </div>
+      </div>
+
+      <div class="actions">
+        <%= link_to '別ページで見る', album_photo_path(album, photo) %>
+        <% if editable(current_user, photo.user) -%>
+          | <%= link_to '編集', edit_album_photo_path(album, photo) %>
+        | <%= link_to '削除', album_photo_path(album, photo), :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
+        <% end -%>
+      </div>
+    </div>
+<% end %>
+</div>
+
+<% end %>

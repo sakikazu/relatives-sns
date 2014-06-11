@@ -668,3 +668,77 @@ h2.normal3 {
   bottom: -20px;
   right: 0;
 }
+
+
+#medias {
+  margin: 0px 0px 50px;
+}
+
+#medias>.thumb {
+  width: 200px;
+  margin-left: 23px;
+  margin-top: 20px;
+  margin-bottom: 35px;
+  float: left;
+  position:relative;
+  height: 230px;
+}
+#medias>.thumb .title {
+  /* background-color: #fff; */
+  text-align:center;
+  font-weight:bold;
+  height: 35px;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+}
+#medias>.thumb .title h4 {
+  float:left;
+  width: 160px;
+  margin: 0;
+  font-size: 98%;
+  text-align: left;
+  padding: 5px;
+  box-sizing: border-box;
+}
+#medias>.thumb .title h4 a {
+  text-shadow: 1px 1px 0px white, 2px 2px 1px #B0D3FF;
+}
+#medias>.thumb .title .extra {
+  float:left;
+  width: 40px;
+}
+#medias>.thumb .image {
+  box-sizing: border-box;
+  position: absolute;
+  top: 35px;
+  z-index: 0;
+}
+#medias>.thumb .info {
+  position:absolute;
+  top: 152px;
+  left: 0;
+  height: 85px;
+  opacity: 0.6;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  font-size: 87%;
+  background-color: black;
+  color: white;
+  text-align: left;
+  /* margin: 10px; */
+}
+
+#medias>.thumb .actions {
+  position:absolute;
+  top: 240px;
+  right: 0;
+}
+
+.myPic
+{
+	/* margin:10px; */
+	/* border-radius:10px; */
+	border:1px solid #ccc;
+}

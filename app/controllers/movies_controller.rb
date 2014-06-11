@@ -9,9 +9,9 @@ class MoviesController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
-      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).order('id DESC').page(params[:page]).per(10)
+      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).order('id DESC').page(params[:page]).per(20)
     else
-      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).order('id DESC').page(params[:page]).per(10)
+      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).order('id DESC').page(params[:page]).per(20)
     end
 
     respond_to do |format|

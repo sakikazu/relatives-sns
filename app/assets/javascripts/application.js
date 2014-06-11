@@ -29,7 +29,17 @@
 //= require bgstretcher
 //= require_tree ./jqplot
 //= require jquery.remotipart
+//= require jquery.MyThumbnail.js
 
+myThumbnail = function(target_area) {
+  if (!target_area) {
+    target_area = $('body');
+  }
+  $(".jthumbnails img", target_area).MyThumbnail({
+    thumbWidth:  200,
+    thumbHeight: 200
+  });
+}
 
 $(function(){
   //イイネしたメンバーをクリックで表示する
@@ -45,6 +55,7 @@ $(function(){
     });
   });
   nice_member();
+
 
 });
 
