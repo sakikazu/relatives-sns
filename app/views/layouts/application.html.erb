@@ -218,7 +218,8 @@ function toggleComments(obj) {
 // 表示したらしっぱなしパターン
 function showComments(obj) {
   $(obj).siblings(":hidden").show();
-  $(obj).html('全表示');
+  //$(obj).html('全表示');
+  $(obj).remove();
 }
 
 </script>

@@ -1,7 +1,7 @@
 <div class="once_content">
   <div class="title for_index">
     <%= "#{@photo.title} " %>
-    <%= link_to "(コメント数：#{@photo.comments.select{|n| n.id.present?}.size}）", "#comment_area" %>
+    <%= link_to "(コメント数：#{@photo.mutter_comments.select{|n| n.id.present?}.size}）", "#comment_area" %>
   </div>
   <div class="info">
     投稿者：<%= @photo.user.try(:dispname) %> | 

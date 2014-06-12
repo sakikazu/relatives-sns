@@ -25,7 +25,6 @@ class MoviesController < ApplicationController
   def show
     #更新情報一括閲覧用
     @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-    @new_comment = @movie.comments.build
 
     respond_to do |format|
       format.html # show.html.erb
@@ -102,15 +101,15 @@ class MoviesController < ApplicationController
   end
 
   def create_comment
-    if params[:comment][:content].blank?
+    if params[:content].blank?
       render :text => "", :status => 500
       return
     end
 
-    @comment = Comment.new(comment_params)
-    @comment.user_id = current_user.id
-    @comment.save
-    @movie = @comment.parent
+    params.merge!(Mutter.extra_params(current_user, request))
+    @movie = Movie.find(params[:id])
+
+    @movie.create_comment_by_mutter(comment_params, current_user.id)
 
     #UpdateHistory
     uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :content_id => @movie.id).first
@@ -122,9 +121,8 @@ class MoviesController < ApplicationController
   end
 
   def destroy_comment
-    @comment = Comment.find(params[:id])
-    @movie = @comment.parent
-    @comment.destroy
+    Mutter.find(params[:mutter_id]).destroy
+    @movie = Movie.find(params[:id])
     render 'create_comment.js'
   end
 
@@ -145,7 +143,7 @@ class MoviesController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:user_id, :parent_id, :parent_type, :content)
+    params.permit(:content, :user_id, :ua, :for_sort_at)
   end
 
 end

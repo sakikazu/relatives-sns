@@ -3,7 +3,7 @@
   <% movies.each do |movie| -%>
     <div class="thumb">
       <div class="title">
-        <h4><span class="label label-success">動画</span> <%= link_to movie.title, movie %></h4>
+        <h4><span class="label label-success"><i class="icon-facetime-video"></i></span> <%= link_to movie.title, movie %></h4>
         <div class="extra">
           <i class='icon icon-comment'></i> <%= movie.comments.size %>
           <br><%= nice_field_disp_only(movie) %>

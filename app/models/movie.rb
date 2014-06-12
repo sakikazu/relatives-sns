@@ -1,14 +1,15 @@
 class Movie < ActiveRecord::Base
+  include Utility
+
   acts_as_paranoid
 
   belongs_to :user
   belongs_to :mutter
-  has_many :comments, as: :parent
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
 
   # default_scope {order('movies.id DESC')}
-  scope :includes_all, lambda {includes({comments: {user: :user_ext}}, {user: :user_ext}, {nices: {user: :user_ext}})}
+  scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
 
   attr_accessor :ffmp_obj, :is_update_thumb
 
@@ -114,6 +115,15 @@ class Movie < ActiveRecord::Base
       thumb = File.open(tmp_path, "r")
       update(thumb: thumb)
     end
+  end
+
+  def has_parent_mutter?
+    self.mutter.present?
+  end
+
+  def comments
+    return [] unless self.has_parent_mutter?
+    self.mutter.children.includes({user: :user_ext}).reorder("id ASC")
   end
 
 end

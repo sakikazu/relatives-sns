@@ -3,7 +3,7 @@
   <% albums.each do |album| -%>
     <div class="thumb">
       <div class="title">
-        <h4><span class="label label-danger">アルバム</span> <%= link_to album.title, album %></h4>
+        <h4><span class="label label-danger"><i class="icon-th"></i> </span> <%= link_to album.title, album %></h4>
         <div class="extra">
           <i class='icon icon-comment'></i> <%= album.comments.size %>
         </div>

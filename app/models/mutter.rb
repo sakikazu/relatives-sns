@@ -22,7 +22,7 @@ class Mutter < ActiveRecord::Base
   before_save :trans_space
   after_save :save_related_media
   after_create :update_sort_at
-  validates_presence_of :content
+  # validates_presence_of :content
   attr_accessor :search_word, :action_flg, :year, :month, :image, :is_save_related_media
 
   @@imap = nil
@@ -47,7 +47,7 @@ class Mutter < ActiveRecord::Base
   # scope :includes_all, lambda { includes(:photo, :movie, :album, :blog, :board, {:user => :user_ext}, {:nices => {:user => :user_ext}}, {children: [:photo, :movie, :album, :blog, :board, {nices: {user: :user_ext}}]}) }
   scope :includes_all, lambda { includes(:photo, :movie, {:user => :user_ext}, {nices: {user: :user_ext}}, {children: [{user: :user_ext}, :photo, :movie, {nices: {user: :user_ext}}]}) }
 
-  scope :parents_mod, lambda { where("mutters.reply_id IS NULL") } #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
+  scope :parents_mod, lambda { where("mutters.reply_id IS NULL").where(invisible_in_timeline: false) } #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
   scope :id_desc, lambda { order("mutters.id DESC") }
   scope :id_asc, lambda { order("mutters.id ASC") }
 
@@ -56,7 +56,7 @@ class Mutter < ActiveRecord::Base
 
   def trans_space
     #auto_linkでURLの後に全角スペースが入るとリンクが延長されてしまうため、半角スペースに変換
-    self.content.gsub!("　", " ")
+    self.content.gsub!("　", " ") if self.content.present?
   end
 
   def save_related_media
@@ -89,8 +89,8 @@ class Mutter < ActiveRecord::Base
 
   # ソート用の日時カラムを更新。レスされた親のも更新する。
   def update_sort_at
-    # self.for_sort_at = Time.now
-    self.update_attributes(for_sort_at: Time.now)
+    # memo 2014/06/12、Mutter.create時にfor_sort_atも設定するようにしたので、ここでは、子Mutterの場合だけ、その親のものを更新するようにした
+    # self.update_attributes(for_sort_at: Time.now)
     if self.parent.present?
       self.parent.update_attributes(for_sort_at: Time.now)
     end
@@ -208,6 +208,19 @@ class Mutter < ActiveRecord::Base
 
    def child?
      self.reply_id.present?
+   end
+
+   def self.create_with_invisible(current_user_id)
+      self.create(user_id: current_user_id, invisible_in_timeline: true)
+   end
+
+   def self.extra_params(current_user, request = nil, celebration_id = nil)
+     params = {}
+     params[:user_id] = current_user.id
+     params[:ua] = request.env["HTTP_USER_AGENT"] if request.present?
+     params[:celebration_id] = celebration_id if celebration_id.present?
+     params[:for_sort_at] = Time.now
+     return params
    end
 
 end

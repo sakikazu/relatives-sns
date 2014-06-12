@@ -14,7 +14,7 @@
   <% initial_visible_count = 3 -%>
   <% count = mutter_row.children.size -%>
   <% if count > initial_visible_count -%>
-    <div class="btn btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i>全部見る<i class="icon-plus"></i></div>
+    <div class="btn btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i> 全部見る <i class="icon-plus"></i></div>
   <% end -%>
   <% mutter_row.children.reverse.each_with_index do |child, idx| -%>
     <% # 最後のコメントは常時表示させておく。中間のコメントはボタンによってトグル表示 -%>

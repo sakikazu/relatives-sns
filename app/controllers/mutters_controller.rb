@@ -236,9 +236,8 @@ class MuttersController < ApplicationController
       return
     end
 
+    params[:mutter].merge!(Mutter.extra_params(current_user, request))
     @mutter = Mutter.new(mutter_params)
-    ua = request.env["HTTP_USER_AGENT"]
-    @mutter.ua = ua
 
     if @mutter.leave_me.blank?
       leave_me_option = {}
@@ -319,9 +318,8 @@ class MuttersController < ApplicationController
     if @celebration.blank?
       @celebration = Celebration.create(celebration_params)
     end
-    params[:mutter][:celebration_id] = @celebration.id
-    params[:mutter][:ua] = request.env["HTTP_USER_AGENT"]
 
+    params[:mutter].merge!(Mutter.extra_params(current_user, request, @celebration.id))
     Mutter.create(mutter_params)
     redirect_to({:action => :index}, :notice => 'お祝いをしました。「お祝いを見る」から確認できます。')
   end

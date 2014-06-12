@@ -4,9 +4,9 @@
   <% photos.each do |photo| -%>
     <div class="thumb">
       <div class="title">
-        <h4><span class="label label-info">写真</span> <%= link_to photo.title, album_photo_path(album, photo) %></h4>
+        <h4><span class="label label-info"><i class="icon-camera"></i></span> <%= link_to photo.title, album_photo_path(album, photo) %></h4>
         <div class="extra">
-          <i class='icon icon-comment'></i> <%= photo.comments.size %>
+          <i class='icon icon-comment'></i> <%= photo.mutter_comments.size %>
           <br><%= nice_field_disp_only(photo) %>
         </div>
       </div>

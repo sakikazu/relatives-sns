@@ -1,14 +1,15 @@
 class Photo < ActiveRecord::Base
+  include Utility
+
   acts_as_paranoid
 
   belongs_to :album
   belongs_to :user
   belongs_to :mutter
-  has_many :comments, as: :parent
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  scope :includes_all, lambda {includes({comments: {user: :user_ext}}, {user: :user_ext}, {nices: {user: :user_ext}})}
+  scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
 
   content_name = "album"
   has_attached_file :image,

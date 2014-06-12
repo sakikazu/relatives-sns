@@ -1,13 +1,13 @@
 <%= link_to '新規作成', new_album_path, class: "btn btn-info" %>
 
 <div class="page-header">
-  <h3>最近更新されたアルバム<small><%= link_to 'アルバム一覧', albums_path %></small></h3>
+  <h3><i class="icon-th"></i> 最近更新されたアルバム<small><%= link_to 'アルバム一覧', albums_path %></small></h3>
 </div>
 <%= render 'albums/index', albums: @albums %>
 
 
 <div class="page-header">
-  <h3>最近アップされた動画<small><%= link_to '動画一覧', movies_albums_path %></small></h3>
+  <h3><i class="icon-facetime-video"></i> 最近アップされた動画<small><%= link_to '動画一覧', movies_albums_path %></small></h3>
 </div>
 
 <%= render 'movies/index', movies: @movies %>

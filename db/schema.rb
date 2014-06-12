@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140608011039) do
+ActiveRecord::Schema.define(version: 20140612011847) do
 
   create_table "admin_users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -200,9 +200,10 @@ ActiveRecord::Schema.define(version: 20140608011039) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "deleted_at"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.boolean  "leave_me",           default: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.boolean  "leave_me",              default: false
+    t.boolean  "invisible_in_timeline", default: false
   end
 
   create_table "nices", force: true do |t|
