@@ -85,24 +85,27 @@ class NicesController < ApplicationController
 
   def create
     @content_type = params[:type]
+    content_id = params[:content_id].to_i
     case @content_type
     when "mutter"
-      @content = Mutter.find(params[:content_id].to_i)
+      @content = Mutter.find(content_id)
     when "photo"
-      @content = Photo.find(params[:content_id].to_i)
+      @content = Photo.find(content_id)
     when "movie"
-      @content = Movie.find(params[:content_id].to_i)
+      @content = Movie.find(content_id)
     when "blog"
-      @content = Blog.find(params[:content_id].to_i)
+      @content = Blog.find(content_id)
     end
     @update_area = params[:area]
 
-    nice = Nice.new(:user_id => current_user.id, :niced_user_id => @content.user_id)
+    nice_params = {:user_id => current_user.id, :niced_user_id => @content.user_id}
+    nice = Nice.new(nice_params)
 
     # 一つのコンテンツに評価できるのは、ユーザー一人につき一回のみ
     exist_check = Nice.where(:user_id => current_user.id, :asset_id => @content.id, :asset_type => @content.class.name)
     if exist_check.blank?
       @content.nices << nice
+      create_related_content_nice(@content, nice_params)
     end
   end
 
@@ -110,9 +113,37 @@ class NicesController < ApplicationController
     @content_type = params[:type]
     @update_area = params[:area]
     nice = Nice.find(params[:id])
+    return if nice.blank?
     @content = nice.asset
     nice.destroy
+    destroy_related_content_nice(@content)
     render "create.js"
+  end
+
+
+private
+
+  def create_related_content_nice(org_content, nice_params)
+    nice = Nice.new(nice_params)
+    content = related_content(org_content)
+    content.nices << nice if content.present?
+  end
+
+  def destroy_related_content_nice(org_content)
+    content = related_content(org_content)
+    content.nices.where(user_id: current_user.id).destroy_all
+  end
+
+  def related_content(org_content)
+    if org_content.class == Mutter and org_content.photo.present?
+      org_content.photo
+    elsif org_content.class == Mutter and org_content.movie.present?
+      org_content.movie
+    elsif [Movie, Photo].include?(org_content.class) and org_content.mutter.present?
+      org_content.mutter
+    else
+      nil
+    end
   end
 
 end
