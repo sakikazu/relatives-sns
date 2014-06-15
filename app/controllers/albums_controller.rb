@@ -217,13 +217,7 @@ class AlbumsController < ApplicationController
     @comment.save
     @album = @comment.parent
 
-    #UpdateHistory
-    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT, :content_id => @album.id).first
-    if action
-      action.update_attributes(:updated_at => Time.now)
-    else
-      @album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_COMMENT)
-    end
+    UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUM_COMMENT, @album)
   end
 
   def destroy_comment

@@ -187,13 +187,7 @@ class BlogsController < ApplicationController
     @comment.save
     @blog = @comment.parent
 
-    #UpdateHistory
-    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT, :content_id => @blog.id).first
-    if action
-      action.update_attributes(:updated_at => Time.now)
-    else
-      @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_COMMENT)
-    end
+    UpdateHistory.create_or_update(current_user.id, UpdateHistory::BLOG_COMMENT, @blog)
 
     # PCの場合はAjaxなのでcreate.jsが呼ばれる
     if request.mobile?

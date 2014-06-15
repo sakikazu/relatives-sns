@@ -111,13 +111,7 @@ class MoviesController < ApplicationController
 
     @movie.create_comment_by_mutter(comment_params, current_user.id)
 
-    #UpdateHistory
-    uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT, :content_id => @movie.id).first
-    if uh
-      uh.update_attributes(:updated_at => Time.now)
-    else
-      @movie.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_COMMENT)
-    end
+    UpdateHistory.create_or_update(current_user.id, UpdateHistory::MOVIE_COMMENT, @movie)
   end
 
   def destroy_comment

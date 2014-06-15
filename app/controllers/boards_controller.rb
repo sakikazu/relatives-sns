@@ -127,13 +127,7 @@ class BoardsController < ApplicationController
     @board = Board.find(params[:board_id])
     @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
 
-    #UpdateHistory
-    uh = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id).first
-    if uh
-      uh.update_attributes(:updated_at => Time.now)
-    else
-      @board.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT)
-    end
+    UpdateHistory.create_or_update(current_user.id, UpdateHistory::BOARD_COMMENT, @board)
 
     flash[:notice] = "コメントを投稿しました"
     redirect_to :action => :show, :id => @board.id
@@ -143,13 +137,7 @@ class BoardsController < ApplicationController
     @board = Board.find(params[:board_id])
     @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
 
-    #UpdateHistory
-    uh = UpdateHistory.find(:first, :conditions => {:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT, :content_id => @board.id})
-    if uh
-      uh.update_attributes(:updated_at => Time.now)
-    else
-      @board.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BOARD_COMMENT)
-    end
+    UpdateHistory.create_or_update(current_user.id, UpdateHistory::BOARD_COMMENT, @board)
 
     redirect_to({:action => :show_mobile, :id => @board.id}, :notice => "コメントを投稿しました")
   end

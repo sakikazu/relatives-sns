@@ -65,13 +65,7 @@ class PhotosController < ApplicationController
     @photo = Photo.new(photo_params)
 
 # ここは認証を解除しているからcurrent_userは使えないので、@photo.userを使う
-    #UpdateHistory
-    action = UpdateHistory.where(:user_id => @photo.user.id, :action_type => UpdateHistory::ALBUMPHOTO_CREATE, :content_id => @photo.album.id).first
-    if action
-      action.update_attributes(:updated_at => Time.now)
-    else
-      @photo.album.update_histories << UpdateHistory.create(:user_id => @photo.user.id, :action_type => UpdateHistory::ALBUMPHOTO_CREATE)
-    end
+    UpdateHistory.create_or_update(@photo.user.id, UpdateHistory::ALBUMPHOTO_CREATE, @photo.album)
 
     # memo Ajaxでのpostはsaveのエラーが画面には表示されないので、自分で出力してあげる
     # あと、pメソッドでログに出力されないため、loggerを使用する
@@ -128,22 +122,10 @@ class PhotosController < ApplicationController
     @photo.create_comment_by_mutter(comment_params, current_user.id)
     @photo.update_attributes(:last_comment_at => Time.now)
 
-    #UpdateHistory(mutters#indexの更新一覧表示用。たぶん)
-    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT, :content_id => @photo.album.id).first
-    if action
-      action.update_attributes(:updated_at => Time.now)
-    else
-      @photo.album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT)
-    end
+    UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUMPHOTO_COMMENT, @photo.album)
 
-    #UpdateHistory(更新内容一括表示機能のための更新データ)
-    action = UpdateHistory.where(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO, :content_id => @photo.id).first
-    if action
-      action.update_attributes(:updated_at => Time.now)
-    else
-      @photo.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO)
-    end
-
+    # 「更新情報一括閲覧」用
+    UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO, @photo)
    end
 
   def destroy_comment

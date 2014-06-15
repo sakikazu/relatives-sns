@@ -17,7 +17,7 @@ class UpdateHistory < ActiveRecord::Base
 
   scope :sort_updated, lambda{ order('updated_at DESC') }
 
-  # ALBUMPHOTO_COMMENT_FOR_PHOTOのものは、mutters#indexの更新情報一覧にはアルバムへの更新(ALBUMPHOTO_COMMENT)として出されているので、出さないようにする
+  # ALBUMPHOTO_COMMENT_FOR_PHOTO:「更新情報一括閲覧」用
   scope :reject_photo_comment, lambda{ where("action_type != ?", ALBUMPHOTO_COMMENT_FOR_PHOTO) }
   scope :view_normal, lambda{ includes({:user => :user_ext}).reject_photo_comment.sort_updated }
 
@@ -38,5 +38,15 @@ class UpdateHistory < ActiveRecord::Base
     BLOG_CREATE => {:content_name => "日記", :info => "を作成しました"},
     BLOG_COMMENT => {:content_name => "日記", :info => "にコメントしました"},
   }
+
+
+  def self.create_or_update(user_id, action_type, content)
+    update_history = where(user_id: user_id, action_type: action_type, content_id: content.id).first
+    if update_history
+      update_history.update_attributes(updated_at: Time.now)
+    else
+      content.update_histories << create(user_id: user_id, action_type: action_type)
+    end
+  end
 
 end
