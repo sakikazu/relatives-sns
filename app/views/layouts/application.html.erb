@@ -170,7 +170,7 @@ jQuery(document).ready(function(){
 
 
   // AutoPager
-<% if @autopagerable -%>
+autopagerize = function() {
   $.autopager({
     content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
     //次ページリンクのセレクタ(Default: 'a[rel=next]')
@@ -185,6 +185,7 @@ jQuery(document).ready(function(){
         colorbox_slideshow();
         nice_member();
         myThumbnail(autopager_area);
+       // autopagerize();
       })
       $("#autopager_loading").hide();
     },
@@ -192,6 +193,10 @@ jQuery(document).ready(function(){
       $("#autopager_loading").show();
     }
   });
+}
+
+<% if @autopagerable -%>
+  autopagerize();
 <% end -%>
 
   // form inputをBootstrapデザインにする

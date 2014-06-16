@@ -73,15 +73,15 @@ class MuttersController < ApplicationController
   # mutters#allからはgetで呼ばれる
   #
   def search
-    if params["mutter"].blank? # mutters#indexでAutoPagerで読み込まれた場合
+    if params["mutter"].blank? or params["mutter"]["action_flg"].blank? # mutters#indexでAutoPagerで読み込まれた場合
       @action_flg = 0
     else
       params[:mutter] = params["mutter"]
       @action_flg = params[:mutter][:action_flg].to_i
       @search_word = params[:mutter][:search_word]
       @user_id = params[:mutter][:user_id]
-      @leave_me = params[:leave_me].blank? ? false : true
     end
+    @leave_me = params[:leave_me].blank? ? false : true
 
     case @action_flg
     when 0 # 検索結果解除
@@ -103,7 +103,7 @@ class MuttersController < ApplicationController
     # 「ひとりごと」
     @mutters = @mutters.where(leave_me: @leave_me)
 
-    @mutters = @mutters.page(params[:page]).per(15)
+    @mutters = @mutters.page(params[:page])
 
     # 検索ワードを画面に表示し続けるため
     @mutter = Mutter.new(mutter_params) if params[:mutter].present?
@@ -112,9 +112,18 @@ class MuttersController < ApplicationController
     # （理由は右サイドバーを表示するためのデータ取得をやりたくないからだったはず）
     @action_is_search = true
 
-    respond_to do |format|
-      format.html {render :action => "all"}
-      format.js
+    if request.xhr?
+      if params[:page].present?
+        render partial: 'list'
+      else
+        render 'search.js'
+      end
+      return
+    else
+      respond_to do |format|
+        format.html {render :action => "all"}
+        format.js
+      end
     end
   end
 

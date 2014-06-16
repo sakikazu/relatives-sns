@@ -22,7 +22,6 @@ class AlbumsController < ApplicationController
     Album.with_owner.each do |album|
       @album_users << {name: album.owner.try(:dispname), photo_count: album.photos.count, album_id: album.id}
     end
-    p @album_users
   end
 
   def top

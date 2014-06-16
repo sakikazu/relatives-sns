@@ -19,12 +19,12 @@
   <ul class="mutter_rows">
     <%= render :partial => 'mutter_row', :collection => @mutters %>
   </ul>
-  <% if @mutter.present? %>
-    <% query = {action_flg: @action_flg, search_word: @search_word} %>
+  <% if @action_flg.present? %>
+    <% query = {action_flg: @action_flg, search_word: @search_word, user_id: @user_id} %>
   <% end %>
   <% # [memo] ここはsearchメソッドの中でformat JSとしたいがためにremoteにしておく %>
   <% # 通常時はページネーションは表示せず、AutoPagerによって読み込まれる -%>
-  <div style="display:none"><%= paginate @mutters, remote: true, params: {action: "search", mutter: query, leave_me: @leave_me} %></div>
+  <div style="display:none"><%= paginate @mutters, remote: true, params: {action: "search", mutter: query, leave_me: (@leave_me.blank? ? "" : 1)} %></div>
 
   <%= link_to "すべて見る", {:action => :all}, class: "btn" %>
 </div> <!-- autopagerize_page_element -->
