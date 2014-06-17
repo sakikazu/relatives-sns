@@ -23,6 +23,8 @@ class Album < ActiveRecord::Base
     albums = Album.all.map do |a|
       if photo[a.id].present? or movie[a.id].present?
         media_max_created_at = [(photo[a.id] || Time.mktime(0)), (movie[a.id] || Time.mktime(0))].max
+      else
+        media_max_created_at = Time.mktime(0)
       end
       a.sort_at = (media_max_created_at || a.created_at);
       a

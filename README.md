@@ -19,6 +19,11 @@ $ cat /tmp/unicorn.adan.pid  | xargs kill -QUIT
 $ bundle exec unicorn -E production -c config/unicorn.conf.rb -D
 
 
+## cron
+todo 詳細追記して〜
+create_ranking_total.sh
+
+
 ## sidekiq
 [todo] capistranoで再起動できるようにしたい
 [todo] デーモン化は？

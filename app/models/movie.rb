@@ -23,6 +23,8 @@ class Movie < ActiveRecord::Base
   TYPE_NORMAL = 0
   TYPE_MODIFY = 1
 
+  CONTENT_TYPE = /\Avide.?\/.*\Z/
+
   # ffmpeg rotation values
   # 0 = 90CounterCLockwise and Vertical Flip (default)
   # 1 = 90Clockwise
@@ -36,7 +38,7 @@ class Movie < ActiveRecord::Base
     :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
   # "vide"で始まるContentType
-  validates_attachment_content_type :movie, :content_type => /\Avide.?\/.*\Z/
+  validates_attachment_content_type :movie, content_type: CONTENT_TYPE
 
   has_attached_file :thumb,
     :styles => {
@@ -48,7 +50,7 @@ class Movie < ActiveRecord::Base
     :path => ":rails_root/public/upload/#{content_name}/:id/thumb/:style/:basename.:extension",
     default_url: "/images/missing.gif"
 
-  validates_attachment_content_type :thumb, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
+  validates_attachment_content_type :thumb, :content_type => Photo::CONTENT_TYPE
 
   # todo 
   # before_saveにして色々やんなきゃなのかなぁ

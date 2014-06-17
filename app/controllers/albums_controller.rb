@@ -20,7 +20,8 @@ class AlbumsController < ApplicationController
 
     @album_users = []
     Album.with_owner.each do |album|
-      @album_users << {name: album.owner.try(:dispname), photo_count: album.photos.count, album_id: album.id}
+      item_count = album.photos.count + album.movies.count
+      @album_users << {name: album.owner.try(:dispname), item_count: item_count, album_id: album.id}
     end
   end
 
@@ -72,7 +73,8 @@ class AlbumsController < ApplicationController
       # movies = @album.movies.order("exif_at ASC") # todo exif取れないよね？対応しなくていっかなー
     when 3
       photos = @album.photos.order("last_comment_at DESC")
-      movies = @album.movies.order("movie_comments.id DESC")
+      # todo できてない
+      movies = @album.movies.order("id DESC")
     when 4
       photos = @album.photos.order("nices.created_at DESC").order("last_comment_at DESC")
       movies = @album.movies.order("nices.created_at DESC")

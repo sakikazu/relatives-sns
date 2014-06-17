@@ -61,38 +61,41 @@ class Mutter < ActiveRecord::Base
 
   def save_related_media
     return if self.is_save_related_media.present? or self.image.blank?
-
     self.is_save_related_media = true
-    photo_type = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
-    movie_type = /\Avide.?\/.*\Z/
+    self._save_related_media
+  end
 
-    # todo メソッド切り出し
+  def _save_related_media
     current_user = self.user
     Album.create_having_owner(current_user) if current_user.my_album.blank?
     current_user.reload
 
     truncated_title = self.content.size > 20 ? self.content[0..19] + "..." : self.content
     description_for_media = self.content + "\n\n" + "(つぶやきから投稿)"
-    if photo_type.include?(self.image.content_type)
-      photo = Photo.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media)
+    saved = nil
+    if Photo::CONTENT_TYPE.include?(self.image.content_type)
+      photo = Photo.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       photo.image = self.image
-      photo.save
-    elsif self.image.content_type =~ movie_type
-      movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media)
+      saved = photo.save
+    elsif self.image.content_type =~ MOVIE::CONTENT_TYPE
+      movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       movie.movie = self.image
       if movie.save and movie.ffmp.valid?
         EncodeWorker.perform_async movie.id
       else
         # p movie.errors.full_messages
       end
+      saved = movie
     end
+    saved
   end
+
 
   # ソート用の日時カラムを更新。レスされた親のも更新する。
   def update_sort_at
     # memo 2014/06/12、Mutter.create時にfor_sort_atも設定するようにしたので、ここでは、子Mutterの場合だけ、その親のものを更新するようにした
     # self.update_attributes(for_sort_at: Time.now)
-    if self.parent.present?
+    if self.parent.present? and !self.parent.invisible?
       self.parent.update_attributes(for_sort_at: Time.now)
     end
   end
@@ -209,6 +212,10 @@ class Mutter < ActiveRecord::Base
 
    def child?
      self.reply_id.present?
+   end
+
+   def invisible?
+     self.invisible_in_timeline.present?
    end
 
    def self.create_with_invisible(current_user_id)

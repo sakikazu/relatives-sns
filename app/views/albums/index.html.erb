@@ -6,13 +6,13 @@
     <div class="well well-small">
       <ul class="unstyled">
         <% @album_users.each do |user| %>
-          <li><%= link_to "#{user[:name]}(#{user[:photo_count]})", album_path(user[:album_id]) %></li>
+          <li><%= link_to "#{user[:name]}(#{user[:item_count]})", album_path(user[:album_id]) %></li>
         <% end %>
       </ul>
     </div>
   </div>
 
-  <div class="span9">
+  <div class="span10">
     <div class="page-header"><h3>アルバム詳細一覧<small>写真のダウンロードも可能</small></h3></div>
     <div id="title_index">
       <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn" %>

@@ -11,6 +11,9 @@ class Photo < ActiveRecord::Base
 
   scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
 
+  # memo なんだろう「image/pjpeg」って。。Mutterにて投稿されていた
+  CONTENT_TYPE = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream", "image/pjpeg", "image/bmp"]
+
   content_name = "album"
   has_attached_file :image,
     :styles => {
@@ -22,7 +25,7 @@ class Photo < ActiveRecord::Base
     :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:basename.:extension",
     default_url: "/images/missing.gif"
 
-  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
+  validates_attachment_content_type :image, content_type: CONTENT_TYPE
 
 
   #全写真からただランダムに抽出する

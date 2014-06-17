@@ -7,6 +7,19 @@ class ApplicationController < ActionController::Base
   layout :select_layout
   include Jpmobile::ViewSelector #Viewの自動振り分け
 
+
+  # 発行されたSQLを取得する
+  # todo 何やってるかさぱりわからん
+  def watch_queries
+    events = []
+    callback = -> name,start,finish,id,payload { events << payload[:sql] }
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      yield
+    end
+    events
+  end
+
+
 private
 
   # トップページから、更新情報を元に更新内容を一括で閲覧するためのデータ取得

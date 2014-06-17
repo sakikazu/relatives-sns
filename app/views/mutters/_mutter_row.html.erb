@@ -4,7 +4,7 @@
   <li>
 <% end -%>
 
-<%= render 'mutter', mutter: mutter_row %>
+<%= render 'mutters/mutter', mutter: mutter_row %>
 
 <!-- つぶやきへのレス -->
 <% if mutter_row.children.present? -%>
@@ -26,7 +26,7 @@
       <li class="clearfix">
     <% end -%>
 
-      <%= render 'mutter', mutter: child %>
+      <%= render 'mutters/mutter', mutter: child %>
     </li>
   <% end -%>
 </ul>

@@ -109,7 +109,7 @@ class MoviesController < ApplicationController
     params.merge!(Mutter.extra_params(current_user, request))
     @movie = Movie.find(params[:id])
 
-    @movie.create_comment_by_mutter(comment_params, current_user.id)
+    @movie.create_comment_by_mutter(comment_params)
 
     UpdateHistory.create_or_update(current_user.id, UpdateHistory::MOVIE_COMMENT, @movie)
   end

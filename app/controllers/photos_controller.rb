@@ -119,7 +119,7 @@ class PhotosController < ApplicationController
     params.merge!(Mutter.extra_params(current_user, request))
     @photo = Photo.find(params[:id])
 
-    @photo.create_comment_by_mutter(comment_params, current_user.id)
+    @photo.create_comment_by_mutter(comment_params)
     @photo.update_attributes(:last_comment_at => Time.now)
 
     UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUMPHOTO_COMMENT, @photo.album)
