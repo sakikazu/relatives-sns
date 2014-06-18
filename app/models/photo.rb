@@ -11,13 +11,14 @@ class Photo < ActiveRecord::Base
 
   scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
 
+
   # memo なんだろう「image/pjpeg」って。。Mutterにて投稿されていた
   CONTENT_TYPE = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream", "image/pjpeg", "image/bmp"]
 
   content_name = "album"
   has_attached_file :image,
     :styles => {
-      :thumb => "150x150>",
+      :thumb => "200x200>",
       :large => "800x800>"
     },
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
@@ -37,4 +38,15 @@ class Photo < ActiveRecord::Base
     photos
   end
 
+  # ファイルパスが必要なので、コールバック内ではなく、明示的に呼び出して処理するようにした
+  def self.set_exif_at(filepath)
+    #memo 「date_time」だと、写真の更新日付になってしまうことがあった。「exif.date_time_digitized」で取得すること
+    #memo 追記 EXIFがない画像への対処を入れた
+    e_data = EXIFR::JPEG.new(filepath) rescue err_flg = true
+    exif_at = nil
+    if err_flg.blank?
+      exif_at = ((e_data.exif && e_data.exif.date_time_digitized) || e_data.date_time) rescue nil
+    end
+    exif_at
+  end
 end

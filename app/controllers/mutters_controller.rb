@@ -205,7 +205,7 @@ class MuttersController < ApplicationController
     @album_thumbs = Photo.rnd_photos
 
     # つぶやきの表示更新時間（ミリ秒指定）
-    @dispupdate_interval = 10 * 1000
+    @dispupdate_interval = 60 * 1000
 
     ###日齢
     @nichirei, @nichirei_future = current_user.user_ext.nichirei

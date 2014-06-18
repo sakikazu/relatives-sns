@@ -72,12 +72,14 @@ class Mutter < ActiveRecord::Base
 
     truncated_title = self.content.size > 20 ? self.content[0..19] + "..." : self.content
     description_for_media = self.content + "\n\n" + "(つぶやきから投稿)"
-    saved = nil
+    saved_content = nil
     if Photo::CONTENT_TYPE.include?(self.image.content_type)
       photo = Photo.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
+      photo.exif_at = Photo::set_exif_at(self.image.path)
       photo.image = self.image
-      saved = photo.save
-    elsif self.image.content_type =~ MOVIE::CONTENT_TYPE
+      photo.save
+      saved_content = photo
+    elsif self.image.content_type =~ Movie::CONTENT_TYPE
       movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       movie.movie = self.image
       if movie.save and movie.ffmp.valid?
@@ -85,9 +87,9 @@ class Mutter < ActiveRecord::Base
       else
         # p movie.errors.full_messages
       end
-      saved = movie
+      saved_content = movie
     end
-    saved
+    saved_content
   end
 
 
@@ -200,7 +202,7 @@ class Mutter < ActiveRecord::Base
      prev_id = cookies[:update_disp_id].to_i
      if last_id > prev_id
        cookies[:update_disp_id] = last_id
-       return self.includes_all.parents_mod
+       return self.includes_all.parents_mod.where(leave_me: false)
      else
        return false
      end

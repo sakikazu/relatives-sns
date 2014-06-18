@@ -15,8 +15,9 @@ update_history_sweeper.rb
 $ cat tmp/unicorn.pid | xargs kill -USR2
 
 ### (こっちじゃないと反映されないことがあるが・・。capistranoの影響？)
-$ cat /tmp/unicorn.adan.pid  | xargs kill -QUIT
-$ bundle exec unicorn -E production -c config/unicorn.conf.rb -D
+$ cd (Rails.root)
+$ cat tmp/unicorn.adan.pid | xargs kill -QUIT
+$ bundle exec unicorn -E production -c /usr/local/site/adan/current/config/unicorn.conf.rb -D
 
 
 ## cron

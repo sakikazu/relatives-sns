@@ -11,8 +11,8 @@
   </div>
   <div class="info">
     投稿者：<%= @photo.user.dispname %> | 
-    投稿日時：<%= l @photo.created_at if @photo.created_at %> | 
-    撮影日時：<%= l @photo.exif_at if @photo.exif_at %>
+    投稿：<%= l @photo.created_at if @photo.created_at %> | 
+    撮影：<%= l @photo.exif_at if @photo.exif_at %>
   </div>
   <div class="description">
     <div style="text-align:center""><%= image_tag(@photo.image(:large)) if @photo.image? %></div>

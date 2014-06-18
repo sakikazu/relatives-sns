@@ -169,7 +169,7 @@ $(document).on('click', 'a.js_search_mutter', function() {
         </div>
         <div class="span2">
           <br>
-          <%= f.submit "投稿する", class: "btn btn-primary btn-large" %>
+          <%= f.submit "投稿する", class: "btn btn-primary btn-large", :data => {:disable_with => "投稿中..."} %>
           <div class="leave_me"><%= f.check_box :leave_me, value: "1" %><%= f.label :leave_me, "ひとりごと" %></div>
         </div>
       <% end -%>

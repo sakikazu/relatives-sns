@@ -53,12 +53,7 @@ class PhotosController < ApplicationController
   def create
     params[:photo] = {}
     params[:photo][:image] = params['Filedata'] #paperclip
-    #memo 「date_time」だと、写真の更新日付になってしまうことがあった。「exif.date_time_digitized」で取得すること
-    #memo 追記 EXIFがない画像への対処を入れた
-    e_data = EXIFR::JPEG.new(params['Filedata'].path) rescue err_flg = true
-    if err_flg.blank?
-      params[:photo][:exif_at] = ((e_data.exif && e_data.exif.date_time_digitized) || e_data.date_time) rescue nil
-    end
+    params[:photo][:exif_at] = Photo::set_exif_at(params['Filedata'].path)
     params[:photo][:user_id] = params['user_id']
     params[:photo][:album_id] = params['album_id']
     params[:photo][:title] = "[無題]"

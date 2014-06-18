@@ -112,8 +112,9 @@ namespace :tmp_work do
       Mutter.where.not(image_file_name: nil).each do |m|
         begin
           saved_media = m._save_related_media
+          next if saved_media.blank?
           m.nices.each do |org_nice|
-            nice=Nice.new(org_nice.attributes)
+            nice = Nice.new(org_nice.attributes)
             nice.id = nil
             nice.asset = saved_media
             nice.save
