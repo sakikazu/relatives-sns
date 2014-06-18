@@ -1,7 +1,7 @@
-# working_directory '/usr/local/site/adan'
+working_directory '/usr/local/site/adan/current'
 listen '/tmp/unicorn_adan.sock', :backlog => 1024
 # listen "127.0.0.1:8080"
-pid Rails.root + '/tmp/unicorn.adan.pid'
+pid 'tmp/pids/unicorn.adan.pid'
 
 # worker_processes 2
 
