@@ -11,12 +11,15 @@ class AlbumsController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
-      @albums = Album.without_owner.order("id DESC").page(params[:page])
+      @albums = Album.without_owner.order("id DESC")
     when 2
-      @albums = Kaminari.paginate_array(Album.without_owner.sort_upload).page(params[:page])
+      @albums = Album.without_owner.sort_upload
     else
-      @albums = Album.without_owner.order("id DESC").page(params[:page])
+      @albums = Album.without_owner.order("id DESC")
     end
+
+    Album.set_thumb_if_noset(@albums)
+    @albums = Kaminari.paginate_array(@albums).page(params[:page])
 
     @album_users = []
     Album.with_owner.each do |album|
@@ -29,6 +32,7 @@ class AlbumsController < ApplicationController
     @page_title = "アルバムトップ"
     # @albums = Kaminari.paginate_array(Album.sort_upload).page(params[:page]).per(10)
     @albums = Album.sort_upload[0..9]
+    Album.set_thumb_if_noset(@albums)
     @movies = Movie.order("id DESC").limit(10)
 
     respond_to do |format|
@@ -113,6 +117,12 @@ class AlbumsController < ApplicationController
 
     # 動画アップロード用
     @movie = @album.movies.build
+
+    if params["focus_comment"].present?
+      @tab_select_index = "eq(1)"
+    else
+      @tab_select_index = "first"
+    end
 
     respond_to do |format|
       format.html # show.html.erb

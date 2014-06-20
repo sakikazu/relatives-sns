@@ -181,7 +181,7 @@ EOS
     when UpdateHistory::ALBUM_CREATE
       ai.merge(:link => (link_to up.content.title, album_path(up.content)))
     when UpdateHistory::ALBUM_COMMENT
-      ai.merge(:link => (link_to up.content.title, album_path(up.content)))
+      ai.merge(:link => (link_to up.content.title, album_path(up.content, focus_comment: 1)))
     when UpdateHistory::ALBUMPHOTO_CREATE
       # 写真が投稿された時のアップデートリンクは、その投稿者のアップロード順でアルバム表示
       ai.merge(:link => (link_to up.content.title, album_path(up.content, "album[sort_flg]" => 1, "album[user_id]" => up.user_id)))

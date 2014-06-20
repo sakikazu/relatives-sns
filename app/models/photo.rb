@@ -14,6 +14,7 @@ class Photo < ActiveRecord::Base
 
   # memo なんだろう「image/pjpeg」って。。Mutterにて投稿されていた
   CONTENT_TYPE = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream", "image/pjpeg", "image/bmp"]
+  EXTS = ["jpg", "jpeg", "png", "gif", "bmp"]
 
   content_name = "album"
   has_attached_file :image,
@@ -49,4 +50,10 @@ class Photo < ActiveRecord::Base
     end
     exif_at
   end
+
+  def self.valid_ext?(filename)
+    ext = File.extname(filename).gsub(".", "").downcase
+    EXTS.include?(ext)
+  end
+
 end

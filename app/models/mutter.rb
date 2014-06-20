@@ -73,13 +73,13 @@ class Mutter < ActiveRecord::Base
     truncated_title = self.content.size > 20 ? self.content[0..19] + "..." : self.content
     description_for_media = self.content + "\n\n" + "(つぶやきから投稿)"
     saved_content = nil
-    if Photo::CONTENT_TYPE.include?(self.image.content_type)
+    if Photo::valid_ext?(self.image.original_filename)
       photo = Photo.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       photo.exif_at = Photo::set_exif_at(self.image.path)
       photo.image = self.image
       photo.save
       saved_content = photo
-    elsif self.image.content_type =~ Movie::CONTENT_TYPE
+    elsif Movie::valid_ext?(self.image.original_filename)
       movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       movie.movie = self.image
       if movie.save and movie.ffmp.valid?

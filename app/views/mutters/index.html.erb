@@ -47,19 +47,19 @@ $(document).ready(function(){
 //  });
 
 
-  // memo 検索時や、動画アップロード時など、不具合が出そうなので無効にする
+  // todo サーバーからのpushにしたい
   // つぶやき表示更新
 <% if Rails.env == "production" %>
-  //setInterval(function(){
-  //  $.get("<%= update_disp_mutters_path %>", function(data){
-  //    if(data != "") {
-  //      $("#mutter_data").html(data);
-  //      $(document).ready(function(){
-  //        $(".colorbox").colorbox();
-  //      })
-  //    }
-  //  });
-  //}, <%= @dispupdate_interval %>);
+  setInterval(function(){
+    $.get("<%= update_disp_mutters_path %>", function(data){
+      if(data != "") {
+        $("#mutter_data").html(data);
+        $(document).ready(function(){
+          $(".colorbox").colorbox();
+        })
+      }
+    });
+  }, <%= @dispupdate_interval %>);
 <% end %>
 
 // つぶやき検索

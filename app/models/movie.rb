@@ -24,7 +24,8 @@ class Movie < ActiveRecord::Base
   TYPE_NORMAL = 0
   TYPE_MODIFY = 1
 
-  CONTENT_TYPE = /\Avide.?\/.*\Z/
+  CONTENT_TYPE = /\Avide.?\/.*\Z|application\/octet-stream/
+  EXTS = ["mp4", "wmv", "avi", "mpeg", "mpg", "mkv", "m4v", "mov", "3gp"]
 
   # ffmpeg rotation values
   # 0 = 90CounterCLockwise and Vertical Flip (default)
@@ -127,6 +128,13 @@ class Movie < ActiveRecord::Base
   def comments
     return [] unless self.has_parent_mutter?
     self.mutter.children.includes({user: :user_ext}).reorder("id ASC")
+  end
+
+  # memo content_typeではなく拡張子で判定した理由は、動画も写真とも「application/octet-stream」でアップされることがあるため。Ajaxの時だけかも。
+  # そのアップ時にうまくやる方法がありそうだけど
+  def self.valid_ext?(filename)
+    ext = File.extname(filename).gsub(".", "").downcase
+    EXTS.include?(ext)
   end
 
 end

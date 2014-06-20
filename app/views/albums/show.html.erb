@@ -1,6 +1,6 @@
 <script>
 $(document).ready(function() {
-  $('a[data-toggle="tab"]:first').tab('show');
+    $('a[data-toggle="tab"]:<%= @tab_select_index %>').tab('show');
 
   //uploadify
   $('#uploadify').uploadify({

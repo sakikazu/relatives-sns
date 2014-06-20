@@ -36,4 +36,13 @@ class Album < ActiveRecord::Base
   def self.create_having_owner(user)
     self.create(title: user.dispname + "のアルバム", owner_id: user.id, user_id: user.id)
   end
+
+  # サムネイルが設定されていないものは、サムネイルがランダムで選択されるようにする
+  def self.set_thumb_if_noset(albums)
+    albums.each do |album|
+      if album.thumb_id.blank?
+        album.thumb_id = album.photos.sample.id
+      end
+    end
+  end
 end
