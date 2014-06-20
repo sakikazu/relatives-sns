@@ -3,6 +3,7 @@ class Movie < ActiveRecord::Base
 
   acts_as_paranoid
 
+  belongs_to :album
   belongs_to :user
   belongs_to :mutter
   has_many :nices, :as => :asset

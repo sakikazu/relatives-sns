@@ -49,7 +49,7 @@ gem 'dotenv-rails'
 gem 'simple_form'
 gem 'twitter-bootstrap-rails'
 gem 'streamio-ffmpeg'
-gem 'rmagick'
+gem 'rmagick', require: 'RMagick'
 gem 'sidekiq'
 
 # Ajaxでファイルアップロード

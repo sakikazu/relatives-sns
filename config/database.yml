@@ -14,8 +14,8 @@ default: &default
   encoding: utf8
   pool: 5
   username: root
-  password: saki0745
-  socket: /tmp/mysql.sock
+  password: <%= ENV['ADAN_DATABASE_PASSWORD'] %>
+  socket: <%= ENV['DATABASE_SOCKET'] %>
 
 development:
   <<: *default

@@ -10,8 +10,8 @@ class Mutter < ActiveRecord::Base
   has_many :children, class_name: "Mutter", foreign_key: "reply_id"
   has_many :nices, :as => :asset
 
-  has_one :movie
-  has_one :photo
+  has_one :movie, dependent: :destroy
+  has_one :photo, dependent: :destroy
 
   # 2014/06/05、とりあえず、つぶやきにひもづけるのはphotoとmovieのみ
   # has_one :album
