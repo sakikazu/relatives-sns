@@ -19,12 +19,12 @@ class Photo < ActiveRecord::Base
   content_name = "album"
   has_attached_file :image,
     :styles => {
-      :thumb => "200x200>",
+      :thumb => "250x250>",
       :large => "800x800>"
     },
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
-    :url => "/upload/#{content_name}/:album/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:basename.:extension",
+    :url => "/upload/#{content_name}/:album/:id/:style/:hash.:extension",
+    :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:hash.:extension",
     default_url: "/images/missing.gif"
 
   validates_attachment_content_type :image, content_type: CONTENT_TYPE
@@ -55,5 +55,4 @@ class Photo < ActiveRecord::Base
     ext = File.extname(filename).gsub(".", "").downcase
     EXTS.include?(ext)
   end
-
 end

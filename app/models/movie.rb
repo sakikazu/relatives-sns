@@ -88,8 +88,10 @@ class Movie < ActiveRecord::Base
     vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
 
     ffmp.transcode("#{encoded_path}", "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose}")
-    original_name = self.movie_file_name
-    update_attributes(is_ready: true, movie: File.open("#{encoded_path}", "r"), original_movie_file_name: original_name)
+    self.is_ready = true
+    self.movie = File.open("#{encoded_path}", "r")
+    self.original_movie_file_name = self.movie_file_name if self.original_movie_file_name.blank?
+    self.save
     p self.errors.full_messages
   end
 

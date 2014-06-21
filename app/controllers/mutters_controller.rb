@@ -408,11 +408,11 @@ class MuttersController < ApplicationController
     ai = UpdateHistory::ACTION_INFO[up.action_type]
     case up.action_type
     when UpdateHistory::ALBUM_CREATE
-      redirect_to album_path(up.content, "sort" => 2, "ups_page" => @ups_page, "ups_id" => up.id)
-    when UpdateHistory::ALBUM_COMMENT
       redirect_to album_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+    when UpdateHistory::ALBUM_COMMENT
+      redirect_to album_path(up.content, focus_comment: 1, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUMPHOTO_CREATE
-      redirect_to album_path(up.content, "sort" => 1, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(up.content, "album[sort_flg]" => 1, "album[user_id]" => up.user_id, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO
       redirect_to album_photo_path(up.content.album, up.content, "ups_page" => @ups_page, "ups_id" => up.id)
     when UpdateHistory::BOARD_CREATE, UpdateHistory::BOARD_COMMENT

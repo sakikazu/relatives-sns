@@ -9,6 +9,7 @@ module MutterHelper
       else
         media_src = image_tag(mutter.photo.image(:large))
       end
+      media_src = "<div class='thumbnail'>\n#{media_src}\n</div>\n".html_safe
       media_src += "<br>\n".html_safe + link_to("(#{mutter.photo.album.title})", album_path(mutter.photo.album_id)).html_safe if mutter.photo.album.present?
     elsif mutter.movie.present?
       if mutter.movie.is_ready?

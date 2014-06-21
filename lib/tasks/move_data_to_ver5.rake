@@ -28,6 +28,25 @@ def watch_queries
 end
 
 namespace :tmp_work do
+  # Photoのファイル名を、元ファイル名を使用するのをやめて、idから生成するようにした(日本語が入ると取り扱いが面倒なため)
+  desc "Rename Photo filename for version5"
+  task :to_ver5_rename_photo_filename => :environment do
+    logger.info "\n\nstart :to_ver5 [to_ver5_rename_filename] [#{Time.now()}]"
+
+    Photo.all.each do |photo|
+      oldfilepath = Rails.root.to_path + "/public/upload/album/#{photo.album_id}/#{photo.id}/original/#{photo.image_file_name}"
+      p "processing.. #{oldfilepath}"
+      if File.exists?(oldfilepath)
+        file = File.open(oldfilepath)
+        photo.image = file
+        photo.save
+        logger.debug "#{oldfilepath} -> #{photo.image.path}"
+      else
+        logger.error "対象のファイルが存在しません[photo_id: #{photo.id}] (#{oldfilepath})"
+      end
+    end
+  end
+
   desc "data move for version5"
   task :to_ver5 => :environment do
     logger.info "\n\nstart :to_ver5 [#{Time.now()}]"

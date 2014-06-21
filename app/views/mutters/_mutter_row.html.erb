@@ -59,7 +59,7 @@
 
     </div>
     <div class="modal-footer">
-      <%= f.submit "返信する", class: "btn btn-primary", style: "z-index:98" %>
+      <%= f.submit "返信する", class: "btn btn-primary", style: "z-index:98", :data => {:disable_with => "投稿中..."} %>
       <a href="#" class="btn" data-dismiss="modal" style="z-index:99">キャンセル</a>
     </div>
   <% end -%>
