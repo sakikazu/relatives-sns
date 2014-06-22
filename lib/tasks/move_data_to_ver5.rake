@@ -1,3 +1,8 @@
+# 2014-06-21:
+#
+# * MutterからPhoto作成の処理が失敗したものを、再作成
+# * Photoのファイル名にハッシュを入れて複雑化
+
 # 2014-06-17: Version5のためのデータ移行
 #
 # * PhotoComment: Mutter.create
@@ -18,6 +23,7 @@ logger = Logger.new("log/move_data_to_ver5.error.log")
 
 
 # todo どこに置けばいいんだろう(ApplicationControllerにおいたものはtaskからは読めず)
+# ActiveRecordで発行されたSQLを出力する
 def watch_queries
   events = []
   callback = -> name,start,finish,id,payload { events << payload[:sql] }
@@ -28,22 +34,80 @@ def watch_queries
 end
 
 namespace :tmp_work do
+
+  desc "Fix faild Mutter Photo file for version5"
+  task :to_ver5_fix_faild_mutter_photo_file => :environment do
+    faild_mutter_ids = [15751,15636,15548,14749,14748,14723,14706,14587,14434,13503,13213,12868,12865,12803,12570,12519,12516,12213,11825,11034,10754]
+
+    puts("スクリプトを実行します。env: [#{ENV['RAILS_ENV']}]")
+    puts("対象: #{faild_mutter_ids.join(",")}")
+    puts("* Mutter.imageをPaperclipにしてるかな？")
+    puts("* _save_related_mediaを、globから取得するような形式で更新したかな？")
+    puts("よろしいですか？(y/n)")
+    print("> ")
+    str = STDIN.gets
+    if (str.chop != "y")
+      puts("中断します")
+      exit
+    end
+
+    logger.info "\n\nstart :to_ver5 [to_ver5_fix_faild_mutter_photo_file] [#{Time.now()}]"
+    Mutter.where(id: faild_mutter_ids).each do |m|
+      Dir.glob("/usr/local/site/adan/releases/20140618003416/public/upload/mutter/#{m.id}/original/*") do |f|
+        if File.exists?(f)
+          logger.debug "processing.. image_file: #{f}"
+          begin
+            saved_media = m._save_related_media(f)
+            next if saved_media.blank?
+            m.nices.each do |org_nice|
+              nice = Nice.new(org_nice.attributes)
+              nice.id = nil
+              nice.asset = saved_media
+              nice.save
+            end
+            logger.debug "success: #{m.class.to_s} id: #{m.id}"
+          rescue => e
+            logger.error "error: #{m.class.to_s} id: #{m.id} (#{e.message})"
+          end
+        end
+      end
+    end
+  end
+
   # Photoのファイル名を、元ファイル名を使用するのをやめて、idから生成するようにした(日本語が入ると取り扱いが面倒なため)
   desc "Rename Photo filename for version5"
   task :to_ver5_rename_photo_filename => :environment do
+    puts("スクリプトを実行します。env: [#{ENV['RAILS_ENV']}] よろしいですか？(y/n)")
+    print("> ")
+    str = STDIN.gets
+    if (str.chop != "y")
+      puts("中断します")
+      exit
+    end
+
     logger.info "\n\nstart :to_ver5 [to_ver5_rename_filename] [#{Time.now()}]"
 
     Photo.all.each do |photo|
-      oldfilepath = Rails.root.to_path + "/public/upload/album/#{photo.album_id}/#{photo.id}/original/#{photo.image_file_name}"
-      p "processing.. #{oldfilepath}"
-      if File.exists?(oldfilepath)
-        file = File.open(oldfilepath)
-        photo.image = file
-        photo.save
-        logger.debug "#{oldfilepath} -> #{photo.image.path}"
+      p "processing.. album/#{photo.album_id}/#{photo.id}/:style/#{photo.image_file_name}"
+
+      oldfilepath_org = Rails.root.to_path + "/public/upload/album/#{photo.album_id}/#{photo.id}/original/#{photo.image_file_name}"
+      oldfilepath_large = Rails.root.to_path + "/public/upload/album/#{photo.album_id}/#{photo.id}/large/#{photo.image_file_name}"
+      oldfilepath_thumb = Rails.root.to_path + "/public/upload/album/#{photo.album_id}/#{photo.id}/thumb/#{photo.image_file_name}"
+      if File.exists?(oldfilepath_org)
+        oldfilepath = oldfilepath_org
+      elsif File.exists?(oldfilepath_large)
+        oldfilepath = oldfilepath_large
+      elsif File.exists?(oldfilepath_thumb)
+        oldfilepath = oldfilepath_thumb
       else
-        logger.error "対象のファイルが存在しません[photo_id: #{photo.id}] (#{oldfilepath})"
+        logger.error "対象のファイルが存在しません[album/#{photo.album_id}/#{photo.id}/:style/#{photo.image_file_name}"
+        next
       end
+
+      file = File.open(oldfilepath)
+      photo.image = file
+      photo.save
+      logger.debug "#{oldfilepath} -> #{photo.image.path}"
     end
   end
 
