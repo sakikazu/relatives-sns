@@ -42,6 +42,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       # t.datetime :locked_at
 
       ## Token authenticatable
+      # 2014-01-25、別のMigrationで追加
       # t.string :authentication_token
 
 
