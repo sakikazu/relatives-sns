@@ -82,6 +82,11 @@ gem 'less-rails'
 # 定数管理
 gem 'rails_config'
 
+# for API
+gem 'grape'
+# gem 'rabl'
+# gem 'oj'
+
 
 group :development, :test do
   # Railsコンソールの多機能版
