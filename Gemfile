@@ -30,6 +30,9 @@ gem 'spring',        group: :development
 
 # --- above defaults ---
 
+# for heroku
+gem 'rails_12factor', group: :production
+
 
 gem 'devise'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
@@ -87,6 +90,14 @@ gem 'grape'
 # gem 'rabl'
 # gem 'oj'
 
+
+group :development do
+  # エラー画面をわかりやすく整形してくれる
+  gem 'better_errors'
+
+  # better_errorsの画面上にirb/pry(PERL)を表示する
+  gem 'binding_of_caller'
+end
 
 group :development, :test do
   # Railsコンソールの多機能版
