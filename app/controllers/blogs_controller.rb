@@ -110,11 +110,11 @@ class BlogsController < ApplicationController
 
     respond_to do |format|
       if @blog.save
-        # todo imageの持ち方を変えるので、現状のこのエラーは無視（2014/05/14）
-        # if params[:image]
-          # image = BlogImage.new(params[:image])
-          # @blog.blog_images << image
-        # end
+        # todo imageの持ち方を変えたい
+        if params[:image]
+          image = BlogImage.new(blog_image_params)
+          @blog.blog_images << image
+        end
 
         @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
 
@@ -143,7 +143,7 @@ class BlogsController < ApplicationController
     respond_to do |format|
       if @blog.update_attributes(blog_params)
         if params[:image]
-          image = BlogImage.new(params[:image])
+          image = BlogImage.new(blog_image_params)
           @blog.blog_images << image
         end
 
@@ -231,6 +231,10 @@ class BlogsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def blog_params
     params.require(:blog).permit(:title, :content, :user_id)
+  end
+
+  def blog_image_params
+    params.require(:image).permit(:image)
   end
 
   def comment_params
