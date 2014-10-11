@@ -126,7 +126,6 @@ Rails.application.routes.draw do
       get :celebration
       get :celebration_new
       post :celebration_create
-      put :celebration_create
     end
   end
 

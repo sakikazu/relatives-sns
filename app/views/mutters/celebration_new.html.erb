@@ -3,7 +3,8 @@
     <div class="page-header">
       <h3><%= @celebration.user.dispname %>さんへのお祝い</h3>
     </div>
-    <%= form_for @celebration, :url => {:action => :celebration_create}, :html => {:multipart => true} do |f| %>
+    <% # note: 同じ人に複数の人が祝う場合はオブジェクトはupdateとなるので、method: :postの指定がないとcelebration_create_mutters_pathの設定はroutesには:postでしか存在しないので無視され、今度はオブジェクトによって判定されてしまい、結局、「update」アクションと解釈されてしまう。いやまあ単純な話ですた。。 %>
+    <%= form_for @celebration, url: celebration_create_mutters_path, html: {multipart: true}, method: :post do |f| %>
       <%= f.hidden_field :anniversary_at %>
       <%= f.hidden_field :user_id %>
 
