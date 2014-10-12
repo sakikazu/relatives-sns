@@ -1,4 +1,4 @@
-<div class="mutter_content">
+<div class="mutter_content" id="mutter<%= mutter.id %>">
   <div class="icon">
     <p>
     <% if mutter.user.present? && mutter.user.user_ext.image? -%>
@@ -12,7 +12,7 @@
   <% if request.smart_phone? %>
     <div class="info-area smp">
       <%= link_to mutter.user.dispname, mutter_by_user_path(mutter.user.id), {:title => mutter.user.dispname(User::FULLNAME)} if mutter.user.present? %><br>
-      <%= link_to (l mutter.created_at), mutter_path(mutter) %><br>
+      <%= link_to (l mutter.created_at), mutter_path(mutter, anchor: "mutter#{mutter.id}") %><br>
       <span class="nice">
         <span id='cont_<%= mutter.id %>'>
           <%= nice_field(mutter, "mutter", "#cont_#{mutter.id}") %>
@@ -29,7 +29,7 @@
       <div class="info-left">
         <span class='label label-inverse'><%= useragent(mutter.ua) %></span>
         <span class='name'>&nbsp;<%= link_to mutter.user.dispname, mutter_by_user_path(mutter.user.id), {:title => mutter.user.dispname(User::FULLNAME)} if mutter.user.present? %></span>
-        <span class='time'><%= link_to (l mutter.created_at), mutter_path(mutter) %></span>
+        <span class='time'><%= link_to (l mutter.created_at), mutter_path(mutter, anchor: "mutter#{mutter.id}") %></span>
       </div>
       <div class="info-right">
         <span class="nice">

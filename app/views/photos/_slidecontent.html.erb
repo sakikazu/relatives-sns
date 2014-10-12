@@ -11,7 +11,12 @@
   <div class="description">
     <div style="text-align:center""><%= image_tag(@photo.image(:large)) if @photo.image? %></div>
     <%= link_to "元画像", @photo.image(:original) if @photo.image? %>
-    <p class="text"><%= sani_custom_br(@photo.description) %></p>
+    <p class="text">
+      <%= sani_custom_br(@photo.description) %>
+      <% if @photo.mutter.present? %>
+        <%= link_to "つぶやき", mutter_path(@photo.mutter, anchor: "mutter#{@photo.mutter.id}") %>
+      <% end %>
+    </p>
   </div>
   <div class="nice">
     <span id="update_nice">
