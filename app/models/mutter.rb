@@ -83,7 +83,12 @@ class Mutter < ActiveRecord::Base
       movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       movie.movie = self.image
       if movie.save and movie.ffmp.valid?
-        EncodeWorker.perform_async movie.id
+        begin
+          EncodeWorker.perform_async movie.id
+        rescue Redis::CannotConnectError => e
+          p "Redisが動いてないのでエンコードなしで保存します"
+          movie.without_encode
+        end
       else
         # p movie.errors.full_messages
       end

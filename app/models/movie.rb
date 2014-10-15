@@ -87,12 +87,20 @@ class Movie < ActiveRecord::Base
     max_video_bitrate = 500
     vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
 
-    ffmp.transcode("#{encoded_path}", "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose}")
+    ffmp.transcode("#{encoded_path}", "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose} -profile:v baseline")
     self.is_ready = true
     self.movie = File.open("#{encoded_path}", "r")
     self.original_movie_file_name = self.movie_file_name if self.original_movie_file_name.blank?
     self.save
     p self.errors.full_messages
+  end
+
+  # ffmpegでサムネイルを作成したいが、Herokuだとインストールがめんどくさそうでやっぱやめとこ
+  def without_encode
+    self.is_ready = true
+    self.movie = File.open("#{original_path}", "r")
+    self.original_movie_file_name = self.movie_file_name if self.original_movie_file_name.blank?
+    self.save
   end
 
   def is_ready?
@@ -104,7 +112,11 @@ class Movie < ActiveRecord::Base
   end
 
   def ffmp
-    @ffmp_obj ||= FFMPEG::Movie.new("#{Rails.root}/public/upload/movie/#{id}/original/#{self.movie_file_name}")
+    @ffmp_obj ||= FFMPEG::Movie.new(original_path)
+  end
+
+  def original_path
+    "#{Rails.root}/public/upload/movie/#{self.id}/original/#{self.movie_file_name}"
   end
 
   # サムネイルがフォームから指定されていないときは動画から生成する
