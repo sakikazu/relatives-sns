@@ -87,7 +87,10 @@ class Movie < ActiveRecord::Base
     max_video_bitrate = 500
     vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
 
-    ffmp.transcode("#{encoded_path}", "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose} -profile:v baseline")
+    # note: 既にエンコードされた「encoded.mp4」を再エンコードする場合、同じファイルをエンコード、出力するとおかしくなるので、テンポラリファイルにエンコード出力する
+    encoding_path = "encoding_#{Time.now.to_i}.mp4"
+    ffmp.transcode(encoding_path, "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose} -profile:v baseline")
+    FileUtils.mv(encoding_path, encoded_path)
     self.is_ready = true
     self.movie = File.open("#{encoded_path}", "r")
     self.original_movie_file_name = self.movie_file_name if self.original_movie_file_name.blank?
