@@ -1,12 +1,11 @@
 module ApplicationHelper
 
   def videojs(movie)
-    thumb_src = movie.thumb? ? movie.thumb(:large) : "/assets/movie_thumb.jpg"
     movie_src = movie.uploaded_full_path.html_safe
 
     videojs_src = <<"EOS"
     <video id="videojs_#{movie.id}" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="none" width="100%" height="400"
-      poster="#{thumb_src}"
+      poster="#{movie.thumb_path}"
       data-setup="{}">
       <source src="#{movie_src}" type='video/mp4' />
     </video>

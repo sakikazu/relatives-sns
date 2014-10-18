@@ -6,7 +6,7 @@ class API < Grape::API
   prefix 'api'
   version 'v1', using: :path
 
-  INVALID_TOKEN_ERROR = {status: 404, message: "Invalid token."}
+  # INVALID_TOKEN_ERROR = {status: 404, message: "Invalid token."}
 
   # --- private methods ---
   helpers do
@@ -33,9 +33,23 @@ class API < Grape::API
       @user = User.find_by_authentication_token(params[:token])
       err_invalid_token if @user.blank?
 
+      timeline = []
+      Mutter.includes_all.parents_mod.limit(15).each do |mutter|
+        photo_path = mutter.photo.present? ? mutter.photo.image(:large) : "";
+        movie_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.uploaded_full_path : "";
+        movie_thumb_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.thumb_path : "";
+
+        timeline << {
+          username: mutter.user.dispname,
+          # message: mutter.view_content,
+          message: mutter.content,
+          photo_path: photo_path,
+          movie_path: movie_path,
+          movie_thumb_path: movie_thumb_path,
+        }
+      end
       return {
-        mutters: Mutter.limit(10),
-        photos: Photo.limit(5)
+        timeline: timeline
       }
     end
 
@@ -51,6 +65,29 @@ class API < Grape::API
         users: User.limit(3)
       }
     end
+
+    # POST /api/timeline/post
+    desc "post mutter"
+    post :post do
+      body = JSON.parse(params[:body])
+
+      p params[:mediaFile].head
+      uploaded_file = params[:mediaFile]
+      file = ActionDispatch::Http::UploadedFile.new(
+        filename: uploaded_file.filename,
+        type: uploaded_file.type,
+        tempfile: uploaded_file.tempfile
+      )
+      p file
+      @user = User.find_by_authentication_token(body["token"])
+      err_invalid_token if @user.blank?
+
+      Mutter.create(user_id: @user.id, content: body["message"], image: file)
+      return {
+        status: 201
+      }
+
+    end
   end
 
   # login, logout
@@ -61,19 +98,19 @@ class API < Grape::API
       username = params[:username]
       password = params[:password]
 
-      return {statue: 406, message: "The request must contain the user username and password."} if username.blank? or password.blank?
+      return {status: 406, message: "The request must contain the user username and password."} if username.blank? or password.blank?
 
       @user = User.find_by_username(username.downcase)
 
-      return {statue: 400, message: "Invalid username or passoword."} if @user.blank?
+      return {status: 400, message: "Invalid username or passoword."} if @user.blank?
 
       @user.ensure_authentication_token
       @user.save(validate: false)
 
       if not @user.valid_password?(password)
-        {statue: 401, message: "Invalid username or passoword."}
+        {status: 401, message: "Invalid username or passoword."}
       else
-        {statue: 200, result: {token: @user.authentication_token}}
+        {status: 200, result: {token: @user.authentication_token}}
       end
     end
 

@@ -154,4 +154,8 @@ class Movie < ActiveRecord::Base
     EXTS.include?(ext)
   end
 
+  def thumb_path
+    self.thumb? ? self.thumb(:large) : "/assets/movie_thumb.jpg"
+  end
+
 end

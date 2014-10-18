@@ -20,6 +20,7 @@ class Mutter < ActiveRecord::Base
   # has_one :history
 
   before_save :trans_space
+  before_save :fill_for_sort_at
   after_save :save_related_media
   after_create :update_sort_at
   # validates_presence_of :content
@@ -57,6 +58,12 @@ class Mutter < ActiveRecord::Base
   def trans_space
     #auto_linkでURLの後に全角スペースが入るとリンクが延長されてしまうため、半角スペースに変換
     self.content.gsub!("　", " ") if self.content.present?
+  end
+
+  def fill_for_sort_at
+    if self.for_sort_at.blank?
+      self.for_sort_at = Time.now
+    end
   end
 
   def save_related_media
@@ -195,7 +202,7 @@ class Mutter < ActiveRecord::Base
 
      last_id = self.uncached {
        # [memo] self.unscoped.last.id だと、uncachedしているのに再ロードされず。クエリーキャッシュは使われてないんだけど、別の機構で保持されてる感じ
-       # [memo] ここではunscopedをしないと、for_sorted_atでソートされてしまうし、unscopedをした場合はid_descまでつけてやらないと再読み込みしてくれない
+       # [memo] ここではunscopedをしないと、for_sort_atでソートされてしまうし、unscopedをした場合はid_descまでつけてやらないと再読み込みしてくれない
        last_id = self.unscoped.id_desc.first.id
      }
 
