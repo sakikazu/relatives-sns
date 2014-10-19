@@ -1,11 +1,7 @@
 <div class="mutter_content" id="mutter<%= mutter.id %>">
   <div class="icon">
     <p>
-    <% if mutter.user.present? && mutter.user.user_ext.image? -%>
-      <%= image_tag mutter.user.user_ext.image(:small), :size => "50x50", alt: "アイコン画像" %>
-  <% else -%>
-      <%= image_tag 'noimage.gif', :size => "50x50"  %>
-  <% end -%>
+    <%= image_tag mutter.user_image_path, :size => "50x50", alt: "プロフィール画像" %>
     </p>
   </div>
   <div class="content-area">

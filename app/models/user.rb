@@ -142,6 +142,14 @@ class User < ActiveRecord::Base
     save
   end
 
+  def profile_path
+    user_ext.image? ? user_ext.image(:small) : "noimage.gif"
+  end
+
+  def self.requested_users(limit = nil)
+    self.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(limit)
+  end
+
   private
 
   def generate_authentication_token

@@ -46,6 +46,8 @@ class API < Grape::API
           photo_path: photo_path,
           movie_path: movie_path,
           movie_thumb_path: movie_thumb_path,
+          profile_image_path: mutter.user_image_path,
+          post_time: mutter.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         }
       end
       return {
@@ -70,23 +72,36 @@ class API < Grape::API
     desc "post mutter"
     post :post do
       body = JSON.parse(params[:body])
-
-      p params[:mediaFile].head
-      uploaded_file = params[:mediaFile]
-      file = ActionDispatch::Http::UploadedFile.new(
-        filename: uploaded_file.filename,
-        type: uploaded_file.type,
-        tempfile: uploaded_file.tempfile
-      )
-      p file
       @user = User.find_by_authentication_token(body["token"])
       err_invalid_token if @user.blank?
 
+      # note: すごい、AndroidからのFileのパラメータがUploadedFileのinitializeにちゃんと一致する！規格あんのかな
+      file = ActionDispatch::Http::UploadedFile.new(params[:mediaFile])
+      p file
       Mutter.create(user_id: @user.id, content: body["message"], image: file)
       return {
         status: 201
       }
 
+    end
+  end
+
+  # アクティブ状況
+  resource :active_status do
+    # GET /api/v1/active_status
+    desc "get active status"
+    get do
+      requested_users = []
+      User.requested_users.each do |user|
+        requested_users << {
+          name: user.dispname,
+          profile_image_path: user.profile_path,
+          access_time: user.last_request_at,
+        }
+      end
+      return {
+        requested_users: requested_users
+      }
     end
   end
 

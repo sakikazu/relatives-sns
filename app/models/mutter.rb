@@ -245,4 +245,8 @@ class Mutter < ActiveRecord::Base
      return params
    end
 
+  def user_image_path
+    user.present? ? user.profile_path : "noimage.gif"
+  end
+
 end
