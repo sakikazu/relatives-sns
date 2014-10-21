@@ -19,7 +19,7 @@
 # * mutter.rbの、has_attached_fileの設定を有効にしておくこと！
 #
 
-logger = Logger.new("log/move_data_to_ver5.error.log")
+logger = Logger.new "tmp/move_data_to_ver5.error.log"
 
 
 # todo どこに置けばいいんだろう(ApplicationControllerにおいたものはtaskからは読めず)
