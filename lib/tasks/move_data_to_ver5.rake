@@ -19,8 +19,8 @@
 # * mutter.rbの、has_attached_fileの設定を有効にしておくこと！
 #
 
-logfile = "log/move_data_to_ver5.error.log"
-File.open(logfile, "w").close unless File.exists?
+logfile = "#{Rails.root}/log/move_data_to_ver5.error.log"
+File.open(logfile, "w").close unless File.exists?(logfile)
 logger = Logger.new logfile
 
 
