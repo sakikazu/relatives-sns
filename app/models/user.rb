@@ -143,7 +143,7 @@ class User < ActiveRecord::Base
   end
 
   def profile_path
-    user_ext.image? ? user_ext.image(:small) : "noimage.gif"
+    user_ext.image? ? user_ext.image(:small) : "/assets/noimage.gif"
   end
 
   def self.requested_users(limit = nil)

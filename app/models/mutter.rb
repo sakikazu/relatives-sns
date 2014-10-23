@@ -52,7 +52,7 @@ class Mutter < ActiveRecord::Base
   scope :id_desc, lambda { order("mutters.id DESC") }
   scope :id_asc, lambda { order("mutters.id ASC") }
 
-  default_scope {order("for_sort_at DESC")}
+  default_scope {order("mutters.for_sort_at DESC")}
 
 
   def trans_space
