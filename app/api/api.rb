@@ -10,6 +10,30 @@ class API < Grape::API
 
   # --- private methods ---
   helpers do
+    def build_timeline_data(mutters)
+      timeline = []
+      mutters.each do |mutter|
+        photo_path = mutter.photo.present? ? mutter.photo.image(:large) : "";
+        movie_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.uploaded_full_path : "";
+        movie_thumb_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.thumb_path : "";
+
+        timeline << {
+          mutter_id: mutter.id,
+          username: mutter.user.dispname,
+          # message: mutter.view_content,
+          message: mutter.content,
+          photo_path: photo_path,
+          movie_path: movie_path,
+          movie_thumb_path: movie_thumb_path,
+          profile_image_path: mutter.user_image_path,
+          post_time: mutter.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+          reply_id: mutter.reply_id,
+          for_sort_at: mutter.for_sort_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+      end
+      timeline
+    end
+
     def auth_with_token(token)
       @user = User.find_by_authentication_token(token)
       err_invalid_token if @user.blank?
@@ -38,31 +62,12 @@ class API < Grape::API
     get :initial do
       auth_with_token(params[:token])
 
-      timeline = []
       # とりあえず、「ひとりごと」はアプリには表示しないようにしよう
       parents = Mutter.includes_all.parents_mod.limit(15)
       # note: pluck(:id)だとすごい時間かかる。なぜ？？
       children = Mutter.includes_all.where(reply_id: parents.map{|n| n.id})
       mutters = parents + children
-      mutters.each do |mutter|
-        photo_path = mutter.photo.present? ? mutter.photo.image(:large) : "";
-        movie_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.uploaded_full_path : "";
-        movie_thumb_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.thumb_path : "";
-
-        timeline << {
-          mutter_id: mutter.id,
-          username: mutter.user.dispname,
-          # message: mutter.view_content,
-          message: mutter.content,
-          photo_path: photo_path,
-          movie_path: movie_path,
-          movie_thumb_path: movie_thumb_path,
-          profile_image_path: mutter.user_image_path,
-          post_time: mutter.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-          reply_id: mutter.reply_id,
-          for_sort_at: mutter.for_sort_at.strftime("%Y-%m-%d %H:%M:%S"),
-        }
-      end
+      timeline = build_timeline_data(mutters)
       return {
         timeline: timeline
       }
@@ -73,33 +78,23 @@ class API < Grape::API
     get :latest do
       auth_with_token(params[:token])
 
-      p params
-      p params[:latest_mutter_id]
-
       # todo refactoring
-      timeline = []
       # とりあえず、「ひとりごと」はアプリには表示しないようにしよう
       mutters = Mutter.includes_all.where("id > ?", params[:latest_mutter_id])
-      p mutters
-      mutters.each do |mutter|
-        photo_path = mutter.photo.present? ? mutter.photo.image(:large) : "";
-        movie_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.uploaded_full_path : "";
-        movie_thumb_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.thumb_path : "";
+      timeline = build_timeline_data(mutters)
+      return {
+        timeline: timeline
+      }
+    end
 
-        timeline << {
-          mutter_id: mutter.id,
-          username: mutter.user.dispname,
-          # message: mutter.view_content,
-          message: mutter.content,
-          photo_path: photo_path,
-          movie_path: movie_path,
-          movie_thumb_path: movie_thumb_path,
-          profile_image_path: mutter.user_image_path,
-          post_time: mutter.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-          reply_id: mutter.reply_id,
-          for_sort_at: mutter.for_sort_at.strftime("%Y-%m-%d %H:%M:%S"),
-        }
-      end
+    # GET /api/timeline/older?oldest_mutter_id=XXX&token=XXXX
+    desc "get older timeline data"
+    get :older do
+      auth_with_token(params[:token])
+
+      # とりあえず、「ひとりごと」はアプリには表示しないようにしよう
+      mutters = Mutter.includes_all.where("id < ?", params[:oldest_mutter_id]).limit(params[:limit])
+      timeline = build_timeline_data(mutters)
       return {
         timeline: timeline
       }
