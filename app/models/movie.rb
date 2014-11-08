@@ -41,6 +41,7 @@ class Movie < ActiveRecord::Base
 
   # "vide"で始まるContentType
   validates_attachment_content_type :movie, content_type: CONTENT_TYPE
+  validates_attachment_size :movie, less_than: Settings.MAX_MOVIE_MEGABYTES.megabytes
 
   has_attached_file :thumb,
     :styles => {
@@ -68,7 +69,7 @@ class Movie < ActiveRecord::Base
     # p "rotation: #{ffmp.rotation}"
     transpose = "-vf transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
 
-    max_video_wid_hei = 640
+    max_video_wid_hei = 720
     p "original size: width: #{ffmp.width} / height: #{ffmp.height}"
     if ffmp.width.present? and ffmp.height.present? and (ffmp.width > max_video_wid_hei || ffmp.height > max_video_wid_hei)
       if ffmp.height > ffmp.width
@@ -84,12 +85,14 @@ class Movie < ActiveRecord::Base
       p "computed size: #{size}"
     end
 
-    max_video_bitrate = 500
+    max_video_bitrate = 1000
     vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
 
+    # note: http://qiita.com/yuya_presto/items/9fed29296dbdc7fd1d5d
+    profile_option = "-profile:v baseline -level:v 3.1"
     # note: 既にエンコードされた「encoded.mp4」を再エンコードする場合、同じファイルをエンコード、出力するとおかしくなるので、テンポラリファイルにエンコード出力する
     encoding_path = "encoding_#{Time.now.to_i}.mp4"
-    ffmp.transcode(encoding_path, "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose} -profile:v baseline")
+    ffmp.transcode(encoding_path, "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose} #{profile_option}")
     FileUtils.mv(encoding_path, encoded_path)
     self.is_ready = true
     self.movie = File.open("#{encoded_path}", "r")
@@ -125,7 +128,8 @@ class Movie < ActiveRecord::Base
   # サムネイルがフォームから指定されていないときは動画から生成する
   # [memo] saveの前に実行する時は、サムネイルが指定されたときはスルーする判別の必要がある
   def generate_thumb(rotate)
-    if self.thumb.blank?
+    # todo ここを無効にすることで、フォームでサムネイル指定されても動画から生成して上書きするようになっている。テーブルにフラグ追加して、動画から生成するか否かを保存しておき、そこで判定する必要がある
+    # if self.thumb.blank?
       tmp_path = "#{Rails.root}/public/upload/movie/#{id}/tmp/thumb.jpg"
       system("mkdir -p #{Pathname.new(tmp_path).dirname.to_s}")
       self.ffmp.screenshot(tmp_path)
@@ -135,7 +139,7 @@ class Movie < ActiveRecord::Base
       end
       thumb = File.open(tmp_path, "r")
       update(thumb: thumb)
-    end
+    # end
   end
 
   def has_parent_mutter?
