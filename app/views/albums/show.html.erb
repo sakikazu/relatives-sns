@@ -1,5 +1,15 @@
 <script>
+
 $(document).ready(function() {
+    // 写真アップロード中に他のタブに移動してしまうと、アップロード処理が止まってしまうのでalertを出す
+    $('a[data-toggle="tab"]:not([href="#tab-photo-upload"]').on("click", function() {
+        if ($('body').data('in_upload_progress') == 1) {
+          alert('写真アップロード中のため移動できません。アップロードを中断する場合は、ページを再読み込みしてください。');
+          return false;
+        }
+    });
+
+
     $('a[data-toggle="tab"]:<%= @tab_select_index %>').tab('show');
 
   //uploadify
@@ -15,8 +25,12 @@ $(document).ready(function() {
     'buttonText' : 'ファイルを選択',
     //'buttonImg'      : '/_images/browse-files.png',
 //    '_http_accept': 'text/html',  //406error対策とかあったらがやっぱエラーになった
+    'onUploadStart' : function () {
+      $('body').data('in_upload_progress', 1);
+    },
     'onQueueComplete': function (evt, data){
       alert('ファイルのアップロードが完了しました。');
+      $('body').data('in_upload_progress', 0);
       //albums#showにuser_id付きでリクエストすることで、セッションが切れてログアウトされてしまった状態から自動でログインするようにする
       location.href = '<%= album_url(@album, "album[sort_flg]" => 1, "album[user_id]" => current_user.id) %>';
       <%#= remote_function(:url => {:controller => :albums, :action => :upload_complete, :id => @album.id},
