@@ -1,5 +1,5 @@
 listen '/tmp/unicorn_adan.sock', :backlog => 1024
-pid '/tmp/unicorn.adan.pid'
+pid '/usr/local/site/adan/shared/tmp/pids/unicorn.adan.pid'
 
 # worker_processes 2
 
