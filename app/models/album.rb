@@ -41,7 +41,7 @@ class Album < ActiveRecord::Base
   def self.set_thumb_if_noset(albums)
     albums.each do |album|
       if album.thumb_id.blank?
-        album.thumb_id = album.photos.sample.id
+        album.thumb_id = album.photos.sample.id if album.photos.sample.present?
       end
     end
   end
