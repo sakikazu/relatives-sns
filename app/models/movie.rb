@@ -79,7 +79,7 @@ class Movie < ActiveRecord::Base
       else
         ratio = max_video_wid_hei.to_f / ffmp.width
         width = max_video_wid_hei 
-        height = (ffmp.height * ratio).to_i
+        height = fix_height((ffmp.height * ratio).to_i)
       end
       size = "-s #{width}x#{height}"
       p "computed size: #{size}"
@@ -162,4 +162,10 @@ class Movie < ActiveRecord::Base
     self.thumb? ? self.thumb(:large) : "/assets/movie_thumb.jpg"
   end
 
+  private
+
+  # note: mp4動画をリサイズするときにheightが2で割り切れないときは「height not divisible by 2」というエラーが出るので、偶数にする
+  def fix_height height
+    return (height % 2 == 1) ? height + 1 : height
+  end
 end
