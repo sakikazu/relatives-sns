@@ -61,9 +61,10 @@ class API < Grape::API
     # end
     get :initial do
       auth_with_token(params[:token])
+      limit = params[:limit].presence || 15
 
       # とりあえず、「ひとりごと」はアプリには表示しないようにしよう
-      parents = Mutter.includes_all.parents_mod.limit(15)
+      parents = Mutter.includes_all.parents_mod.limit(limit)
       # note: pluck(:id)だとすごい時間かかる。なぜ？？
       children = Mutter.includes_all.where(reply_id: parents.map{|n| n.id})
       mutters = parents + children
@@ -104,7 +105,15 @@ class API < Grape::API
     desc "post mutter"
     post :post do
       p params
-      body = JSON.parse(params[:body])
+      body = nil
+
+      # note: Androidだとbodyキーが存在するがiOSでは存在しない。まあこのままでいっか
+      if params.has_key? :body
+        body = JSON.parse(params[:body])
+      else
+        body = params
+      end
+
       p "body:#{body}"
       p "token:#{body["token"]}"
       auth_with_token(body["token"])
