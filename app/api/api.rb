@@ -29,6 +29,7 @@ class API < Grape::API
           post_time: mutter.created_at.strftime("%Y-%m-%d %H:%M:%S"),
           reply_id: mutter.reply_id,
           for_sort_at: mutter.for_sort_at.strftime("%Y-%m-%d %H:%M:%S"),
+          can_modify: (mutter.user_id == @user.id) ? true : false
         }
       end
       timeline
@@ -130,6 +131,24 @@ class API < Grape::API
       }
 
     end
+
+    # POST /api/timeline/delete
+    desc "delete mutter"
+    delete :delete do
+      p params
+      auth_with_token(params["token"])
+
+      mutter = Mutter.find(params["mutter_id"])
+      return {} if mutter.blank?
+
+      mutter.destroy
+
+      return {
+        status: 201
+      }
+
+    end
+
   end
 
   # アクティブ状況
