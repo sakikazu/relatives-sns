@@ -16,6 +16,7 @@ class API < Grape::API
         photo_path = mutter.photo.present? ? mutter.photo.image(:large) : "";
         movie_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.uploaded_full_path : "";
         movie_thumb_path = (mutter.movie.present? and mutter.movie.is_ready?) ? mutter.movie.thumb_path : "";
+        is_encoding_movie = (mutter.movie.present? and not mutter.movie.is_ready?) ? true : false
 
         timeline << {
           mutter_id: mutter.id,
@@ -25,6 +26,7 @@ class API < Grape::API
           photo_path: photo_path,
           movie_path: movie_path,
           movie_thumb_path: movie_thumb_path,
+          is_encoding_movie: is_encoding_movie,
           profile_image_path: mutter.user_image_path,
           post_time: mutter.created_at.strftime("%Y-%m-%d %H:%M:%S"),
           reply_id: mutter.reply_id,
@@ -138,7 +140,7 @@ class API < Grape::API
       p params
       auth_with_token(params["token"])
 
-      mutter = Mutter.find(params["mutter_id"])
+      mutter = Mutter.find_by_id(params["mutter_id"])
       return {} if mutter.blank?
 
       mutter.destroy
