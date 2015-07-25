@@ -31,7 +31,8 @@ class API < Grape::API
           post_time: mutter.created_at.strftime("%Y-%m-%d %H:%M:%S"),
           reply_id: mutter.reply_id,
           for_sort_at: mutter.for_sort_at.strftime("%Y-%m-%d %H:%M:%S"),
-          can_modify: (mutter.user_id == @user.id) ? true : false
+          can_modify: (mutter.user_id == @user.id) ? true : false,
+          deleted_at: mutter.deleted_at
         }
       end
       timeline
@@ -73,21 +74,38 @@ class API < Grape::API
       mutters = parents + children
       timeline = build_timeline_data(mutters)
       return {
-        timeline: timeline
+        timeline: timeline,
+        latest_request_at: Time.now.to_s(:long)
       }
     end
 
-    # GET /api/timeline/latest?latest_mutter_id=XXX&token=XXXX
+    # 指定時間以降更新があれば、特定件数返す
+    # GET /api/timeline/latest?latest_request_at=XXX&token=XXXX
     desc "get latest timeline data"
     get :latest do
       auth_with_token(params[:token])
+      limit = params[:limit].presence || 15
+
+      # 更新があるかチェック
+      current_time = Time.zone.parse(params[:latest_request_at])
+      updated_mutters = Mutter.with_deleted.where("for_sort_at > ? or deleted_at > ?", current_time, current_time)
+      updated_nices = Nice.where("created_at > ?", current_time)
+      if updated_mutters.blank? and updated_nices.blank?
+        return {
+          timeline: []
+        }
+      end
 
       # todo refactoring
       # とりあえず、「ひとりごと」はアプリには表示しないようにしよう
-      mutters = Mutter.includes_all.where("id > ?", params[:latest_mutter_id])
+      # 削除されたものも返したいので含む
+      parents = Mutter.with_deleted.includes_all.parents_mod.limit(limit)
+      children = Mutter.with_deleted.includes_all.where(reply_id: parents.map{|n| n.id})
+      mutters = parents + children
       timeline = build_timeline_data(mutters)
       return {
-        timeline: timeline
+        timeline: timeline,
+        latest_request_at: Time.now.to_s(:long)
       }
     end
 
