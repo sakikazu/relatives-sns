@@ -146,6 +146,7 @@ class API < Grape::API
       # todo 現状、アプリから文字列として時間を受け取ると、タイムゾーン考慮されてないので-9hで入るな。とりあえず、サーバーの方で時間は埋めとくが、これだと少し遅い時間になるのでどうにかして
       # Mutter.create(user_id: @user.id, content: body["message"], image: file, for_sort_at: body["for_sort_at"])
       Mutter.create(user_id: @user.id, content: body["message"], image: file, reply_id: reply_id)
+      UserExtension.send_gcm(@user.dispname, body["message"])
       return {
         status: 201
       }
@@ -230,6 +231,19 @@ class API < Grape::API
 
   end
 
+  resource :register_id do
+    # POST /api/v1/register_id
+    desc 'プッシュ通知用regId登録'
+    post do
+      auth_with_token(params[:token])
+      reg_id = params[:register_id]
+      if reg_id.present?
+        @user.save_extension(UserExtension::PUSH_APNS_OR_GCM, UserExtension::TYPE_GCM)
+        @user.save_extension(UserExtension::PUSH_DEVICE_TOKEN, reg_id)
+      end
+      return {status: 200}
+    end
+  end
 
   resource :user do
     desc 'ユーザー追加'

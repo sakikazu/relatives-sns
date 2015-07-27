@@ -60,6 +60,8 @@ gem 'sidekiq'
 # Ajaxでファイルアップロード
 gem 'remotipart', '~> 1.2'
 
+gem 'gcm'
+gem 'apns'
 
 # todo 問題なさげ？このまま大丈夫ならここ削除
 # memo jquery 1.9以上になるとliveが使えずエラーになるのでバージョン指定
