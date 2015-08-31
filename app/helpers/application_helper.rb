@@ -47,6 +47,13 @@ EOS
   # UserAgentから各デバイス名を割り出す
   #
   def useragent(ua)
+    # Android App
+    if ua =~ /^AdanAndroidApp/
+      return ua
+    # iOS App
+    elsif ua =~ /^AdanIOSApp/
+      return ua
+    end
 
     # browser
     case ua

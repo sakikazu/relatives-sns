@@ -125,6 +125,7 @@ class API < Grape::API
     # POST /api/timeline/post
     desc "post mutter"
     post :post do
+      ua =  headers["User-Agent"]
       p params
       body = nil
 
@@ -145,7 +146,7 @@ class API < Grape::API
       p file
       # todo 現状、アプリから文字列として時間を受け取ると、タイムゾーン考慮されてないので-9hで入るな。とりあえず、サーバーの方で時間は埋めとくが、これだと少し遅い時間になるのでどうにかして
       # Mutter.create(user_id: @user.id, content: body["message"], image: file, for_sort_at: body["for_sort_at"])
-      Mutter.create(user_id: @user.id, content: body["message"], image: file, reply_id: reply_id)
+      Mutter.create(user_id: @user.id, content: body["message"], image: file, reply_id: reply_id, ua: ua)
       UserExtension.send_gcm(@user.dispname, body["message"])
       return {
         status: 201
