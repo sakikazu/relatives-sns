@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :members do
     collection do
+      get 'relation'
       get 'edit'
       get 'edit_ex'
       get 'map'

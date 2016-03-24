@@ -1,0 +1,12 @@
+#sakimuras
+  %ul.members
+    - @users.each do |u|
+      %li.clearfix
+        .img
+          = image_tag "/images/missing.gif"
+        .name
+          = u
+        .info
+          %p.underline 長男
+          %p.underline 65歳
+          %p 属8人

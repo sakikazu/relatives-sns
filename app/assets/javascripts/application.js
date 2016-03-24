@@ -57,7 +57,16 @@ $(function(){
   });
   nice_member();
 
-
+  $('#members_controller li').on('click', function() {
+	  var offset = $(this).offset();
+	  offsetY = offset.top;
+	  // positionX = offset.left;
+	  positionX = 200;
+	  // console.log(positionX);
+	  $("#sakimuras").append("<ul class='family'>");
+	  $("ul.family").css({"top": offsetY, "left": positionX});
+	  // alert(offsetY);
+  });
 });
 
 

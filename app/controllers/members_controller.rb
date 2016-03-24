@@ -2,6 +2,11 @@ class MembersController < ApplicationController
   before_filter :authenticate_user!
   before_filter :page_title
 
+  # 家系図
+  def relation
+    @users = ["崎村輝美", "maki", "shin"]
+  end
+
   # GET /members
   # GET /members.json
   def index
