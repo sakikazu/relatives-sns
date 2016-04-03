@@ -1,12 +1,52 @@
 #sakimuras
-  %ul.members
-    - @users.each do |u|
-      %li.clearfix
-        .img
-          = image_tag "/images/missing.gif"
-        .name
-          = u
-        .info
-          %p.underline 長男
-          %p.underline 65歳
-          %p 属8人
+  #generation1
+    %ul.members
+      - @users.each do |u|
+        %li.list.clearfix{id: "id#{u[:id]}"}
+          .img
+            = image_tag "/images/missing.gif"
+          .name
+            = u[:name]
+          .info
+            %p.underline= "#{u[:relational]}"
+            %p.underline= "#{u[:age]}歳"
+            %p= "属#{u[:has_members_num]}人"
+        %div{style: "display:none"}
+          %ul.members.child{id: "id#{u[:id]}-family"}
+            %li.zoom.clearfix{id: "id#{u[:id]}"}
+              = render partial: 'member_zoom', locals: {user: u}
+
+            - if u[:family].present?
+              - u[:family].each do |uu|
+                %li.list.clearfix{id: "id#{uu[:id]}"}
+                  = render partial: 'member_list', locals: {user: uu}
+
+                %div{style: "display:none"}
+                  %ul.members.child{id: "id#{uu[:id]}-family"}
+                    %li.zoom.clearfix{id: "id#{uu[:id]}"}
+                      = render partial: 'member_zoom', locals: {user: uu}
+
+                    - if uu[:family].present?
+                      - uu[:family].each do |uuu|
+                        %li.list.clearfix{id: "id#{uuu[:id]}"}
+                          = render partial: 'member_list', locals: {user: uuu}
+
+                        %div{style: "display:none"}
+                          %ul.members.child{id: "id#{uuu[:id]}-family"}
+                            %li.zoom.clearfix{id: "id#{uuu[:id]}"}
+                              = render partial: 'member_zoom', locals: {user: uuu}
+
+                            - if uuu[:family].present?
+                              - uuu[:family].each do |uuuu|
+                                %li.list.clearfix{id: "id#{uuuu[:id]}"}
+                                  = render partial: 'member_list', locals: {user: uuuu}
+
+                                %ul.members.child{id: "id#{uuuu[:id]}-family"}
+                                  %li.zoom.clearfix{id: "id#{uuuu[:id]}"}
+                                    = render partial: 'member_zoom', locals: {user: uuuu}
+
+  #generation2
+  #generation3
+  #generation4
+  #generation5
+

@@ -4,7 +4,25 @@ class MembersController < ApplicationController
 
   # 家系図
   def relation
-    @users = ["崎村輝美", "maki", "shin"]
+    @users = [
+      {id: 1, name: "崎村輝美", age: 67, relational: "長男", has_members_num: 5, family: [
+        {id: 11, name: "キヨコ", age: 63, relational: "妻", has_members_num: 0, family: nil},
+        {id: 12, name: "和孝", age: 33, relational: "長男", has_members_num: 0, family: nil},
+        {id: 13, name: "泰孝", age: 32, relational: "次男", has_members_num: 2, family: [
+          {id: 101, name: "まさみ", age: 42, relational: "妻", has_members_num: 0, family: nil},
+          {id: 102, name: "kouta", age: 4, relational: "長男", has_members_num: 0, family: nil},
+        ]},
+      ]},
+      {id: 2, name: "崎村まき", age: 60, relational: "五女", has_members_num: 3, family: [
+        {id: 21, name: "政孝", age: 63, relational: "夫", has_members_num: 0, family: nil},
+        {id: 22, name: "たかひろ", age: 33, relational: "長男", has_members_num: 0, family: nil},
+        {id: 23, name: "ちさ", age: 32, relational: "次男", has_members_num: 2, family: [
+          {id: 121, name: "aaa", age: 6, relational: "長女", has_members_num: 0, family: nil},
+          {id: 122, name: "bbb", age: 4, relational: "長男", has_members_num: 0, family: nil},
+        ]},
+      ]},
+      {id: 3, name: "崎村ゆかり", age: 53, relational: "六女", has_members_num: 3, family: nil},
+    ]
   end
 
   # GET /members

@@ -42,6 +42,52 @@ myThumbnail = function(target_area) {
   });
 }
 
+// 選択枠線と表示済みの家族を初期化
+function initiateList($obj) {
+  $obj.find("li").removeClass('selected');
+  $next_obj = $obj.next();
+  if ($next_obj.is("[id*=generation]")) {
+	$next_obj.children().hide();
+    initiateList($next_obj);
+  } else {
+  	return;
+  }
+}
+
+function calc_next_ul_top($selected_li) {
+  var offsetY = $selected_li.offset().top;
+  var $wrap_ul = $selected_li.closest('ul');
+  var ul_offsetY = $wrap_ul.offset().top;
+  var next_ul_top = offsetY - ul_offsetY;
+  // console.log(next_ul_top);
+  return next_ul_top;
+}
+
+function build_relation() {
+  $('#members_controller li').on('click', function() {
+    $selected_li = $(this);
+
+    if ($selected_li.hasClass('zoom')) return;
+
+    var $this_wrapper = $selected_li.closest("div[id*=generation");
+	initiateList($this_wrapper);
+    var $appended_wrapper = $this_wrapper.next();
+	console.log($appended_wrapper);
+
+    var member_id = $selected_li.attr("id");
+    console.log(member_id);
+    var $member_ul = $("#" + member_id + "-family");
+	$member_ul.show();
+    $member_ul.find('li.zoom').addClass('selected');
+    $selected_li.addClass('selected');
+
+    $appended_wrapper.append($member_ul);
+
+    var next_ul_top = calc_next_ul_top($selected_li);
+    $member_ul.css({"top": next_ul_top});
+  });
+}
+
 $(function(){
   //イイネしたメンバーをクリックで表示する
   nice_member = (function(){
@@ -57,16 +103,7 @@ $(function(){
   });
   nice_member();
 
-  $('#members_controller li').on('click', function() {
-	  var offset = $(this).offset();
-	  offsetY = offset.top;
-	  // positionX = offset.left;
-	  positionX = 200;
-	  // console.log(positionX);
-	  $("#sakimuras").append("<ul class='family'>");
-	  $("ul.family").css({"top": offsetY, "left": positionX});
-	  // alert(offsetY);
-  });
+  build_relation();
 });
 
 

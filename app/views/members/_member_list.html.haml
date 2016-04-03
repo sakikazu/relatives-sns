@@ -1,0 +1,8 @@
+.img
+  = image_tag "/images/missing.gif"
+.name
+  = user[:name]
+.info
+  %p.underline= "#{user[:relational]}"
+  %p.underline= "#{user[:age]}歳"
+  %p= "属#{user[:has_members_num]}人"
