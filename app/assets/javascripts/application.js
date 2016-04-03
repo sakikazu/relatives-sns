@@ -64,7 +64,7 @@ function calc_next_ul_top($selected_li) {
 }
 
 function build_relation() {
-  $('#members_controller li').on('click', function() {
+  $('#members_controller #sakimuras li').on('click', function() {
     $selected_li = $(this);
 
     if ($selected_li.hasClass('zoom')) return;
