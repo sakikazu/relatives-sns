@@ -86,8 +86,10 @@ class MembersController < ApplicationController
   # GET /members/new
   # GET /members/new.json
   def new
-    render :text => "権限がありません。" unless current_user.admin?
+    @parent_user = params[:parent_user]
     @user = User.new
+    @user.parent_id = @parent_user[:id]
+    @user.build_user_ext
 
     respond_to do |format|
       format.html # new.html.erb
@@ -97,8 +99,7 @@ class MembersController < ApplicationController
 
   # GET /members/1/edit
   def edit
-    @user = current_user
-    # @user = User.find(params[:id])
+    @user = User.find(params[:id])
   end
 
   # POST /members
@@ -123,7 +124,8 @@ class MembersController < ApplicationController
   # PUT /members/1
   # PUT /members/1.json
   def update
-    @user = current_user
+    @user = User.find(params[:id])
+    p params
 
     respond_to do |format|
       if @user.update_attributes(member_params)
@@ -169,7 +171,7 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params
-      params.require(:member).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at)
+      params.require(:user).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:image])
   end
 
   def user_ext_params

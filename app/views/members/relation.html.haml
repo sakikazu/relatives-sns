@@ -1,3 +1,6 @@
+.page-header
+  %h3 家系図
+
 #sakimuras{style: "width: 1100px; height: 1000px"}
   #generation1
     %ul.members
@@ -16,6 +19,9 @@
             %li.zoom.clearfix{id: "id#{u[:id]}"}
               = render partial: 'member_zoom', locals: {user: u}
 
+            %li.add_user
+              = link_to "家族追加", new_member_path(parent_user: u), class: "btn btn-warning btn-block"
+
             - if u[:family].present?
               - u[:family].each do |uu|
                 %li.list.clearfix{id: "id#{uu[:id]}"}
@@ -25,6 +31,9 @@
                   %ul.members.child{id: "id#{uu[:id]}-family"}
                     %li.zoom.clearfix{id: "id#{uu[:id]}"}
                       = render partial: 'member_zoom', locals: {user: uu}
+
+                    %li.add_user
+                      = link_to "家族追加", new_member_path(parent_user: uu), class: "btn btn-warning btn-block"
 
                     - if uu[:family].present?
                       - uu[:family].each do |uuu|
@@ -36,6 +45,9 @@
                             %li.zoom.clearfix{id: "id#{uuu[:id]}"}
                               = render partial: 'member_zoom', locals: {user: uuu}
 
+                            %li.add_user
+                              = link_to "家族追加", new_member_path(parent_user: uuu), class: "btn btn-warning btn-block"
+
                             - if uuu[:family].present?
                               - uuu[:family].each do |uuuu|
                                 %li.list.clearfix{id: "id#{uuuu[:id]}"}
@@ -44,6 +56,9 @@
                                 %ul.members.child{id: "id#{uuuu[:id]}-family"}
                                   %li.zoom.clearfix{id: "id#{uuuu[:id]}"}
                                     = render partial: 'member_zoom', locals: {user: uuuu}
+
+                                  %li.add_user
+                                    = link_to "家族追加", new_member_path(parent_user: uuuu), class: "btn btn-warning btn-block"
 
   #generation2
   #generation3

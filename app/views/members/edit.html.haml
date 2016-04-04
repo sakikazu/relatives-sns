@@ -1,0 +1,10 @@
+.mb20
+  = link_to "戻る", relation_members_path, class: "btn"
+
+.page-header
+  %h3 ＜#{@user.dispname}＞の情報を編集
+
+= render 'form'
+
+.mt20.text-center
+  = link_to "削除", member_path(@user), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger"

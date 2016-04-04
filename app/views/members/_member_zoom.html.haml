@@ -1,8 +1,7 @@
 .img
   = image_tag "/images/missing.gif"
 .name
-  = user[:name]
+  = "#{user[:name]} (#{user[:age]}歳)"
 .info
-  %p.underline= "#{user[:relational]}"
-  %p.underline= "#{user[:age]}歳"
-  %p= "属#{user[:has_members_num]}人"
+  %p.underline AB型
+  %p= link_to "編集", edit_member_path(user)

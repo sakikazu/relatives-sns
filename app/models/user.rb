@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :user_extensions
   has_one :my_album, class_name: "Album", foreign_key: "owner_id"
 
+  accepts_nested_attributes_for :user_ext
+
   after_save :rel_save
 
   # Include default devise modules. Others available are:

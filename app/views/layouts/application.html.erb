@@ -257,7 +257,7 @@ function showComments(obj) {
            <ul class="nav pull-right">
              <li><%= link_to current_user.dispname(User::FULLNAME), edit_ex_members_path if current_user.present? %></li>
              <!-- todo ドロップダウンメニューに入れたら、httpメソッドがGETになってしまう？？ -->
-             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+			 <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしますか？"} %></li>
 
              <li class="divider-vertical"></li>
              <li class="dropdown">
