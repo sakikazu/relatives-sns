@@ -11,7 +11,7 @@
           .name
             = u[:name]
           .info
-            %p.underline= "#{u[:relational]}"
+            %p.underline= "#{u[:sex_h]}"
             %p.underline= "#{u[:age]}歳"
             %p= "属#{u[:has_members_num]}人"
         %div{style: "display:none"}
@@ -20,7 +20,7 @@
               = render partial: 'member_zoom', locals: {user: u}
 
             %li.add_user
-              = link_to "家族追加", new_member_path(parent_user: u), class: "btn btn-warning btn-block"
+              = link_to "家族追加", new_member_path(parent_user_id: u[:id]), class: "btn btn-warning btn-block"
 
             - if u[:family].present?
               - u[:family].each do |uu|
@@ -33,7 +33,7 @@
                       = render partial: 'member_zoom', locals: {user: uu}
 
                     %li.add_user
-                      = link_to "家族追加", new_member_path(parent_user: uu), class: "btn btn-warning btn-block"
+                      = link_to "家族追加", new_member_path(parent_user_id: uu[:id]), class: "btn btn-warning btn-block"
 
                     - if uu[:family].present?
                       - uu[:family].each do |uuu|
@@ -46,7 +46,7 @@
                               = render partial: 'member_zoom', locals: {user: uuu}
 
                             %li.add_user
-                              = link_to "家族追加", new_member_path(parent_user: uuu), class: "btn btn-warning btn-block"
+                              = link_to "家族追加", new_member_path(parent_user_id: uuu[:id]), class: "btn btn-warning btn-block"
 
                             - if uuu[:family].present?
                               - uuu[:family].each do |uuuu|
@@ -58,7 +58,7 @@
                                     = render partial: 'member_zoom', locals: {user: uuuu}
 
                                   %li.add_user
-                                    = link_to "家族追加", new_member_path(parent_user: uuuu), class: "btn btn-warning btn-block"
+                                    = link_to "家族追加", new_member_path(parent_user_id: uuuu[:id]), class: "btn btn-warning btn-block"
 
   #generation2
   #generation3

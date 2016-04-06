@@ -4,31 +4,45 @@ class MembersController < ApplicationController
 
   # 家系図
   def relation
-    @users = [
-      {id: 1, name: "崎村輝美", age: 67, relational: "長男", has_members_num: 5, family: [
-        {id: 11, name: "キヨコ", age: 63, relational: "妻", has_members_num: 0, family: nil},
-        {id: 12, name: "和孝", age: 33, relational: "長男", has_members_num: 0, family: nil},
-        {id: 13, name: "泰孝", age: 32, relational: "次男", has_members_num: 2, family: [
-          {id: 101, name: "まさみ", age: 42, relational: "妻", has_members_num: 0, family: nil},
-          {id: 102, name: "kouta", age: 4, relational: "長男", has_members_num: 0, family: nil},
-        ]},
-      ]},
-      {id: 2, name: "崎村まき", age: 60, relational: "五女", has_members_num: 3, family: [
-        {id: 21, name: "政孝", age: 63, relational: "夫", has_members_num: 0, family: nil},
-        {id: 22, name: "たかひろ", age: 33, relational: "長男", has_members_num: 0, family: nil},
-        {id: 23, name: "ちさ", age: 32, relational: "次男", has_members_num: 2, family: [
-          {id: 121, name: "aaa", age: 6, relational: "長女", has_members_num: 0, family: nil},
-          {id: 122, name: "bbb", age: 4, relational: "長男", has_members_num: 0, family: nil},
-        ]},
-      ]},
-      {id: 3, name: "崎村ゆかり", age: 53, relational: "六女", has_members_num: 3, family: nil},
-    ]
+    users = User.includes_ext.order("users.root11, users.id")
+    users = users.select{|u| u.parent_id == nil}
+    @users = []
+    users.each do |user|
+      @users << recursive_relation(user)
+    end
+  end
+
+  def recursive_relation(user)
+    user_h = {id: user.id,
+              name: user.dispname(User::FULLNAME),
+              age: user.user_ext.age,
+              sex_h: user.user_ext.sex_name,
+              blood_h: user.user_ext.blood_name,
+              address: user.user_ext.address
+    }
+
+    children = user.children
+    if children.blank?
+      return user_h.merge({has_members_num: 0, family: []})
+    else
+      has_members_num = 0
+      family = []
+
+      children.each do |child|
+        has_members_num += 1
+
+        child_h = recursive_relation(child)
+        family << child_h
+        has_members_num += child_h[:has_members_num]
+      end
+      return user_h.merge({has_members_num: has_members_num, family: family})
+    end
   end
 
   # GET /members
   # GET /members.json
   def index
-    @users = User.includes("user_ext").order("users.root11, users.id")
+    @users = User.includes_ext.order("users.root11, users.id")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -37,7 +51,7 @@ class MembersController < ApplicationController
   end
 
   def all
-    @users = User.includes("user_ext").order("user_exts.updated_at DESC")
+    @users = User.includes_ext.order("user_exts.updated_at DESC")
   end
 
   def login_history
@@ -86,10 +100,9 @@ class MembersController < ApplicationController
   # GET /members/new
   # GET /members/new.json
   def new
-    @parent_user = params[:parent_user]
     @user = User.new
-    @user.parent_id = @parent_user[:id]
     @user.build_user_ext
+    @user.parent_id = params[:parent_user_id]
 
     respond_to do |format|
       format.html # new.html.erb
@@ -125,7 +138,6 @@ class MembersController < ApplicationController
   # PUT /members/1.json
   def update
     @user = User.find(params[:id])
-    p params
 
     respond_to do |format|
       if @user.update_attributes(member_params)
@@ -158,7 +170,7 @@ class MembersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to members_url }
+      format.html { redirect_to relation_members_url }
       format.json { head :no_content }
     end
   end

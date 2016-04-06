@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   has_one :user_ext
   has_many :user_extensions
   has_one :my_album, class_name: "Album", foreign_key: "owner_id"
+  belongs_to :parent, class_name: "User", foreign_key: "parent_id"
+  has_many :children, class_name: "User", foreign_key: "parent_id"
 
   accepts_nested_attributes_for :user_ext
 
@@ -20,6 +22,8 @@ class User < ActiveRecord::Base
          :authentication_keys => [:username]
 
   validates :username, presence: true, uniqueness: true
+
+  scope :includes_ext, -> { includes("user_ext") }
 
 
   #role
