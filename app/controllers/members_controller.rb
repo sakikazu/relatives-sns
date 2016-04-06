@@ -4,7 +4,7 @@ class MembersController < ApplicationController
 
   # 家系図
   def relation
-    users = User.includes_ext.order("users.root11, users.id")
+    users = User.includes_ext.order("user_exts.birth_day ASC")
     users = users.select{|u| u.parent_id == nil}
     @users = []
     users.each do |user|
@@ -18,10 +18,12 @@ class MembersController < ApplicationController
               age: user.user_ext.age,
               sex_h: user.user_ext.sex_name,
               blood_h: user.user_ext.blood_name,
-              address: user.user_ext.address
+              address: user.user_ext.address,
+              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/images/missing.gif"
     }
 
-    children = user.children
+    # todo SQL最適化したい
+    children = user.children.includes_ext.order("user_exts.birth_day ASC")
     if children.blank?
       return user_h.merge({has_members_num: 0, family: []})
     else
@@ -119,14 +121,14 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @user = User.new(member_params)
+    @user.username = SecureRandom.uuid
 
     respond_to do |format|
-      if @user.save
-        flash[:notice] = "#{@user.login} を登録しました！"
-        redirect_back_or_default new_user_url
+      if @user.save(validate: false)
+        # redirect_back_or_default new_user_url
 
-        # format.html { redirect_to @user, notice: 'Member was successfully created.' }
-        # format.json { render json: @user, status: :created, location: @user }
+        format.html { redirect_to relation_members_path, notice: "#{@user.dispname(User::FULLNAME)}を登録しました." }
+        format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -138,10 +140,11 @@ class MembersController < ApplicationController
   # PUT /members/1.json
   def update
     @user = User.find(params[:id])
+    @user.attributes = member_params
 
     respond_to do |format|
-      if @user.update_attributes(member_params)
-        format.html { redirect_to member_path(@user), notice: '更新しました.' }
+      if @user.save(validate: false)
+        format.html { redirect_to relation_members_path, notice: "#{@user.dispname(User::FULLNAME)}の情報を更新しました." }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -167,10 +170,11 @@ class MembersController < ApplicationController
   # DELETE /members/1.json
   def destroy
     @user = User.find(params[:id])
+    name = @user.dispname(User::FULLNAME)
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to relation_members_url }
+      format.html { redirect_to relation_members_url, notice: "#{name}を削除しました." }
       format.json { head :no_content }
     end
   end
@@ -183,7 +187,7 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params
-      params.require(:user).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:image])
+      params.require(:user).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:image, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day])
   end
 
   def user_ext_params

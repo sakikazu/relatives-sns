@@ -7,7 +7,7 @@
       - @users.each do |u|
         %li.list.clearfix{id: "id#{u[:id]}"}
           .img
-            = image_tag "/images/missing.gif"
+            = image_tag u[:image_path]
           .name
             = u[:name]
           .info
