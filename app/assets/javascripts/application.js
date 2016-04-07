@@ -56,9 +56,11 @@ function initiateList($obj) {
 
 function calc_next_ul_top($selected_li) {
   var offsetY = $selected_li.offset().top;
-  var $wrap_ul = $selected_li.closest('ul');
-  var ul_offsetY = $wrap_ul.offset().top;
-  var next_ul_top = offsetY - ul_offsetY;
+  // var $wrap_ul = $selected_li.closest('ul');
+  // var ul_offsetY = $wrap_ul.offset().top;
+  // var next_ul_top = offsetY - ul_offsetY;
+  var sakimurasY = $("#sakimuras").offset().top;
+  var next_ul_top = offsetY - sakimurasY;
   // console.log(next_ul_top);
   return next_ul_top;
 }

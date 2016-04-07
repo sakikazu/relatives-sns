@@ -4,15 +4,15 @@ class MembersController < ApplicationController
 
   # 家系図
   def relation
-    users = User.includes_ext.order("user_exts.birth_day ASC")
-    users = users.select{|u| u.parent_id == nil}
+    all_users = User.includes_ext.order("user_exts.birth_day ASC")
+    root11_users = all_users.select{|u| u.parent_id == nil}
     @users = []
-    users.each do |user|
-      @users << recursive_relation(user)
+    root11_users.each do |user|
+      @users << recursive_relation(user, all_users)
     end
   end
 
-  def recursive_relation(user)
+  def recursive_relation(user, users)
     user_h = {id: user.id,
               name: user.dispname(User::FULLNAME),
               age: user.user_ext.age,
@@ -22,8 +22,7 @@ class MembersController < ApplicationController
               image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/images/missing.gif"
     }
 
-    # todo SQL最適化したい
-    children = user.children.includes_ext.order("user_exts.birth_day ASC")
+    children = users.select{|u| u.parent_id == user.id}
     if children.blank?
       return user_h.merge({has_members_num: 0, family: []})
     else
@@ -33,7 +32,7 @@ class MembersController < ApplicationController
       children.each do |child|
         has_members_num += 1
 
-        child_h = recursive_relation(child)
+        child_h = recursive_relation(child, users)
         family << child_h
         has_members_num += child_h[:has_members_num]
       end
@@ -105,6 +104,7 @@ class MembersController < ApplicationController
     @user = User.new
     @user.build_user_ext
     @user.parent_id = params[:parent_user_id]
+    @users = User.includes_ext.order("user_exts.birth_day ASC")
 
     respond_to do |format|
       format.html # new.html.erb
@@ -115,6 +115,7 @@ class MembersController < ApplicationController
   # GET /members/1/edit
   def edit
     @user = User.find(params[:id])
+    @users = User.includes_ext.order("user_exts.birth_day ASC")
   end
 
   # POST /members
@@ -187,7 +188,7 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params
-      params.require(:user).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:image, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day])
+      params.require(:user).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:id, :image, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day])
   end
 
   def user_ext_params
