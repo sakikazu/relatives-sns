@@ -95,9 +95,10 @@ class User < ActiveRecord::Base
     when NICKNAME
       name = self.user_ext.nickname if self.user_ext
     when FULLNAME
-      name = "#{self.user_ext.familyname}#{self.user_ext.givenname}"
+      name = "#{self.familyname}#{self.givenname}"
     when FULLNICK
-      name = "#{self.user_ext.nickname}(#{self.user_ext.familyname}#{self.user_ext.givenname})" if self.user_ext && !self.user_ext.nickname.blank? && !self.user_ext.familyname.blank? && !self.user_ext.givenname.blank?
+      name = "#{self.familyname}#{self.givenname}"
+      name += "(#{self.user_ext.nickname})" if self.user_ext && !self.user_ext.nickname.blank?
     end
 
     # 名前が設定されていなかったら、管理者設定の名前を使う

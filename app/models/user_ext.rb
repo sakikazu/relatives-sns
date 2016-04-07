@@ -71,6 +71,7 @@ class UserExt < ActiveRecord::Base
     kinenday_array = [10000,20000,30000,40000]
 
     UserExt.includes(:user).where("birth_day is not NULL").each do |ue|
+	  next if ue.user.blank?
       birday_tmp = Date.new(Date.today.year, ue.birth_day.month, ue.birth_day.day)
     
       ##--年齢--##

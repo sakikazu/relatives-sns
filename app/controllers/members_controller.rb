@@ -14,7 +14,7 @@ class MembersController < ApplicationController
 
   def recursive_relation(user, users)
     user_h = {id: user.id,
-              name: user.dispname(User::FULLNAME),
+              name: user.dispname(User::FULLNICK),
               age: user.user_ext.age,
               sex_h: user.user_ext.sex_name,
               blood_h: user.user_ext.blood_name,

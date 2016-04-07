@@ -71,7 +71,7 @@ function build_relation() {
 
     if ($selected_li.hasClass('zoom')) return;
 
-    var $this_wrapper = $selected_li.closest("div[id*=generation");
+    var $this_wrapper = $selected_li.closest("div[id*=generation]");
 	initiateList($this_wrapper);
     var $appended_wrapper = $this_wrapper.next();
 
