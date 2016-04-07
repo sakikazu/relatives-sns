@@ -74,10 +74,8 @@ function build_relation() {
     var $this_wrapper = $selected_li.closest("div[id*=generation");
 	initiateList($this_wrapper);
     var $appended_wrapper = $this_wrapper.next();
-	console.log($appended_wrapper);
 
     var member_id = $selected_li.attr("id");
-    console.log(member_id);
     var $member_ul = $("#" + member_id + "-family");
 	$member_ul.show();
     $member_ul.find('li.zoom').addClass('selected');
