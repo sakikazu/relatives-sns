@@ -1,8 +1,8 @@
 .img
   = image_tag user[:image_path]
 .name
-  = "#{user[:name]} (#{user[:age]}歳)"
+  = user[:name]
 .info
-  %p.underline= user[:blood_h]
+  %p.underline= "#{user[:age]}歳  #{user[:blood_h]}"
   %p.underline= user[:address]
   %p= link_to "編集", edit_member_path(user[:id])
