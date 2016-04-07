@@ -19,11 +19,11 @@
     = ff.input :addr_from, label: "出身地"
     = ff.input :birth_day, label: "誕生日", as: :date, start_year: 1910, end_year: Date.today.year, include_blank: true
 
-  %p todo ここはログイン用の設定ページを作って移動sたいアカウント情報設定ページを作成(導線考えて)
-  -# usersのemailにちゃんと設定するスキーマな
-  = f.input :email, label: "メールアドレス(ログイン用)"
-  -# = f.input :password, label: "パスワード(ログイン用)"
-  -# = f.input :password_confirmation, label: "パスワード(確認)"
+    .alert.alert-error.mt30
+      HPにログインする場合はユーザー名とパスワードが必要です
+    = f.input :username, label: "ユーザー名"
+    = f.input :password, label: "パスワード"
+    = f.input :password_confirmation, label: "パスワード(確認)"
 
 
   .form-actions

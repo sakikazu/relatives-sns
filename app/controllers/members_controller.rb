@@ -122,7 +122,7 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @user = User.new(member_params)
-    @user.username = SecureRandom.uuid
+    @user.username = (0...4).map{ ('a'..'z').to_a[rand(26)] }.join
 
     respond_to do |format|
       if @user.save(validate: false)
