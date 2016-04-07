@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: true
 
+  default_scope { where("role != ?", User::TEST_USER) }
   scope :includes_ext, -> { includes("user_ext") }
 
 
@@ -153,7 +154,7 @@ class User < ActiveRecord::Base
   end
 
   def self.requested_users(limit = nil)
-    self.includes(:user_ext).where("role != ?", User::TEST_USER).order("last_request_at DESC").limit(limit)
+    self.includes_ext.order("last_request_at DESC").limit(limit)
   end
 
   private
