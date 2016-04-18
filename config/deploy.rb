@@ -46,7 +46,7 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # for unicorn
-      execute :cat, "#{File.join(current_path, 'tmp/pids/unicorn.pid')} | xargs kill -USR2"
+      execute :cat, "#{File.join(current_path, 'tmp/pids/unicorn.adan.pid')} | xargs kill -USR2"
     end
   end
 
