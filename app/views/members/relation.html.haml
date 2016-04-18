@@ -1,13 +1,7 @@
-:javascript
-  $(function() {
-    var height = $("#generation1").height();
-    $("#generation1").height(height + 500);
-  })
-
 .page-header
   %h3 家系図
 
-#sakimuras{style: "width: 1100px;"}
+#sakimuras
   #generation1
     %ul.members
       - @users.each do |u|

@@ -65,11 +65,18 @@ function calc_next_ul_top($selected_li) {
   return next_ul_top;
 }
 
+function wide_wrapper() {
+  $("#sakimuras").width(1100);
+  $("footer").css({"margin-top" : 800});
+}
+
 function build_relation() {
   $('#members_controller #sakimuras li').on('click', function() {
     $selected_li = $(this);
 
     if ($selected_li.hasClass('zoom')) return;
+
+    wide_wrapper();
 
     var $this_wrapper = $selected_li.closest("div[id*=generation]");
 	initiateList($this_wrapper);
