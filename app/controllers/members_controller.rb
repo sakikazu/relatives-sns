@@ -128,13 +128,17 @@ class MembersController < ApplicationController
       if @user.save(validate: false)
         # redirect_back_or_default new_user_url
 
-        format.html { redirect_to relation_members_path, notice: "#{@user.dispname(User::FULLNAME)}を登録しました." }
+        format.html { redirect_to finish_create_member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}を登録しました." }
         format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def finish_create
+    @user = User.find(params[:id])
   end
 
   # PUT /members/1
@@ -149,6 +153,25 @@ class MembersController < ApplicationController
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def edit_account
+    @user = User.find(params[:id])
+  end
+
+  def update_account
+    @user = User.find(params[:id])
+    @user.attributes = user_params
+
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to edit_member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}のユーザー名とパスワードが設定されました." }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit_account" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -187,8 +210,12 @@ private
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    params.require(:user).permit(:username, :password, :password_confirmation)
+  end
+
   def member_params
-      params.require(:user).permit(:username, :familyname, :givenname, :root11, :generation, :role, :email, :password, :password_confirmation, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:id, :image, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day])
+      params.require(:user).permit(:familyname, :givenname, :root11, :generation, :role, :email, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:id, :image, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day])
   end
 
   def user_ext_params

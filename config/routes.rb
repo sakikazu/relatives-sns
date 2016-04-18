@@ -4,9 +4,13 @@ Rails.application.routes.draw do
   mount API => "/"
 
   resources :members do
+    member do
+      get :edit_account
+      patch :update_account
+      get :finish_create
+    end
     collection do
       get 'relation'
-      get 'edit'
       get 'edit_ex'
       get 'map'
       get 'all'

@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :user_ext
 
+  before_validation :fill_email
   after_save :rel_save
 
   # Include default devise modules. Others available are:
@@ -107,6 +108,13 @@ class User < ActiveRecord::Base
     end
 
     return Sanitize.clean(name, Sanitize::Config::BASIC)
+  end
+
+  def fill_email
+    if self.email.blank?
+      randstr = (0...5).map{ ('a'..'z').to_a[rand(26)] }.join
+      self.email = "sample-#{randstr}@dummy.com"
+    end
   end
 
   def rel_save
