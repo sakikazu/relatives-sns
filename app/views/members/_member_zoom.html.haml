@@ -3,6 +3,6 @@
 .name
   = user[:name]
 .info
-  %p.underline= "#{user[:age]}歳  #{user[:blood_h]}"
+  %p.underline= "#{user[:birth_dead_h]} #{user[:blood_h]}"
   %p.underline= user[:address]
   %p= link_to "編集", edit_member_path(user[:id])

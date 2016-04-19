@@ -780,7 +780,7 @@ h2.normal3 {
 #members_controller {
   ul.members {
     margin-left: 0;
-    width: 200px;
+    width: 220px;
   }
   ul.child {
 	position:absolute;
@@ -830,6 +830,9 @@ h2.normal3 {
       }
     }
   }
+  ul.members>li.zoom.dead {
+    background-color: #C9C3C3;
+  }
 
   ul.members>li.list {
     position:relative;
@@ -871,13 +874,17 @@ h2.normal3 {
     }
   }
 
+  ul.members>li.list.dead {
+    background-color: #C9C3C3;
+  }
+
   #generation1 {
     float: left;
   }
   #generation2, #generation3, #generation4, #generation5 {
     float: left;
 	height: 600px;
-	width: 200px;
+	width: 220px;
     margin-left:5px;
     position:relative;
   }

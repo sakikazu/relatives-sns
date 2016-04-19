@@ -5,6 +5,8 @@ class UserExt < ActiveRecord::Base
 
   attr_accessor :lat, :lng
 
+  scope :alive, lambda { where("dead_day IS NULL") }
+
   content_name = "profile"
   has_attached_file :image,
     :styles => {
@@ -39,12 +41,32 @@ class UserExt < ActiveRecord::Base
   end
 
   def age
-    ((Date.today - birth_day) / 365).to_i if birth_day.present?
+    return "" if birth_day.blank?
+    if self.dead_day.present?
+      ((self.dead_day - birth_day) / 365).to_i
+    else
+      ((Date.today - birth_day) / 365).to_i
+    end
+  end
+
+  def age_h
+    unit = self.dead_day.present? ? "歳没" : "歳"
+    "#{self.age}#{unit}"
   end
 
   # ゼロパディングする
   def age_to_s
     "%02d"%self.age if self.age.present?
+  end
+
+  def birth_dead_h
+    if self.dead_day.present?
+      "#{self.birth_day.to_s(:normal)}生 - #{self.dead_day.to_s(:normal)}没"
+    elsif self.birth_day.present?
+      "#{self.birth_day.to_s(:normal)}生まれ"
+    else
+      "(生年月日)"
+    end
   end
 
   def nichirei
@@ -70,7 +92,7 @@ class UserExt < ActiveRecord::Base
     kinenbirth_array = [20 => '二十歳', 60 => '還暦', 77 => '喜寿', 88 => '米寿', 99 => '白寿']
     kinenday_array = [10000,20000,30000,40000]
 
-    UserExt.includes(:user).where("birth_day is not NULL").each do |ue|
+    UserExt.includes(:user).where("birth_day is not NULL").alive.each do |ue|
 	  next if ue.user.blank?
       birday_tmp = Date.new(Date.today.year, ue.birth_day.month, ue.birth_day.day)
     

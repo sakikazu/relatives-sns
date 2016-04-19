@@ -15,10 +15,12 @@ class MembersController < ApplicationController
   def recursive_relation(user, users)
     user_h = {id: user.id,
               name: user.dispname(User::FULLNICK),
-              age: user.user_ext.age,
+              age_h: user.user_ext.age_h,
               sex_h: user.user_ext.sex_name,
               blood_h: user.user_ext.blood_name,
               address: user.user_ext.address,
+              birth_dead_h: user.user_ext.birth_dead_h,
+              is_dead: user.user_ext.dead_day.present?,
               image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/images/missing.gif"
     }
 
@@ -215,11 +217,11 @@ private
   end
 
   def member_params
-      params.require(:user).permit(:familyname, :givenname, :root11, :generation, :role, :email, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:id, :image, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day])
+      params.require(:user).permit(:familyname, :givenname, :root11, :generation, :role, :email, :remember_me, :last_request_at, :parent_id, user_ext_attributes: [:id, :image, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :dead_day])
   end
 
   def user_ext_params
-      params.require(:user_ext).permit(:familyname, :givenname, :nickname, :sex, :blood, :email, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :job, :hobby, :skill, :free_text, :image, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id)
+      params.require(:user_ext).permit(:familyname, :givenname, :nickname, :sex, :blood, :email, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :dead_day, :job, :hobby, :skill, :free_text, :image, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id)
   end
 
 end

@@ -5,18 +5,11 @@
   #generation1
     %ul.members
       - @users.each do |u|
-        %li.list.clearfix{id: "id#{u[:id]}"}
-          .img
-            = image_tag u[:image_path]
-          .name
-            = u[:name]
-          .info
-            %p.underline= "#{u[:sex_h]}"
-            %p.underline= "#{u[:age]}歳"
-            %p= "属#{u[:has_members_num]}人"
+        %li.list.clearfix{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
+          = render partial: 'member_list', locals: {user: u}
         %div{style: "display:none"}
           %ul.members.child{id: "id#{u[:id]}-family"}
-            %li.zoom.clearfix{id: "id#{u[:id]}"}
+            %li.zoom.clearfix{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
               = render partial: 'member_zoom', locals: {user: u}
 
             %li.add_user
@@ -24,12 +17,12 @@
 
             - if u[:family].present?
               - u[:family].each do |uu|
-                %li.list.clearfix{id: "id#{uu[:id]}"}
+                %li.list.clearfix{id: "id#{uu[:id]}", class: (uu[:is_dead] ? "dead" : "alive")}
                   = render partial: 'member_list', locals: {user: uu}
 
                 %div{style: "display:none"}
                   %ul.members.child{id: "id#{uu[:id]}-family"}
-                    %li.zoom.clearfix{id: "id#{uu[:id]}"}
+                    %li.zoom.clearfix{id: "id#{uu[:id]}", class: (uu[:is_dead] ? "dead" : "alive")}
                       = render partial: 'member_zoom', locals: {user: uu}
 
                     %li.add_user
@@ -37,12 +30,12 @@
 
                     - if uu[:family].present?
                       - uu[:family].each do |uuu|
-                        %li.list.clearfix{id: "id#{uuu[:id]}"}
+                        %li.list.clearfix{id: "id#{uuu[:id]}", class: (uuu[:is_dead] ? "dead" : "alive")}
                           = render partial: 'member_list', locals: {user: uuu}
 
                         %div{style: "display:none"}
                           %ul.members.child{id: "id#{uuu[:id]}-family"}
-                            %li.zoom.clearfix{id: "id#{uuu[:id]}"}
+                            %li.zoom.clearfix{id: "id#{uuu[:id]}", class: (uuu[:is_dead] ? "dead" : "alive")}
                               = render partial: 'member_zoom', locals: {user: uuu}
 
                             %li.add_user
@@ -50,11 +43,11 @@
 
                             - if uuu[:family].present?
                               - uuu[:family].each do |uuuu|
-                                %li.list.clearfix{id: "id#{uuuu[:id]}"}
+                                %li.list.clearfix{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
                                   = render partial: 'member_list', locals: {user: uuuu}
 
                                 %ul.members.child{id: "id#{uuuu[:id]}-family"}
-                                  %li.zoom.clearfix{id: "id#{uuuu[:id]}"}
+                                  %li.zoom.clearfix{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
                                     = render partial: 'member_zoom', locals: {user: uuuu}
 
                                   %li.add_user

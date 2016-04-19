@@ -66,7 +66,8 @@ function calc_next_ul_top($selected_li) {
 }
 
 function wide_wrapper() {
-  $("#sakimuras").width(1100);
+  // #generationのfloatが折り返さない幅にしておくこと
+  $("#sakimuras").width(1150);
   $("footer").css({"margin-top" : 800});
 }
 

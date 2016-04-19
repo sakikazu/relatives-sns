@@ -18,6 +18,7 @@
     = ff.input :addr4, label: "住所(アパート名とか)"
     = ff.input :addr_from, label: "出身地"
     = ff.input :birth_day, label: "誕生日", as: :date, start_year: 1910, end_year: Date.today.year, include_blank: true
+    = ff.input :dead_day, label: "亡くなった日", as: :date, start_year: 1980, end_year: Date.today.year, include_blank: true
 
   .form-actions
     = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "処理中.."}
