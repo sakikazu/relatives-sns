@@ -1,5 +1,5 @@
 class NicesController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def recent
 #sakikazu 現在、同じコンテンツでも、複数人が評価してたら人数分出てしまうので、コンテンツごとにまとめたい。ソート対象は、最後に評価した人物のnice.created_at

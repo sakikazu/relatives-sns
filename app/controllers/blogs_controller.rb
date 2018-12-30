@@ -1,5 +1,5 @@
 class BlogsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
+  before_action :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
   before_action :set_blog, only: [:show, :edit, :update, :destroy, :show_mobile, :destroy_mobile, :edit_mobile, :destroy_confirm_mobile]
   before_action :init
 

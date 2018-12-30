@@ -12,9 +12,9 @@
 //
 
 //= require jquery
-//= require jquery_ujs
-//= require twitter/bootstrap
-//= require bootstrap
+//= require rails-ujs
+//= require popper
+//= require bootstrap-sprockets
 //= require_tree ./uploadify
 //= require_tree ./jPlayer
 //= require video-js/video

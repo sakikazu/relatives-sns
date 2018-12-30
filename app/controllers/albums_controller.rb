@@ -1,6 +1,6 @@
 class AlbumsController < ApplicationController
-  before_filter :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
-  before_filter :authenticate_user!
+  before_action :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
+  before_action :authenticate_user!
   before_action :set_album, only: [:show, :edit, :update, :destroy, :download]
   before_action :init
 

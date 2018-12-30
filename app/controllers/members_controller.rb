@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
-  before_filter :authenticate_user!, except: ["relation"]
-  before_filter :page_title
+  before_action :authenticate_user!, except: ["relation"]
+  before_action :page_title
 
   # 家系図
   def relation

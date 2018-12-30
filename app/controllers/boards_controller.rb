@@ -1,6 +1,6 @@
 class BoardsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :page_title
+  before_action :authenticate_user!
+  before_action :page_title
   before_action :set_board, only: [:show, :edit, :update, :destroy, :show_mobile]
 
   # GET /boards

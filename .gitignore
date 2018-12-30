@@ -17,6 +17,7 @@
 
 # my setting
 public/upload
+public/upload_dev/
 public/assets
 *.DS_Store
 *.svn

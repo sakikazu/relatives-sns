@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  root :to => 'mutters#index'
+
+  devise_for :users, controllers: {sessions: 'users/sessions'}
+  # method: :delete が効かないので
+  devise_scope :user do
+    delete "/m/sign_out" => "devise/sessions#destroy", as: :mobile_sign_out
+  end
+
   devise_for :admin_users
   mount RailsAdmin::Engine => '/adamin', as: 'rails_admin'
   mount API => "/"
@@ -40,9 +50,10 @@ Rails.application.routes.draw do
       # post 'symbol_images'
     end
     # collection do
-      # delete 'destroy_image'
+    # delete 'destroy_image'
     # end
   end
+
   # for mobile ※携帯だとmethod: :deleteが効いてくれないぽい？？指定してもGETメソッドになっちゃったので
   delete "/blogs/destroy_comment/:id" => "blogs#destroy_comment", :as => :destroy_comment
 
@@ -134,9 +145,6 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: {sessions: 'users/sessions'}
-
-
   # for mobile
   # 2014/05/12, routingが間違ってるのでエラーになるけど、もう使わないと思うので削除しようかな
   # get "/m" => "mobile#index", :as => :mobile
@@ -146,71 +154,4 @@ Rails.application.routes.draw do
   # get "/m/celebration" => "mobile#celebration", :as => :mobile_uh
   # get "/m/celebration_new" => "mobile#celebration_new", :as => :mobile_uh
   # post "/m/celebration_create" => "mobile#celebration_create", :as => :mobile_uh
-
-  # method: :delete が効かないので
-  devise_scope :user do
-    delete "/m/sign_out" => "devise/sessions#destroy", as: :mobile_sign_out
-  end
-
-  root :to => 'mutters#index'
-
-  #
-  # This is routes explaination for rails4
-  #
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
 end

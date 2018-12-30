@@ -1,24 +1,27 @@
 source 'https://rubygems.org'
 
-# ruby '2.0.0'
+ruby '2.5.1'
+gem 'rails', '~> 5.2.0'
+gem 'bootsnap' # railsの起動を速くする
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.0'
 # Use mysql as the database for Active Record
 gem 'mysql2'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 # gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer',  platforms: :ruby
+gem 'mini_racer'
+gem 'bootstrap', '~> 4.1.3' # twitter bootstrap4
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+# gem 'jquery-ui-rails', '2.0.2'
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -49,12 +52,9 @@ gem 'kaminari'
 gem 'whenever', :require => false
 gem 'dotenv-rails'
 
-# gem 'formtastic'
-# gem 'formtastic-bootstrap'
 gem 'simple_form'
-gem 'twitter-bootstrap-rails'
 gem 'streamio-ffmpeg'
-gem 'rmagick', require: 'RMagick'
+gem 'rmagick'
 gem 'sidekiq'
 
 # Ajaxでファイルアップロード
@@ -63,10 +63,6 @@ gem 'remotipart', '~> 1.2'
 gem 'gcm'
 gem 'apns'
 
-# todo 問題なさげ？このまま大丈夫ならここ削除
-# memo jquery 1.9以上になるとliveが使えずエラーになるのでバージョン指定
-# gem 'jquery-rails', '2.1.3'
-# gem 'jquery-ui-rails', '2.0.2'
 
 # jquery-railsをバージョン指定するとこれがエラーになるぞ？？（2014/05/12）
 gem 'rails_admin'
@@ -84,10 +80,11 @@ gem 'jpmobile'
 # gem 'tmail'
 gem 'ruby-gmail', '0.3.0'
 
-gem 'less-rails'
-
 # 定数管理
-gem 'rails_config'
+gem 'config'
+
+# NOTE: View handlerの設定で使用されるのでどの環境でも必要
+gem 'slim'
 
 # for API
 gem 'grape'
@@ -96,6 +93,20 @@ gem 'grape'
 
 
 group :development do
+  gem 'listen'
+  gem 'slim-rails'                # generator時にslim対応可能になる
+  gem 'view_source_map'           # webページ中に使用されているviewファイル名が見れる
+  gem 'annotate'
+  gem 'bullet'                    # n+1検出
+  gem 'rubocop', require: false
+  gem 'rack-mini-profiler'        # 処理時間を表示
+
+  # Use Capistrano for deployment
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'rvm1-capistrano3', require: false
+
   # エラー画面をわかりやすく整形してくれる
   gem 'better_errors'
 
@@ -104,13 +115,7 @@ group :development do
 end
 
 group :development, :test do
-  # Railsコンソールの多機能版
-  gem 'pry-rails'
-
-  # pryの入力に色付け
-  gem 'pry-coolline'
-
-  # デバッカー
+  # デバッガー
   gem 'pry-byebug'
 
   # Pryでの便利コマンド
@@ -118,37 +123,16 @@ group :development, :test do
 
   # PryでのSQLの結果を綺麗に表示
   gem 'hirb'
-  gem 'hirb-unicode'
-
-  # pryの色付けをしてくれる
-  gem 'awesome_print'
 
   # テスト環境のテーブルをきれいにする
   gem 'database_rewinder'
-
-  # デバッグ情報をフッターに出してくれる
-  gem 'rails-footnotes', '>= 4.0.0', '<5'
 
   gem 'rails-erd'
 
   # for test
   gem 'rspec-rails'
-  gem "factory_girl_rails"
-  gem "rr"
+  gem "factory_bot"
   gem "capybara"
-  gem 'spork'
-  gem "guard-spork"
-  gem "guard-rspec"
-
-  # erbからhamlに変換
-  gem 'erb2haml'
-
-  # for deploy
-  # Use Capistrano for deployment
-  # gem 'capistrano'
-  # gem 'capistrano-bundler'
-  gem 'rvm1-capistrano3', require: false
-
 end
 
 # Use ActiveModel has_secure_password
@@ -157,10 +141,4 @@ end
 # Use unicorn as the app server
 gem 'unicorn'
 gem 'foreman'
-
-# Use Capistrano for deployment
-gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
 

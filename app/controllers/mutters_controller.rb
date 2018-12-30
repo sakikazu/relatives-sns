@@ -1,10 +1,10 @@
 class MuttersController < ApplicationController
   # for mobile
-  before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
-  after_filter :update_request_at, only: [:index, :update_disp, :create]
+  before_action :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
+  after_action :update_request_at, only: [:index, :update_disp, :create]
 
-  before_filter :authenticate_user!, :except => :rss
-  before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
+  before_action :authenticate_user!, :except => :rss
+  before_action :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
   # todo 2014-05-12
   # cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 

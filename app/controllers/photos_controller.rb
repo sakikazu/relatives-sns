@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-  before_filter :authenticate_user!, :except => [:create]  #sakikazu これがないとcreateできない。 for uploadify
+  before_action :authenticate_user!, :except => [:create]  #sakikazu これがないとcreateできない。 for uploadify
   before_action :set_photo, only: [:show, :edit, :update, :destroy, :slideshow, :update_from_slideshow]
 
   # GET /photos
