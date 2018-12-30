@@ -1,4 +1,18 @@
-class BlogImage < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: blog_images
+#
+#  id                 :integer          not null, primary key
+#  image_content_type :string(255)
+#  image_file_name    :string(255)
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  blog_id            :integer
+#
+
+class BlogImage < ApplicationRecord
   belongs_to :user
   belongs_to :blog
 

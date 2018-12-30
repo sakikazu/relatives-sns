@@ -1,4 +1,20 @@
-class BoardComment < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: board_comments
+#
+#  id                  :integer          not null, primary key
+#  attach_content_type :string(255)
+#  attach_file_name    :string(255)
+#  attach_file_size    :integer
+#  attach_updated_at   :datetime
+#  content             :text(65535)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  board_id            :integer
+#  user_id             :integer
+#
+
+class BoardComment < ApplicationRecord
   belongs_to :user
   belongs_to :board
 

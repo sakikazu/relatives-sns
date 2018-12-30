@@ -1,4 +1,22 @@
-class Board < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: boards
+#
+#  id                  :integer          not null, primary key
+#  attach_content_type :string(255)
+#  attach_file_name    :string(255)
+#  attach_file_size    :integer
+#  attach_updated_at   :datetime
+#  deleted_at          :datetime
+#  description         :text(65535)
+#  title               :string(255)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  mutter_id           :integer
+#  user_id             :integer
+#
+
+class Board < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :user

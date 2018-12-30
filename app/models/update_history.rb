@@ -1,4 +1,17 @@
-class UpdateHistory < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: update_histories
+#
+#  id           :integer          not null, primary key
+#  action_type  :integer
+#  content_type :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  content_id   :integer
+#  user_id      :integer
+#
+
+class UpdateHistory < ApplicationRecord
   belongs_to :user
   belongs_to :content, :polymorphic => true
 

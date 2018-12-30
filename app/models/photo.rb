@@ -1,4 +1,26 @@
-class Photo < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: photos
+#
+#  id                 :integer          not null, primary key
+#  deleted_at         :datetime
+#  description        :text(65535)
+#  exif_at            :datetime
+#  image_content_type :string(255)
+#  image_file_name    :string(255)
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  last_comment_at    :datetime
+#  title              :string(255)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  album_id           :integer
+#  comment_id         :integer
+#  mutter_id          :integer
+#  user_id            :integer
+#
+
+class Photo < ApplicationRecord
   include Utility
 
   acts_as_paranoid

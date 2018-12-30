@@ -1,4 +1,53 @@
-class UserExt < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: user_exts
+#
+#  id                 :integer          not null, primary key
+#  addr1              :string(255)
+#  addr2              :string(255)
+#  addr3              :string(255)
+#  addr4              :string(255)
+#  addr_from          :string(255)
+#  birth_day          :date
+#  blood              :integer
+#  character          :string(255)
+#  dead_day           :date
+#  deleted_at         :datetime
+#  dream              :string(255)
+#  email              :string(255)
+#  familyname         :string(255)
+#  fav_book           :string(255)
+#  fav_brand          :string(255)
+#  fav_food           :string(255)
+#  fav_game           :string(255)
+#  fav_movie          :string(255)
+#  fav_music          :string(255)
+#  fav_sports         :string(255)
+#  free_text          :text(65535)
+#  givenname          :string(255)
+#  hobby              :string(255)
+#  hosii              :string(255)
+#  ikitai             :string(255)
+#  image_content_type :string(255)
+#  image_file_name    :string(255)
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  jiman              :string(255)
+#  job                :string(255)
+#  kyujitsu           :string(255)
+#  myboom             :string(255)
+#  nickname           :string(255)
+#  sex                :integer
+#  skill              :string(255)
+#  sonkei             :string(255)
+#  unfav_food         :string(255)
+#  yaritai            :string(255)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  user_id            :integer
+#
+
+class UserExt < ApplicationRecord
   require 'net/http'
 
   belongs_to :user

@@ -1,4 +1,26 @@
-class Mutter < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: mutters
+#
+#  id                    :integer          not null, primary key
+#  content               :text(65535)
+#  deleted_at            :datetime
+#  for_sort_at           :datetime
+#  image_content_type    :string(255)
+#  image_file_name       :string(255)
+#  image_file_size       :integer
+#  image_updated_at      :datetime
+#  invisible_in_timeline :boolean          default(FALSE)
+#  leave_me              :boolean          default(FALSE)
+#  ua                    :string(255)
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  celebration_id        :integer
+#  reply_id              :integer
+#  user_id               :integer
+#
+
+class Mutter < ApplicationRecord
   acts_as_paranoid
 
   # kaminari

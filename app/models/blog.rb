@@ -1,4 +1,18 @@
-class Blog < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: blogs
+#
+#  id         :integer          not null, primary key
+#  content    :text(65535)
+#  deleted_at :datetime
+#  title      :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  mutter_id  :integer
+#  user_id    :integer
+#
+
+class Blog < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :user

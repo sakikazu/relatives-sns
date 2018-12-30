@@ -1,4 +1,17 @@
-class Ranking < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: rankings
+#
+#  id             :integer          not null, primary key
+#  classification :integer
+#  content_type   :string(255)
+#  nice_count     :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  content_id     :integer
+#
+
+class Ranking < ApplicationRecord
   belongs_to :content, :polymorphic => true
 
   # [memo] ここで各コンテンツが「content」でincludeできるんだ！！すげー(polymorphic)
