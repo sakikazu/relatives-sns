@@ -54,6 +54,8 @@ class Photo < ApplicationRecord
 
   #全写真からただランダムに抽出する
   def self.rnd_photos
+    return Album.last.photos if Rails.env.development?
+
     photos = self.includes(:album).order("RAND()").limit(15).map{|photo| photo if photo.album.present?}
 #sakikazu 上でalbumが実際に存在しなかったら、if文のせいで(？)、nilが入ってしまう。なので削除しておく
 # ★これってどうしようかな。アルバムない写真を全削除？上のはもっと良いやり方ある？これは注意すべき事象なので、解析してメモっておきたい
