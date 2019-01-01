@@ -1,7 +1,4 @@
-<%= link_to "アルバムトップへ", top_albums_path, class: "btn" %>
-
-<div class="row">
-  <div class="span2">
+  <div class="col-sm-2">
     <div class="page-header"><h3>個人のアルバム</h3></div>
     <div class="well well-small">
       <ul class="unstyled">
@@ -12,10 +9,11 @@
     </div>
   </div>
 
-  <div class="span10">
+  <div class="col-sm-10">
+    <%= link_to "アルバムトップへ", top_albums_path, class: "btn btn-light" %>
     <div class="page-header"><h3>アルバム詳細一覧<small>写真のダウンロードも可能</small></h3></div>
     <div id="title_index">
-      <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn" %>
+      <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn btn-light" %>
     </div>
 
     <div class="page-header"><h3>アルバム一覧</h3></div>
@@ -29,9 +27,8 @@
       <% end -%>
     </div>
 
-    <div id="album">
+    <div id="album"></div>
     <%= paginate @albums, :window => 2, :outer_window => 2 %><br>
     <%= render 'albums/index', albums: @albums %>
     <%= paginate @albums, :window => 2, :outer_window => 2 %><br>
-    </div>
-</div>
+  </div>

@@ -1,13 +1,11 @@
-<div class="row">
-  <div class="span5 offset4">
+<div class="col-sm-5">
 
 <div id="update_history">
-  <%= paginate @updates, window: 2 %>
+  <%= paginate @updates, window: 3, outer_window: 2 %>
   <table class="table table-striped table-condensed mgn-t20">
     <%= render :partial => "update_history" %>
   </table>
-  <%= paginate @updates, window: 2 %>
+  <%= paginate @updates, window: 3, outer_window: 2 %>
 </div>
 
-  </div>
 </div>

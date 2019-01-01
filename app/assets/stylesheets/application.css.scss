@@ -268,15 +268,19 @@ ul.children li {
 
 /*footer*/
 footer {
-  margin-top: 80px;
+  margin-top: 70px;
   background-color: black;
   color: white;
   text-align: center;
-  padding: 5px 0px;
+  padding: 6px 0px;
   width: 100%;
   filter: alpha(opacity=80);
   -moz-opacity:0.8;
   opacity:0.8;
+}
+footer > p {
+  margin: 1px 0;
+  font-size: 90%;
 }
 
 /* hr.strong { */
@@ -966,6 +970,10 @@ h3 {
   padding: 15px;
   backgroud: #F7F0F0;
   border-color: #BBD8E9;
+}
+
+.btn-light {
+  border-color: #ccc;
 }
 
 a [class^="icon-"], a [class*=" icon-"] {

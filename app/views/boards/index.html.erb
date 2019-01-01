@@ -24,7 +24,7 @@ jQuery(document).ready(function(){
   <% end -%>
 </div>
 
-<%= paginate @boards, window: 2 %>
+<%= paginate @boards, window: 3, outer_window: 2 %>
 <% @boards.each do |board| %>
   <div class="well well-small">
     <legend><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", board %></legend>
@@ -43,6 +43,6 @@ jQuery(document).ready(function(){
     </div>
   </div>
 <% end %>
-<%= paginate @boards, window: 2 %>
+<%= paginate @boards, window: 3, outer_window: 2 %>
 
   </div>

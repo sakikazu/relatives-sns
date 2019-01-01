@@ -140,7 +140,7 @@ class Mutter < ApplicationRecord
     # [後方不一致の正規表現]
     # 顔文字対策(ex. 「(・ω<)ああ」と書くと、sanitizeによって「<」以降が消えてしまうので、タグとしての「<」でなければ、「＜」に置換する
     # この正規表現だと、(・ω<)のあとにタグ<iframe>とか入れられたら顔文字の置換はされないけどな
-    content = self.content.gsub(/<(?!.*>)/, "＜")
+    content = self.content&.gsub(/<(?!.*>)/, "＜")
 
     if self.celebration.present?
       "<span class='badge badge-warning'>【祝】 #{self.celebration.user.try(:dispname)}さんへ</span> #{content}"

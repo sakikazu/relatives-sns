@@ -14,11 +14,11 @@ $(function(){
     <div class="alert alert-error"><p>入力エラーがあります。下記のエラー内容を確認してください。</p></div>
   <% end %>
 
-  <%= f.input :title, label: "タイトル", input_html: {class: "span7"} %><br>
-  <%= f.input :content, label: "本文", input_html: {class: "span7", rows: 20} %><br>
-    <%= file_field :image, :image %>
+  <%= f.input :title, label: "タイトル", input_html: {class: "form-control"} %><br>
+  <%= f.input :content, label: "本文", input_html: {class: "form-control", rows: 17} %><br>
+    <%= file_field :image, :image, class: 'form-control' %>
 
-  <div class="form-actions">
+  <div class="form-actionsm mt20">
     <%= f.button :submit, class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
   </div>
 <% end %>

@@ -87,16 +87,17 @@ $(document).ready(function() {
 //}
 </script>
 
+<div class="col-sm-10">
 <div class="mb-50">
-<%= link_to 'アルバム一覧', albums_path, class: "btn" %>
+<%= link_to 'アルバム一覧', albums_path, class: "btn btn-light" %>
 <%= link_to '編集する', edit_album_path(@album), class: "btn btn-info" %>
 </div>
 
-<ul class="nav nav-tabs">
-  <li><a href="#tab-description" data-toggle="tab"><i class="icon-list-alt"></i> <%= @album.title %></a></li>
-  <li><a href="#tab-comments" data-toggle="tab"><i class="icon-comment"></i> アルバムへのコメント(<%= @album.comments.select{|n| n.id.present?}.size %>)</a></li>
-  <li><a href="#tab-photo-upload" data-toggle="tab"><i class="icon-camera"></i> 写真アップロード</a></li>
-  <li><a href="#tab-movie-upload" data-toggle="tab"><i class="icon-facetime-video"></i> 動画アップロード</a></li>
+<ul class="nav nav-tabs mb15">
+  <li class="nav-item"><a href="#tab-description" data-toggle="tab" class="nav-link"><i class="icon-list-alt"></i> <%= @album.title %></a></li>
+  <li class="nav-item"><a href="#tab-comments" data-toggle="tab" class="nav-link"><i class="icon-comment"></i> アルバムへのコメント(<%= @album.comments.select{|n| n.id.present?}.size %>)</a></li>
+  <li class="nav-item"><a href="#tab-photo-upload" data-toggle="tab" class="nav-link"><i class="icon-camera"></i> 写真アップロード</a></li>
+  <li class="nav-item"><a href="#tab-movie-upload" data-toggle="tab" class="nav-link"><i class="icon-facetime-video"></i> 動画アップロード</a></li>
 </ul>
 
 <div class="tab-content well well-small">
@@ -115,7 +116,6 @@ $(document).ready(function() {
 
     <!-- アルバムへのコメント -->
     <div class="clearfix">
-      <div class="span6">
         <div id="comment_area">
           <div id="comments">
             <%= render "comments" %>
@@ -123,7 +123,7 @@ $(document).ready(function() {
 
           <%= form_for @new_comment, url: create_comment_album_path(@album), remote: true do |f| %>
             <div class="field">
-            <%= f.text_area :content, rows: 4, class: "span6" %>
+            <%= f.text_area :content, rows: 4, class: "form-control" %>
             <%= f.hidden_field :parent_id %>
             <%= f.hidden_field :parent_type %>
           </div>
@@ -132,7 +132,6 @@ $(document).ready(function() {
           </div>
         <% end -%>
         </div>
-      </div>
     </div>
   </div>
 
@@ -182,7 +181,7 @@ $(document).ready(function() {
       <%= f.select :user_id, @uploader_list.map{|u| [u[1], u[0]]}, {include_blank: "＜アップロード者＞"}, {class: "span3"} %>
       <%= f.select :sort_flg, sort_list.map{|s| [s[1], s[0]]}, {include_blank: "＜並び替え順＞"}, {class: "span3"} %>
       <%= f.hidden_field :media_filter %>
-      <%= f.submit "並び替え", class: "btn" %>
+      <%= f.submit "並び替え", class: "btn btn-light" %>
     <% end %>
   </div>
 
@@ -204,3 +203,4 @@ $(document).ready(function() {
 </div> <!-- autopagerize_page_element -->
 
 <div id="autopager_loading" class="btn btn-warning btn-block" style="display:none">次のページを読込中です</div>
+</div>

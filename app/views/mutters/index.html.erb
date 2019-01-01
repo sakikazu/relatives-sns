@@ -64,9 +64,9 @@ $(document).ready(function(){
 
 // つぶやき検索
 $(document).on('click', 'a.js_search_mutter', function() {
-  alert('aa');
-  $form = $('form#new_mutter');
+  $form = $('form#search_form');
   $('#mutter_action_flg', $form).val($(this).attr('rel'));
+  // TODO: form_for remote:true のフォームだが、Rails5とかにバージョンアップしたらAjaxじゃなくなった。JSのsubmit()でやったからか？UIの考慮から
   $form.submit();
   return false;
 });
@@ -184,7 +184,7 @@ $(document).on('click', 'a.js_search_mutter', function() {
 
     <div id="create_notification" class="alert alert-success text-center important" style="display:none">つぶやきを投稿しました<%#= @create_notification %></div>
 
-        <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
+    <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, html: {id: 'search_form'} do |f| %>
           <div class="row no-gutters well justify-content-center">
           <% # [memo] このinput textはspanX指定のみだとAndroidのChromeでフォームが横に飛び出してしまった。
              #   text_fieldではデフォルトでsizeが30になるらしく、Androidではそれが影響していた。

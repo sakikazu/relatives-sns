@@ -1,5 +1,5 @@
   <div class="col-sm-7">
-    <%= link_to '自分の日記へ', blogs_path, class: "btn" %>
+    <%= link_to '自分の日記へ', blogs_path, class: "btn btn-light" %>
     <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
     <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
     <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @blog.user) %>
@@ -40,7 +40,7 @@
 
     <div id="comment_form">
       <%= form_for @new_comment, url: create_comment_blog_path(@blog.id), :remote => true do |f| %>
-        <%= f.text_area :content, rows: 5, class: "span7", placeholder: "コメントする" %><br />
+        <%= f.text_area :content, rows: 4, class: "form-control", placeholder: "コメントする" %><br />
         <%= f.hidden_field :parent_id %>
         <%= f.hidden_field :parent_type %>
         <div class="form-actions">

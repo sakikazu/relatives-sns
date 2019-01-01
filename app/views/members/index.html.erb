@@ -9,7 +9,7 @@
   <div class="page-header">
     <h3>管理者用</h3>
   </div>
-  <%= link_to "[admin]みんなのログイン履歴", login_history_members_path, class: "btn" %>
+  <%= link_to "[admin]みんなのログイン履歴", login_history_members_path, class: "btn btn-light" %>
 <% end -%>
 
 <div class="page-header">
@@ -22,8 +22,8 @@
   <h3>みんなの</h3>
 </div>
 <%= link_to "家系図", relation_members_path, class: "btn btn-warning" %>
-<%= link_to "住所を地図で見る", map_members_path, class: "btn" %>
-<%= link_to "詳細情報を一覧で見る", all_members_path, class: "btn" %>
+<%= link_to "住所を地図で見る", map_members_path, class: "btn btn-light" %>
+<%= link_to "詳細情報を一覧で見る", all_members_path, class: "btn btn-light" %>
 
 <div class="page-header">
   <h3>メンバー一覧 (列のタイトルクリックでソートできます)</h3>
@@ -66,7 +66,7 @@
     <td><%= user.username %></td>
     <td><%= user.role_name %></td>
 <% end -%>
-    <td><%= link_to "見る", member_path(user), class: "btn" %></td>
+    <td><%= link_to "見る", member_path(user), class: "btn btn-light" %></td>
   </tr>
 <% end -%>
   </tbody>
