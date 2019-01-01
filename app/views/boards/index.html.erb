@@ -1,6 +1,3 @@
-<div class="row">
-  <div class="span7 offset2">
-
 <script>
 jQuery(document).ready(function(){
   jQuery("#new_board_info").popover({
@@ -12,6 +9,7 @@ jQuery(document).ready(function(){
 });
 </script>
 
+  <div class="col-sm-7">
 <%= link_to "新規作成", new_board_path, class: "btn btn-info" %>
 <a href="#" id="new_board_info" data-content="<div style='font-size:13px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>" data-original-title="日記との使い分け"><i class="icon-exclamation-sign"></i>&nbsp;日記との使い分け</a>
 
@@ -48,4 +46,3 @@ jQuery(document).ready(function(){
 <%= paginate @boards, window: 2 %>
 
   </div>
-</div>

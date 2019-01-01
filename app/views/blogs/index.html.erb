@@ -1,10 +1,9 @@
-<% if @user.present? -%>
-  <%= link_to "自分の日記", blogs_path, class: "btn" %>
-<% end -%>
-<%= link_to "日記を書く", new_blog_path, class: "btn btn-info" %>
+  <div class="col-sm-7">
+    <% if @user.present? -%>
+      <%= link_to "自分の日記", blogs_path, class: "btn" %>
+    <% end -%>
+    <%= link_to "日記を書く", new_blog_path, class: "btn btn-info" %>
 
-<div class="row">
-  <div class="span7">
     <div class="page-header ver2">
       <h3><%= @page_title %><%= "<small>#{@page_desc}</small>" if @page_desc.present? %></h3>
     </div>
@@ -31,7 +30,7 @@
     <%= paginate @blogs, :window => 2, :outer_window => 2 %>
   </div> <!-- .span -->
 
-  <div class="span3">
+  <div class="col-sm-3">
     <div class="page-header ver2"><h3>人ごと(更新日順)</h3></div>
     <% @blog_count_by_user.each do |user, cnt, created_at| -%>
       <div class="blog">
@@ -41,4 +40,3 @@
       <hr>
     <% end -%>
   </div> <!-- .span -->
-</div> <!-- .row -->

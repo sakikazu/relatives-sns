@@ -52,7 +52,7 @@ class MuttersController < ApplicationController
   def new_from_mail
     config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
     @to = config['to']
-    env = Rails.env == "development" ? "[dev]" : ""
+    env = Rails.env.production? ? "" : "[dev]"
     @subject = "[a-dan-hp]#{env}mutter[user_id]#{current_user.id}"
     if request.mobile?
       @content_title = "画像付きつぶやき"
@@ -171,7 +171,6 @@ class MuttersController < ApplicationController
   end
 
   def index
-    @layout_type = 1
     @slideshow_visible = true
     @page_title = "トップ"
 

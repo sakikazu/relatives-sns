@@ -104,7 +104,7 @@ jQuery(document).ready(function(){
 
 
   // つぶやきのデスクトップ通知
-<% if Rails.env == "production" %>
+<% if Rails.env.production? %>
 //  $('<button id="desktopify">つぶやきの通知を有効にする<\/button>')
 //    .appendTo('#desktopnotification')
 //    .desktopify({
@@ -199,15 +199,6 @@ autopagerize = function() {
   autopagerize();
 <% end -%>
 
-  // form inputをBootstrapデザインにする
-  // memo 現在、1つのformにつき1つのfilefieldのみ対応
-  $('.bootstrap_file_field input[type=file]').on("change", function() {
-      $(this).siblings(".file_value").val($(this).val());
-  });
-  $('.bootstrap_file_field>*').on("click", function() {
-    $(this).siblings('input[type=file]:first').click();
-  });
-
 }); // jQuery(document).ready
 
 
@@ -234,81 +225,52 @@ function showComments(obj) {
    <!-- 黒背景にして前面にアクションを起こすためのもの。お祝い表示などで使用 -->
    <div id="background_black" style="display:none"></div>
 
-   <div class="navbar navbar-fixed-top navbar-inverse">
-     <div class="navbar-inner">
-       <div class="container">
-         <!-- 小さい画面で見た時の小さいメニューボタン用 -->
-         <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-         </a>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb20">
+     <a class="navbar-brand" href="/">AdanHP</a>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+       <span clas="navbar-toggler-icon"></span>
+     </button>
+     <div id="navbarSupportedContent" class="collapse navbar-collapse">
+       <ul class="navbar-nav mr-auto">
+         <li class="nav-item <%= controller.controller_name == "nices" ? "active" : "" %>"><%= link_to "人気", nices_path, class: 'nav-link' %></li>
+         <li class="nav-item <%= controller.controller_name =~ /albums|movies/ ? "active" : "" %>"><%= link_to "アルバム", top_albums_path, class: 'nav-link' %></li>
+         <li class="nav-item <%= controller.controller_name == "blogs" ? "active" : "" %>"><%= link_to "日記", blogs_path, class: 'nav-link' %></li>
+         <li class="nav-item <%= controller.controller_name == "boards" ? "active" : "" %>"><%= link_to "掲示板", boards_path, class: 'nav-link' %></li>
+         <li class="nav-item <%= controller.controller_name == "histories" ? "active" : "" %>"><%= link_to "年表", histories_path, class: 'nav-link' %></li>
+         <li class="nav-item <%= controller.controller_name == "members" ? "active" : "" %>"><%= link_to "親戚データ", members_path, class: 'nav-link' %></li>
+       </ul>
+       <ul class="navbar-nav justify-content-end">
+         <li class="nav-item"><%= link_to current_user.dispname(User::FULLNAME), edit_ex_members_path, class: 'nav-link' if current_user.present? %></li>
+         <!-- todo ドロップダウンメニューに入れたら、httpメソッドがGETになってしまう？？ -->
+         <li class="nav-item"><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしますか？"}, class: 'nav-link' %></li>
 
-         <a class="brand" href="/">AdanHP</a>
-         <div class="container nav-collapse">
-           <ul class="nav">
-             <li class="<%= controller.controller_name == "nices" ? "active" : "" %>"><%= link_to "人気", nices_path %></li>
-             <li class="<%= controller.controller_name =~ /albums|movies/ ? "active" : "" %>"><%= link_to "アルバム", top_albums_path %></li>
-             <li class="<%= controller.controller_name == "blogs" ? "active" : "" %>"><%= link_to "日記", blogs_path %></li>
-             <li class="<%= controller.controller_name == "boards" ? "active" : "" %>"><%= link_to "掲示板", boards_path %></li>
-             <li class="<%= controller.controller_name == "histories" ? "active" : "" %>"><%= link_to "年表", histories_path %></li>
-             <li class="<%= controller.controller_name == "members" ? "active" : "" %>"><%= link_to "親戚データ", members_path %></li>
-           </ul>
-           <ul class="nav pull-right">
-             <li><%= link_to current_user.dispname(User::FULLNAME), edit_ex_members_path if current_user.present? %></li>
-             <!-- todo ドロップダウンメニューに入れたら、httpメソッドがGETになってしまう？？ -->
-			 <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしますか？"} %></li>
-
-             <li class="divider-vertical"></li>
-             <li class="dropdown">
-             <a href="#" class="dropdown-toggle" data-toggle="dropdown">その他メニュー<b class="caret"></b></a>
-             <ul class="dropdown-menu">
-               <li><a data-toggle="modal" href="#modalQR">QRコード</a></li>
-               <li><%= link_to "その他", others_path %></li>
-               <li><strike>RSS</strike></li>
-               <li class="divider"></li>
-               <li><%= link_to 'このサイトについて', about_others_path %></li>
-             </ul>
-             </li>
-             <li class="divider-vertical"></li>
-             <!-- todo こいつもAjaxだからかドロップダウンメニューに入れたらだめだな -->
-             <li><%= link_to '写真を入れ替える', slider_update_mutters_path, remote: true if @slideshow_visible %></li>
-           </ul>
-         </div><!--/.nav-collapse -->
-       </div>
+         <li class="nav-item dropdown">
+           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">その他メニュー<b class="caret"></b></a>
+           <div class="dropdown-menu">
+             <a data-toggle="modal" href="#modalQR", class='dropdown-item'>QRコード</a>
+             <%= link_to "その他", others_path, class: 'dropdown-item' %>
+             <strike>RSS</strike>
+             <div class="dropdown-divider"></div>
+             <%= link_to 'このサイトについて', about_others_path, class: 'dropdown-item' %>
+           </div>
+         </li>
+         <!-- todo こいつもAjaxだからかドロップダウンメニューに入れたらだめだな -->
+         <li class="nav-item"><%= link_to '写真を入れ替える', slider_update_mutters_path, remote: true, class: 'nav-link' if @slideshow_visible %></li>
+       </ul>
      </div>
-   </div>
+   </nav>
 
     <div id="slider_update_info" class="alert alert-success text-center important" style="display:none">↓ 変更しました ↓</div>
   <div id="slider_photo">
     <%= render "mutters/slider" if @slideshow_visible %>
   </div>
 
-    <div class="container">
-<% # コンテンツは"row"ブロックからレイアウトできるので自由がある(トップ画面など) -%>
-<% if @layout_type == 1 -%>
-      <div class="row">
-        <div class="span12">
-          <%= bootstrap_flash %>
-        </div>
-      </div>
-
+  <div class="container-fluid">
+    <%= bootstrap_flash %>
+    <div class="row justify-content-center">
       <%= yield %>
-
-<% # コンテンツは"span12"の中身からレイアウトするので自由がない -%>
-<% else -%>
-      <div class="row">
-        <div class="span12">
-          <%= bootstrap_flash %>
-
-          <%= yield %>
-
-        </div>
-      </div>
-<% end -%>
-
-    </div> <!-- /container -->
-
+    </div>
+  </div> <!-- /container -->
 
     <!-- ### モーダル表示用 ### -->
     <!-- QRコード -->

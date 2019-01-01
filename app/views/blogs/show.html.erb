@@ -1,5 +1,4 @@
-<div class="row">
-  <div class="span7 offset2">
+  <div class="col-sm-7">
     <%= link_to '自分の日記へ', blogs_path, class: "btn" %>
     <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
     <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
@@ -50,5 +49,3 @@
       <% end -%>
     </div>
   </div> <!-- .span -->
-
-</div> <!-- .row -->

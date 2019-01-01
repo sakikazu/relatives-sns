@@ -1,9 +1,9 @@
-<ul class="nav nav-tabs">
-  <li<%= " class=active" if @leave_me.blank? %>>
-  <%= link_to "みんなの", root_path %>
+<ul class="nav nav-tabs mb15">
+  <li class="nav-item">
+    <%= link_to "みんなの", root_path, class: "nav-link #{'active' if @leave_me.blank?}" %>
   </li>
-  <li<%= " class=active" if @leave_me.present? %>>
-  <%= link_to "ひとりごと <span class='badge badge-warning'>#{@count_unread_leave_me_mutters}</span>".html_safe, mutters_path(leave_me: true) %>
+  <li class="nav-item">
+  <%= link_to "ひとりごと <span class='badge badge-warning'>#{@count_unread_leave_me_mutters}</span>".html_safe, mutters_path(leave_me: true), class: "nav-link #{'active' if @leave_me.present?}" %>
   </li>
 </ul>
 

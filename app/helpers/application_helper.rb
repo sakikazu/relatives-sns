@@ -30,7 +30,7 @@ EOS
 
   def page_title
     title = ""
-    title += "[dev]" if Rails.env != "production"
+    title += "[dev]" unless Rails.env.production?
     title += "A団HP | "
     if @page_title.present?
       title += @page_title
@@ -158,8 +158,9 @@ EOS
   end
 
   def sani_br(html)
-    html.gsub!(/\r\n|\r|\n/, "<br>") unless html.blank?
-    auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
+    html_mod = ''
+    html_mod = html.gsub(/\r\n|\r|\n/, "<br>") unless html.blank?
+    auto_link(Sanitize.clean(html_mod, Sanitize::Config::BASIC)).html_safe
   end
 
   def sani_custom(html)
@@ -167,16 +168,18 @@ EOS
   end
 
   def sani_custom_br(html)
-    html.gsub!(/\r\n|\r|\n/, "<br>") unless html.blank?
-    auto_link(Sanitize.clean(html, Sanitize::Config::CUSTOM)).html_safe
+    html_mod = ''
+    html_mod = html.gsub(/\r\n|\r|\n/, "<br>") unless html.blank?
+    auto_link(Sanitize.clean(html_mod, Sanitize::Config::CUSTOM)).html_safe
   end
 
   #jsコード内に出力するときに改行コードがあるとjsコード自体が改行されてしまうのでスペースに変換する
   def sani_for_js(html)
-    html.gsub!(/[\r\n]+/, " ") if html.present?
+    html_mod = ''
+    html_mod = html.gsub(/[\r\n]+/, " ") if html.present?
     # これだとクォーテーションなどがそのままになり、JSの動作に不具合が生じた。タグを有効にしたかったんだろうけどとりあえずJS内ではデザインなしってことで無効。
     # auto_link(Sanitize.clean(h(html), Sanitize::Config::BASIC)).html_safe
-    auto_link(h(html))
+    auto_link(h(html_mod))
   end
 
   def action_info(up)

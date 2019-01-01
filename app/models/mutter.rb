@@ -27,8 +27,8 @@ class Mutter < ApplicationRecord
   paginates_per 7
 
   belongs_to :user
-  belongs_to :celebration
-  belongs_to :parent, class_name: "Mutter", foreign_key: "reply_id"
+  belongs_to :celebration, optional: true
+  belongs_to :parent, class_name: "Mutter", foreign_key: "reply_id", optional: true
   has_many :children, class_name: "Mutter", foreign_key: "reply_id"
   has_many :nices, :as => :asset
 

@@ -49,7 +49,7 @@ $(document).ready(function(){
 
   // todo サーバーからのpushにしたい
   // つぶやき表示更新
-<% if Rails.env == "production" %>
+<% if Rails.env.production? %>
   setInterval(function(){
     $.get("<%= update_disp_mutters_path %>", function(data){
       if(data != "") {
@@ -64,7 +64,8 @@ $(document).ready(function(){
 
 // つぶやき検索
 $(document).on('click', 'a.js_search_mutter', function() {
-  $form = $('#form_search form');
+  alert('aa');
+  $form = $('form#new_mutter');
   $('#mutter_action_flg', $form).val($(this).attr('rel'));
   $form.submit();
   return false;
@@ -73,8 +74,7 @@ $(document).on('click', 'a.js_search_mutter', function() {
 }); // document.ready
 </script>
 
-<div class="row">
-  <div class="span4">
+  <div class="col-sm-3">
     <div class="well sidebar-nav">
       <legend class="text-center">― 日齢 ― 生まれて何日？</legend>
       <div id="nichirei">
@@ -154,61 +154,61 @@ $(document).on('click', 'a.js_search_mutter', function() {
 
 
         <!-- start main mutter -->
-        <div class="span8">
+        <div class="col-sm-6">
 
    <div id="mutter" class="clearfix">
-    <div id="form" class="clearfix well well2">
+    <div id="form" class=" well well2">
       <%= simple_form_for @mutter, html: {multipart: true}, remote: true do |f| -%>
-        <div class="span5">
-        <%= f.text_area :content, rows: 3, class: "span5", placeholder: "つぶやき" %><br>
+      <div class="row justify-content-center">
+        <div class="col-sm-8">
+        <%= f.text_area :content, rows: 3, class: "form-control", placeholder: "つぶやき" %><br>
         <%= f.hidden_field :user_id %>
       <% if request.smart_phone? %>
         <%= f.file_field :image %>
       <% else %>
-        <div class="bootstrap_file_field input-append">
-          <%= f.file_field :image, style: "display: none" %>
-          <input class="file_value input-large span4" type="text" placeholder="写真や動画がアップロードできます">
-          <a class="btn">ファイル選択</a>
+        <div class="custom-file">
+          <%= f.file_field :image, class: 'custom-file-input', id: 'customFile' %>
+          <label class="custom-file-label" for="customFile">写真や動画がアップロードできます</label>
         </div>
       <% end %>
         </div>
-        <div class="span2">
+        <div class="col-sm-3">
           <br>
           <%= f.submit "投稿する", class: "btn btn-primary btn-large", :data => {:disable_with => "投稿中..."} %>
           <div class="leave_me"><%= f.check_box :leave_me, value: "1" %><%= f.label :leave_me, "ひとりごと" %></div>
         </div>
+      </div>
       <% end -%>
     </div>
     <%#= link_to '写真付きでつぶやく', :action => "new_from_mail" if request.smart_phone? %>
 
     <div id="create_notification" class="alert alert-success text-center important" style="display:none">つぶやきを投稿しました<%#= @create_notification %></div>
 
-    <div id="form_search" class="row well text-center">
-      <div class="input-append">
         <%= form_for @mutter, url: search_mutters_path, :remote => true, :method => :get do |f| %>
+          <div class="row no-gutters well justify-content-center">
           <% # [memo] このinput textはspanX指定のみだとAndroidのChromeでフォームが横に飛び出してしまった。
              #   text_fieldではデフォルトでsizeが30になるらしく、Androidではそれが影響していた。
              #   なので、sizeを小さめにして最小のサイズとしつつ、spanXが最大のサイズとして設定されるようにした -%>
-          <%= f.text_field :search_word, size: 15, class: "span3" %>
-          <%= f.select :user_id, User.all.map{|u| [u.dispname, u.id]}, {include_blank: true}, {class: "span2"} %>
+          <%= f.text_field :search_word, size: 15, class: "col-sm-6" %>
+          <%= f.select :user_id, User.all.map{|u| [u.dispname, u.id]}, {include_blank: true}, {class: "col-sm-3"} %>
           <%= f.hidden_field :action_flg %>
-        <% end %>
 
         <div class="btn-group">
           <button class="btn dropdown-toggle" data-toggle="dropdown">
-           検索
-            <span class="caret"></span>
+           検索<span class="caret"></span>
           </button>
-          <ul class="dropdown-menu">
-            <li><%= link_to "発言内容から検索", "#", {class: "js_search_mutter", rel: "1"} %></li>
-            <li><%= link_to "画像か動画を含むもの", "#", {class: "js_search_mutter", rel: "2"} %></li>
-            <li><%= link_to "URLを含むもの", "#", {class: "js_search_mutter", rel: "3"} %></li>
-            <li class="divider"></li>
-            <li><strike><%= link_to "詳細検索", action: :all %></strike>まだできてない</li>
-          </ul>
+          <div class="dropdown-menu">
+            <%= link_to "発言内容から検索", "#", {class: "js_search_mutter dropdown-item", rel: "1"} %>
+            <%= link_to "画像か動画を含むもの", "#", {class: "js_search_mutter dropdown-item", rel: "2"} %>
+            <%= link_to "URLを含むもの", "#", {class: "js_search_mutter dropdown-item", rel: "3"} %>
+             <div class="dropdown-divider"></div>
+            <strike><%= link_to "詳細検索", action: :all, class: 'dropdown-item' %></strike>まだできてない
+          </div>
         </div>
-      </div>
-    </div>
+
+          </div>
+        <% end %>
+
 
 
     <div id="mutter_data">
@@ -225,4 +225,3 @@ $(document).on('click', 'a.js_search_mutter', function() {
   </div> <!-- #mutter -->
 
   </div>
-</div><!--/row-->

@@ -25,7 +25,7 @@ jQuery(document).ready(function(){
   var udats = [
   <% @user_exts.each_with_index do |user_x, idx| %>
     {
-      "name": '<%= user_x.user.dispname %>',
+      "name": '<%= user_x.user&.dispname %>',
       "lat": <%= user_x.lat %>,
       "lng": <%= user_x.lng %>,
       "address": '<%= user_x.address %>',
@@ -64,7 +64,7 @@ jQuery(document).ready(function(){
     <% if idx == 0 -%>
       sidebar_html += "<br /><b style='background-color:yellow'>(登録されている住所から経度緯度が取得できませんでした)</b>"
     <% end -%>
-    sidebar_html += "<div><%= user_x.user.dispname %></div>"
+    sidebar_html += "<div><%= user_x.user&.dispname %></div>"
   <% end -%>
 
   $('#gmap_sidebar').append(sidebar_html);
