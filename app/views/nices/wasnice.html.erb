@@ -1,24 +1,11 @@
-<script>
-$(document).on('turbolinks:load', function() {
-  //目次を作成する
-  $("#mokuji").mokuji();
-
-  //colorbox 再適用
-  $(".colorbox").colorbox();
-  colorbox_fix_size();
-})
-</script>
-
-<div id="nice_show" style="width:900px">
+<div id="nice_show" class="col-sm-7">
 
 <%= render :partial => 'nices_menu' %>
 
-
 <h1 style="margin-top:45px">＜<%= @user.dispname %>＞がイイネされたもの</h1>
 
-<div id="nice_show_left">
-
-<div id="mokuji"></div>
+<div class="jumbotron">
+<div id="mokuji" data-mokuji-summary="false"></div>
 
 <h2 class="normal">人気のつぶやき</h2>
 <div class="h2normal_content">
@@ -48,7 +35,7 @@ $(document).on('turbolinks:load', function() {
     <span class="nice_user">(イイネした人： <%= obj.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
   </div>
   <% if obj.present? -%>
-    <%= link_to(image_tag(obj.attach(:thumb)), slideshow_album_photo_path(obj), {:class => colorbox_fix_size}) if obj.attach?  %><br>
+    <%= link_to(image_tag(obj.image(:thumb)), slideshow_album_photo_path(obj.album, obj), {:class => colorbox_fix_size}) if obj.image?  %><br>
     写真タイトル：<%= obj.title %> / アルバム：<%= link_to obj.album.title, obj.album %>
   <% else -%>
     削除されました.
@@ -98,11 +85,12 @@ $(document).on('turbolinks:load', function() {
 <% end -%>
 </div>
 
+</div>
 
 </div> <!-- #nice_show_left -->
 
 
-<div class="right_side_bar" style="width:180px;margin-top:30px;">
+<div class="right_side_bar col-sm-2">
     <p class="title">イイネされたことがある人</p>
     <ul>
     <% @users.each do |user| -%>
@@ -111,4 +99,3 @@ $(document).on('turbolinks:load', function() {
     </ul>
 </div>
 
-</div> <!-- #nice_show -->

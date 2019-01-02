@@ -48,7 +48,8 @@ class NicesController < ApplicationController
 
     nices = nices.group_by{|n| n[:asset_type] =~ /(Mutter|Photo|Movie|Blog)/;$1}
     %w(Mutter Photo Movie Blog).each do |type|
-      @nices[type.downcase] = nices[type].present? ? nices[type].page(:page => params[:page]).per(10) : {}
+      # todo 元々paginate対応の予定だったが、辞めたので暫定的に配列10個取得してる
+      @nices[type.downcase] = nices[type].present? ? nices[type][0..9] : []
     end
 
     @users = Nice.joins(:user).select('distinct user_id').map{|n| User.find(n.user_id)}

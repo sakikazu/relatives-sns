@@ -1,32 +1,18 @@
-<script>
-$(document).on('turbolinks:load', function() {
-  //目次を作成する
-  $("#mokuji").mokuji();
-
-  //colorbox 再適用
-  $(".colorbox").colorbox();
-  colorbox_fix_size();
-})
-</script>
-
-<div id="nice_show" style="width:900px">
+<div id="nice_show" class="col-sm-7">
 
 <%= render :partial => 'nices_menu' %>
 
-
 <h1 style="margin-top:45px">＜<%= @user.dispname %>＞がイイネしたもの</h1>
 
-<div id="nice_show_left">
-
-<div id="mokuji"></div>
+<div class="jumbotron">
+<div id="mokuji" data-mokuji-summary="false"></div>
 
 <h2 class="normal">最近評価したつぶやき</h2>
-<%= will_paginate @nices["mutter"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["mutter"].present? %>
 <div class="h2normal_content">
 <% @nices["mutter"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
@@ -40,16 +26,15 @@ $(document).on('turbolinks:load', function() {
 </div>
 
 <h2 class="normal">最近評価した写真</h2>
-<%= will_paginate @nices["albumphoto"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["albumphoto"].present? %>
 <div class="h2normal_content">
-<% @nices["albumphoto"].each do |data| -%>
+<% @nices["photo"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
-    <%= link_to(image_tag(obj.attach(:thumb)), slideshow_album_photo_path(obj), {:class => colorbox_fix_size}) if obj.attach?  %><br>
+    <%= link_to(image_tag(obj.image(:thumb)), slideshow_album_photo_path(obj.album, obj), {:class => colorbox_fix_size}) if obj.image?  %><br>
     写真タイトル：<%= obj.title %> / アルバム：<%= link_to obj.album.title, obj.album %>
   <% end -%>
   <hr>
@@ -58,12 +43,11 @@ $(document).on('turbolinks:load', function() {
 </div>
 
 <h2 class="normal">最近評価した日記</h2>
-<%= will_paginate @nices["blog"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["blog"].present? %>
 <div class="h2normal_content">
 <% @nices["blog"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
@@ -81,12 +65,11 @@ $(document).on('turbolinks:load', function() {
 
 
 <h2 class="normal">最近評価した動画</h2>
-<%= will_paginate @nices["movie"], :previous_label=>'&#171;前', :next_label=>'次&#187;', :class => 'flickr_pagination' if @nices["movie"].present? %>
 <div class="h2normal_content">
 <% @nices["movie"].each do |data| -%>
   <div class="nice_content_wrap" id="<%= data.id %>" time="<%= l data.created_at %>">
   <div class="nice_user">イイネした人：<%= "#{data.user.dispname} (#{l data.created_at})" %></div>
-  <% obj = data.nice -%>
+  <% obj = data.asset -%>
   <% if obj.blank? -%>
     削除されました.
   <% else -%>
@@ -99,11 +82,12 @@ $(document).on('turbolinks:load', function() {
 <% end -%>
 </div>
 
+</div>
 
 </div> <!-- #nice_show_left -->
 
 
-<div class="right_side_bar" style="width:180px;margin-top:30px;">
+<div class="right_side_bar col-sm-2">
     <p class="title">イイネしたことがある人</p>
     <ul>
     <% @users.each do |user| -%>
@@ -112,4 +96,3 @@ $(document).on('turbolinks:load', function() {
     </ul>
 </div>
 
-</div> <!-- #nice_show -->
