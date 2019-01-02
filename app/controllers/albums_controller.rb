@@ -112,9 +112,6 @@ class AlbumsController < ApplicationController
     # アップロード者リスト
     @uploader_list = @album.photos.includes(user: :user_ext).select('distinct user_id').map{|p| [p.user.id, p.user.dispname]}
 
-    # AutoPager対応
-    @autopagerable = true
-
     # 動画アップロード用
     @movie = @album.movies.build
 

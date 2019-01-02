@@ -161,9 +161,6 @@ class MuttersController < ApplicationController
 #todo kaminariにしてみたけどincludeしたらどうなる？？
     @mutters = Mutter.includes_all.user_is(params[:user_id]).parents_mod.page(params[:page]).per(15)
 
-    # AutoPager対応
-    @autopagerable = true
-
     unless read_fragment :mutter_by_user
       @users_mcnt = Mutter.group(:user_id).count
       @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
@@ -211,10 +208,6 @@ class MuttersController < ApplicationController
 
     ###誕生記念日(年齢／日齢)
     @kinen = UserExt.kinen
-
-    # AutoPager対応
-    @autopagerable = true
-
   end
 
 

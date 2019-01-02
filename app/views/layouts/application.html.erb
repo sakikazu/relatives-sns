@@ -43,7 +43,7 @@
 <script>
 
   // todo 整理したい
-jQuery(document).ready(function(){
+$(document).on('turbolinks:load', function() {
 
   // Ajax用エラーハンドリング
   //$("form#new_mutter:first").bind('ajax:error', function(XMLHttpRequest, textStatus, errorThrown) {
@@ -55,45 +55,6 @@ jQuery(document).ready(function(){
   //  console.log(errorThrown);
   //});
 
-  myThumbnail();
-
-  //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよい)
-  $(".colorbox").colorbox();
-  //対象がhtml(colorboxのサイズ指定必要)
-  colorbox_fix_size = (function(){
-    jQuery(".colorbox_fix_size").colorbox({
-      width:"900px",
-      height:"750px",
-    });
-  });
-  colorbox_fix_size();
-
-  colorbox_slideshow = (function(){
-    $("a[rel='colorbox']").colorbox({
-      slideshow:true,
-      slideshowSpeed:8000,
-      slideshowAuto: false,
-      slideshowStart: "★開始する(8秒送り)",
-      slideshowStop: "★停止する",
-      width:"900px",
-      height:"750px",
-      current: "{current} / {total}",
-      escKey:false,
-      arrowKey:false
-    });
-  });
-  colorbox_slideshow();
-
-  slide_effect = (function(){
-    jQuery(".carousel-demo2").sliderkit({
-      shownavitems:9,
-      scroll:1,
-      mousewheel:true,
-      circular:true,
-      start:0
-    });
-  });
-
   // [memo] colorboxでのフロートウィンドウで、下のほうが切れてしまってる問題が時々起きてたが、これが原因かも。とりあえずコメントアウト
   // コンテンツの高さが足りないページでも、フッターを下の方に配置する
   // ※bodyに対して設定しようとしたら適用されなかった
@@ -101,7 +62,6 @@ jQuery(document).ready(function(){
 //    offset = $("body").height() - $("#wrapper").height();
 //    $("#wrapper").height($(window).height() - offset);
 //  }
-
 
   // つぶやきのデスクトップ通知
 <% if Rails.env.production? %>
@@ -168,56 +128,7 @@ jQuery(document).ready(function(){
     })
 <% end -%>
 
-
-  // AutoPager
-autopagerize = function() {
-  $.autopager({
-    content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
-    //次ページリンクのセレクタ(Default: 'a[rel=next]')
-    //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
-    load: function(current, next) {
-      var autopager_area = this;
-      var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
-      //thisは読み込んだコンテンツ要素を指す
-      $(this).before(pageBreak);
-      $(function() {
-        $(".colorbox").colorbox();
-        colorbox_slideshow();
-        nice_member();
-        myThumbnail(autopager_area);
-       // autopagerize();
-      })
-      $("#autopager_loading").hide();
-    },
-    start: function() {
-      $("#autopager_loading").show();
-    }
-  });
-}
-
-<% if @autopagerable -%>
-  autopagerize();
-<% end -%>
-
-}); // jQuery(document).ready
-
-
-// つぶやきのコメントのうち、最後のコメント以外をトグル表示
-function toggleComments(obj) {
-  $(obj).siblings(":not(.last_children)").toggle();
-  if ($(obj).text() == '全部見る') {
-    $(obj).html('<i class="icon-minus"></i>隠す<i class="icon-minus""></i>');
-  } else {
-    $(obj).html('<i class="icon-plus"></i>全部見る<i class="icon-plus"></i>');
-  }
-}
-// 表示したらしっぱなしパターン
-function showComments(obj) {
-  $(obj).siblings(":hidden").show();
-  //$(obj).html('全表示');
-  $(obj).remove();
-}
-
+});
 </script>
 
  </head>

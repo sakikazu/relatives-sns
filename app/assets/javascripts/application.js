@@ -33,6 +33,49 @@
 //= require jquery.remotipart
 //= require jquery.MyThumbnail.js
 
+
+$(document).on('turbolinks:load', function() {
+  //イイネしたメンバーをクリックで表示する
+  nice_member = (function(){
+    $('.nice_members').each(function(){
+      $(this).css({'cursor' : 'pointer'});
+      $(this).tooltip({
+        title: $(this).attr('nice_members'),
+        placement: 'top',
+        trigger: 'click',
+        delay: 0,
+      });
+    });
+  });
+  nice_member();
+
+  build_relation();
+
+	if (document.getElementById('mokuji')) {
+		//目次を作成する
+		$("#mokuji").mokuji();
+	}
+
+	if (document.getElementsByClassName('autopagerize_page_element')[0]) {
+		autopagerize();
+	}
+
+  //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよいもの)
+  $(".colorbox").colorbox();
+  colorbox_fix_size();
+  colorbox_slideshow();
+
+  myThumbnail();
+
+	// bootstrap
+	$('[data-toggle="popover"]').popover({
+		trigger: 'click',
+		html: true,
+	});
+	$('[data-toggle="tooltip"]').tooltip();
+});
+
+
 myThumbnail = function(target_area) {
   if (!target_area) {
     target_area = $('body');
@@ -97,23 +140,80 @@ function build_relation() {
   });
 }
 
-$(function(){
-  //イイネしたメンバーをクリックで表示する
-  nice_member = (function(){
-    $('.nice_members').each(function(){
-      $(this).css({'cursor' : 'pointer'});
-      $(this).tooltip({
-        title: $(this).attr('nice_members'),
-        placement: 'top',
-        trigger: 'click',
-        delay: 0,
-      });
+// つぶやきのコメントのうち、最後のコメント以外をトグル表示
+function toggleComments(obj) {
+  $(obj).siblings(":not(.last_children)").toggle();
+  if ($(obj).text() == '全部見る') {
+    $(obj).html('<i class="icon-minus"></i>隠す<i class="icon-minus""></i>');
+  } else {
+    $(obj).html('<i class="icon-plus"></i>全部見る<i class="icon-plus"></i>');
+  }
+}
+// 表示したらしっぱなしパターン
+function showComments(obj) {
+  $(obj).siblings(":hidden").show();
+  //$(obj).html('全表示');
+  $(obj).remove();
+}
+
+// AutoPager
+autopagerize = function() {
+  $.autopager({
+    content: '.autopagerize_page_element', // コンテンツ部分のセレクタ 
+    //次ページリンクのセレクタ(Default: 'a[rel=next]')
+    //link   : '.next_page',  //デフォルトでいいのでコメントアウト 
+    load: function(current, next) {
+      var autopager_area = this;
+      var pageBreak = '<p>ページ: <a href="' + current.url + '">' + current.page + '</a></p>';
+      //thisは読み込んだコンテンツ要素を指す
+      $(this).before(pageBreak);
+      $(function() {
+        $(".colorbox").colorbox();
+        colorbox_slideshow();
+        nice_member();
+        myThumbnail(autopager_area);
+       // autopagerize();
+      })
+      $("#autopager_loading").hide();
+    },
+    start: function() {
+      $("#autopager_loading").show();
+    }
+  });
+}
+
+  slide_effect = (function(){
+    jQuery(".carousel-demo2").sliderkit({
+      shownavitems:9,
+      scroll:1,
+      mousewheel:true,
+      circular:true,
+      start:0
     });
   });
-  nice_member();
 
-  build_relation();
-});
+  //対象がhtml(colorboxのサイズ指定必要)
+  colorbox_fix_size = (function(){
+    jQuery(".colorbox_fix_size").colorbox({
+      width:"900px",
+      height:"750px",
+    });
+  });
+
+  colorbox_slideshow = (function(){
+    $("a[rel='colorbox']").colorbox({
+      slideshow:true,
+      slideshowSpeed:8000,
+      slideshowAuto: false,
+      slideshowStart: "★開始する(8秒送り)",
+      slideshowStop: "★停止する",
+      width:"900px",
+      height:"750px",
+      current: "{current} / {total}",
+      escKey:false,
+      arrowKey:false
+    });
+  });
 
 
 // todo 下記jQueryの構文って、ライブラリ作る用ってことだったけ？readyの構文は上のやつだしな
@@ -121,15 +221,13 @@ $(function(){
 (function($){
 
   //目次を作成する
-//sakikazu もっと汎用性あるようにしたい。「nice～」とかあるし
-  $.fn.mokuji = function(options){
-    var opts = $.extend({
-      summary : false,
-    }, options);
+//todo もっと汎用性あるようにしたい。「nice～」とかあるし
+  $.fn.mokuji = function() {
+    var summary = $(this).data('mokuji-summary');
 
     $(this).append('<ul><h3 class="normal">目次</h3></ul>');
 
-    if(opts.summary == true) {
+    if(summary == true) {
       $(this).after('<h2 class="normal" summary="true">まとめ(直近10個)</h2>');
     }
 
@@ -141,7 +239,7 @@ $(function(){
     $("ul", this).append('<li>' + items.join("</li><li>") + '</li>');
 
     //すべてのカテゴリから評価された日付降順に抽出する
-    if(opts.summary == true) {
+    if(summary == true) {
       var data = [];
       $(".nice_content_wrap").each(function(){
         data.push({"id" : $(this).attr("id"), "time" : new Date($(this).attr("time"))});

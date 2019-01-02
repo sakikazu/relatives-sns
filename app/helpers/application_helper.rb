@@ -217,7 +217,7 @@ EOS
     text2 = strip_tags(text)
     if text2.split(//u).length > 120
       ret = sani_br(text2.truncate(120, :omission => ""))
-      ret += link_to " ...(続き)", "javascript:void(0)", :title => text2, :class => "overstring"
+      ret += link_to " ...(続き)", "javascript:void(0)", :title => '', data: {toggle: 'popover', html: true, trigger: 'hover', placement: 'right', content: sani_br(text2)}
     else
       ret = sani_br(text2)
     end

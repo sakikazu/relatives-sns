@@ -1,6 +1,6 @@
 <script>
 
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
     // 写真アップロード中に他のタブに移動してしまうと、アップロード処理が止まってしまうのでalertを出す
     $('a[data-toggle="tab"]:not([href="#tab-photo-upload"]').on("click", function() {
         if ($('body').data('in_upload_progress') == 1) {
@@ -41,7 +41,6 @@ $(document).ready(function() {
 
   });
 
-  
   //colorbox
   colorbox_slideshow();
 

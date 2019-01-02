@@ -1,19 +1,8 @@
-<script>
-$(document).ready(function() {
-  //目次を作成する
-  $("#mokuji").mokuji({summary : true});
-
-  //colorbox 再適用
-  $(".colorbox").colorbox();
-  colorbox_fix_size();
-})
-</script>
-
 <div id="nice_show">
 
 <%= render :partial => 'nices_menu' %>
 
-<div id="mokuji"></div>
+<div id="mokuji" data-mokuji-summary="true"></div>
 
 <h2 class="normal">最近評価されたつぶやき</h2>
 <%#= paginate @nices["mutter"], :window => 2, :outer_window => 2 if @nices["mutter"].present? %>
