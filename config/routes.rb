@@ -292,7 +292,6 @@ Rails.application.routes.draw do
   resources :others do
     collection do
       get :about
-      get :he
     end
   end
 

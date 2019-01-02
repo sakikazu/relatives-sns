@@ -17,7 +17,6 @@
 //= require popper
 //= require bootstrap-sprockets
 //= require_tree ./uploadify
-//= require_tree ./jPlayer
 //= require video-js/video
 //= require jquery.colorbox-min
 // 日記でhtmlが使えるように
