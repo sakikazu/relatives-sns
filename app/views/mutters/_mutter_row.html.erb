@@ -36,19 +36,23 @@
 
 
 <!-- レス用モーダル -->
-<div class="modal modal-mutter-reply" id="myModal<%= mutter_row.id %>" style="display:none">
+<div class="modal fade modal-mutter-reply" id="myModal<%= mutter_row.id %>">
+  <div class="modal-dialog">
+    <div class="modal-content">
   <% @mutter ||= Mutter.new(user_id: current_user.id) -%>
   <% @mutter.reply_id = mutter_row.id -%>
   <%= form_for @mutter, html: {multi_part: true}, remote: true do |f| %>
     <div class="modal-header">
-      <a class="close" data-dismiss="modal">×</a>
-      <h3>返信</h3>
+      <h3 class='modal-title'>返信</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div class="modal-body">
       <div id="form" class="clearfix">
         <div class="left">
-          <%= f.text_area :content, rows: 3, class: "span5", placeholder: "「#{mutter_row.content}」へのレス" %><br>
-          <%= f.file_field :image %>
+          <%= f.text_area :content, rows: 3, class: "form-control", placeholder: "「#{mutter_row.content}」へのレス" %><br>
+          <%= f.file_field :image, class: 'form-control' %>
           <%= f.hidden_field :user_id %>
           <%= f.hidden_field :reply_id %>
         </div>
@@ -59,9 +63,11 @@
 
     </div>
     <div class="modal-footer">
-      <%= f.submit "返信する", class: "btn btn-primary", style: "z-index:98", :data => {:disable_with => "投稿中..."} %>
-      <a href="#" class="btn" data-dismiss="modal" style="z-index:99">キャンセル</a>
+      <button type="button" class="btn btn-light" data-dismiss="modal">キャンセル</button>
+      <%= f.submit "返信する", class: "btn btn-primary", :data => {:disable_with => "投稿中..."} %>
     </div>
   <% end -%>
+    </div>
+  </div>
 </div>
 

@@ -183,20 +183,7 @@ $(document).on('turbolinks:load', function() {
     </div>
   </div> <!-- /container -->
 
-    <!-- ### モーダル表示用 ### -->
-    <!-- QRコード -->
-    <div class="modal" id="modalQR" style="display:none">
-      <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>このサイトのQRコード</h3>
-      </div>
-      <div class="modal-body">
-        <%= image_tag('QR_Code.jpg'); %>
-      </div>
-      <div class="modal-footer">
-        produced by たかひろ
-      </div>
-    </div>
+    <%= render 'shared/qr_modal' %>
 
     <%= render 'movies/flash_install_message' %>
 
