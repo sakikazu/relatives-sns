@@ -11,6 +11,7 @@ module ApplicationHelper
     </video>
 EOS
 
+    # todo flashは不要になってるかもだから、この処理はなくしていいかも
     unless request.smart_phone?
       videojs_src += <<"EOS"
       <script>
