@@ -50,6 +50,9 @@ $(document).on('turbolinks:load', function() {
 
   build_relation();
 
+// todo PUSH通知でできればいいかなー。とりあえず無効
+// desktopify();
+
 	if (document.getElementById('mokuji')) {
 		//目次を作成する
 		$("#mokuji").mokuji();
@@ -219,6 +222,34 @@ autopagerize = function() {
     });
   });
 
+
+// つぶやきのデスクトップ通知
+desktopify = (function() {
+  $('<button id="desktopify">つぶやきの通知を有効にする<\/button>')
+    .appendTo('#desktopnotification')
+    .desktopify({
+      timeout: 15000,
+      callback: function(){
+        setInterval(function(){
+          $.get("/mutters/update_check", function(data){
+            if(data != "" && data != undefined) {
+              $('#desktopify').trigger('notify', [
+                data,
+                '新着つぶやき(15秒後に非表示)'
+              ]);
+              return false;
+            }
+          });
+        },60000); // ミリ秒
+      },
+      unsupported: function() {
+        $('<div>あなたのブラウザは通知をサポートしてません。Chromeにするか、Firefoxなら <a href="http://code.google.com/p/ff-html5notifications/">http://code.google.com/p/ff-html5notifications/</a> をインストールしてください<\/div>')
+          .appendTo('#desktopnotification');
+        $('#desktopify').hide();
+      }
+    })
+    .trigger('click');
+});
 
 // todo 下記jQueryの構文って、ライブラリ作る用ってことだったけ？readyの構文は上のやつだしな
 // メソッドが多くなってきたら別ファイルに切り出す
