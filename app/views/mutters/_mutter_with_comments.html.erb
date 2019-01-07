@@ -1,5 +1,5 @@
 <% if mutter_with_comments == @created_mutter -%>
-  <li <%= "style='border:3px solid red'" %>>
+  <li <%== "style='border:3px solid red'" %>>
 <% else -%>
   <li>
 <% end -%>
@@ -11,14 +11,12 @@
 <ul class="children">
   <% #childrenはつぶやき時間昇順で表示する -%>
 
-  <% initial_visible_count = 3 -%>
   <% count = mutter_with_comments.children.size -%>
-  <% if count > initial_visible_count -%>
-    <div class="btn btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i> 全部見る <i class="icon-plus"></i></div>
+  <% if count > Mutter::VISIBLE_INITIAL_COMMENTS -%>
+    <div class="btn btn-light btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i> 全部見る <i class="icon-plus"></i></div>
   <% end -%>
   <% mutter_with_comments.children.reverse.each_with_index do |child, idx| -%>
-    <% # 最後のコメントは常時表示させておく。中間のコメントはボタンによってトグル表示 -%>
-    <% if idx + initial_visible_count < count -%>
+    <% if idx + Mutter::VISIBLE_INITIAL_COMMENTS < count -%>
       <li class="clearfix" style="display:none">
     <% elsif idx + 1 == count -%>
       <li class="clearfix last_children">

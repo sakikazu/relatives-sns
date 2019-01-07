@@ -48,7 +48,7 @@ class Mutter < ApplicationRecord
   # validates_presence_of :content
   attr_accessor :search_word, :action_flg, :year, :month, :image, :is_save_related_media
 
-  @@imap = nil
+  VISIBLE_INITIAL_COMMENTS = 3
 
   # content_name = "mutter"
   # has_attached_file :image,

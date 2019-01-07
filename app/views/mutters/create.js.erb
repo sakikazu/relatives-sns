@@ -8,12 +8,12 @@ $('#mutter_content').val('');
 $("#mutter_image").siblings().val('')
 $("#create_notification").show().fadeOut(3000);
 
-$('#mutter_data').html(
-  "<%= escape_javascript(render :partial => 'list', :locals => {mutters: @mutters, mutter: @mutter}) %>"
-);
-
-$(function(){
-  $(".colorbox").colorbox();
-});
+// NOTE: 遅延させないと、bootstrapのmodalが半端にhideされないという問題があった
+setTimeout(function(){
+  $('#mutter_data').html(
+    "<%= escape_javascript(render :partial => 'list', :locals => {mutters: @mutters, mutter: @mutter}) %>"
+  );
+  $("html,body").animate({scrollTop:$('#mutter_data').offset().top});
+}, 300); // ミリ秒
 
 <% end %>

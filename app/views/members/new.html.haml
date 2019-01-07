@@ -1,7 +1,9 @@
-.mb20
-  = link_to "戻る", relation_members_path, class: "btn"
-
-.page-header
-  %h3 ＜#{@user.parent.dispname(User::FULLNAME)}＞の家族追加
-
-= render 'form'
+.col-sm-6
+  .mb20
+    = link_to "戻る", relation_members_path, class: "btn btn-light"
+  
+  .page-header
+    %h3 ＜#{@user.parent.dispname(User::FULLNAME)}＞の家族追加
+  
+  .well
+    = render 'form'

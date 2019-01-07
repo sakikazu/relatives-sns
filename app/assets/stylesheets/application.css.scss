@@ -166,9 +166,10 @@
 }
 
 ul.children {
-  background: #DCEAF4;
+  // background: #DCEAF4;
   /* width: 550px; */
   /* margin-left: 80px; */
+  padding-left: 0;
   margin: 15px;
 }
 
@@ -408,6 +409,9 @@ footer > p {
 }
 .text-center {
   text-align: center;
+}
+ul {
+  padding-left: 0;
 }
 
 table.th-vertical-top th {
@@ -783,7 +787,7 @@ h2.normal3 {
 #members_controller {
   ul.members {
     margin-left: 0;
-    width: 220px;
+    width: 250px;
   }
   ul.child {
 	position:absolute;
@@ -792,7 +796,7 @@ h2.normal3 {
     border: 1px solid #666;
     border-radius: 4px;
     list-style-type: none;
-    margin: 0 0 5px 0;
+    margin: 0 0 7px 0;
   }
   ul.members>li.selected {
 	  border: 2px solid red;
@@ -802,7 +806,7 @@ h2.normal3 {
   }
   ul.members>li.zoom {
     padding: 5px;
-    height: 210px;
+    height: 250px;
     cursor: default;
 
     .img {
@@ -840,13 +844,13 @@ h2.normal3 {
   ul.members>li.list {
     position:relative;
     padding: 5px;
-    height: 60px;
+    height: 85px;
     cursor: pointer;
 
     .img {
       position:absolute;
-      top: 5px;
-      left: 5px;
+      top: 7px;
+      left: 7px;
       width: 50px;
       height: 50px;
 
@@ -863,7 +867,7 @@ h2.normal3 {
       position:absolute;
       top: 5px;
       right: 0px;
-      width: 60px;
+      width: 70px;
       height: 50px;
       margin-right: 5px;
 
@@ -915,15 +919,13 @@ h1 > small, h2 > small, h3 > small {
 
 .page-header {
   padding-bottom: 0px;
-  margin-bottom: 20px;
+  margin: 25px 0 25px;
+  border-bottom: 1px solid #eeeeee;
 }
 .page-header h3, .page-header h2 {
-  margin-top: 30px;
-  font-size: 20px;
-  color: #003F8E;
+  // color: #003F8E;
 }
 .page-header.ver2 h3, .page-header.ver2 h2 {
-  font-size: 23px;
   text-shadow: 1px 1px 0px white, 2px 2px 1px #B0D3FF;
 }
 .page-header small {

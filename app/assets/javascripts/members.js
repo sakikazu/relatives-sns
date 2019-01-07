@@ -1,0 +1,58 @@
+$(document).on('turbolinks:load', function() {
+  build_relation();
+});
+
+function build_relation() {
+  $('#members_controller #sakimuras li').on('click', function() {
+    $selected_li = $(this);
+
+    if ($selected_li.hasClass('zoom')) return;
+
+    wide_wrapper();
+
+    var $this_wrapper = $selected_li.closest("div[id*=generation]");
+    initiateList($this_wrapper);
+    var $appended_wrapper = $this_wrapper.next();
+
+    var member_id = $selected_li.attr("id");
+    var $member_ul = $("#" + member_id + "-family");
+    $member_ul.show();
+    $member_ul.find('li.zoom').addClass('selected');
+    $selected_li.addClass('selected');
+
+    $appended_wrapper.append($member_ul);
+
+    var next_ul_top = calc_next_ul_top($selected_li);
+    $member_ul.css({"top": next_ul_top});
+  });
+}
+
+// 選択枠線と表示済みの家族を初期化
+function initiateList($obj) {
+  $obj.find("li").removeClass('selected');
+  $next_obj = $obj.next();
+  if ($next_obj.is("[id*=generation]")) {
+    $next_obj.children().hide();
+    initiateList($next_obj);
+  } else {
+    return;
+  }
+}
+
+function calc_next_ul_top($selected_li) {
+  var offsetY = $selected_li.offset().top;
+  // var $wrap_ul = $selected_li.closest('ul');
+  // var ul_offsetY = $wrap_ul.offset().top;
+  // var next_ul_top = offsetY - ul_offsetY;
+  var sakimurasY = $("#sakimuras").offset().top;
+  var next_ul_top = offsetY - sakimurasY;
+  // console.log(next_ul_top);
+  return next_ul_top;
+}
+
+function wide_wrapper() {
+  // #generationのfloatが折り返さない幅にしておくこと
+  $("#sakimuras").width(1150);
+  $("footer").css({"margin-top" : 800});
+}
+
