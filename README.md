@@ -54,3 +54,25 @@ $ nginx -s reload
 # Updates
 * [2014/05/11] Rails4に。configなどの内容もちゃんと合わせた
 
+
+# Ruby version
+- ruby 2.5
+- rails 5.2
+
+# System dependencies
+- Twitter bootstrap 4
+- colorboxは、サムネイル画像のリンクからリンク先の大きな画像を取得してモーダルで表示するというbootstrapでは実現できない機能を持つので使っていきたい
+- メール送信のSMTPにGmailの個人アカウントを使用
+
+# Configuration
+
+# Database creation
+
+# Database initialization
+
+# How to run the test suite
+
+# Services (job queues, cache servers, search engines, etc.)
+
+# Deployment instructions
+
