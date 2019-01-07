@@ -898,6 +898,10 @@ h2.normal3 {
  from bootstrap_and_overrides.css.less
  todo グルーピングして別ファイル切り出したい
 **********************************************/
+h1 > small, h2 > small, h3 > small {
+  color: #6c757d;
+  font-size: 55%;
+}
 .nav-header {
   padding: 0px 5px 12px;
   font-size: 17px;

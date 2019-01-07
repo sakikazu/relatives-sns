@@ -18,6 +18,8 @@ ja:
       invalid: 'パスワードが違います.'
       invalid_token: '認証トークンが不正です.'
       timeout: 'セッションがタイムアウトしました。再ログインしてください.'
+      user:
+        not_found_in_database: '指定のユーザーが見つかりません.'
 
     sessions:
       signed_in: 'ログインしました.'

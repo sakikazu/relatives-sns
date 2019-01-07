@@ -138,6 +138,7 @@ $(document).on('turbolinks:load', function() {
 
    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb20">
      <a class="navbar-brand" href="/">AdanHP</a>
+     <% if current_user.present? %>
      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
        <span clas="navbar-toggler-icon"></span>
      </button>
@@ -169,6 +170,7 @@ $(document).on('turbolinks:load', function() {
          <li class="nav-item"><%= link_to '写真を入れ替える', slider_update_mutters_path, remote: true, class: 'nav-link' if @slideshow_visible %></li>
        </ul>
      </div>
+     <% end %>
    </nav>
 
     <div id="slider_update_info" class="alert alert-success text-center important" style="display:none">↓ 変更しました ↓</div>
