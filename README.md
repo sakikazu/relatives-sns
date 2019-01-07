@@ -54,6 +54,11 @@ $ nginx -s reload
 # Updates
 * [2014/05/11] Rails4に。configなどの内容もちゃんと合わせた
 
+# Knowhow
+- ruby-gmailを使用してGmailにIMAPで接続し、メール検索や取得などの操作を行う[6b15bcd23cafd96ba10a67a2a26e996d629bf7c3]
+  - ref: ruby-gmailを使ってRubyからGmailのメールを受信して本文を取得 - Shoken OpenSource Society http://shoken.hatenablog.com/entry/20120401/p1
+  - 以前はruby-gmailではなくtmailのgemを使っていた。tmailが汎用的だが処理が煩雑って感じ
+  - ガラケーからMutterに画像を投稿するために使用していたので、2019/01/07に処理を削除
 
 # Ruby version
 - ruby 2.5

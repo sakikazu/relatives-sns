@@ -1,6 +1,4 @@
 class MuttersController < ApplicationController
-  # for mobile
-  before_action :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
   after_action :update_request_at, only: [:index, :update_disp, :create]
 
   before_action :authenticate_user!, :except => :rss
@@ -47,22 +45,6 @@ class MuttersController < ApplicationController
         @range_for_title = "#{year}年"
       end
     end
-  end
-
-  def new_from_mail
-    config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
-    @to = config['to']
-    env = Rails.env.production? ? "" : "[dev]"
-    @subject = "[a-dan-hp]#{env}mutter[user_id]#{current_user.id}"
-    if request.mobile?
-      @content_title = "画像付きつぶやき"
-      render :layout => 'mobile'
-    end
-  end
-
-  def create_from_mail
-    Mutter.create_from_mail
-    redirect_to(mutters_path, :notice => 'メールからつぶやきました。それが表示されてないときは、前の画面に戻って再度「つぶやく」ボタンを押してください。')
   end
 
 

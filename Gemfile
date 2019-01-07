@@ -75,11 +75,6 @@ gem 'jpmobile'
 # gem 'flash_cookie_session'
 #
 
-# 現在、ガラケーからのファイル添付のつぶやきにのみ使用
-# ※tmailを有効にしたらログインフォームでエラーになった。全く不明
-# gem 'tmail'
-gem 'ruby-gmail', '0.3.0'
-
 # 定数管理
 gem 'config'
 

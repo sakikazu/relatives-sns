@@ -4,9 +4,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   # protect_from_forgery with: :null_session
 
-  layout :select_layout
-  include Jpmobile::ViewSelector #Viewの自動振り分け
-
 
   # 発行されたSQLを取得する
   # todo 何やってるかさぱりわからん
@@ -39,32 +36,6 @@ private
   def update_request_at
     # [memo] update_attributeだと、validateなしで更新することができる。update_attributesはvalidateあり。
     current_user.update_attribute(:last_request_at, Time.now) if current_user.present?
-  end
-
-
-  # ガラケー用
-  def redirect_if_mobile
-    if request.mobile?
-      pa = params.dup
-      pa[:controller] = "mobile"
-      redirect_to pa
-    end
-  end
-
-  def select_layout
-    if devise_controller?
-      if request.mobile?
-        false
-      else
-        "application"
-      end
-    else
-      if request.mobile?
-        "mobile"
-      else
-        "application"
-      end
-    end
   end
 
 end
