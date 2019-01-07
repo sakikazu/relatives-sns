@@ -17,7 +17,7 @@
     削除されました.
   <% else -%>
     <ul class="mutter_rows">
-      <%= render :partial => 'mutters/mutter_row', :locals => {:mutter_row => obj} %>
+      <%= render :partial => 'mutters/mutter_with_comments', :locals => {:mutter_with_comments => obj} %>
     </ul>
   <% end -%>
   <hr>

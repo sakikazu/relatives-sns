@@ -17,7 +17,7 @@
   </div>
   <% if obj.present? -%>
     <ul class="mutter_rows">
-      <%= render :partial => 'mutters/mutter_row', :locals => {:mutter_row => obj} %>
+      <%= render :partial => 'mutters/mutter_with_comments', :locals => {:mutter_with_comments => obj} %>
     </ul>
   <% else -%>
     削除されました.

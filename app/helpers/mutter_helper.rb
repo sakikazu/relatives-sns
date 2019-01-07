@@ -1,26 +1,25 @@
 module MutterHelper
   def draw_content(mutter)
-    out = ""
-    out += sani_org(mutter.view_content)
-
+    out = sani_org(mutter.view_content)
+    media_src = ""
     if mutter.photo.present?
-      if request.smart_phone?
-        media_src = link_to(image_tag(mutter.photo.image(:thumb), class: 'img-thumbnail'), mutter.photo.image(:large))
-      else
-        media_src = image_tag(mutter.photo.image(:large), class: 'img-thumbnail')
-      end
+      media_src = if request.smart_phone?
+                    link_to(image_tag(mutter.photo.image(:thumb), class: 'img-thumbnail'), mutter.photo.image(:large))
+                  else
+                    image_tag(mutter.photo.image(:large), class: 'img-thumbnail')
+                  end
       media_src = "<div class='thumbnail'>\n#{media_src}\n</div>\n".html_safe
-      media_src += "<br>\n".html_safe + link_to("(#{mutter.photo.album.title})", album_path(mutter.photo.album_id)).html_safe if mutter.photo.album.present?
+      media_src += "<br>\n".html_safe + link_to("(#{mutter.photo.album.title})", album_path(mutter.photo.album_id)) if mutter.photo.album.present?
     elsif mutter.movie.present?
-      if mutter.movie.is_ready?
-        media_src = videojs(mutter.movie)
-      else
-        media_src = "<div class='label'>動画を準備しています。数分かかると思います</div>".html_safe
-      end
-      media_src += "<br>\n".html_safe + link_to("(#{mutter.movie.album.title})", album_path(mutter.movie.album_id)).html_safe if mutter.movie.album.present?
+      media_src = if mutter.movie.is_ready?
+                    videojs(mutter.movie)
+                  else
+                    "<div class='label'>動画を準備しています。数分かかると思います</div>".html_safe
+                  end
+      media_src += "<br>\n".html_safe + link_to("(#{mutter.movie.album.title})", album_path(mutter.movie.album_id)) if mutter.movie.album.present?
     end
-    if media_src
-      out += "<div class='mutter-media'>#{media_src}</div>"
+    if media_src.present?
+      out += "<div class='mutter-media'>#{media_src}</div>".html_safe
     end
     out
   end

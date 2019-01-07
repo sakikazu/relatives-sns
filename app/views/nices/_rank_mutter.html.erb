@@ -7,7 +7,7 @@
   </div>
   <% if content.present? -%>
     <ul class="mutter_rows">
-      <%= render :partial => 'mutters/mutter_row', :locals => {:mutter_row => content} %>
+      <%= render :partial => 'mutters/mutter_with_comments', :locals => {:mutter_with_comments => content} %>
     </ul>
   <% else -%>
     削除されました.

@@ -199,7 +199,7 @@ class MuttersController < ApplicationController
   #
   def show
     # todo
-    # このときのMutter一覧の中で削除すると、_mutter_row.html.erbがホームでの削除前提なのか、動的にViewが更新されない。削除はされる。気が向いたら修正しよう
+    # このときのMutter一覧の中で削除すると、_mutter_with_comments.html.erbがホームでの削除前提なのか、動的にViewが更新されない。削除はされる。気が向いたら修正しよう
     # ここでレスしたら、この画面で更新されてほしいがホームに行ってしまう。これもー。
     mutter = Mutter.find(params[:id])
     num = 5

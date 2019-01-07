@@ -1,22 +1,22 @@
-<% if mutter_row == @created_mutter -%>
+<% if mutter_with_comments == @created_mutter -%>
   <li <%= "style='border:3px solid red'" %>>
 <% else -%>
   <li>
 <% end -%>
 
-<%= render 'mutters/mutter', mutter: mutter_row %>
+<%= render 'mutters/mutter', mutter: mutter_with_comments %>
 
 <!-- つぶやきへのレス -->
-<% if mutter_row.children.present? -%>
+<% if mutter_with_comments.children.present? -%>
 <ul class="children">
   <% #childrenはつぶやき時間昇順で表示する -%>
 
   <% initial_visible_count = 3 -%>
-  <% count = mutter_row.children.size -%>
+  <% count = mutter_with_comments.children.size -%>
   <% if count > initial_visible_count -%>
     <div class="btn btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i> 全部見る <i class="icon-plus"></i></div>
   <% end -%>
-  <% mutter_row.children.reverse.each_with_index do |child, idx| -%>
+  <% mutter_with_comments.children.reverse.each_with_index do |child, idx| -%>
     <% # 最後のコメントは常時表示させておく。中間のコメントはボタンによってトグル表示 -%>
     <% if idx + initial_visible_count < count -%>
       <li class="clearfix" style="display:none">
@@ -36,11 +36,11 @@
 
 
 <!-- レス用モーダル -->
-<div class="modal fade modal-mutter-reply" id="myModal<%= mutter_row.id %>">
+<div class="modal fade modal-mutter-reply" id="myModal<%= mutter_with_comments.id %>">
   <div class="modal-dialog">
     <div class="modal-content">
   <% @mutter ||= Mutter.new(user_id: current_user.id) -%>
-  <% @mutter.reply_id = mutter_row.id -%>
+  <% @mutter.reply_id = mutter_with_comments.id -%>
   <%= form_for @mutter, html: {multi_part: true}, remote: true do |f| %>
     <div class="modal-header">
       <h3 class='modal-title'>返信</h3>
@@ -51,7 +51,7 @@
     <div class="modal-body">
       <div id="form" class="clearfix">
         <div class="left">
-          <%= f.text_area :content, rows: 3, class: "form-control", placeholder: "「#{mutter_row.content}」へのレス" %><br>
+          <%= f.text_area :content, rows: 3, class: "form-control", placeholder: "「#{mutter_with_comments.content}」へのレス" %><br>
           <%= f.file_field :image, class: 'form-control' %>
           <%= f.hidden_field :user_id %>
           <%= f.hidden_field :reply_id %>

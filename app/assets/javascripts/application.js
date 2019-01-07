@@ -58,6 +58,9 @@ $(document).on('turbolinks:load', function() {
 	if (document.getElementsByClassName('autopagerize_page_element')[0]) {
 		autopagerize();
 	}
+	if (document.getElementsByClassName('carousel-demo2')[0]) {
+		slide_effect();
+	}
 
   // NOTE: turbolinksの影響で一度colorboxモーダルを開いたらそこのDOMあたりに残っているようで、ページ遷移後は一旦削除してからでないと開けない
   $.colorbox.remove()

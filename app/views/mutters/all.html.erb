@@ -4,7 +4,7 @@
         <%= link_to 'グラフを見る', graph_mutters_path, :class => "btn btn-light" %>
       </div>
       <div class="page-header"><h3>つぶやき総数: <%= @mutters.total_count %></h3></div>
-      <%= paginate @mutters, window: 2 %>
+      <%= paginate @mutters, window: 2, outer_window: 3 %>
 
       <div id="form_search" class="well" style="padding-left:8px; padding-right:8px;">
       <div class="input-append">
@@ -27,9 +27,9 @@
 
       <div class="autopagerize_page_element">
         <ul class="mutter_rows">
-          <%= render :partial => 'mutter_row', :collection => @mutters %>
+          <%= render :partial => 'mutter_with_comments', :collection => @mutters %>
         </ul>
-        <%= paginate @mutters, window: 2 %>
+        <%= paginate @mutters, window: 2, outer_window: 3 %>
       </div> <!-- autopagerize_page_element -->
     </div>
   </div> <!-- span -->

@@ -11,41 +11,7 @@ show_recent_login_users = function(){
   }
 }
 
-$(document).ready(function(){
-  slide_effect();
-
-  //mutter表示行数制限
-// AutoPagerにしたことで不要になった
-//  data_toggle = (function(){
-//    $hidden_data = $('ul.mutter_rows>li:gt(<%#= Mutter::MUTTER_DATA_VISIBLE %>)');
-//    $hidden_data.hide();
-//    $show_btn = $('#show_more');
-//    $show_btn.data('show', false);
-//  });
-//  data_toggle();
-
-//  $show_btn.click(function(){
-//    if($show_btn.data('show') == false) {
-//      $hidden_data.show();
-//      $show_btn.text('隠す');
-//      $show_btn.data('show', true);
-//    }else {
-//      $hidden_data.hide();
-//      $show_btn.text('もっと見る');
-//      $show_btn.data('show', false);
-//    }
-
-
-//sakikazu $hidden_dataは集合データなので、↓でやると要素の一つ一つにfunctionが設定されてるぽくて負荷が高まった。注意。
-//    $hidden_data.toggle(300, function(){
-  //      if ($hidden_data.is(":visible")) {
-    //        $('#show_more').text('隠す');
-    //      }else {
-    //        $('#show_more').text('もっと見る');
-    //      }
-//    });
-//  });
-
+$(document).on('turbolinks:load', function() {
 
   // todo サーバーからのpushにしたい
   // つぶやき表示更新
@@ -71,7 +37,7 @@ $(document).on('click', 'a.js_search_mutter', function() {
   return false;
 });
 
-}); // document.ready
+});
 </script>
 
   <div class="col-sm-3">

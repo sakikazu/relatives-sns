@@ -17,7 +17,7 @@
 <div class="well">
 <div class="autopagerize_page_element">
   <ul class="mutter_rows">
-    <%= render :partial => 'mutter_row', :collection => @mutters %>
+    <%= render :partial => 'mutter_with_comments', :collection => @mutters %>
   </ul>
   <% if @action_flg.present? %>
     <% query = {action_flg: @action_flg, search_word: @search_word, user_id: @user_id} %>

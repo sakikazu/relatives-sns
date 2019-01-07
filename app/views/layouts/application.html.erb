@@ -173,10 +173,12 @@ $(document).on('turbolinks:load', function() {
      <% end %>
    </nav>
 
-    <div id="slider_update_info" class="alert alert-success text-center important" style="display:none">↓ 変更しました ↓</div>
-  <div id="slider_photo">
-    <%= render "mutters/slider" if @slideshow_visible %>
-  </div>
+   <% if @slideshow_visible %>
+     <div id="slider_update_info" class="alert alert-success text-center important" style="display:none">↓ 変更しました ↓</div>
+     <div id="slider_photo">
+       <%= render "mutters/slider" %>
+     </div>
+   <% end %>
 
   <div class="container-fluid">
     <%= bootstrap_flash %>
