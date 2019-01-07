@@ -39,8 +39,8 @@ module Adan4
       :port => '587',
       :domain => 'smtp.gmail.com',
       :authentication => 'plain',
-      :user_name => 'sakikazu15@gmail.com',
-      :password => 'saki074515'
+      :user_name => ENV['GMAIL_ADDRESS'],
+      :password => ENV['GMAIL_PASSWORD']
     }
   end
 end
