@@ -59,6 +59,8 @@ $(document).on('turbolinks:load', function() {
 		autopagerize();
 	}
 
+  // NOTE: turbolinksの影響で一度colorboxモーダルを開いたらそこのDOMあたりに残っているようで、ページ遷移後は一旦削除してからでないと開けない
+  $.colorbox.remove()
   //対象が画像(サイズが決まっているので、colorboxのサイズ指定しなくてよいもの)
   $(".colorbox").colorbox();
   colorbox_fix_size();
