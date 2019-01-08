@@ -45,7 +45,8 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @users = User.includes_ext.order("users.root11, users.id")
+    @users = User.myfamily(current_user).includes_ext.order(:generation)
+    @users += User.notfamily(current_user).includes_ext.order("root11, generation")
 
     respond_to do |format|
       format.html # index.html.erb

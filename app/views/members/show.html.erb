@@ -1,15 +1,36 @@
 <div class="col-sm-7">
 
-<div class="form-actions">
-  <%= link_to "家系図へ", relation_members_path, class: "btn btn-light" %>
-  <%= link_to "親戚データ一覧へ", members_path, class: "btn btn-light" %>
-  <%= link_to "編集する", edit_ex_members_path, class: "btn btn-info" %>
+<div class="form-actions mb20">
+  <%= link_to "戻る", members_path, class: "btn btn-light" %>
+  <%= link_to "編集する", edit_member_path(@user), class: "btn btn-danger" if current_user.myfamily?(@user) || current_user.admin? %>
 </div>
+
 <%= link_to(image_tag(@user.user_ext.image(:thumb), class: "img-polaroid"), @user.user_ext.image.url(:large), {:class => colorbox_class}) if  @user.user_ext.image? %>
 
 <h2 class='mt20'><%= @user.dispname(User::FULLNICK) %></h2>
 
+<% if current_user.myfamily?(@user) || current_user.admin? %>
+  <div class='alert alert-danger'>
+  <div class='page-header'>
+    <h3>アカウント情報</h3>
+  </div>
+
+  <table class="table table-bordered table-hover">
+    <thead></thead>
+    <tbody>
+      <tr><th>ユーザー名</th><td><%= @user.username %></td></tr>
+      <tr><th>メールアドレス</th><td><%= @user.email %></td></tr>
+    </tbody>
+  </table>
+  </div>
+<% end %>
+
+<div class='page-header'>
+  <h3>詳細情報</h3>
+</div>
+
 <table class="table table-striped table-bordered table-hover">
+  <tr><th>関係する11兄弟</th><td><%= @user.root11_name %></td></tr>
   <tr><th width="200">性別</th><td><%= @user.user_ext.sex_name %></td></tr>
   <tr><th>血液型</th><td><%= @user.user_ext.blood_name %></td></tr>
   <tr><th>メールアドレス</th><td><%= @user.user_ext.email %></td></tr>
@@ -20,8 +41,6 @@
   <tr><th>趣味</th><td><%= @user.user_ext.hobby %></td></tr>
   <tr><th>特技</th><td><%= @user.user_ext.skill %></td></tr>
   <tr><th>アピールとか</th><td><%= sani_custom_br(@user.user_ext.free_text) %></td></tr>
-  <tr><th>関係する11兄弟</th><td>※表示のみにする<%#= @user.user_ext.root11_name %></td></tr>
-  <tr><th>generation</th><td></td></tr> <!--t.integer  "generation"-->
   <tr><th>性格</th><td><%= @user.user_ext.character %></td></tr>
   <tr><th>自慢</th><td><%= @user.user_ext.jiman %></td></tr>
   <tr><th>夢</th><td><%= @user.user_ext.dream %></td></tr>

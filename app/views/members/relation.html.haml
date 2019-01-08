@@ -1,6 +1,7 @@
 #sakimuras.col-sm-10
-  .page-header
-    %h3 家系図
+
+  = render 'menu'
+
   #generation1
     %ul.members
       - @users.each do |u|

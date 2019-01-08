@@ -76,16 +76,7 @@ $(document).on('turbolinks:load', function() {
          <li class="nav-item <%= controller.controller_name == "blogs" ? "active" : "" %>"><%= link_to "日記", blogs_path, class: 'nav-link' %></li>
          <li class="nav-item <%= controller.controller_name == "boards" ? "active" : "" %>"><%= link_to "掲示板", boards_path, class: 'nav-link' %></li>
          <li class="nav-item <%= controller.controller_name == "histories" ? "active" : "" %>"><%= link_to "年表", histories_path, class: 'nav-link' %></li>
-
-         <%# 親戚データメニュー %>
-         <li class="nav-item dropdown <%= controller.controller_name == "members" ? "active" : "" %>">
-           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">親戚データ</a>
-           <div class="dropdown-menu">
-             <%= link_to "あなたの家族(TODO)", relation_members_path, class: "dropdown-item" %>
-             <%= link_to "家系図", relation_members_path, class: "dropdown-item" %>
-             <%= link_to "親戚一覧", members_path, class: "dropdown-item" %>
-           </div>
-         </li>
+         <li class="nav-item <%= controller.controller_name == "members" ? "active" : "" %>"><%= link_to "親戚データ", relation_members_path, class: 'nav-link' %></li>
        </ul>
 
        <ul class="navbar-nav justify-content-end">
@@ -104,7 +95,7 @@ $(document).on('turbolinks:load', function() {
          <%# その他メニュー %>
          <li class="nav-item dropdown">
            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">その他メニュー</a>
-           <div class="dropdown-menu">
+           <div class="dropdown-menu dropdown-menu-right">
              <a data-toggle="modal" href="#modalQR", class='dropdown-item'>QRコード</a>
              <%= link_to "その他", others_path, class: 'dropdown-item' %>
              <%= link_to 'トップ写真の入れ替え', slider_update_mutters_path, remote: true, class: 'dropdown-item' if @slideshow_visible %>

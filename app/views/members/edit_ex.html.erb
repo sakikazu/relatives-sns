@@ -1,5 +1,13 @@
 <div class="col-sm-7">
 
+<div class='alert alert-success mb30'>
+  <ul class='ml20 mb0'>
+    <% if current_user.email.blank? %>
+      <li>メールアドレスが未登録です。メールアドレスでのログイン、パスワード忘れ時のリセットを行いたい場合は、登録が必要です。</li>
+    <% end %>
+    <li>TODO: アカウント情報変更もこの画面でできるようにする</li>
+  </ul>
+</div>
 <%= link_to "アカウント情報変更", edit_user_registration_path, class: "btn btn-info" %>
 
 <% if current_user.email.blank? %>

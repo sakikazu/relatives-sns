@@ -20,5 +20,6 @@
   .well
     = render 'form'
   
-  .mt20.text-center
-    = link_to "削除", member_path(@user), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger"
+  - if current_user.admin?
+    .mt20.text-center
+      = link_to "削除", member_path(@user), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger"

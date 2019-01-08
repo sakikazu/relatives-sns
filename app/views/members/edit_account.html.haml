@@ -1,17 +1,19 @@
-.mb20
-  = link_to "戻る", edit_member_path(@user), class: "btn"
-
-.page-header
-  %h3 ＜#{@user.dispname(User::FULLNAME)}＞のログイン情報を編集
-
-= simple_form_for @user, url: update_account_member_path(@user) do |f|
-  - if @user.errors.any?
-    %p.alert.alert-error 入力エラーがあります。下記のエラー内容を確認してください。
-
-  = f.input :username, label: "ユーザー名"
-  = f.input :password, label: "パスワード", required: true
-  = f.input :password_confirmation, label: "パスワード（確認）", required: true
-
-  .form-actions
-    = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "処理中.."}
-
+.col-sm-6
+  .mb20
+    = link_to "戻る", edit_member_path(@user), class: "btn btn-light"
+  
+  .page-header
+    %h3 ＜#{@user.dispname(User::FULLNAME)}＞のログイン情報を編集
+  
+  .jumbotron
+    = simple_form_for @user, url: update_account_member_path(@user) do |f|
+      - if @user.errors.any?
+        %p.alert.alert-error 入力エラーがあります。下記のエラー内容を確認してください。
+    
+      = f.input :username, label: "ユーザー名", input_html: {class: 'form-control'}
+      = f.input :password, label: "パスワード", required: true, input_html: {class: 'form-control'}
+      = f.input :password_confirmation, label: "パスワード（確認）", required: true, input_html: {class: 'form-control'}
+    
+      .form-actions.mt30
+        = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "処理中.."}
+  

@@ -62,6 +62,8 @@ class User < ApplicationRecord
 
   default_scope { where("role != ?", User::TEST_USER) }
   scope :includes_ext, -> { includes("user_ext") }
+  scope :myfamily, -> (user) { where(root11: user.root11) }
+  scope :notfamily, -> (user) { where.not(root11: user.root11) }
 
 
   #role
@@ -200,6 +202,10 @@ class User < ApplicationRecord
 
   def self.requested_users(limit = nil)
     self.includes_ext.order("last_request_at DESC").limit(limit)
+  end
+
+  def myfamily?(user)
+    self.root11 == user.root11
   end
 
   private
