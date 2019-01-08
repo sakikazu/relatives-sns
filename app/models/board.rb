@@ -20,7 +20,7 @@ class Board < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :user
-  belongs_to :mutter
+  belongs_to :mutter, optional: true
   # todo BoardCommentは画像持ちなので、汎用化はちょっと置いとこう
   # has_many :comments, as: :parent
   has_many :board_comments

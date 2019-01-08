@@ -17,7 +17,7 @@
 
 class History < ApplicationRecord
   belongs_to :user
-  belongs_to :mutter
+  belongs_to :mutter, optional: true
   has_many :comments, as: :parent
 
   validates :content, :presence => true

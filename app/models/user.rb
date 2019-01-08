@@ -42,7 +42,7 @@ class User < ApplicationRecord
   has_one :user_ext
   has_many :user_extensions
   has_one :my_album, class_name: "Album", foreign_key: "owner_id"
-  belongs_to :parent, class_name: "User", foreign_key: "parent_id"
+  belongs_to :parent, class_name: "User", foreign_key: "parent_id", optional: true
   has_many :children, class_name: "User", foreign_key: "parent_id"
 
   accepts_nested_attributes_for :user_ext

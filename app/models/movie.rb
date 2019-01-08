@@ -31,7 +31,7 @@ class Movie < ApplicationRecord
 
   belongs_to :album
   belongs_to :user
-  belongs_to :mutter
+  belongs_to :mutter, optional: true
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
 

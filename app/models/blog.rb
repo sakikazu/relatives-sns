@@ -16,7 +16,7 @@ class Blog < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :user
-  belongs_to :mutter
+  belongs_to :mutter, optional: true
   has_many :comments, as: :parent
   has_many :blog_images
   has_many :nices, :as => :asset
