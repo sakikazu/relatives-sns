@@ -1,11 +1,13 @@
 <div class="col-sm-7">
 
-<div class="form-actions">
-<%= link_to "親戚データ一覧へ", members_path, class: "btn btn-light" %>
-</div>
+<%= link_to "アカウント情報変更", edit_user_registration_path, class: "btn btn-info" %>
+
+<% if current_user.email.blank? %>
+  <p class='important'>メールアドレスが未設定（TODO）</p>
+<% end %>
 
 <div class="page-header">
-  <h3>情報を変更する(好きなとこだけ設定すればいいよ)</h3>
+  <h3>情報を変更する</h3>
 </div>
 
 <%= form_for @user_ext, html: form_html_option, url: update_ex_members_path, method: "put" do |f| %>

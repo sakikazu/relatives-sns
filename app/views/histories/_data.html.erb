@@ -24,9 +24,10 @@
       <td width="35px"><%= link_to '削除', history, data: {confirm: '本当に削除してもよろしいですか？'}, :method => :delete %></td>
     <% end -%>
   </tr>
+  <%# TODO: コメントの表示方法をうまいことやりたいな。本文とつながるように %>
   <% history.comments.each do |co| -%>
     <tr>
-      <td class="comment">コメント</td>
+      <td class="comment text-right">コメント</td>
       <td><%= sani_custom_br(co.content) %></td>
       <td></td>
       <td><%= co.user.dispname %></td>
@@ -42,12 +43,4 @@
 <% end %>
   </tbody>
 </table>
-
-<script type="text/javascript">
-  $(document).ready(function(){ 
-    //sakikazu memo Ajaxで追加された要素には、再度これをやらないと、プラグインが適用されない
-    $(".colorbox").colorbox();
-    $('table#tablesorter').tablesorter();
-  }); 
-</script>
 

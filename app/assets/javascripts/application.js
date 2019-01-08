@@ -47,6 +47,9 @@ $(document).on('turbolinks:load', function() {
   if (document.getElementsByClassName('carousel-demo2')[0]) {
     slide_effect();
   }
+  if (document.getElementById('tablesorter')) {
+    $('table#tablesorter').tablesorter({widgets: ['zebra']});
+  }
 
   // NOTE: turbolinksの影響で一度colorboxモーダルを開いたらそこのDOMあたりに残っているようで、ページ遷移後は一旦削除してからでないと開けない
   $.colorbox.remove()
