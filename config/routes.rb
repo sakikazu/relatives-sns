@@ -180,15 +180,13 @@ Rails.application.routes.draw do
     member do
       get :edit_account
       patch :update_account
-      get :finish_create
     end
     collection do
       get 'relation'
-      get 'edit_ex'
+      get 'edit_me'
       get 'map'
       get 'all'
       get 'login_history'
-      put 'update_ex'
     end
   end
 

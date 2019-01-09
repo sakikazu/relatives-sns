@@ -83,11 +83,11 @@ $(document).on('turbolinks:load', function() {
          <%# プロフィールメニュー %>
          <li class="nav-item dropdown">
            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-             <%= image_tag current_user.profile_path, class: 'rounded-circle', size: '35x35', style: 'margin:-8px 0 -8px;' %>
+             <%= image_tag current_user.user_ext.image(:small), class: 'rounded-circle', size: '35x35', style: 'margin:-8px 0 -8px;' %>
              <%= current_user.dispname(User::FULLNAME) %>
            </a>
            <div class="dropdown-menu">
-             <%= link_to 'プロフィール編集', edit_ex_members_path, class: 'dropdown-item' %>
+             <%= link_to 'プロフィール編集', edit_me_members_path, class: 'dropdown-item' %>
              <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしますか？"}, class: 'dropdown-item' %>
            </div>
          </li>

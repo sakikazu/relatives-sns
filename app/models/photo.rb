@@ -47,7 +47,7 @@ class Photo < ApplicationRecord
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
     :url => "/upload/#{content_name}/:album/:id/:style/:hash.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:hash.:extension",
-    default_url: "/assets/missing.gif"
+    default_url: "/assets/noimage.gif"
 
   validates_attachment_content_type :image, content_type: CONTENT_TYPE
 

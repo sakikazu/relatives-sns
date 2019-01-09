@@ -8,6 +8,7 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require font-awesome
  *= require_self
  *= require_tree .
  */
@@ -902,6 +903,11 @@ h2.normal3 {
  from bootstrap_and_overrides.css.less
  todo グルーピングして別ファイル切り出したい
 **********************************************/
+*[data-toggle="popover"] {
+  cursor: pointer;
+  color: red;
+}
+
 h1 > small, h2 > small, h3 > small {
   color: #6c757d;
   font-size: 65%;
@@ -993,4 +999,12 @@ a [class^="icon-"], a [class*=" icon-"] {
   margin-left: 10px;
 }
 
-
+.form-date-select-wrapper {
+  label {
+    display: block;
+  }
+  .form-control {
+    display: inline-block !important;
+    width: auto !important;
+  }
+}

@@ -68,7 +68,8 @@ class UserExt < ApplicationRecord
       :thumb => ['-quality 80', '-strip'],
     },
     :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
+    :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension",
+    default_url: "/assets/noimage.gif"
 
   validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
 
@@ -109,7 +110,7 @@ class UserExt < ApplicationRecord
   end
 
   def birth_dead_h
-    if self.dead_day.present?
+    if self.birth_day.present? && self.dead_day.present?
       "#{self.birth_day.to_s(:normal)}生 - #{self.dead_day.to_s(:normal)}没"
     elsif self.birth_day.present?
       "#{self.birth_day.to_s(:normal)}生まれ"

@@ -47,7 +47,6 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_ext
 
-  before_validation :fill_email
   after_save :rel_save
 
   # Include default devise modules. Others available are:
@@ -58,12 +57,15 @@ class User < ApplicationRecord
          :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic algorithm
          :authentication_keys => [:username]
 
-  validates :username, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: true, format: { with: /\A[\w]+\z/i, message: '英数字のみで入力してください.' }
+  validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
+  validates :familyname, presence: true
+  validates :givenname, presence: true
 
   default_scope { where("role != ?", User::TEST_USER) }
   scope :includes_ext, -> { includes("user_ext") }
   scope :myfamily, -> (user) { where(root11: user.root11) }
-  scope :notfamily, -> (user) { where.not(root11: user.root11) }
+  scope :notfamily, -> (user) { where.not(root11: user.root11).or(self.where(root11: nil)) }
 
 
   #role
@@ -148,13 +150,6 @@ class User < ApplicationRecord
     return Sanitize.clean(name, Sanitize::Config::BASIC)
   end
 
-  def fill_email
-    if self.email.blank?
-      randstr = (0...5).map{ ('a'..'z').to_a[rand(26)] }.join
-      self.email = "sample-#{randstr}@dummy.com"
-    end
-  end
-
   def rel_save
     self.user_ext ||= UserExt.create
   end
@@ -196,16 +191,23 @@ class User < ApplicationRecord
     save
   end
 
-  def profile_path
-    user_ext.image? ? user_ext.image(:small) : "/assets/noimage.gif"
-  end
-
   def self.requested_users(limit = nil)
     self.includes_ext.order("last_request_at DESC").limit(limit)
   end
 
   def myfamily?(user)
     self.root11 == user.root11
+  end
+
+  # 家系図などからのユーザー登録時はパスワードは決めたくないので、passwordをバリデート対象外とする
+  def save_unvalidate(keys)
+    self.valid?
+    keys.each do |key|
+      self.errors.delete(key)
+    end
+    is_success = self.errors.blank?
+    self.save(validate: false) if is_success
+    is_success
   end
 
   private

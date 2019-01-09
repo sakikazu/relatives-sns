@@ -497,6 +497,7 @@ DEPENDENCIES
   exifr
   factory_bot
   faker
+  font-awesome-rails
   foreman
   gcm
   grape

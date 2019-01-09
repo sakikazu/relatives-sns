@@ -1,19 +1,32 @@
 .col-sm-6
   .mb20
     = link_to "戻る", edit_member_path(@user), class: "btn btn-light"
-  
+
   .page-header
     %h3 ＜#{@user.dispname(User::FULLNAME)}＞のログイン情報を編集
-  
+
   .jumbotron
     = simple_form_for @user, url: update_account_member_path(@user) do |f|
       - if @user.errors.any?
-        %p.alert.alert-error 入力エラーがあります。下記のエラー内容を確認してください。
-    
-      = f.input :username, label: "ユーザー名", input_html: {class: 'form-control'}
-      = f.input :password, label: "パスワード", required: true, input_html: {class: 'form-control'}
-      = f.input :password_confirmation, label: "パスワード（確認）", required: true, input_html: {class: 'form-control'}
-    
+        %p.alert.alert-danger 入力エラーがあります。下記のエラー内容を確認してください。
+
+      = f.input :username, label: "ユーザー名（英数字のみ）", input_html: {class: 'form-control'}
+      = f.input :email, label: "メールアドレス", input_html: {class: 'form-control'}
+      = f.input :password, autocomplete: 'off', label: "パスワード", required: false, input_html: {class: 'form-control'}
+      = f.input :password_confirmation, label: "パスワード（確認用）", required: false, input_html: {class: 'form-control'}
+      = f.input :familyname, autofocus: true, label: "姓", input_html: {class: 'form-control'}
+      = f.input :givenname, label: "名", input_html: {class: 'form-control'}
+
+      - if current_user.admin?
+        .alert.alert-danger.mt30
+          %p.important 管理者のみ
+          = f.input :root11, label: "関連する11兄弟" do
+            = f.select :root11, User::ROOT_LIST, include_blank: true, required: false
+          = f.input :generation, label: "世代数" do
+            = f.select :generation, [1, 2, 3, 4, 5].map{|n| ["#{n}世代", n]}, required: false
+          = f.input :role, label: "権限" do
+            = f.select :role, User::ROLE, selected: 2
+
       .form-actions.mt30
         = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "処理中.."}
-  
+

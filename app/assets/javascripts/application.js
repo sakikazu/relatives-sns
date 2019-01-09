@@ -62,7 +62,7 @@ $(document).on('turbolinks:load', function() {
 
   // bootstrap
   $('[data-toggle="popover"]').popover({
-    trigger: 'click',
+    // trigger: 'click', // html要素で設定するようにする
     html: true,
   });
 

@@ -1,9 +1,10 @@
 <div class='alert alert-success mb30'>
   <ul class='ml20 mb0'>
     <% if controller.action_name == 'index' %>
-      <li>自分の家族のアカウント情報は、詳細ボタンで閲覧、編集ボタンで編集ができます</li>
+      <li>自分の家族のアカウント情報は、詳細ボタンで閲覧、編集ボタンで編集が行えます</li>
     <% end %>
-    <li>自分の情報は<%= link_to 'こちら', edit_ex_members_path %>で変更できます</li>
+    <li>メンバーの追加は家系図から行えます</li>
+    <li>自分の情報は<%= link_to 'こちら', edit_me_members_path %>で変更が行えます</li>
   </ul>
 </div>
 

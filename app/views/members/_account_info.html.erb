@@ -1,0 +1,27 @@
+<div class='alert alert-success mb30'>
+  <div class='page-header'>
+    <h3>ログイン情報（あなたの家族のみ表示）</h3>
+  </div>
+  <ul class='ml20 mb20'>
+    <li>ユーザー名：<%= @user.username.presence || "未設定" %></li>
+    <li>
+      メールアドレス：<%= @user.email.presence || "未設定"  %>
+      <% if @user.email.blank? %>
+        <span data-toggle='popover', data-trigger='hover', data-placement='bottom' data-content='メールアドレスでのログイン、パスワード忘れ時のリセットを行いたい場合は登録が必要です。メールアドレスはそれ以外の用途には一切使用しません'><%= fa_icon('exclamation-circle') %></span>
+      <% end %>
+    </li>
+    <li>パスワード：<%= @user.encrypted_password.blank? ? "未設定" : "*******" %></li>
+  </ul>
+
+  <p class='important'>
+  <% if @user.encrypted_password.blank? %>
+    このユーザーがAdanHPにログインするためには
+    <%= link_to "こちらから", edit_account_member_path(@user) %>
+    メールアドレス／ユーザー名とパスワードを設定してください
+  <% else %>
+    <%= link_to "こちらから", edit_account_member_path(@user) %>
+    ログイン情報を変更する
+  <% end %>
+  </p>
+</div>
+

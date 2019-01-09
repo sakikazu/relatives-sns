@@ -187,7 +187,7 @@ class API < Grape::API
         access_time = user.last_request_at.present? ? user.last_request_at.strftime("%Y-%m-%d %H:%M:%S") : ""
         requested_users << {
           name: user.dispname,
-          profile_image_path: user.profile_path,
+          profile_image_path: user.user_ext.image(:small),
           access_time: access_time,
         }
       end

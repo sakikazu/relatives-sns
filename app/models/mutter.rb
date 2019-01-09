@@ -204,7 +204,7 @@ class Mutter < ApplicationRecord
    end
 
   def user_image_path
-    user.present? ? user.profile_path : "noimage.gif"
+    user.present? ? user.user_ext.image(:small) : "noimage.gif"
   end
 
 end

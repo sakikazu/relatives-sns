@@ -56,6 +56,7 @@ gem 'simple_form'
 gem 'streamio-ffmpeg'
 gem 'rmagick'
 gem 'sidekiq'
+gem 'font-awesome-rails'
 
 # Ajaxでファイルアップロード
 gem 'remotipart', '~> 1.2'

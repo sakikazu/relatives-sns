@@ -1,6 +1,6 @@
 <%= simple_form_for(@movie, :html => form_html_option) do |f| %>
   <% if @movie.errors.any? %>
-    <div class="alert alert-error"><p>入力エラーがあります。下記のエラー内容を確認してください。</p></div>
+    <div class="alert alert-danger"><p>入力エラーがあります。下記のエラー内容を確認してください。</p></div>
   <% end %>
 
   <%= f.input :title, label: "タイトル", input_html: {class: 'form-control'} %>
