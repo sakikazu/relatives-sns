@@ -1,14 +1,15 @@
 $(document).on('turbolinks:load', function() {
-  build_relation();
+  kakeizu_id = 'sakimuras'
+  if (document.getElementById(kakeizu_id)) {
+    wide_wrapper(kakeizu_id);
+    build_relation(kakeizu_id);
+  }
 });
 
-function build_relation() {
-  $('#members_controller #sakimuras li').on('click', function() {
+function build_relation(id) {
+  $('#' + id).find('ul.members > li').on('click', function() {
     $selected_li = $(this);
-
     if ($selected_li.hasClass('zoom')) return;
-
-    wide_wrapper();
 
     var $this_wrapper = $selected_li.closest("div[id*=generation]");
     initiateList($this_wrapper);
@@ -44,15 +45,15 @@ function calc_next_ul_top($selected_li) {
   // var $wrap_ul = $selected_li.closest('ul');
   // var ul_offsetY = $wrap_ul.offset().top;
   // var next_ul_top = offsetY - ul_offsetY;
-  var sakimurasY = $("#sakimuras").offset().top;
-  var next_ul_top = offsetY - sakimurasY;
+  var next_ul_top = offsetY - $("#generation1").offset().top;
   // console.log(next_ul_top);
   return next_ul_top;
 }
 
-function wide_wrapper() {
+function wide_wrapper(id) {
   // #generationのfloatが折り返さない幅にしておくこと
-  $("#sakimuras").width(1150);
+  $('#' + id).width(1300);
+  // TODO: floatじゃなくflexでやれば必要なくなるはず
   $("footer").css({"margin-top" : 800});
 }
 

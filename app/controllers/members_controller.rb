@@ -1,6 +1,8 @@
 class MembersController < ApplicationController
   before_action :authenticate_user!, except: ["relation"]
   before_action :page_title
+  before_action :set_user, only: [:show, :edit, :update, :edit_account, :update_account, :destroy]
+  before_action :restrict_other_family, only: [:create, :edit, :update, :edit_account, :update_account, :destroy]
 
   # 家系図
   def relation
@@ -93,8 +95,6 @@ class MembersController < ApplicationController
   # GET /members/1
   # GET /members/1.json
   def show
-    @user = User.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @user }
@@ -117,7 +117,6 @@ class MembersController < ApplicationController
 
   # GET /members/1/edit
   def edit
-    @user = User.find(params[:id])
     @users = User.includes_ext.order("user_exts.birth_day ASC")
   end
 
@@ -140,7 +139,7 @@ class MembersController < ApplicationController
     @user.username = (0...4).map{ ('a'..'z').to_a[rand(26)] }.join
 
     respond_to do |format|
-      if @user.save_unvalidate([:password])
+      if @user.save_without_validation([:email, :password])
         # redirect_back_or_default new_user_url
 
         format.html { redirect_to member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}を登録しました." }
@@ -156,8 +155,6 @@ class MembersController < ApplicationController
   # PUT /members/1
   # PUT /members/1.json
   def update
-    @user = User.find(params[:id])
-
     respond_to do |format|
       # NOTE: 現在更新してるのはUserExtであることに注意。Userと合わせて更新するように変更するかもだが
       if @user.user_ext.update_attributes(user_ext_params)
@@ -172,18 +169,17 @@ class MembersController < ApplicationController
   end
 
   def edit_account
-    @user = User.find(params[:id])
   end
 
   def update_account
-    @user = User.find(params[:id])
     @user.attributes = user_params
 
     respond_to do |format|
-      if @user.save_unvalidate([:email, :password, :password_confirmation])
+      if @user.save_without_validation([:email, :password, :password_confirmation])
         format.html { redirect_to member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}のユーザー名とパスワードが設定されました." }
         format.json { head :no_content }
       else
+        p @user.errors
         format.html { render action: "edit_account" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -193,7 +189,6 @@ class MembersController < ApplicationController
   # DELETE /members/1
   # DELETE /members/1.json
   def destroy
-    @user = User.find(params[:id])
     name = @user.dispname(User::FULLNAME)
     @user.destroy
 
@@ -207,6 +202,14 @@ class MembersController < ApplicationController
 private
   def page_title
     @page_title = "親戚データ"
+  end
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def restrict_other_family
+    render 'errors/403', status: 403 unless current_user.editable(@user)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

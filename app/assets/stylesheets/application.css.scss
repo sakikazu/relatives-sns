@@ -53,6 +53,19 @@
 
 
 /**********************************************
+ error page
+**********************************************/
+#error {
+  .alert {
+    margin: 50px 0 30px;
+    padding: 25px 30px;
+  }
+  h1 {
+    margin: 0 0 30px;
+  }
+}
+
+/**********************************************
  other
 **********************************************/
 #about_contents {
@@ -785,13 +798,18 @@ h2.normal3 {
 	border:1px solid #ccc;
 }
 
-#members_controller {
+
+/**********************************************
+ 家系図
+**********************************************/
+
+#sakimuras {
   ul.members {
     margin-left: 0;
     width: 250px;
   }
   ul.child {
-	position:absolute;
+    position:absolute;
   }
   ul.members>li {
     border: 1px solid #666;
@@ -813,11 +831,11 @@ h2.normal3 {
     .img {
       text-align:center;
       /* width: 100px; */
-	  height: 100px;
+      height: 100px;
 
-	  img {
-		height: 90px;
-	  }
+      img {
+        height: 90px;
+      }
     }
     .name {
       text-align:center;
@@ -891,8 +909,8 @@ h2.normal3 {
   }
   #generation2, #generation3, #generation4, #generation5 {
     float: left;
-	height: 600px;
-	width: 220px;
+    height: 600px;
+    width: 250px;
     margin-left:5px;
     position:relative;
   }

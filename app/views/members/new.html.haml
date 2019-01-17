@@ -21,8 +21,8 @@
         = ff.input :blood, label: "血液型", collection: UserExt::BLOOD_LIST, include_blank: true, input_html: {class: 'form-control'}
         = ff.input :addr1, label: "住所(都道府県)", input_html: {class: 'form-control'}
         = ff.input :addr2, label: "住所(市区町村)", input_html: {class: 'form-control'}
-        = ff.input :addr3, label: "住所(地区、番地)", input_html: {class: 'form-control'}
-        = ff.input :addr4, label: "住所(アパート名など)", input_html: {class: 'form-control'}
+        -# = ff.input :addr3, label: "住所(地区、番地)", input_html: {class: 'form-control'}
+        -# = ff.input :addr4, label: "住所(アパート名など)", input_html: {class: 'form-control'}
         = ff.input :addr_from, label: "出身地", input_html: {class: 'form-control'}
         = ff.input :birth_day, label: "誕生日", as: :date, start_year: 1910, end_year: Date.today.year, include_blank: true, input_html: {class: 'form-control'}, wrapper_html: {class: 'form-date-select-wrapper'}
         = ff.input :dead_day, label: "亡くなった日", as: :date, start_year: 1980, end_year: Date.today.year, include_blank: true, input_html: {class: 'form-control'}, wrapper_html: {class: 'form-date-select-wrapper'}

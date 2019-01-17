@@ -4,7 +4,7 @@
     <%= link_to "一覧へ", members_path, class: "btn btn-light" %>
   </div>
 
-<% if current_user.myfamily?(@user) || current_user.admin? %>
+<% if current_user.editable(@user) %>
   <%= render 'account_info' %>
 <% end %>
 

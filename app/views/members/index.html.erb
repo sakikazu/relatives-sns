@@ -43,7 +43,7 @@
 <% end -%>
     <td>
       <%= link_to "詳細", member_path(user), class: "btn btn-light" %>
-      <%= link_to "編集", edit_member_path(user), class: "btn btn-danger" if current_user.myfamily?(user) || current_user.admin? %>
+      <%= link_to "編集", edit_member_path(user), class: "btn btn-danger" if current_user.editable(user) %>
     </td>
   </tr>
 <% end -%>

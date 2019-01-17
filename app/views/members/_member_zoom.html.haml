@@ -5,4 +5,5 @@
 .info
   %p.underline= "#{user[:birth_dead_h]} #{user[:blood_h]}"
   %p.underline= user[:address]
-  %p= link_to "編集", edit_member_path(user[:id])
+  - if current_user.editable(user)
+    %p= link_to "編集", edit_member_path(user[:id])

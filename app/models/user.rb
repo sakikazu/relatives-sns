@@ -47,6 +47,7 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_ext
 
+  before_validation :fill_root11
   after_save :rel_save
 
   # Include default devise modules. Others available are:
@@ -57,8 +58,10 @@ class User < ApplicationRecord
          :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic algorithm
          :authentication_keys => [:username]
 
+  validates :root11, presence: true
   validates :username, presence: true, uniqueness: true, format: { with: /\A[\w]+\z/i, message: '英数字のみで入力してください.' }
-  validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
+  # todo deviseが行うバリデーションに任せる？
+  validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }, allow_blank: true
   validates :familyname, presence: true
   validates :givenname, presence: true
 
@@ -98,23 +101,6 @@ class User < ApplicationRecord
     Hash[*ROOT_LIST.flatten.reverse][self.root11]
   end
 
-
-  def self.find_or_create(username, password)
-    user = find_by_username(username)
-    if user.blank?
-      user = create!(:username => username, :password => password, :password_confirmation => password)
-    end
-    return user
-  end
-
-  def self.find_or_create2(username, password, familyname, givenname, email, role, root11, generation)
-    user = self.find_by_username(username)
-    if user.blank?
-      user = self.create!(username: username, password: password, password_confirmation: password, familyname: familyname, givenname: givenname, email: email, role: role, root11: root11, generation: generation)
-    end
-    return user
-  end
-
   def admin?
     self.role == ADMIN
   end
@@ -152,6 +138,11 @@ class User < ApplicationRecord
 
   def rel_save
     self.user_ext ||= UserExt.create
+  end
+
+  def fill_root11
+    return if self.root11.present? || self.parent_id.blank?
+    self.root11 = self.parent.root11
   end
 
   # 指定時間（分指定）内にリクエストしたユーザー数
@@ -195,12 +186,16 @@ class User < ApplicationRecord
     self.includes_ext.order("last_request_at DESC").limit(limit)
   end
 
+  def editable(user)
+    self.admin? || self.myfamily?(user)
+  end
+
   def myfamily?(user)
     self.root11 == user.root11
   end
 
   # 家系図などからのユーザー登録時はパスワードは決めたくないので、passwordをバリデート対象外とする
-  def save_unvalidate(keys)
+  def save_without_validation(keys)
     self.valid?
     keys.each do |key|
       self.errors.delete(key)

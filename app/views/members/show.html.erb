@@ -2,14 +2,16 @@
 
 <div class="form-actions mb30">
   <%= link_to "一覧へ", members_path, class: "btn btn-light" %>
-  <%= link_to "編集する", edit_member_path(@user), class: "btn btn-danger" if current_user.myfamily?(@user) || current_user.admin? %>
+  <%= link_to "編集する", edit_member_path(@user), class: "btn btn-danger" if current_user.editable(@user) %>
 </div>
-
-<%= link_to(image_tag(@user.user_ext.image(:thumb), class: "img-polaroid"), @user.user_ext.image.url(:large), {:class => colorbox_class}) %>
 
 <h2 class='mt20 mb25'><%= @user.dispname(User::FULLNICK) %></h2>
 
-<% if current_user.myfamily?(@user) || current_user.admin? %>
+<div class='mb20'>
+  <%= link_to(image_tag(@user.user_ext.image(:thumb), class: "img-polaroid"), @user.user_ext.image.url(:large), {:class => colorbox_class}) %>
+</div>
+
+<% if current_user.editable(@user) || current_user.admin? %>
   <%= render 'account_info' %>
 <% end %>
 
