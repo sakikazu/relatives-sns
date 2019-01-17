@@ -209,7 +209,7 @@ private
   end
 
   def restrict_other_family
-    render 'errors/403', status: 403 unless current_user.editable(@user)
+    raise Forbidden unless current_user.editable(@user)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
