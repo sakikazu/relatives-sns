@@ -47,6 +47,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_ext
 
+  attr_writer :login
+
   before_validation :fill_root11
   after_save :rel_save
 
@@ -56,7 +58,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable,
          :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic algorithm
-         :authentication_keys => [:username]
+         :authentication_keys => [:login]
 
 
   # NOTE: deviseの:validatableを使用しないため手動で定義。理由は、User登録時はログインに必要な情報は必須入力にしたくないため
@@ -100,6 +102,11 @@ class User < ApplicationRecord
   R10 = 9
   R11 = 10
   ROOT_LIST = [["輝美", R1], ["由美子", R2], ["順子", R3], ["真澄", R4], ["泰弘", R5], ["睦子", R6], ["満喜子", R7], ["浩敏", R8], ["徹", R9], ["ゆかり", R10], ["英樹" ,R11]]
+
+
+  def login
+    @login || self.username || self.email
+  end
 
   def root11_name
     Hash[*ROOT_LIST.flatten.reverse][self.root11]
@@ -183,6 +190,17 @@ class User < ApplicationRecord
   def reset_authentication_token!
     self.authentication_token = generate_authentication_token
     save
+  end
+
+  # NOTE: メールアドレスとユーザー名のどちらでもログイン可能にしたいため、Deviseメソッドをオーバーライド
+  # cf. https://github.com/plataformatec/devise/wiki/How-To:-Allow-users-to-sign-in-using-their-username-or-email-address
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_h).where(["lower(username) = :value OR lower(email) = :value", { value: login.downcase }]).first
+    elsif conditions.has_key?(:username) || conditions.has_key?(:email)
+      where(conditions.to_h).first
+    end
   end
 
   def self.requested_users(limit = nil)

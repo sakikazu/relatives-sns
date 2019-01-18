@@ -9,6 +9,7 @@ ja:
         email: "メールアドレス"
         fullpath: "(管理者用)フルネーム"
         role: "権限"
+        login: "メールアドレスかユーザー名"
         username: "ユーザー名"
         password: "パスワード"
         password_confirmation: "パスワード(再入力)"
