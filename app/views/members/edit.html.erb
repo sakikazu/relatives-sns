@@ -2,14 +2,17 @@
 
   <div class='mb25'>
     <%= link_to "一覧へ", members_path, class: "btn btn-light" %>
+    <%= link_to "詳細へ", member_path(@user), class: "btn btn-light" %>
   </div>
+
+<h2 class='mt30 mb30'><%= @user.dispname(User::FULLNICK) %></h2>
 
 <% if current_user.editable(@user) %>
   <%= render 'account_info' %>
 <% end %>
 
 <div class="page-header">
-  <h3>＜<%= @user.dispname(User::FULLNAME) %>＞の情報を変更する</h3>
+  <h3>情報を変更する</h3>
 </div>
 
 <%= form_for @user.user_ext, html: form_html_option, url: member_path(@user), method: "put" do |f| %>
@@ -18,7 +21,14 @@
   <tr><th>家族</th><td><%#= f.select :parent_id, @users.map{|u| ["#{u.dispname(User::FULLNAME)}の家族", u.id]}, {:include_blank => true}, class: 'form-control' %></td></tr>
   <tr><th>姓</th><td><%= f.text_field :familyname, class: 'form-control' %></td></tr>
   <tr><th>名</th><td><%= f.text_field :givenname, class: 'form-control' %></td></tr>
-  <tr><th>プロフィール写真</th><td><%= f.file_field :image, class: 'form-control' %></td></tr>
+  <tr><th>プロフィール画像</th>
+    <td>
+      <div class='mb20'>
+        <%= link_to(image_tag(@user.user_ext.image(:thumb), class: "img-polaroid"), @user.user_ext.image.url(:large), {:class => colorbox_class}) %>
+      </div>
+      <%= f.file_field :image, class: 'form-control' %>
+    </td>
+  </tr>
   <tr><th>ニックネーム</th><td><%= f.text_field :nickname, class: 'form-control' %></td></tr>
   <tr><th>性別</th><td><%= f.select :sex, UserExt::SEX_LIST, {:include_blank => true}, class: 'form-control' %></td></tr>
   <tr><th>血液型</th><td><%= f.select :blood, UserExt::BLOOD_LIST, {:include_blank => true}, class: 'form-control' %></td></tr>
@@ -70,4 +80,5 @@
 <% end %>
 
 </div>
+
 

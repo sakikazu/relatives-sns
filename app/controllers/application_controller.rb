@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  class Forbidden < ActionController::ActionControllerError; end
   include ErrorHandlers if Rails.env.production?
 
   # 発行されたSQLを取得する
@@ -20,7 +21,7 @@ class ApplicationController < ActionController::Base
 private
 
   # トップページから、更新情報を元に更新内容を一括で閲覧するためのデータ取得
-  def update_allview_helper(page, ups_id) 
+  def update_allview_helper(page, ups_id)
     if page.present? and ups_id.present?
       up = UpdateHistory.find(ups_id)
       ai = UpdateHistory::ACTION_INFO[up.action_type]

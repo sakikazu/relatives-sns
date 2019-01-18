@@ -54,16 +54,20 @@ class User < ApplicationRecord
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
+         :recoverable, :rememberable, :trackable,
          :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic algorithm
          :authentication_keys => [:username]
 
+
+  # NOTE: deviseの:validatableを使用しないため手動で定義。理由は、User登録時はログインに必要な情報は必須入力にしたくないため
+  validates :email, uniqueness: true, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }, allow_blank: true
+  validates :password, length: { minimum: 4 }, confirmation: { case_sensitive: true }, allow_blank: true
+
   validates :root11, presence: true
   validates :username, presence: true, uniqueness: true, format: { with: /\A[\w]+\z/i, message: '英数字のみで入力してください.' }
-  # todo deviseが行うバリデーションに任せる？
-  validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }, allow_blank: true
   validates :familyname, presence: true
   validates :givenname, presence: true
+
 
   default_scope { where("role != ?", User::TEST_USER) }
   scope :includes_ext, -> { includes("user_ext") }
@@ -142,14 +146,13 @@ class User < ApplicationRecord
 
   def fill_root11
     return if self.root11.present? || self.parent_id.blank?
-    self.root11 = self.parent.root11
+    self.root11 = self.parent&.root11
   end
 
   # 指定時間（分指定）内にリクエストしたユーザー数
   def self.recent_request_count(minute = 5)
     where("last_request_at > ?", Time.now() - minute * 60).size
   end
-
 
   def save_extension(key, value)
     ext = UserExtension.where(user_id: self.id, key: key).first
@@ -191,18 +194,13 @@ class User < ApplicationRecord
   end
 
   def myfamily?(user)
-    self.root11 == user.root11
-  end
-
-  # 家系図などからのユーザー登録時はパスワードは決めたくないので、passwordをバリデート対象外とする
-  def save_without_validation(keys)
-    self.valid?
-    keys.each do |key|
-      self.errors.delete(key)
-    end
-    is_success = self.errors.blank?
-    self.save(validate: false) if is_success
-    is_success
+    user_root11 = if user.is_a?(Hash)
+                    user[:root11]
+                  else
+                    user.fill_root11
+                    user.root11
+                  end
+    self.root11 == user_root11
   end
 
   private

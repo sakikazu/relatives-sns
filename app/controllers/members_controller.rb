@@ -2,7 +2,7 @@ class MembersController < ApplicationController
   before_action :authenticate_user!, except: ["relation"]
   before_action :page_title
   before_action :set_user, only: [:show, :edit, :update, :edit_account, :update_account, :destroy]
-  before_action :restrict_other_family, only: [:create, :edit, :update, :edit_account, :update_account, :destroy]
+  before_action :restrict_other_family, only: [:edit, :update, :edit_account, :update_account, :destroy]
 
   # 家系図
   def relation
@@ -11,36 +11,6 @@ class MembersController < ApplicationController
     @users = []
     root11_users.each do |user|
       @users << recursive_relation(user, all_users)
-    end
-  end
-
-  def recursive_relation(user, users)
-    user_h = {id: user.id,
-              name: user.dispname(User::FULLNICK),
-              age_h: user.user_ext.age_h,
-              sex_h: user.user_ext.sex_name,
-              blood_h: user.user_ext.blood_name,
-              address: user.user_ext.address,
-              birth_dead_h: user.user_ext.birth_dead_h,
-              is_dead: user.user_ext.dead_day.present?,
-              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/assets/missing.gif"
-    }
-
-    children = users.select{|u| u.parent_id == user.id}
-    if children.blank?
-      return user_h.merge({has_members_num: 0, family: []})
-    else
-      has_members_num = 0
-      family = []
-
-      children.each do |child|
-        has_members_num += 1
-
-        child_h = recursive_relation(child, users)
-        family << child_h
-        has_members_num += child_h[:has_members_num]
-      end
-      return user_h.merge({has_members_num: has_members_num, family: family})
     end
   end
 
@@ -107,6 +77,7 @@ class MembersController < ApplicationController
     @user = User.new
     @user.build_user_ext
     @user.parent_id = params[:parent_user_id]
+    restrict_other_family
     @users = User.includes_ext.order("user_exts.birth_day ASC")
 
     respond_to do |format|
@@ -136,10 +107,11 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @user = User.new(member_params)
+    restrict_other_family
     @user.username = (0...4).map{ ('a'..'z').to_a[rand(26)] }.join
 
     respond_to do |format|
-      if @user.save_without_validation([:email, :password])
+      if @user.save
         # redirect_back_or_default new_user_url
 
         format.html { redirect_to member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}を登録しました." }
@@ -175,7 +147,7 @@ class MembersController < ApplicationController
     @user.attributes = user_params
 
     respond_to do |format|
-      if @user.save_without_validation([:email, :password, :password_confirmation])
+      if @user.save
         format.html { redirect_to member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}のユーザー名とパスワードが設定されました." }
         format.json { head :no_content }
       else
@@ -225,4 +197,34 @@ private
       params.require(:user_ext).permit(:familyname, :givenname, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :dead_day, :job, :hobby, :skill, :free_text, :image, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id)
   end
 
+  def recursive_relation(user, users)
+    user_h = {id: user.id,
+              root11: user.root11,
+              name: user.dispname(User::FULLNICK),
+              age_h: user.user_ext.age_h,
+              sex_h: user.user_ext.sex_name,
+              blood_h: user.user_ext.blood_name,
+              address: user.user_ext.address,
+              birth_dead_h: user.user_ext.birth_dead_h,
+              is_dead: user.user_ext.dead_day.present?,
+              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/assets/missing.gif"
+    }
+
+    children = users.select{|u| u.parent_id == user.id}
+    if children.blank?
+      return user_h.merge({has_members_num: 0, family: []})
+    else
+      has_members_num = 0
+      family = []
+
+      children.each do |child|
+        has_members_num += 1
+
+        child_h = recursive_relation(child, users)
+        family << child_h
+        has_members_num += child_h[:has_members_num]
+      end
+      return user_h.merge({has_members_num: has_members_num, family: family})
+    end
+  end
 end

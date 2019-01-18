@@ -1,8 +1,6 @@
 module ErrorHandlers
   extend ActiveSupport::Concern
 
-  class Forbidden < ActionController::ActionControllerError; end
-
   included do
     rescue_from Exception, with: :rescue500
     rescue_from ApplicationController::Forbidden, with: :rescue403
