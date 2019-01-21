@@ -44,8 +44,8 @@
     <div class="content">
       <%== draw_content(mutter) %>
     </div>
-    <div class='delete'>
-      <p><%= link_to("削除", mutter, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) if editable(current_user, mutter.user) %></p>
+    <div class='delete' data-mutter-id="<%= mutter.user&.id %>" style="display:none">
+      <p><%= link_to("削除", mutter, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true) %></p>
     </div>
   </div>
 </div>

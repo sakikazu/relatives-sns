@@ -34,6 +34,7 @@
 //= require mutters.js
 //= require members.js
 //= require nices.js
+//= require cable
 
 $(document).on('turbolinks:load', function() {
   nice_member();
@@ -108,6 +109,7 @@ autopagerize = function() {
         $(".colorbox").colorbox();
         colorbox_slideshow();
         nice_member();
+        showMutterDeleteLink();
         myThumbnail(autopager_area);
         // autopagerize();
       })

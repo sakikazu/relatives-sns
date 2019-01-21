@@ -1,0 +1,70 @@
+<div class="well sidebar-nav">
+  <legend class="text-center">― 日齢 ― 生まれて何日？</legend>
+  <div id="nichirei">
+    <% if @nichirei -%>
+      <div class="main"><%= @nichirei %>日</div>
+      <% @nichirei_future.each do |n| -%>
+        <%= "#{n[0]}日: #{n[1].strftime("%Y/%m/%d")}" %><br />
+      <% end -%>
+    <% else -%>
+      ※生年月日を登録している人のみ
+    <% end -%>
+  </div>
+</div><!--/.well -->
+
+<div class="well sidebar-nav">
+  <legend class="text-center">みんなの誕生記念日</legend>
+  <div class="text-center" style="margin:auto">
+    <% @kinen.each do |k| -%>
+      <% if k[:count] == 0 || k[:count] == -1-%>
+        <p style="margin-bottom: 5px">
+        <i class="icon-music"></i> <%= "#{k[:user].dispname}さん" %>
+      <span class="important big"><%= k[:count] == 0 ? "本日" : "昨日" %></span>
+      <span class="main"><%= "#{k[:kinen_name]}" %></span> <i class="icon-music"></i>
+        </p>
+        <div class="mgn-b20">
+          <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id}, :class => colorbox_class + " btn btn-info" %>
+          <%= link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id}, :remote => true, :class => "btn btn-warning" %>
+        </div>
+
+      <% else -%>
+        <p class="mgn-b20">
+        <i class="icon-music"></i> <%= "#{k[:user].dispname}さん" if k[:user].present? %>
+      <span class="important big"><%= "あと#{k[:count]}日で" %></span>
+      <span class="main"><%= "#{k[:kinen_name]}" %></span> <i class="icon-music"></i>
+        </p>
+      <% end -%>
+    <% end -%>
+  </div>
+  <div class="text-center mgn-t20">(生年月日を登録している人のみ)</div>
+</div><!--/.well -->
+
+<div class="well sidebar-nav">
+  <legend class="text-center">みんなの新着情報</legend>
+  <%= link_to '一気に見る', update_allview_mutters_path, class: "btn btn-danger btn-block" %>
+  <table class="table table-striped table-condensed mgn-t20">
+    <%= render :partial => "update_history" %>
+    <tr>
+      <td><%= link_to "すべて見る", {:action => :update_history_all}, class: "btn btn-success btn-block" %></td>
+    </tr>
+  </table>
+</div><!--/.well -->
+
+<div class="well sidebar-nav">
+  <legend class="text-center">みんなのアクセス情報</legend>
+  <p class="important text-center">現在 <%= User::recent_request_count %> 人がログインしています</p>
+  <table class="table table-striped table-condensed">
+    <% @login_users.each_with_index do |user, idx| -%>
+      <% if idx > 20 -%>
+        <tr class="hide_row" style="display:none">
+      <% else -%>
+        <tr>
+      <% end -%>
+      <td><%= user.last_request_at.present? ? user.last_request_at.to_s(:short) : "ログインなし" %></td>
+      <td><%= user.dispname(User::FULLNICK) %></td>
+      </tr>
+    <% end -%>
+  </table>
+  <div id="link_recent_login_users" class="btn btn-success btn-block" onclick="javascript:show_recent_login_users()">もっと見る(直近40人分)</div>
+</div><!--/.well -->
+

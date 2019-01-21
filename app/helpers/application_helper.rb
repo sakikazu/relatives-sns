@@ -144,7 +144,8 @@ EOS
   end
 
   def editable(login_user, content_user)
-    login_user.role == 0 or login_user.role == 1 or (content_user.present? and (login_user.id == content_user.id))
+    return false if content_user.blank?
+    login_user.admin? || login_user.role == User::SUB_ADMIN || login_user.id == content_user.id
   end
 
   #

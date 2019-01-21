@@ -1,8 +1,11 @@
+<% if @error_message.present? %>
+    alert("<%= @error_message %>");
+<% else %>
 $('#mutter_data').html(
   '<%= escape_javascript(render :partial => "list", :locals => {:mutters => @mutters}) %>'
 );
-
-// 多分、DOM構築を待つようにしたほうがいいかと思って$(functionで囲んだ
-$(function(){
-  $(".colorbox").colorbox();
+// turbolinksによる遷移じゃない時は、これまで通り、DOM構築イベントでやる必要がある
+$(function() {
+  showMutterDeleteLink();
 });
+<% end %>
