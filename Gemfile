@@ -6,6 +6,8 @@ gem 'bootsnap' # railsの起動を速くする
 
 # Use mysql as the database for Active Record
 gem 'mysql2'
+# Use Puma as the app server
+gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -95,7 +97,8 @@ group :development do
   gem 'annotate'
   gem 'bullet'                    # n+1検出
   gem 'rubocop', require: false
-  gem 'rack-mini-profiler'        # 処理時間を表示
+  # 邪魔なことが多いから無効に
+  # gem 'rack-mini-profiler'        # 処理時間を表示
 
   # Use Capistrano for deployment
   gem 'capistrano'

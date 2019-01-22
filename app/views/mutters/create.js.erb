@@ -1,19 +1,9 @@
-<% if @status == "error" %>
-  alert('つぶやきを入力しないと投稿できません');
-  return
-
+<% if @error_message.present? %>
+    alert("<%= @error_message %>");
 <% else %>
 $('.modal-mutter-reply').modal('hide');
-$('#mutter_content').val('');
-$("#mutter_image").siblings().val('')
+$("textarea[name='mutter[content]']").val('')
+$("input[name='mutter[image]']").val('')
+// TODO: toastrに置き換えたい
 $("#create_notification").show().fadeOut(3000);
-
-// NOTE: 遅延させないと、bootstrapのmodalが半端にhideされないという問題があった
-setTimeout(function(){
-  $('#mutter_data').html(
-    "<%= escape_javascript(render :partial => 'list', :locals => {mutters: @mutters, mutter: @mutter}) %>"
-  );
-  $("html,body").animate({scrollTop:$('#mutter_data').offset().top});
-}, 300); // ミリ秒
-
 <% end %>

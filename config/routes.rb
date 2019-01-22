@@ -276,7 +276,6 @@ Rails.application.routes.draw do
       get :graph
       get :update_allview
       get :update_check
-      get :update_disp
       get :update_history_all
       get :all
       get :search

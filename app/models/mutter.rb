@@ -45,7 +45,10 @@ class Mutter < ApplicationRecord
   before_save :fill_for_sort_at
   after_save :save_related_media
   after_create :update_sort_at
+  after_create_commit :broadcast_mutter_channel
+
   # validates_presence_of :content
+
   attr_accessor :search_word, :action_flg, :year, :month, :image, :is_save_related_media
 
   VISIBLE_INITIAL_COMMENTS = 3
@@ -207,4 +210,17 @@ class Mutter < ApplicationRecord
     user.present? ? user.user_ext.image(:small) : "noimage.gif"
   end
 
+  private
+
+  def broadcast_mutter_channel
+    ActionCable.server.broadcast 'mutter_channel', mutter_html: render_mutter, parent_mutter_id: self.reply_id
+  end
+
+  def render_mutter
+    if self.parent?
+      ApplicationController.renderer.render(partial: 'mutters/mutter_with_comments', locals: { mutter_with_comments: self })
+    else
+      ApplicationController.renderer.render(partial: 'mutters/mutter', locals: { mutter: self })
+    end
+  end
 end

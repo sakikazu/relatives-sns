@@ -1,8 +1,10 @@
 class MuttersController < ApplicationController
-  after_action :update_request_at, only: [:index, :update_disp, :create]
+  include ApplicationHelper
+
+  after_action :update_request_at, only: [:index, :create]
 
   before_action :authenticate_user!, :except => :rss
-  before_action :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
+  before_action :set_new_mutter_obj, only: [:index, :all, :search]
   # todo 2014-05-12
   # cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
@@ -182,9 +184,6 @@ class MuttersController < ApplicationController
 
     @album_thumbs = Photo.rnd_photos
 
-    # つぶやきの表示更新時間（ミリ秒指定）
-    @dispupdate_interval = 300 * 1000
-
     ###日齢
     @nichirei, @nichirei_future = current_user.user_ext.nichirei
 
@@ -212,59 +211,31 @@ class MuttersController < ApplicationController
     @mutters = Mutter.includes_all.where(id: mutter_ids)
   end
 
+  # NOTE: 作成後の画面更新は、MutterのコールバックでActionCableによって行っている
   def create
     if params[:mutter][:content].blank?
-      @status = "error"
+      @error_message = 'つぶやきを入力しないと投稿できません'
       render 'create.js'
       return
     end
 
     params[:mutter].merge!(Mutter.extra_params(current_user, request))
     @mutter = Mutter.new(mutter_params)
-
-    if @mutter.leave_me.blank?
-      leave_me_option = {}
-      @leave_me = false
-    else
-      leave_me_option = {leave_me: 1}
-      @leave_me = true
+    unless @mutter.save
+      @error_message = @mutter.errors.full_messages.first
     end
-
-    # memo remotipart_submittedは、ファイルなしのAjaxポストではtrueにならないので、xhrの判定も必要
-    if request.xhr? or remotipart_submitted?
-      @mutter.save
-      @mutters = Mutter.includes_all.parents_mod.page(params[:page])
-      # todo こういうところとかリファクタリングしたい〜〜。allメソッドやsearchとの関連をまとめたい
-      @mutters = @mutters.where(leave_me: @mutter.leave_me)
-      # @create_notification = "に投稿しました"
-
-      # 新規post用に入れ替える
-      @created_mutter = @mutter
-      @mutter = Mutter.new(:user_id => current_user.id)
-      render 'create.js'
-      return
-    else
-      respond_to do |format|
-        if @mutter.save
-          format.html { redirect_to mutters_path(leave_me_option), notice: 'つぶやきを投稿しました。' }
-          format.json { render json: @mutter, status: :created, location: @mutter }
-        else
-          format.html { redirect_to(mutters_path, :notice => 'つぶやきを入力しないと投稿できません') }
-          format.json { render json: @mutter.errors, status: :unprocessable_entity }
-        end
-      end
-    end
-
-### ajax 失敗
-    #@mutters = Mutter.all(:order => "id desc")
-    #render :partial => "list", :locals => {:mutters => @mutters}
   end
 
   def destroy
-    mutter = @mutter
+    unless editable(current_user, @mutter.user)
+      @error_message = '削除権限がありません。'
+      render "update_list.js"
+      return
+    end
+    mutter_leave_me = @mutter.leave_me
     @mutter.destroy
     @mutters = Mutter.includes_all.parents_mod.page(params[:page])
-    @mutters = @mutters.where(leave_me: mutter.leave_me)
+    @mutters = @mutters.where(leave_me: mutter_leave_me)
     render "update_list.js"
   end
 
@@ -317,25 +288,6 @@ class MuttersController < ApplicationController
     #ランダム抽出 -sample
     @celeb_mutters = cel.present? ? cel.mutters.sample(cel.mutters.size) : []
   end
-
-
-  #
-  # つぶやき表示更新
-  #
-  # 最後にされたつぶやきのIDをcookieに入れておき、
-  # その後、定期的なJSでの呼び出しによって新しいつぶやきがないかチェックし、
-  # 存在したら表示を更新する
-  #
-  def update_disp
-    @mutters = Mutter.updated_datas(cookies)
-    if @mutters.blank?
-      render :text => ""
-    else
-      @mutters = @mutters.page(params[:page])
-      render :partial => "list"
-    end
-  end
-
 
   # つぶやき新着チェック
   # (ブラウザのNotificationにて表示する用)
