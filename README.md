@@ -59,6 +59,8 @@ $ nginx -s reload
   - ref: ruby-gmailを使ってRubyからGmailのメールを受信して本文を取得 - Shoken OpenSource Society http://shoken.hatenablog.com/entry/20120401/p1
   - 以前はruby-gmailではなくtmailのgemを使っていた。tmailが汎用的だが処理が煩雑って感じ
   - ガラケーからMutterに画像を投稿するために使用していたので、2019/01/07に処理を削除
+- Mutterの追加をActionCable（Websocket）でサーバーPUSH通知している
+  - git show a7aa70b0de49d5a0eea3eb07387330fb645e40c3
 
 # Ruby version
 - ruby 2.5

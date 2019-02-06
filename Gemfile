@@ -114,6 +114,9 @@ group :development do
 end
 
 group :development, :test do
+  # rails consoleでpryを使うために必要
+  gem 'pry-rails'
+
   # デバッガー
   gem 'pry-byebug'
 
