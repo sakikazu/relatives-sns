@@ -53,10 +53,10 @@ class User < ApplicationRecord
   after_save :rel_save
 
   # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable,
-  # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable,
+  # :token_authenticatable, :confirmable, :registerable,
+  # :lockable, :omniauthable
+  devise :database_authenticatable,
+         :recoverable, :rememberable, :trackable, :timeoutable,
          :encryptable, :encryptor => :authlogic_sha512, :stretches => 20, :pepper => "", # for authlogic algorithm
          :authentication_keys => [:login]
 

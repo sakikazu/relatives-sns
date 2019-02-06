@@ -1,0 +1,26 @@
+.col-sm-6
+  .mb30
+    = link_to '戻る', root_path, class: 'btn btn-light'
+
+  .page-header
+    h2 パスワード再設定の手続き
+
+  ul.alert.alert-info.pl-5
+    li
+      | パスワードを忘れた場合、
+      span.text-danger 事前にメールアドレスを登録していれば、
+      | パスワードの再設定を行うことができます
+    li 下記ボタンからパスワード再設定用メールを送信し、届いたメール内容に従い、再設定を行ってください
+    li メールアドレスを登録していなかった場合は、和孝か自分の家族の誰かにパスワードを再設定してもらってください
+
+  = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+    = f.error_notification
+
+    .form-inputs
+      = f.input :email, required: true, autofocus: true, input_html: { class: 'form-control' }
+
+    .form-actions.mt30
+      = f.button :submit, "パスワード再設定用のメールを送信", class: 'btn btn-warning'
+
+  / NOTE: ここに「ログイン」があるとユーザーが混乱しそうなので消す
+  / = render "users/shared/links"

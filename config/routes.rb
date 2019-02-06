@@ -171,7 +171,10 @@ Rails.application.routes.draw do
 
   root :to => 'mutters#index'
 
-  devise_for :users, controllers: {sessions: 'users/sessions'}
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    passwords: 'users/passwords'
+  }
   devise_for :admin_users
   mount RailsAdmin::Engine => '/adamin', as: 'rails_admin'
   mount API => "/"

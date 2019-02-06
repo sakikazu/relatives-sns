@@ -1018,6 +1018,12 @@ a [class^="icon-"], a [class*=" icon-"] {
   font-weight: bold;
   margin-left: 10px;
 }
+/* hidden要素に対するエラーメッセージは非表示にする */
+.input.hidden.field_with_errors {
+  span.error {
+    display: none;
+  }
+}
 
 .form-date-select-wrapper {
   label {
