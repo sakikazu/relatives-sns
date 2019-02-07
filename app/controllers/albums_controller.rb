@@ -220,6 +220,11 @@ class AlbumsController < ApplicationController
   end
 
   def create_comment
+    if params[:comment][:content].blank?
+      @error_message = 'コメントを入力しないと投稿できません'
+      return
+    end
+
     @comment = Comment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.save

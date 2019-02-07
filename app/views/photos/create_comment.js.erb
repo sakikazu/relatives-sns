@@ -1,5 +1,9 @@
+<% if @error_message.present? %>
+    alert("<%= @error_message %>");
+<% else %>
+
 $('#photo_comment_form #content').val('');
 $('#photo_comments').html(
     '<%= escape_javascript(render "comments") %>'
 );
-
+<% end %>

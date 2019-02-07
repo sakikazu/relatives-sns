@@ -6,24 +6,15 @@
       <div class="page-header"><h3>つぶやき総数: <%= @mutters.total_count %></h3></div>
       <%= paginate @mutters, window: 2, outer_window: 3 %>
 
-      <div id="form_search" class="well" style="padding-left:8px; padding-right:8px;">
-      <div class="input-append">
-        <%= form_for @mutter, url: search_mutters_path, :method => :get do |f| %>
-          <%= f.text_field :search_word, class: "span2" %>
+      <div class="well text-center">
+        <%= form_for @mutter, url: search_mutters_path, method: :get, html: { class: 'form-inline d-inline' } do |f| %>
+          <%= f.text_field :search_word, class: "form-control" %>
           <%= f.hidden_field :action_flg, value: 1 %>
-          <%= f.submit "発言内容から検索する", class: "btn btn-info" %>
+          <%= f.submit "内容から検索する", class: "btn btn-info" %>
         <% end %>
-        <%= form_for @mutter, url: search_mutters_path, :method => :get do |f| %>
-          <%= f.hidden_field :action_flg, value: 2 %>
-          <%= f.submit "画像が含まれる", class: "btn btn-info" %>
-        <% end %>
-        <%= form_for @mutter, url: search_mutters_path, :method => :get do |f| %>
-          <%= f.hidden_field :action_flg, value: 3 %>
-          <%= f.submit "URLが含まれる", class: "btn btn-info" %>
-        <% end %>
+        <%= link_to '画像が含まれる', search_mutters_path("mutter[action_flg]" => 2), class: "btn btn-info" %>
+        <%= link_to 'URLが含まれる', search_mutters_path("mutter[action_flg]" => 3), class: "btn btn-info" %>
       </div>
-      </div>
-
 
       <div class="autopagerize_page_element">
         <ul class="mutter_rows">
@@ -39,7 +30,7 @@
       <% cache :mutter_by_user do %>
         <div id="mutter_by_user">
           <div class="page-header"><h3>メンバー<small>()内はつぶやき数</small></h3></div>
-          <ul>
+          <ul class='pl-3'>
             <% @users.each do |user| -%>
               <li><%= link_to user.try(:dispname, User::FULLNAME), mutter_by_user_path(user.id) %>(<%= @users_mcnt[user.id] %>)</li>
             <% end if @users.present? -%>

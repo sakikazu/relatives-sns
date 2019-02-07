@@ -34,7 +34,7 @@
   <div id="photo_comment_form">
     <%= form_tag create_comment_album_photo_path(@photo.album, @photo), remote: true do |f| %>
       <%= text_area_tag :content, nil, rows: 4, class: "form-control", placeholder: "コメントする" %><br />
-      <%= submit_tag "投稿する", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
+      <%= submit_tag "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
     <% end -%>
     <br /><br />
   </div>

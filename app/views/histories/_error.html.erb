@@ -1,9 +1,0 @@
-  <div id="error_explanation">
-    <h2><%=t "activerecord.errors.template.header.other", :model => History.model_name.human, :count => @history.errors.count %></h2>
-    <ul>
-    <% @history.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-    </ul>
-  </div>
-

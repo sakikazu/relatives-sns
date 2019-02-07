@@ -111,6 +111,11 @@ class PhotosController < ApplicationController
   end
 
   def create_comment
+    if params[:content].blank?
+      @error_message = 'コメントを入力しないと投稿できません'
+      return
+    end
+
     params.merge!(Mutter.extra_params(current_user, request))
     @photo = Photo.find(params[:id])
 

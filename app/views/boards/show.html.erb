@@ -1,4 +1,4 @@
-  <div class="col-sm-7">
+  <div class="col-sm-6">
 
 <div class="form-actions">
 <%= link_to "掲示板一覧へ", boards_path, class: "btn btn-light" %>
@@ -8,7 +8,7 @@
   <h3><%= @board.title %><small><%= link_to "(コメント数：#{@board.board_comments.size}）", "#comments" %></small></h3>
 </div>
 
-<div class="once_content span7">
+<div class="once_content">
   <div class="info">
     作成者：<%= @board.user.dispname %> | 
     作成日時：<%= @board.created_at.to_s(:long) if @board.created_at %>

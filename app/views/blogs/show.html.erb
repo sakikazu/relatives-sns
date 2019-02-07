@@ -1,4 +1,4 @@
-  <div class="col-sm-7">
+  <div class="col-sm-6">
     <%= link_to '自分の日記へ', blogs_path, class: "btn btn-light" %>
     <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
     <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
@@ -44,7 +44,7 @@
         <%= f.hidden_field :parent_id %>
         <%= f.hidden_field :parent_type %>
         <div class="form-actions">
-        <%= f.submit "投稿する", class: "btn btn-primary" %>
+        <%= f.submit "コメントを投稿", class: "btn btn-primary" %>
         </div>
       <% end -%>
     </div>

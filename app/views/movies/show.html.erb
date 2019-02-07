@@ -1,4 +1,4 @@
-<div class="col-sm-8">
+<div class="col-sm-7">
 
   <%= link_to "アルバムへ", album_path(@movie.album_id), class: "btn btn-light" if @movie.album_id.present? %>
   <%= link_to "動画一覧へ", movies_path, class: "btn btn-light" %>
@@ -46,7 +46,7 @@
   <%= form_tag create_comment_movie_path(@movie), remote: true do |f| %>
     <%= text_area_tag :content, nil, class: "form-control", rows: 4, placeholder: "コメントする" %><br />
     <div class="form-actions">
-      <%= submit_tag "投稿する", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
+      <%= submit_tag "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
     </div>
   <% end -%>
 </div>

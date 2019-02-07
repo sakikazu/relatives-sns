@@ -1,8 +1,10 @@
+<div class="m-5">
+<div class="page-header">
+  <h3><%= @celebration.user.dispname %>さんへのお祝い</h3>
+</div>
+
 <div class="well">
   <% if @flag.present? -%>
-    <div class="page-header">
-      <h3><%= @celebration.user.dispname %>さんへのお祝い</h3>
-    </div>
     <% # note: 同じ人に複数の人が祝う場合はオブジェクトはupdateとなるので、method: :postの指定がないとcelebration_create_mutters_pathの設定はroutesには:postでしか存在しないので無視され、今度はオブジェクトによって判定されてしまい、結局、「update」アクションと解釈されてしまう。いやまあ単純な話ですた。。 %>
     <%= form_for @celebration, url: celebration_create_mutters_path, html: {multipart: true}, method: :post do |f| %>
       <%= f.hidden_field :anniversary_at %>
@@ -10,19 +12,21 @@
 
       <%= fields_for @mutter do |ff| %>
         <%= ff.label '自由にメッセージを変更してください' %><br />
-        <%= ff.text_area :content, class: "span4", rows: 2 %><br />
+        <%= ff.text_area :content, class: "form-control", rows: 2 %><br />
         <%= ff.file_field :image %>
         <%= ff.hidden_field :user_id %>
       <% end -%>
-      <br />
-      <%= f.submit '祝う', class: "btn btn-primary" %>
+      <div class='mt20'>
+        <%= f.submit '祝う', class: "btn btn-primary" %>
+      </div>
     <% end -%>
-    <ul>
+    <ul class='mt20 pl-3'>
       <li>つぶやきにも追加されます。</li>
       <li>投稿後に削除したい場合、つぶやきから削除すればOKです。</li>
-      <li>当日以降は、お祝いは親戚ページの各人ページで見れます。</li>
+      <li>当日以降は、お祝いは親戚ページの個人ページで見れます。</li>
     </ul>
   <% else -%>
     <p class="big important">今回は既にお祝いしてます。</p>
   <% end -%>
+</div>
 </div>

@@ -1,21 +1,17 @@
 <% if @history.errors.any? %>
-  $('#info')
-    .show()
-    .html(
-      '<%= escape_javascript(render "error") %>'
-    )
+  $('#error_message').show();
+  <% @history.errors.full_messages.each do |msg| %>
+    $('#error_message > ul').append("<li><%= msg %></li>");
+  <% end %>
+
 <% else %>
   $('#history_data').html(
     '<%= escape_javascript(render "data") %>'
   );
   $('#info')
     .show()
-    .html('<br><br>追加しました')
-    .css({
-      'background-color': 'yellow',
-      'font-size' : '25px',
-      'text-align' : 'center',
-    })
-    .hide(4000);
+    .html('追加しました')
+    .hide(5000);
   $('#his_form form textarea').val("");
+  $(".colorbox").colorbox();
 <% end %>

@@ -1,9 +1,9 @@
-<div class="span4">
+<div class="m-3">
 <h3 class="normal">コメントをする</h3>
 <%= form_for @comment, :url => create_comment_histories_path do |f| %>
-  <%= f.text_area :content, rows: 5, class: "span3" %>
+  <%= f.text_area :content, rows: 5, class: "form-control" %>
   <%= f.hidden_field :parent_id %>
   <%= f.hidden_field :parent_type %>
-  <div><%= f.submit '投稿する', class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %></div>
+  <div class='mt10'><%= f.submit '投稿する', class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %></div>
 <% end -%>
 </div>

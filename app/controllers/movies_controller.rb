@@ -32,21 +32,11 @@ class MoviesController < ApplicationController
     end
   end
 
-  # GET /movies/new
-  # GET /movies/new.xml
-  def new
-    @movie = Movie.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @movie }
-    end
-  end
-
   # GET /movies/1/edit
   def edit
   end
 
+  # NOTE: 動画作成はアルバムからなので、これは使ってないような
   # POST /movies
   # POST /movies.xml
   def create
@@ -102,7 +92,7 @@ class MoviesController < ApplicationController
 
   def create_comment
     if params[:content].blank?
-      render :text => "", :status => 500
+      @error_message = 'コメントを入力しないと投稿できません'
       return
     end
 

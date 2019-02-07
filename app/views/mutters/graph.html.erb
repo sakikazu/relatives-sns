@@ -53,9 +53,9 @@ $(document).ready(function() {
 
 <div class='col-sm-10'>
 <div id="mutter_graph">
-<%= simple_form_for @mutter, url: graph_mutters_path, :method => "get" do |f| %>
-  <%= f.select "year", (2008..Date.today.year).map{|y| [y, y]}, input_html: {class: "span1"} %>
-  <%= f.select "month", (1..12).map{|m| [m, m]}, :include_blank => true, class: "span1" %>
+  <%= simple_form_for @mutter, url: graph_mutters_path, :method => "get", html: { class: 'form-inline' } do |f| %>
+    <%= f.select "year", (2008..Date.today.year).map{|y| [y, y]}, {}, {class: "form-control"} %>
+  <%= f.select "month", (1..12).map{|m| [m, m]}, {:include_blank => true}, {class: "form-control"} %>
   <%= f.submit "期間を選択して表示", :class => "btn btn-light" %>
 <% end -%>
 <%= form_tag graph_mutters_path, :method => "get" do %>

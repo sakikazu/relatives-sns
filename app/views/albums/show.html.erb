@@ -126,8 +126,8 @@ $(document).on('turbolinks:load', function() {
             <%= f.hidden_field :parent_id %>
             <%= f.hidden_field :parent_type %>
           </div>
-          <div class="actions">
-            <%= f.submit "コメントする", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
+          <div class="actions mt10">
+            <%= f.submit "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
           </div>
         <% end -%>
         </div>
@@ -175,10 +175,10 @@ $(document).on('turbolinks:load', function() {
   <!-- ソート機能 -->
   <% #sort_list = [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]] -%>
   <% sort_list = {"1" => "アップロード順", "2" => "撮影日時順", "3" => "コメント順", "4" => "イイネされた順"} -%>
-  <div class="input-append">
+  <div class="input-append mb30">
     <%= form_for @album4sort, url: album_path, :method => :get do |f| %>
-      <%= f.select :user_id, @uploader_list.map{|u| [u[1], u[0]]}, {include_blank: "＜アップロード者＞"}, {class: "span3"} %>
-      <%= f.select :sort_flg, sort_list.map{|s| [s[1], s[0]]}, {include_blank: "＜並び替え順＞"}, {class: "span3"} %>
+      <%= f.select :user_id, @uploader_list.map{|u| [u[1], u[0]]}, {include_blank: "＜アップロード者＞"}, {class: "form-control"} %>
+      <%= f.select :sort_flg, sort_list.map{|s| [s[1], s[0]]}, {include_blank: "＜並び替え順＞"}, {class: "form-control"} %>
       <%= f.hidden_field :media_filter %>
       <%= f.submit "並び替え", class: "btn btn-light" %>
     <% end %>

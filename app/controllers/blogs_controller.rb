@@ -123,7 +123,7 @@ class BlogsController < ApplicationController
 
   def create_comment
     if params[:comment][:content].blank?
-      render :text => "", :status => 500
+      @error_message = 'コメントを入力しないと投稿できません'
       return
     end
 

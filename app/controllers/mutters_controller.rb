@@ -296,7 +296,7 @@ class MuttersController < ApplicationController
   def update_check
     if cookies[:update_check_id].blank?
       cookies[:update_check_id] = Mutter.last.id
-      render :text => ""
+      render plain: ""
       return
     end
 
@@ -306,10 +306,10 @@ class MuttersController < ApplicationController
     @mutters.reject!{|m| m.user.id == current_user.id}
     if @mutters.size > 0
       cookies[:update_check_id] = Mutter.last.id
-      # render :text => @mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
+      # render plain: @mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
       render :partial => "mutter_update"
     else
-      render :text => ""
+      render plain: ""
     end
   end
 
