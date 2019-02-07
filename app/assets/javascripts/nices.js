@@ -11,7 +11,7 @@ $(document).on('turbolinks:load', function() {
   $.fn.mokuji = function() {
     var summary = $(this).data('mokuji-summary');
 
-    $(this).append('<ul><h3 class="normal">目次</h3></ul>');
+    $(this).append('<ul class="pl-3"><h3 class="normal">目次</h3></ul>');
 
     if(summary == true) {
       $(this).after('<h2 class="normal" summary="true">まとめ(直近10個)</h2>');
@@ -24,7 +24,7 @@ $(document).on('turbolinks:load', function() {
     });
     $("ul", this).append('<li>' + items.join("</li><li>") + '</li>');
 
-    //すべてのカテゴリから評価された日付降順に抽出する
+    // すべてのカテゴリから評価された日付降順に抽出する「まとめ」
     if(summary == true) {
       var data = [];
       $(".nice_content_wrap").each(function(){

@@ -1,0 +1,20 @@
+#nice_show.col-sm-7
+  = render :partial => 'nices_menu'
+  #mokuji[data-mokuji-summary="false"]
+
+  h2.normal 人気のつぶやき
+  .well.well-small
+    #mutter_area.h2normal_content
+      = render :partial => 'rank_mutter'
+  h2.normal 人気の写真
+  .well.well-small
+    #photo_area.h2normal_content
+      = render :partial => 'rank_photo'
+  h2.normal 人気の日記
+  .well.well-small
+    #blog_area.h2normal_content
+      = render :partial => 'rank_blog'
+  h2.normal 人気の動画
+  .well.well-small
+    #movie_area.h2normal_content
+      = render :partial => 'rank_movie'

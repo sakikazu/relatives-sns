@@ -35,7 +35,7 @@ class NicesController < ApplicationController
     @photo_data = contents["Photo"] || []
     @blog_data = contents["Blog"] || []
 
-    @users = Nice.select('distinct niced_user_id').map{|n| User.find(n.niced_user_id)}
+    @users = Nice.niced_users
 
     @sort = 4
     @mutter = Mutter.new(:user_id => current_user.id) # Mutterのレス用
@@ -52,7 +52,7 @@ class NicesController < ApplicationController
       @nices[type.downcase] = nices[type].present? ? nices[type][0..9] : []
     end
 
-    @users = Nice.joins(:user).select('distinct user_id').map{|n| User.find(n.user_id)}
+    @users = Nice.nicing_users
 
     @sort = 3
   end
@@ -110,6 +110,7 @@ class NicesController < ApplicationController
     end
   end
 
+  # todo: リファクタリングしたい・・
   def destroy
     @content_type = params[:type]
     @update_area = params[:area]
@@ -132,7 +133,7 @@ private
 
   def destroy_related_content_nice(org_content)
     content = related_content(org_content)
-    content.nices.where(user_id: current_user.id).destroy_all
+    content.nices.where(user_id: current_user.id).destroy_all if content.present?
   end
 
   def related_content(org_content)
