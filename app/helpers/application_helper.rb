@@ -10,22 +10,6 @@ module ApplicationHelper
       <source src="#{movie_src}" type='video/mp4' />
     </video>
 EOS
-
-    # todo flashは不要になってるかもだから、この処理はなくしていいかも
-    unless request.smart_phone?
-      videojs_src += <<"EOS"
-      <script>
-      $(function() {
-      if(!videojs.Flash.isSupported()) {
-        var myPlayer = videojs("videojs_#{movie.id}");
-        myPlayer.on("click", function() {
-          $("#flash_install_message").click();
-        });
-      }
-      })
-      </script>
-EOS
-    end
     return videojs_src
   end
 
