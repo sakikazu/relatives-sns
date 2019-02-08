@@ -6,12 +6,8 @@ class MembersController < ApplicationController
 
   # 家系図
   def relation
-    all_users = User.includes_ext.order("user_exts.birth_day ASC")
-    root11_users = all_users.select{|u| u.parent_id == nil}
-    @users = []
-    root11_users.each do |user|
-      @users << recursive_relation(user, all_users)
-    end
+    @relationed_users = User.build_relationed_users
+    @count_by_generation = User.count_by_generation(@relationed_users)
   end
 
   # GET /members
@@ -195,36 +191,5 @@ private
 
   def user_ext_params
       params.require(:user_ext).permit(:familyname, :givenname, :nickname, :sex, :blood, :addr1, :addr2, :addr3, :addr4, :addr_from, :birth_day, :dead_day, :job, :hobby, :skill, :free_text, :image, :character, :jiman, :dream, :sonkei, :kyujitsu, :myboom, :fav_food, :unfav_food, :fav_movie, :fav_book, :fav_sports, :fav_music, :fav_game, :fav_brand, :hosii, :ikitai, :yaritai, :user_id)
-  end
-
-  def recursive_relation(user, users)
-    user_h = {id: user.id,
-              root11: user.root11,
-              name: user.dispname(User::FULLNICK),
-              age_h: user.user_ext.age_h,
-              sex_h: user.user_ext.sex_name,
-              blood_h: user.user_ext.blood_name,
-              address: user.user_ext.address,
-              birth_dead_h: user.user_ext.birth_dead_h,
-              is_dead: user.user_ext.dead_day.present?,
-              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/assets/missing.gif"
-    }
-
-    children = users.select{|u| u.parent_id == user.id}
-    if children.blank?
-      return user_h.merge({has_members_num: 0, family: []})
-    else
-      has_members_num = 0
-      family = []
-
-      children.each do |child|
-        has_members_num += 1
-
-        child_h = recursive_relation(child, users)
-        family << child_h
-        has_members_num += child_h[:has_members_num]
-      end
-      return user_h.merge({has_members_num: has_members_num, family: family})
-    end
   end
 end

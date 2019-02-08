@@ -221,12 +221,82 @@ class User < ApplicationRecord
     self.root11 == user_root11
   end
 
+  # 家系図用のデータ作成
+  def self.build_relationed_users
+    all_users = self.includes_ext.order("user_exts.birth_day ASC")
+    root11_users = all_users.select{ |u| u.parent_id.nil? }
+    users = root11_users.map do |user|
+      recursive_relation(user, all_users)
+    end
+    users
+  end
+
+  # 家系図用のデータを世代ごとにカウント（A団専用）
+  #
+  # NOTE: この家系図では、そうへい夫妻と11兄弟を並列にしてしまっているため、人数集計ではその部分は決め打ちするしかない
+  # [0] => 合計
+  # [1] => 1世代（そうへい、ふさこ）
+  # [2] => 2世代（11兄弟）
+  # [3] => 3世代（11兄弟の配偶者、子供）
+  # [n] => 続いていく
+  def self.count_by_generation(relationed_users)
+    users_count = [0, 2, 11]
+    relationed_users.each do |user|
+      gen = 2
+      recursive_count_by_generation(users_count, gen, user)
+    end
+    users_count[0] = users_count.inject(0) { |sum, n| sum + n }
+    users_count
+  end
+
+
   private
 
   def generate_authentication_token
     loop do
       token = Devise.friendly_token
       break token unless self.class.unscoped.where(authentication_token: token).first
+    end
+  end
+
+  def self.recursive_relation(user, users)
+    user_h = {id: user.id,
+              root11: user.root11,
+              name: user.dispname(User::FULLNICK),
+              age_h: user.user_ext.age_h,
+              sex_h: user.user_ext.sex_name,
+              blood_h: user.user_ext.blood_name,
+              address: user.user_ext.address,
+              birth_dead_h: user.user_ext.birth_dead_h,
+              is_dead: user.user_ext.dead_day.present?,
+              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/assets/missing.gif"
+    }
+
+    children = users.select{|u| u.parent_id == user.id}
+    if children.blank?
+      return user_h.merge({has_members_num: 0, family: []})
+    else
+      has_members_num = 0
+      family = []
+
+      children.each do |child|
+        has_members_num += 1
+
+        child_h = recursive_relation(child, users)
+        family << child_h
+        has_members_num += child_h[:has_members_num]
+      end
+      return user_h.merge({has_members_num: has_members_num, family: family})
+    end
+  end
+
+  def self.recursive_count_by_generation(users_count, gen, user)
+    return if user[:family].blank?
+    gen += 1
+    users_count[gen] ||= 0
+    users_count[gen] += user[:family].size
+    user[:family].each do |u|
+      recursive_count_by_generation(users_count, gen, u)
     end
   end
 end

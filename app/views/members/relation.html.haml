@@ -2,13 +2,33 @@
 
   = render 'menu'
 
+  .row.mb30
+    .col-sm-8
+      .card
+        .card-header
+          %h3 人数データ
+        .card-body
+          %ul.pl-4
+            %li A団の構成のみに対応させているため、それ以外の家族では正しい値が出ない
+            %li 1世代目がそうへい夫妻、2世代目が11人兄弟となる
+            %li この人数には配偶者も含む
+          %table.table.table-bordered.table-striped.table-warning.text-center
+            %tr
+              %th 合計
+              - 1.upto(@count_by_generation.size - 1) do |n|
+                %th #{n}世代
+            %tr
+              %td #{@count_by_generation[0]}
+              - 1.upto(@count_by_generation.size - 1) do |n|
+                %td #{@count_by_generation[n]}人
+
 #sakimuras
   #generation1
     -# NOTE: partialにしたかったが、単純にやるとhtml階層を潜りながらrenderは書けず、partial内で再帰にしようかとも思ったが、カウンターがわかりづらそうなのと、
     -# ループ内でこれ以上renderを増やしたくないと思ったので辞めた。クリックしたらAjaxで子メンバーをレンダリングも良いが、頻繁にクリックするし、
     -# その度にクリアしてレンダリングってなると速度面で怪しいのでとりあえずこのまま。
     %ul.members
-      - @users.each do |u|
+      - @relationed_users.each do |u|
         %li.list.clearfix{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
           = render partial: 'member_list', locals: {user: u}
         %div{style: "display:none"}
