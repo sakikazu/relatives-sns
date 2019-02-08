@@ -24,8 +24,6 @@
 //= require jquery.autopager-1.0.0.min
 //= require jquery.tablesorter.min
 //= require jquery.sliderkit.1.9.2.pack.js
-// mousewheel is required by sliderkit
-//= require jquery.mousewheel.min.js
 //= //require desktopify
 //= require bgstretcher
 //= require_tree ./jqplot
@@ -125,7 +123,7 @@ slide_effect = (function(){
   jQuery(".carousel-demo2").sliderkit({
     shownavitems:9,
     scroll:1,
-    mousewheel:true,
+    mousewheel:false,
     circular:true,
     start:0
   });
