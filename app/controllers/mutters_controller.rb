@@ -18,6 +18,7 @@ class MuttersController < ApplicationController
       @mutter = Mutter.new(mutter_params)
     end
 
+    @all_mode = false
     if params[:all].present?
       @mutters_count = Mutter.group("DATE_FORMAT(created_at, '%Y/%m')").count
       @mutters_count = @mutters_count.map{|m| ["#{m[0]}/01", m[1]]}
@@ -25,7 +26,7 @@ class MuttersController < ApplicationController
       @min = '2008-04'
       @interval = "1 year"
       @range_for_title = "全期間：2008年 - #{Date.today.year}年"
-      @flg = 0
+      @all_mode = true
     else
       year = @mutter.year
       month = @mutter.month

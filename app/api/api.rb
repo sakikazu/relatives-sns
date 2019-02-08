@@ -75,7 +75,7 @@ class API < Grape::API
       timeline = build_timeline_data(mutters)
       return {
         timeline: timeline,
-        latest_request_at: Time.now.to_s(:long)
+        latest_request_at: Time.now.to_s(:normal)
       }
     end
 
@@ -105,7 +105,7 @@ class API < Grape::API
       timeline = build_timeline_data(mutters)
       return {
         timeline: timeline,
-        latest_request_at: Time.now.to_s(:long)
+        latest_request_at: Time.now.to_s(:normal)
       }
     end
 

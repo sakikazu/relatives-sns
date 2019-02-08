@@ -1,69 +1,39 @@
-<%# content_for :add_jscss do %>
-  <%#= stylesheet_link_tag 'jquery.jqplot.min' %>
-  <%#= javascript_include_tag 'jqplot/jquery.jqplot.min' %>
-  <%#= javascript_include_tag 'jqplot/excanvas.min' %>
-  <%#= javascript_include_tag 'jqplot/plugins/jqplot.cursor.min' %>
-  <%#= javascript_include_tag 'jqplot/plugins/jqplot.highlighter.min' %>
-  <%#= javascript_include_tag 'jqplot/plugins/jqplot.dateAxisRenderer.min' %>
-  <%#= javascript_include_tag 'jqplot/plugins/jqplot.barRenderer.min' %>
-<%# end %>
-
 <script>
 $(document).ready(function() {
-
-  var line1=[
+<% if @mutters_count.present? %>
+  var data = [
 <% @mutters_count.each do |data| -%>
   <%= "['#{data[0]}', #{data[1]}],".html_safe %>
 <% end -%>
   ];
-  var plot = $.jqplot('chart', [line1], {
-    title:'つぶやき数(<%= @range_for_title %>)',
-    gridPadding:{right:20},
-    axes:{
-      xaxis:{
-        renderer:$.jqplot.DateAxisRenderer,
-        tickOptions:{formatString:'<%= @format %>'},
-        min:'<%= @min %>',
-        tickInterval:'<%= @interval %>'
-      }
-    },
-    seriesDefaults: {
-      renderer:$.jqplot.BarRenderer,
-      rendererOptions: {
-        barPadding: 2,      // number of pixels between adjacent bars in the same
-        // group (same category or bin).
-        barMargin: 5,      // number of pixels between adjacent groups of bars.
-        barDirection: 'vertical', // vertical or horizontal.
-        barWidth: 14,     // width of the bars.  null to calculate automatically.
-        shadowOffset: 2,    // offset from the bar edge to stroke the shadow.
-        shadowDepth: 2,     // nuber of strokes to make for the shadow.
-        shadowAlpha: 0.8,   // transparency of the shadow.
-      }
-    },
-    highlighter: {
-      show: true,
-      sizeAdjust: 7.5
-    },
-    cursor: {
-      show: false
-    }
-  });
+  generate_mutter_grapth('chart', data, 'つぶやき数(<%= @range_for_title %>)', '<%= @format %>', '<%= @min %>', '<%= @interval %>');
+<% end -%>
 }); //jquery#ready
 </script>
 
 <div class='col-sm-10'>
-<div id="mutter_graph">
-  <%= simple_form_for @mutter, url: graph_mutters_path, :method => "get", html: { class: 'form-inline' } do |f| %>
-    <%= f.select "year", (2008..Date.today.year).map{|y| [y, y]}, {}, {class: "form-control"} %>
+  <div class='mb30'>
+    <%= link_to 'つぶやき一覧へ', all_mutters_path, class: 'btn btn-light' %>
+  </div>
+
+<div>
+<ul class="nav nav-tabs mt10 mb40">
+  <li class="nav-item"><%= link_to '期間選択', graph_mutters_path, class: "nav-link #{'active' unless @all_mode}" %></li>
+  <li class="nav-item"><%= link_to '全期間', graph_mutters_path(all: 1), class: "nav-link #{'active' if @all_mode}" %></li>
+</ul>
+
+<% unless @all_mode %>
+<%= simple_form_for @mutter, url: graph_mutters_path, :method => "get", html: { class: 'form-inline' } do |f| %>
+  <%= f.select "year", (2008..Date.today.year).map{|y| [y, y]}, {}, {class: "form-control"} %>
   <%= f.select "month", (1..12).map{|m| [m, m]}, {:include_blank => true}, {class: "form-control"} %>
   <%= f.submit "期間を選択して表示", :class => "btn btn-light" %>
 <% end -%>
-<%= form_tag graph_mutters_path, :method => "get" do %>
-  <%= hidden_field_tag :all, 1 %>
-  <%= submit_tag "全期間を表示", :class => "btn btn-light" %>
-<% end -%>
 </div>
+<% end -%>
 
-
-<div id="chart"></div>
+<div id="chart">
+<% if @mutters_count.blank? %>
+  <p class='mt30 text-danger'>この期間のデータはありません。</p>
+<% end %>
+</div>
 </div>

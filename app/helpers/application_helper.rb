@@ -1,5 +1,12 @@
 module ApplicationHelper
 
+  def time_shorter(time, options = {})
+    return '' if time.blank?
+    full_time_str = time.to_s(:normal)
+    fmt = options[:noyear] ? '%m/%d' : '%Y/%m/%d'
+    link_to time.strftime(fmt), 'javascript:void()', data: { toggle: 'tooltip', trigger: 'click' }, title: full_time_str, class: 'text-info text-underline'
+  end
+
   def videojs(movie)
     movie_src = movie.uploaded_full_path.html_safe
 
@@ -27,6 +34,12 @@ EOS
     title
   end
 
+  def useragent_short(ua)
+    full = useragent(ua)
+    matched = full.match(/^\w+/)
+    short = matched.present? ? matched[0] : full
+    link_to short, 'javascript:void()', class: 'badge badge-secondary', data: { toggle: 'tooltip' }, title: full
+  end
 
   #
   # UserAgentから各デバイス名を割り出す
@@ -41,31 +54,33 @@ EOS
     end
 
     # browser
-    case ua
-    when /Chrome\/([\d]*)/
-      ret = "Chrome#{$1}"
-    when /Firefox\/([\d]*)/
-      ret = "Firefox#{$1}"
-    when /Opera\/([\d]*)/
-      ret = "Opera#{$1}"
-    when /Safari/
-      ua =~ /Version\/(\d)/
-      ret = "Safari#{$1}"
-    when /MSIE (\d)/
-      ret = "IE#{$1}"
-    else
-      ret = " 不明 "
-    end
+    ret = case ua
+          when /Chrome\/([\d]*)/
+            "Chrome#{$1}"
+          when /Firefox\/([\d]*)/
+            "Firefox#{$1}"
+          when /Opera\/([\d]*)/
+            "Opera#{$1}"
+          when /Safari/
+            ua =~ /Version\/(\d)/
+            "Safari#{$1}"
+          when /MSIE (\d)/
+            "IE#{$1}"
+          else
+            " 不明 "
+          end
 
     # OS
-    case ua
-    when /iPhone OS (\d)/
-      ret += " [iOS#{$1}]"
-    when /Android ([\d\.\s]*)/
-      ret += " [Android #{$1}]"
-    when /Mac OS X (\d+)_(\d+)/
-      ret += " [MacOSX #{$1}.#{$2}]"
-    end
+    ret += case ua
+           when /iPhone OS (\d)/
+             " [iOS#{$1}]"
+           when /Android ([\d\.\s]*)/
+             " [Android #{$1}]"
+           when /Mac OS X (\d+)_(\d+)/
+             " [MacOSX #{$1}.#{$2}]"
+           else
+             ''
+           end
 
     return ret
   end
@@ -77,7 +92,6 @@ EOS
   def colorbox_fix_size
     request.smart_phone? ? "" : "colorbox_fix_size"
   end
-
 
   def form_html_option
     # request.smart_phone? ? {} : {:multipart => true}

@@ -93,10 +93,12 @@ $(document).on('turbolinks:load', function() {
 </div>
 
 <ul class="nav nav-tabs mb15">
-  <li class="nav-item"><a href="#tab-description" data-toggle="tab" class="nav-link"><i class="icon-list-alt"></i> <%= @album.title %></a></li>
-  <li class="nav-item"><a href="#tab-comments" data-toggle="tab" class="nav-link"><i class="icon-comment"></i> アルバムへのコメント(<%= @album.comments.select{|n| n.id.present?}.size %>)</a></li>
-  <li class="nav-item"><a href="#tab-photo-upload" data-toggle="tab" class="nav-link"><i class="icon-camera"></i> 写真アップロード</a></li>
-  <li class="nav-item"><a href="#tab-movie-upload" data-toggle="tab" class="nav-link"><i class="icon-facetime-video"></i> 動画アップロード</a></li>
+  <li class="nav-item"><a href="#tab-description" data-toggle="tab" class="nav-link"><%= fa_icon 'th-large', text: @album.title %></a></li>
+  <li class="nav-item"><a href="#tab-comments" data-toggle="tab" class="nav-link">
+      <%= fa_icon 'comment', text: "アルバムへのコメント(#{@album.comments.select{|n| n.id.present?}.size})" %>
+  </a></li>
+  <li class="nav-item"><a href="#tab-photo-upload" data-toggle="tab" class="nav-link"><%= fa_icon 'camera', text: '写真アップロード' %></a></li>
+  <li class="nav-item"><a href="#tab-movie-upload" data-toggle="tab" class="nav-link"><%= fa_icon 'video-camera', text: '動画アップロード' %></a></li>
 </ul>
 
 <div class="tab-content well well-small">

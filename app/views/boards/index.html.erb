@@ -20,8 +20,8 @@
       <br />
     <% end -%>
     <div class="bar">
-      <%= "作成者：#{board.user.dispname}" %> | <%= "作成日時：#{board.created_at.to_s(:short2)}" %>
-      <%= " | 最新コメント日時：#{board.board_comments.last.created_at.to_s(:short2)}" if board.board_comments.last && board.board_comments.last.created_at %>
+      <%= "作成者：#{board.user.dispname}" %> | <%= "作成日時：#{time_shorter(board.created_at)}".html_safe %>
+      <%= " | 最新コメント日時：#{time_shorter(board.board_comments.last.created_at)}".html_safe if board.board_comments.present? %>
       <br />
       <% if editable(current_user, board.user) -%>
         <%= link_to '編集', edit_board_path(board) %>

@@ -28,7 +28,7 @@ module NicesHelper
     output = ""
     if content.nices.size > 0
       output += <<"EOS"
-<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}"><i class='icon-heart'></i> #{content.nices.size}</strong>
+<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}">#{fa_icon 'heart'} #{content.nices.size}</strong>
 EOS
     end
 
@@ -39,7 +39,7 @@ EOS
 EOS
     else
       output += <<"EOS"
-  #{link_to '<i class="icon-heart"></i>&nbsp;イイネ '.html_safe, nices_path(:type => content_type, :content_id => content.id, :area => area), :method => :post, :remote => true, class: "nice_link"}
+  #{link_to fa_icon('heart', text: 'イイネ '), nices_path(:type => content_type, :content_id => content.id, :area => area), :method => :post, :remote => true, class: "nice_link"}
 EOS
     end
 
@@ -50,7 +50,7 @@ EOS
     output = ""
     if content.nices.size > 0
       output += <<"EOS"
-<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}"><i class='icon-heart'></i> #{content.nices.size}</strong>
+<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}">#{fa_icon 'heart'} #{content.nices.size}</strong>
 EOS
     end
 

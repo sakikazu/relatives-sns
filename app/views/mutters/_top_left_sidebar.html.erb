@@ -18,9 +18,9 @@
     <% @kinen.each do |k| -%>
       <% if k[:count] == 0 || k[:count] == -1-%>
         <p style="margin-bottom: 5px">
-        <i class="icon-music"></i> <%= "#{k[:user].dispname}さん" %>
+        <%= fa_icon 'music' %> <%= "#{k[:user].dispname}さん" %>
       <span class="important big"><%= k[:count] == 0 ? "本日" : "昨日" %></span>
-      <span class="main"><%= "#{k[:kinen_name]}" %></span> <i class="icon-music"></i>
+      <span class="main"><%= "#{k[:kinen_name]}" %></span> <%= fa_icon 'music' %>
         </p>
         <div class="mgn-b20">
           <%= link_to '祝う', {:action => :celebration_new, :user_id => k[:user].id}, :class => colorbox_class + " btn btn-info" %>
@@ -29,9 +29,9 @@
 
       <% else -%>
         <p class="mgn-b20">
-        <i class="icon-music"></i> <%= "#{k[:user].dispname}さん" if k[:user].present? %>
+        <%= fa_icon 'music' %> <%= "#{k[:user].dispname}さん" if k[:user].present? %>
       <span class="important big"><%= "あと#{k[:count]}日で" %></span>
-      <span class="main"><%= "#{k[:kinen_name]}" %></span> <i class="icon-music"></i>
+      <span class="main"><%= "#{k[:kinen_name]}" %></span> <%= fa_icon 'music' %>
         </p>
       <% end -%>
     <% end -%>
@@ -53,14 +53,14 @@
 <div class="well sidebar-nav">
   <legend class="text-center">みんなのアクセス情報</legend>
   <p class="important text-center">現在 <%= User::recent_request_count %> 人がログインしています</p>
-  <table class="table table-striped table-condensed">
+  <table class="table table-striped table-sm">
     <% @login_users.each_with_index do |user, idx| -%>
       <% if idx > 20 -%>
         <tr class="hide_row" style="display:none">
       <% else -%>
         <tr>
       <% end -%>
-      <td><%= user.last_request_at.present? ? user.last_request_at.to_s(:short) : "ログインなし" %></td>
+      <td style='width:5em'><%= user.last_request_at.present? ? time_shorter(user.last_request_at, { noyear: true }) : "未ログイン" %></td>
       <td><%= user.dispname(User::FULLNICK) %></td>
       </tr>
     <% end -%>

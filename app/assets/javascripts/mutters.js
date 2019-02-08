@@ -31,9 +31,9 @@ $('#search_form a.js_search_mutter').on('click', function() {
 function toggleComments(obj) {
   $(obj).siblings(":not(.last_children)").toggle();
   if ($(obj).text() == '全部見る') {
-    $(obj).html('<i class="icon-minus"></i>隠す<i class="icon-minus""></i>');
+    $(obj).html('<i class="fa fa-minus"></i>隠す<i class="fa fa-minus""></i>');
   } else {
-    $(obj).html('<i class="icon-plus"></i>全部見る<i class="icon-plus"></i>');
+    $(obj).html('<i class="fa fa-plus"></i>全部見る<i class="fa fa-plus"></i>');
   }
 }
 // 表示したらしっぱなしパターン
@@ -66,3 +66,37 @@ show_recent_login_users = function() {
   }
 }
 
+generate_mutter_grapth = function(elm_id, data, title, format, min, interval) {
+  var plot = $.jqplot(elm_id, [data], {
+    title: title,
+    gridPadding:{right:20},
+    axes:{
+      xaxis:{
+        renderer:$.jqplot.DateAxisRenderer,
+        tickOptions:{formatString:format},
+        min:min,
+        tickInterval:interval
+      }
+    },
+    seriesDefaults: {
+      renderer:$.jqplot.BarRenderer,
+      rendererOptions: {
+        barPadding: 2,      // number of pixels between adjacent bars in the same
+        // group (same category or bin).
+        barMargin: 5,      // number of pixels between adjacent groups of bars.
+        barDirection: 'vertical', // vertical or horizontal.
+        barWidth: 14,     // width of the bars.  null to calculate automatically.
+        shadowOffset: 2,    // offset from the bar edge to stroke the shadow.
+        shadowDepth: 2,     // nuber of strokes to make for the shadow.
+        shadowAlpha: 0.8,   // transparency of the shadow.
+      }
+    },
+    highlighter: {
+      show: true,
+      sizeAdjust: 7.5
+    },
+    cursor: {
+      show: false
+    }
+  });
+}

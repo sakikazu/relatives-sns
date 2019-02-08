@@ -3,17 +3,17 @@
   <% albums.each do |album| -%>
     <div class="thumb">
       <div class="title">
-        <h4><span class="label label-danger"><i class="icon-th"></i> </span> <%= link_to album.title, album %></h4>
+        <h4><span class="badge badge-danger"><%= fa_icon 'th-large' %> </span> <%= link_to album.title, album %></h4>
         <div class="extra">
-          <i class='icon icon-comment'></i> <%= album.comments.size %>
+          <%= fa_icon 'comment', text: album.comments.size %>
         </div>
       </div>
       <div class="image jthumbnails"><%= link_to(image_tag(album.thumb.image(:thumb)), album) if album.thumb.present? %></div>
       <div class="info">
         <div>
           作成者：<%= album.user.try(:dispname) %><br />
-          作成：<%= l album.created_at if album.created_at %><br />
-          最新アップ：<%= l album.sort_at if album.sort_at %>
+          作成：<%= time_shorter(album.created_at) %><br />
+          最新アップ：<%= time_shorter(album.sort_at) %>
         </div>
       </div>
 

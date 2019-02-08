@@ -11,7 +11,7 @@
 <div class="once_content">
   <div class="info">
     作成者:<%= @movie.user.dispname %> | 
-    作成日時:<%= @movie.created_at.to_s(:long) if @movie.created_at %>
+    作成日時:<%= @movie.created_at.to_s(:normal) if @movie.created_at %>
   </div>
   <div class="description">
     <% if @movie.is_ready? %>

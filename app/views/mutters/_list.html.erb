@@ -14,7 +14,6 @@
   <% end -%>
 <% end -%>
 
-<div class="well">
 <div class="autopagerize_page_element">
   <ul class="mutter_rows">
     <%= render :partial => 'mutter_with_comments', :collection => @mutters %>
@@ -26,6 +25,5 @@
   <% # 通常時はページネーションは表示せず、AutoPagerによって読み込まれる -%>
   <div style="display:none"><%= paginate @mutters, remote: true, params: {action: "search", mutter: query, leave_me: (@leave_me.blank? ? "" : 1)} %></div>
 
-  <%= link_to "すべて見る", {:action => :all}, class: "btn" %>
+  <%= link_to "すべて見る", {:action => :all}, class: "btn btn-secondary btn-block" %>
 </div> <!-- autopagerize_page_element -->
-</div>

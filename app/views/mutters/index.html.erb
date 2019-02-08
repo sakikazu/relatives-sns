@@ -65,7 +65,9 @@
 
     <div class="mgn-t40 text-center">
       <%#= link_to "もっと見る", "javascript:void(0)", {id: "show_more", class: "left btn"} %>
-      <div id="autopager_loading" class="btn btn-warning btn-block"><i class="icon-refresh"></i>　次のページを読込中です　<i class="icon-refresh"></i></div>
+      <div id="autopager_loading" class="btn btn-warning btn-block">
+        <%= fa_icon 'refresh', class: 'fa-spin' %>　次のページを読込中です　<%= fa_icon 'refresh', class: 'fa-spin' %>
+      </div>
     </div>
 
   </div> <!-- #mutter -->

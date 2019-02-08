@@ -1,4 +1,4 @@
-<li>
+<li class='bg-light'>
 <%= render 'mutters/mutter', mutter: mutter_with_comments %>
 
 <!-- つぶやきへのレス -->
@@ -9,7 +9,7 @@
 
     <% count = mutter_with_comments.children.size -%>
     <% if count > Mutter::VISIBLE_INITIAL_COMMENTS -%>
-      <div class="btn btn-light btn-block" onclick="javascript:showComments(this)"><i class="icon-plus"></i> 全部見る <i class="icon-plus"></i></div>
+      <div class="btn btn-light btn-block" onclick="javascript:showComments(this)"><%= fa_icon 'plus' %> 全部見る <%= fa_icon 'plus' %></div>
     <% end -%>
     <% mutter_with_comments.children.reverse.each_with_index do |child, idx| -%>
       <% if idx + Mutter::VISIBLE_INITIAL_COMMENTS < count -%>
