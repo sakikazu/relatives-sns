@@ -70,6 +70,11 @@ $ nginx -s reload
 - Twitter bootstrap 4
 - colorboxは、サムネイル画像のリンクからリンク先の大きな画像を取得してモーダルで表示するというbootstrapでは実現できない機能を持つので使っていきたい
 - メール送信のSMTPにGmailの個人アカウントを使用
+  - TODO: サーバーにpostfixが動いているかもしれないので不要かも
+- Google Maps API: メンバーの住所の地図機能
+  - 使っているのは多分「Maps JavaScript API」のみ。月の無料枠内で収まるはず。
+  - https://cloud.google.com/maps-platform/
+    - コンソールの「IAMと管理」の「割り当て」から使用量が確認できる
 
 # Configuration
 
