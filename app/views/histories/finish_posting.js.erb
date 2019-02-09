@@ -1,17 +1,16 @@
-<% if @history.errors.any? %>
+<% if @errors.present? %>
   $('#error_message').show();
-  <% @history.errors.full_messages.each do |msg| %>
+  <% @errors.full_messages.each do |msg| %>
     $('#error_message > ul').append("<li><%= msg %></li>");
   <% end %>
 
 <% else %>
+  $('#error_message').hide();
   $('#history_data').html(
     '<%= escape_javascript(render "data") %>'
   );
-  $('#info')
-    .show()
-    .html('追加しました')
-    .hide(5000);
+  alert("<%= @success_message %>");
   $('#his_form form textarea').val("");
-  $(".colorbox").colorbox();
+  $('#historyFormModal').modal('hide');
+  $('[data-toggle="tooltip"]').tooltip();
 <% end %>

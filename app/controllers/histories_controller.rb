@@ -5,8 +5,7 @@ class HistoriesController < ApplicationController
   # GET /histories
   # GET /histories.xml
   def index
-    # todo
-    # 「内容」をクリックしたらcolorboxか別ページで表示して、コメントはそこでできるように。一覧ではコメント数は表示する
+    # todo: 「内容」をクリックしたらcolorboxか別ページで表示して、コメントはそこでできるように。一覧ではコメント数は表示する
     @histories = History.includes_all
     @history = History.new
 
@@ -18,12 +17,12 @@ class HistoriesController < ApplicationController
 
   def new
     @history = History.new
-    render "form", :layout => false
+    render partial: "form_modal", layout: false
   end
 
   # GET /histories/1/edit
   def edit
-    render "form", :layout => false
+    render partial: "form_modal", layout: false
   end
 
   # POST /histories
@@ -32,30 +31,24 @@ class HistoriesController < ApplicationController
     params[:history][:user_id] = current_user.id
     @history = History.new(history_params)
     if @history.save
-      # format.html { redirect_to(@history, :notice => 'History was successfully created.') }
-      # format.xml  { render :xml => @history, :status => :created, :location => @history }
-
-    #sakikazu memo ここ、Ajaxのエラーハンドリングはどうすべきなんだろう
+      @histories = History.includes_all
+      @success_message = '投稿しました'
     else
-      # format.html { render :action => "new" }
-      # format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
+      @errors = @history.errors
     end
-
-    @histories = History.includes_all
+    render 'finish_posting'
   end
 
   # PUT /histories/1
   # PUT /histories/1.xml
   def update
     if @history.update_attributes(history_params)
-      # format.html { redirect_to(@history, :notice => 'History was successfully updated.') }
-      # format.xml  { head :ok }
+      @histories = History.includes_all
+      @success_message = '更新しました'
     else
-      # format.html { render :action => "edit" }
-      # format.xml  { render :xml => @history.errors, :status => :unprocessable_entity }
+      @errors = @history.errors
     end
-
-    @histories = History.includes_all
+    render 'finish_posting'
   end
 
   # DELETE /histories/1
@@ -70,19 +63,21 @@ class HistoriesController < ApplicationController
   end
 
   def new_comment
-    @history = History.find(params[:history_id])
-    @comment = @history.comments.build
-    render :layout => false
+    history = History.find(params[:history_id])
+    @comment = history.comments.build
+    render layout: false
   end
 
   def create_comment
     @comment = Comment.new(comment_params)
     @comment.user_id = current_user.id
     if @comment.save
-      redirect_to(histories_path, :notice => "コメントしました")
+      @histories = History.includes_all
+      @success_message = '投稿しました'
     else
-      redirect_to(histories_path, :notice => "エラー：コメント内容を入力してください")
+      @errors = @comment.errors
     end
+    render 'finish_posting'
   end
 
   def destroy_comment

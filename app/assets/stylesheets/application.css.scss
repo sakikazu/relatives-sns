@@ -395,8 +395,11 @@ footer > p {
   font-weight: bold;
   color: red;
 }
-.big {
+.big, .text-big {
   font-size: 120%;
+}
+.text-small {
+  font-size: 80%;
 }
 .block {
   display: block;

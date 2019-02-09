@@ -249,6 +249,11 @@ ja:
         title: "グループタイトル"
         sort_no: "表示順"
 
+      history:
+        content: '内容'
+      comment:
+        content: '内容'
+
   views:
     pagination:
       previous: "<< 前ページ"
