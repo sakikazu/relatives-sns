@@ -18,15 +18,13 @@
           |  ※生年月日を登録している人のみ
 
 .card.mb30
-  .card-header.text-center
-    = toggle_link('みんなの新着情報', '#collapsed_update_histories_area')
+  .card-header.text-center みんなの新着情報
   .card-body
     = link_to '一気に見る', update_allview_mutters_path, class: "btn btn-danger btn-block"
-  #collapsed_update_histories_area[class='#{"collapse" if request.smart_phone?}']
-    table.table.table-striped.table-condensed
-      = render :partial => "update_history"
-    .mt10
-      = link_to "すべて見る", {:action => :update_history_all}, class: "btn btn-success btn-block"
+  table.table.table-striped.table-condensed
+    = render :partial => "update_history"
+  .mt10
+    = link_to "すべて見る", {:action => :update_history_all}, class: "btn btn-success btn-block"
 
 .card.mb30
   .card-header.text-center

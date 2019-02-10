@@ -96,6 +96,41 @@
 /**********************************************
  mutter
 **********************************************/
+#slider_photo {
+  position: relative;
+
+  #slider_update_info {
+    z-index: 100;
+    background-color: black;
+    opacity: 0.8;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    font-size: 2em;
+    padding: 20px;
+    text-align: center;
+    color: yellow;
+  }
+}
+
+.view_updated_contents {
+  padding: 7px 8px;
+
+  .message {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+  .buttons {
+    text-align: right;
+    a {
+      color: white;
+      padding-right: 5px
+    }
+  }
+}
+
 #mutter .leave_me {
   margin-top: 15px;
 }

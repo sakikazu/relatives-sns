@@ -25,54 +25,11 @@
   <% else %>
   var current_user = null;
   <% end %>
-
-$(document).on('turbolinks:load', function() {
-//更新情報一括閲覧
-<% if @ups_action_info -%>
-  $('<div><%= @ups_action_info %></div>')
-    .appendTo($('body'))
-    .css({
-      "position" : "fixed",
-      "top" : "140px",
-      "right" : "10px",
-      "height" : "40px",
-      "line-height" : "35px",
-      "text-align" : "center",
-      "z-index" : 100,
-      "background-color" : "yellow",
-      "font-size" : "25px",
-      "opacity" : "0.8",
-    })
-
-<% end -%>
-
-<% if @ups_page -%>
-  $('<div><%= link_to '次へ', update_allview_mutters_path(:ups_page => @ups_page) %></div>')
-    .appendTo($('body'))
-    .css({
-      "position" : "fixed",
-      "top" : "200px",
-      "right" : "10px",
-      "width" : "130px",
-      "height" : "50px",
-      "line-height" : "45px",
-      "text-align" : "center",
-      "z-index" : 100,
-      "background-color" : "yellow",
-      "font-size" : "30px",
-      "opacity" : "0.8",
-    })
-<% end -%>
-
-});
 </script>
 
  </head>
  <body id="<%= controller.controller_name %>_controller">
-   <!-- 黒背景にして前面にアクションを起こすためのもの。お祝い表示などで使用 -->
-   <div id="background_black" style="display:none"></div>
-
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb20">
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
      <a class="navbar-brand" href="/">AdanHP</a>
      <% if current_user.present? %>
      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
@@ -128,14 +85,23 @@ $(document).on('turbolinks:load', function() {
      <% end %>
    </nav>
 
+   <% if @ups_action_info -%>
+     <div class='view_updated_contents bg-secondary text-warning border border-warning'>
+       <div class='message'><%= @ups_action_info %></div>
+       <div class='buttons'>
+         <%= link_to fa_stacked_icon('chevron-right', text: '次へ'), update_allview_mutters_path(ups_page: @ups_page) if @ups_page %>
+         <%= link_to fa_stacked_icon('home', text: '戻る'), root_path %>
+       </div>
+     </div>
+   <% end -%>
+
    <% if @slideshow_visible %>
-     <div id="slider_update_info" class="alert alert-success text-center important" style="display:none">↓ 変更しました ↓</div>
      <div id="slider_photo">
        <%= render "mutters/slider" %>
      </div>
    <% end %>
 
-  <div class="container-fluid">
+  <div class="container-fluid mt30">
     <%= bootstrap_flash %>
     <div class="row justify-content-center">
       <%= yield %>

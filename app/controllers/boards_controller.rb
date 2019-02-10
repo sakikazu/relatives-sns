@@ -2,6 +2,7 @@ class BoardsController < ApplicationController
   before_action :authenticate_user!
   before_action :page_title
   before_action :set_board, only: [:show, :edit, :update, :destroy]
+  before_action :set_ups_data, only: [:show]
 
   # GET /boards
   # GET /boards.xml
@@ -31,9 +32,6 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.xml
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @board }

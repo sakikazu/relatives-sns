@@ -20,16 +20,21 @@ class ApplicationController < ActionController::Base
 
 private
 
-  # トップページから、更新情報を元に更新内容を一括で閲覧するためのデータ取得
-  def update_allview_helper(page, ups_id)
+  # トップページから、UpdateHistoryを元に更新内容をそれぞれのページで閲覧するためのデータ
+  def set_ups_data
+    @ups_page = nil
+    @ups_action_info = nil
+
+    page = params[:ups_page]
+    ups_id =  params[:ups_id]
     if page.present? and ups_id.present?
       up = UpdateHistory.find(ups_id)
-      ai = UpdateHistory::ACTION_INFO[up.action_type]
-      #ai.infoから先頭一文字(「に」とか入ってるから)を除く
-      msg = "#{up.user.dispname}が#{ai[:info][1, ai[:info].length]}"
-      return page.to_i, msg
-    else
-      return nil, nil
+      action_info = UpdateHistory::ACTION_INFO[up.action_type]
+      msg = action_info[:info]
+      # infoから先頭一文字(「に」とか入ってるから)を除く
+      msg = msg[1, msg.length]
+      @ups_action_info = "#{up.user&.dispname}が#{msg}"
+      @ups_page = page.to_i
     end
   end
 

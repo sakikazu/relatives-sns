@@ -2,6 +2,7 @@ class MoviesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_movie, only: [:show, :edit, :update, :destroy]
   before_action :init
+  before_action :set_ups_data, only: [:show]
 
   # GET /movies
   # GET /movies.xml
@@ -23,9 +24,6 @@ class MoviesController < ApplicationController
   # GET /movies/1
   # GET /movies/1.xml
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @movie }

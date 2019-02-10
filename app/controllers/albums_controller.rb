@@ -3,6 +3,7 @@ class AlbumsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_album, only: [:show, :edit, :update, :destroy, :download]
   before_action :init
+  before_action :set_ups_data, only: [:show]
 
   # GET /albums
   # GET /albums.json
@@ -51,9 +52,6 @@ class AlbumsController < ApplicationController
   # GET /albums/1
   # GET /albums/1.json
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
     uploader = nil
     @sort_flg = 2
     @media_filter = 1

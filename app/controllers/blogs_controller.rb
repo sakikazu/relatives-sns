@@ -2,6 +2,7 @@ class BlogsController < ApplicationController
   before_action :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
   before_action :set_blog, only: [:show, :edit, :update, :destroy]
   before_action :init
+  before_action :set_ups_data, only: [:show]
 
   # GET /blogs
   # GET /blogs.xml
@@ -33,8 +34,6 @@ class BlogsController < ApplicationController
   # GET /blogs/1
   # GET /blogs/1.json
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
     @new_comment = @blog.comments.build
 
     respond_to do |format|

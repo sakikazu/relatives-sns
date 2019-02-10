@@ -312,55 +312,33 @@ class MuttersController < ApplicationController
 
   # 更新情報一括閲覧
   def update_allview
-    next_page = params[:ups_page].blank? ? 0 : params[:ups_page].to_i
-    if next_page > 0
-      up_prev = UpdateHistory.view_offset(next_page - 1).first
-      up_current = UpdateHistory.view_offset(next_page).first
-      up, next_page = recursive_for_update_all_view(up_prev, up_current, next_page)
-    else
-      up = UpdateHistory.view_offset(next_page).first
-    end
-
-    if up.blank?
+    update_history = UpdateHistory.next_by_offset(params[:ups_page])
+    if update_history.blank?
       redirect_to root_path
       return
     end
 
-    @ups_page = next_page + 1
-
-    ai = UpdateHistory::ACTION_INFO[up.action_type]
-    case up.action_type
+    ups_options = { ups_page: update_history.next_page, ups_id: update_history.id }
+    case update_history.action_type
     when UpdateHistory::ALBUM_CREATE
-      redirect_to album_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(update_history.content, ups_options)
     when UpdateHistory::ALBUM_COMMENT
-      redirect_to album_path(up.content, focus_comment: 1, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(update_history.content, { focus_comment: 1 }.merge(ups_options))
     when UpdateHistory::ALBUMPHOTO_CREATE
-      redirect_to album_path(up.content, "album[sort_flg]" => 1, "album[user_id]" => up.user_id, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(update_history.content, { "album[sort_flg]" => 1, "album[user_id]" => update_history.user_id }.merge(ups_options))
     when UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO
-      redirect_to album_photo_path(up.content.album, up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_photo_path(update_history.content.album, update_history.content, ups_options)
     when UpdateHistory::BOARD_CREATE, UpdateHistory::BOARD_COMMENT
-      redirect_to board_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to board_path(update_history.content, ups_options)
     when UpdateHistory::MOVIE_CREATE, UpdateHistory::MOVIE_COMMENT
-      redirect_to movie_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to movie_path(update_history.content, ups_options)
     when UpdateHistory::BLOG_CREATE, UpdateHistory::BLOG_COMMENT
-      redirect_to blog_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to blog_path(update_history.content, ups_options)
     end
   end
-
 
 
   private
-  def recursive_for_update_all_view(prev, current, next_page)
-    return nil, nil if prev.blank? or current.blank?
-    if prev.content == current.content
-      next_page += 1
-      up_next = UpdateHistory.view_offset(next_page).first
-      recursive_for_update_all_view(current, up_next, next_page)
-    else
-      return current, next_page
-    end
-  end
-
 
   #
   # 新規レス用のオブジェクト生成
