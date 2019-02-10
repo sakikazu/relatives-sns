@@ -5,14 +5,13 @@
 - content_for :add_js do
   javascript:
     $('#historyFormModal').on('show.bs.modal', function (event) {
-      $('.modal-content').html('');
       var button = $(event.relatedTarget);
       var path = button.data('path');
       $.ajax({
         type: 'GET',
         url: path,
         success: function(html) {
-          $('.modal-content').append(html);
+          $('.modal-content').html(html);
         }
       });
     });

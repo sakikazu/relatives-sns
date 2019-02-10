@@ -1,0 +1,29 @@
+/ modalのコンテンツの部分のみ
+.modal-header
+  h5.modal-title #{@celebration.user.dispname}さんへのお祝い
+  button.close[type="button" data-dismiss="modal"]
+    span &times;
+.modal-body
+  - unless @celebratable
+    p.big.important
+      | 今回は既にお祝いしています。
+
+  - else
+    - # note: 同じ人に複数の人が祝う場合はオブジェクトはupdateとなるので、method: :postの指定がないとcelebration_create_mutters_pathの設定はroutesには:postでしか存在しないので無視され、今度はオブジェクトによって判定されてしまい、結局、「update」アクションと解釈されてしまう。いやまあ単純な話ですた。。
+    = form_for @celebration, url: celebration_create_mutters_path, html: {multipart: true}, method: :post do |f|
+      = f.hidden_field :anniversary_at
+      = f.hidden_field :user_id
+      = fields_for @mutter do |ff|
+        = ff.label '自由にメッセージを変更してください'
+        br
+        = ff.text_area :content, class: "form-control", rows: 2
+        br
+        = ff.file_field :image
+        = ff.hidden_field :user_id
+      .mt20
+        = f.submit '祝う', class: "btn btn-primary btn-lg"
+    ul.well.well-narrow.mt30.p-3.pl-4.text-muted.text-small
+      li つぶやきにも追加されます。
+      li 投稿後に削除したい場合、つぶやきから削除すればOKです。
+      li 当日以降は、お祝いは親戚ページの個人ページで見れます。
+

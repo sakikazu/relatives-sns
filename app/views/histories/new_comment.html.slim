@@ -4,7 +4,7 @@
   button.close[type="button" data-dismiss="modal"]
     span &times;
 .modal-body
-  #his_form.mgn-b20.mgn-t20
+  #his_form
     = form_for @comment, url: create_comment_histories_path, remote: true do |f|
       #error_message.alert.alert-danger[style="display:none;"]
         p

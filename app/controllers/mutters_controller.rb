@@ -251,29 +251,24 @@ class MuttersController < ApplicationController
   def celebration_new
     # お祝いする対象ユーザーの今日か昨日のCelebrationデータを取得
     user = User.find(params[:user_id])
-    celeb = Celebration.where(:anniversary_at => [Date.today, Date.today - 1.day], :user_id => user.id).first
-    if celeb.present?
-      if celeb.mutters.where(:user_id => current_user.id).present?
-        @flag = false
+    @celebration = Celebration.where(:anniversary_at => [Date.today, Date.today - 1.day], :user_id => user.id).first
+    @celebratable = true
+    celebration_mutter_params = { user_id: current_user.id, content: 'おめでとう！' }
+    if @celebration.present?
+      if @celebration.mutters.where(:user_id => current_user.id).present?
+        @celebratable = false
       else
-        @mutter = celeb.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
-        @flag = true
+        @mutter = @celebration.mutters.new(celebration_mutter_params)
       end
-      @celebration = celeb
     else
       @celebration = Celebration.new(:anniversary_at => Date.today, :user_id => user.id)
-      @mutter = @celebration.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
-      @flag = true
+      @mutter = @celebration.mutters.new(celebration_mutter_params)
     end
-    render :layout => "simple"
+    render layout: false
   end
 
   def celebration_create
-    @celebration = Celebration.where(celebration_params).first
-    if @celebration.blank?
-      @celebration = Celebration.create(celebration_params)
-    end
-
+    @celebration = Celebration.where(celebration_params).first || Celebration.create(celebration_params)
     params[:mutter].merge!(Mutter.extra_params(current_user, request, @celebration.id))
     Mutter.create(mutter_params)
     redirect_to({:action => :index}, :notice => 'お祝いをしました。「お祝いを見る」から確認できます。')
