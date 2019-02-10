@@ -158,8 +158,9 @@ class MuttersController < ApplicationController
 
     updates_count = request.smart_phone? ? 5 : 10
     @updates = UpdateHistory.view_normal.limit(updates_count)
-    login_users_count = request.smart_phone? ? 7 : 40
+    login_users_count = 40
     @login_users = User.requested_users(login_users_count)
+    @login_users_hidden_cnt = 10
 
     # from lesys
     @fix_title = ""
