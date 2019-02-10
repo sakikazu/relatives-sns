@@ -1,0 +1,60 @@
+.col-sm-3
+  = render 'top_left_sidebar'
+.col-sm-6
+  #mutter.clearfix
+    #form.well.well2
+      = simple_form_for @mutter, html: {multipart: true}, remote: true do |f|
+        .row.justify-content-center
+          .col-sm-8
+            = f.text_area :content, rows: 3, class: "form-control", placeholder: "つぶやき"
+            br
+            = f.hidden_field :user_id
+            - if request.smart_phone?
+              = f.file_field :image
+            - else
+              .custom-file
+                = f.file_field :image, class: 'custom-file-input', id: 'customFile'
+                label.custom-file-label[for="customFile"]
+                  | 写真や動画がアップロードできます
+          .col-sm-3
+            br
+            = f.submit "投稿する", class: "btn btn-primary btn-large", :data => {:disable_with => "投稿中..."}
+            .leave_me
+              = f.check_box :leave_me, value: "1"
+              = f.label :leave_me, "ひとりごと"
+
+    #create_notification.alert.alert-success.text-center.important[style="display:none"]
+      | つぶやきを投稿しました
+      - #= @create_notification
+
+    = form_for @mutter, url: search_mutters_path, :remote => true, :method => :get, html: {id: 'search_form'} do |f|
+      .row.no-gutters.well.justify-content-center
+        - # [memo] このinput textはspanX指定のみだとAndroidのChromeでフォームが横に飛び出してしまった。
+        -              #   text_fieldではデフォルトでsizeが30になるらしく、Androidではそれが影響していた。
+        -              #   なので、sizeを小さめにして最小のサイズとしつつ、spanXが最大のサイズとして設定されるようにした
+        = f.text_field :search_word, size: 15, class: "col-sm-6"
+        = f.select :user_id, User.all.map{|u| [u.dispname, u.id]}, {include_blank: true}, {class: "col-sm-3"}
+        = f.hidden_field :action_flg
+        .btn-group
+          button.btn.dropdown-toggle[data-toggle="dropdown"]
+            |  検索
+            span.caret
+          .dropdown-menu
+            = link_to "発言内容から検索", "#", {class: "js_search_mutter dropdown-item", rel: "1"}
+            = link_to "画像か動画を含むもの", "#", {class: "js_search_mutter dropdown-item", rel: "2"}
+            = link_to "URLを含むもの", "#", {class: "js_search_mutter dropdown-item", rel: "3"}
+            .dropdown-divider
+            strike
+              = link_to "詳細検索", action: :all, class: 'dropdown-item'
+            | まだできてない 
+    #mutter_data
+      / - cache :mutter_data do
+      = render :partial => "list"
+
+    .mgn-t40.text-center
+      - #= link_to "もっと見る", "javascript:void(0)", {id: "show_more", class: "left btn"}
+      #autopager_loading.btn.btn-warning.btn-block
+        = fa_icon 'refresh', class: 'fa-spin'
+        | 　次のページを読込中です　
+        = fa_icon 'refresh', class: 'fa-spin'
+

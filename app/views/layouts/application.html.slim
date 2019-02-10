@@ -1,0 +1,99 @@
+doctype html
+html[lang="ja"]
+  head
+    meta[charset="utf-8"]
+    meta[http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"]
+    meta[name="viewport" content="width=device-width, initial-scale=1.0"]
+    title
+      = page_title
+    = csrf_meta_tags
+    = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+    - if current_user.present?
+      javascript:
+        var current_user = {
+          id: #{current_user.id},
+          is_admin: #{current_user.admin? ? 'true' : 'false'},
+        }
+    - else
+      javascript:
+        var current_user = null;
+
+  body[id="#{controller.controller_name}_controller"]
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      a.navbar-brand[href="/"] AdanHP
+      - if current_user.present?
+        button.navbar-toggler[type="button" data-toggle="collapse" data-target="#navbarSupportedContent"]
+          span[clas="navbar-toggler-icon"]
+        #navbarSupportedContent.collapse.navbar-collapse
+          ul.navbar-nav.mr-auto
+            li.nav-item[class='#{controller.controller_name == "nices" ? "active" : ""}']
+              = link_to "人気", nices_path, class: 'nav-link'
+            li.nav-item[class='#{controller.controller_name =~ /albums|movies/ ? "active" : ""}']
+              = link_to "アルバム", top_albums_path, class: 'nav-link'
+            li.nav-item[class='#{controller.controller_name == "blogs" ? "active" : ""}']
+              = link_to "日記", blogs_path, class: 'nav-link'
+            li.nav-item[class='#{controller.controller_name == "boards" ? "active" : ""}']
+              = link_to "掲示板", boards_path, class: 'nav-link'
+            li.nav-item[class='#{controller.controller_name == "histories" ? "active" : ""}']
+              = link_to "年表", histories_path, class: 'nav-link'
+            li.nav-item[class='#{controller.controller_name == "members" ? "active" : ""}']
+              = link_to "親戚データ", relation_members_path, class: 'nav-link'
+
+          ul.navbar-nav.justify-content-end
+            - # プロフィールメニュー
+            li.nav-item.dropdown
+              a.nav-link.dropdown-toggle[href="#" data-toggle="dropdown"]
+                = image_tag current_user.user_ext.image(:small), class: 'rounded-circle', size: '35x35', style: 'margin:-8px 0 -8px;'
+                =< current_user.dispname(User::FULLNAME)
+              .dropdown-menu
+                = link_to 'プロフィール編集', edit_me_members_path, class: 'dropdown-item'
+                = link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしますか？"}, class: 'dropdown-item'
+            - # その他メニュー
+            li.nav-item.dropdown
+              a.nav-link.dropdown-toggle[href="#" data-toggle="dropdown"]
+                | その他メニュー
+              .dropdown-menu.dropdown-menu-right
+                |  <a data-toggle="modal" href="#modalQR", class='dropdown-item'>QRコード
+                = link_to "その他", others_path, class: 'dropdown-item'
+                = link_to 'トップ写真の入れ替え', slider_update_mutters_path, remote: true, class: 'dropdown-item' if @slideshow_visible
+                strike
+                  | RSS
+                .dropdown-divider
+                = link_to 'このサイトについて', about_others_path, class: 'dropdown-item'
+            - # 管理者メニュー
+            - if current_user.admin?
+              li.nav-item.dropdown
+                a.nav-link.dropdown-toggle[href="#" data-toggle="dropdown"]
+                  | 管理者
+                .dropdown-menu.dropdown-menu-right
+                  = link_to "みんなのログイン履歴", login_history_members_path, class: "dropdown-item"
+
+    - if @ups_action_info
+      .view_updated_contents.bg-secondary.text-warning.border.border-warning
+        .message
+          = @ups_action_info
+        .buttons
+          = link_to fa_stacked_icon('chevron-right', text: '次へ'), update_allview_mutters_path(ups_page: @ups_page) if @ups_page
+          = link_to fa_stacked_icon('home', text: '戻る'), root_path
+
+    - if @slideshow_visible
+      #slider_photo
+        = render "mutters/slider"
+
+    .container-fluid.mt30
+      = bootstrap_flash
+      .row.justify-content-center
+        = yield
+
+    = render 'shared/qr_modal'
+
+    footer
+      #desktopnotification
+      p
+        | - AdanHP ( 2006-#{Date.today.year} ) -
+
+    - #= javascript_include_tag "application"
+    = yield :add_js
