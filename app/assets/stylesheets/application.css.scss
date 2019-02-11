@@ -161,68 +161,94 @@
 
 .mutter_content {
   position:relative;
-}
-.mutter_content .icon {
-  margin-left: 6px;
-  position:absolute;
-  top: 5px;
-  left: 0px;
-}
-.mutter_content .icon p {
-  margin: 4px 0px;
-}
-.mutter_content .icon p img {
-  border: 1px gray solid;
-  padding: 4px;
+
+  .delete > p {
+    text-align: right;
+    margin-bottom: 0;
+  }
+
+  .mutter-media {
+    margin-top: 18px;
+  }
 }
 
-.mutter_content .content-area {
-  margin-left: 78px;
-}
-.mutter_content .content {
-  padding: 5px 4px;
-}
-.mutter_content .mutter-media {
-  margin-top: 18px;
+// PC版
+.mutter_content {
+  .icon {
+    margin-left: 6px;
+    position:absolute;
+    top: 5px;
+    left: 0px;
+
+    p {
+      margin: 4px 0px;
+    }
+  }
+
+  .content-area {
+    margin-left: 75px;
+
+    .content {
+      padding: 10px 4px;
+    }
+  }
+
+  .info-area {
+    padding-bottom: 3px;
+    border-bottom: 1px dotted gray;
+    margin-bottom: 5px;
+    height: 30px;
+
+    .info-left {
+      position:absolute;
+      top: 0px;
+      left: 80px;
+      .time {
+        margin-left: 15px;
+        color: DimGray;
+      }
+      .name a{
+        font-weight: bold;
+        /* color: blue; */
+      }
+    }
+    .info-right {
+      position:absolute;
+      top: 0px;
+      right: 0px;
+      .nice {
+      }
+    }
+  }
 }
 
-.mutter_content .info-area {
-  padding-bottom: 3px;
-  border-bottom: 1px dotted gray;
-  margin-bottom: 5px;
-  height: 30px;
-}
-.mutter_content .info-area.smp {
-  height: 65px;
-}
+// スマホ版
+.mutter_content {
+  .info-area-smp {
+    border-bottom: 1px dotted gray;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
 
-.mutter_content .info-left {
-  position:absolute;
-  top: 0px;
-  left: 80px;
-}
-.mutter_content .info-left .time {
-  margin-left: 15px;
-  color: DimGray;
-}
-.mutter_content .info-left .name a{
-  font-weight: bold;
-  /* color: blue; */
-}
-.mutter_content .info-right {
-  position:absolute;
-  top: 0px;
-  right: 0px;
-}
-.mutter_content .info-right .nice {
-}
-.mutter_content .delete {
-  height: 30px;
-}
-.mutter_content .delete p {
-  position:absolute;
-  bottom: 0px;
-  right: 0px;
+    .icon {
+      margin-left: 6px;
+      position:absolute;
+      top: 5px;
+      left: 0px;
+
+      p {
+        margin: 4px 0px;
+      }
+    }
+    .info-area-right {
+      margin-left: 70px
+    }
+  }
+  .content-area-smp {
+    padding: 5px;
+    .content {
+      padding: 4px;
+    }
+  }
 }
 
 ul.children {
@@ -1017,11 +1043,6 @@ h3 {
 
 .well.well-narrow {
   padding: 6px 8px 0px 8px;
-}
-.well2 {
-  padding: 15px;
-  backgroud: #F7F0F0;
-  border-color: #BBD8E9;
 }
 
 .btn-light {

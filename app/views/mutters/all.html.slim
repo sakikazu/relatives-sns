@@ -1,0 +1,55 @@
+.col-sm-6
+  #mutter
+    .form-actions.mb30
+      = link_to 'トップに戻る', root_path, :class => "btn btn-light"
+      =< link_to 'グラフを見る', graph_mutters_path, :class => "btn btn-light"
+    .page-header
+      h3
+        | つぶやき総数 
+        .badge.badge-pill.badge-warning = @mutters.total_count
+    = paginate @mutters, window: 2, outer_window: 3
+
+    = form_for @mutter, url: search_mutters_path, method: :get, html: { class: 'form-inline d-inline' } do |f|
+      .row.no-gutters.well.justify-content-center
+        - # [memo] このinput textはspanX指定のみだとAndroidのChromeでフォームが横に飛び出してしまった。
+        -              #   text_fieldではデフォルトでsizeが30になるらしく、Androidではそれが影響していた。
+        -              #   なので、sizeを小さめにして最小のサイズとしつつ、spanXが最大のサイズとして設定されるようにした
+        = f.text_field :search_word, size: 15, class: "form-control col-sm-5"
+        = f.select :user_id, User.all.map{|u| [u.dispname, u.id]}, { prompt: '全メンバー対象' }, {class: "col-sm-3"}
+        = f.hidden_field :action_flg
+        .btn-group
+          button.btn.btn-info.dropdown-toggle[data-toggle="dropdown"]
+            |  検索
+            span.caret
+          .dropdown-menu#search_mutter_buttons
+            = link_to "発言内容から検索", "#", {class: "dropdown-item", rel: "1"}
+            = link_to "画像か動画を含むもの", "#", {class: "dropdown-item", rel: "2"}
+            = link_to "URLを含むもの", "#", {class: "dropdown-item", rel: "3"}
+            .dropdown-divider
+            strike 詳細検索
+            | まだできてない
+        .col-sm-2.ml10
+          = link_to '検索解除', all_mutters_path, class: 'btn btn-light'
+
+    .autopagerize_page_element
+      ul.mutter_rows
+        = render :partial => 'mutter_with_comments', :collection => @mutters
+      = paginate @mutters, window: 2, outer_window: 3
+    .mgn-t40.text-center
+      #autopager_loading.btn.btn-warning.btn-block
+        = fa_icon 'refresh', class: 'fa-spin'
+        | 　次のページを読込中です　
+        = fa_icon 'refresh', class: 'fa-spin'
+
+.col-sm-2.right_side_bar
+  .page-header
+    h3
+      | メンバー
+      .badge.badge-secondary
+        | ()内はつぶやき数
+  ul.pl-3
+    - @users.each do |user|
+      li
+        = link_to user.try(:dispname, User::FULLNAME), mutter_by_user_path(user.id)
+        | (#{@users_mcnt[user.id]})
+

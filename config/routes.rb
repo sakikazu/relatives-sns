@@ -5,18 +5,11 @@
 #                  new_user_session GET    /users/sign_in(.:format)                                                                 users/sessions#new
 #                      user_session POST   /users/sign_in(.:format)                                                                 users/sessions#create
 #              destroy_user_session DELETE /users/sign_out(.:format)                                                                users/sessions#destroy
-#                 new_user_password GET    /users/password/new(.:format)                                                            devise/passwords#new
-#                edit_user_password GET    /users/password/edit(.:format)                                                           devise/passwords#edit
-#                     user_password PATCH  /users/password(.:format)                                                                devise/passwords#update
-#                                   PUT    /users/password(.:format)                                                                devise/passwords#update
-#                                   POST   /users/password(.:format)                                                                devise/passwords#create
-#          cancel_user_registration GET    /users/cancel(.:format)                                                                  devise/registrations#cancel
-#             new_user_registration GET    /users/sign_up(.:format)                                                                 devise/registrations#new
-#            edit_user_registration GET    /users/edit(.:format)                                                                    devise/registrations#edit
-#                 user_registration PATCH  /users(.:format)                                                                         devise/registrations#update
-#                                   PUT    /users(.:format)                                                                         devise/registrations#update
-#                                   DELETE /users(.:format)                                                                         devise/registrations#destroy
-#                                   POST   /users(.:format)                                                                         devise/registrations#create
+#                 new_user_password GET    /users/password/new(.:format)                                                            users/passwords#new
+#                edit_user_password GET    /users/password/edit(.:format)                                                           users/passwords#edit
+#                     user_password PATCH  /users/password(.:format)                                                                users/passwords#update
+#                                   PUT    /users/password(.:format)                                                                users/passwords#update
+#                                   POST   /users/password(.:format)                                                                users/passwords#create
 #            new_admin_user_session GET    /admin_users/sign_in(.:format)                                                           devise/sessions#new
 #                admin_user_session POST   /admin_users/sign_in(.:format)                                                           devise/sessions#create
 #        destroy_admin_user_session DELETE /admin_users/sign_out(.:format)                                                          devise/sessions#destroy
@@ -24,13 +17,11 @@
 #                               api        /                                                                                        API
 #               edit_account_member GET    /members/:id/edit_account(.:format)                                                      members#edit_account
 #             update_account_member PATCH  /members/:id/update_account(.:format)                                                    members#update_account
-#              finish_create_member GET    /members/:id/finish_create(.:format)                                                     members#finish_create
 #                  relation_members GET    /members/relation(.:format)                                                              members#relation
-#                   edit_ex_members GET    /members/edit_ex(.:format)                                                               members#edit_ex
+#                   edit_me_members GET    /members/edit_me(.:format)                                                               members#edit_me
 #                       map_members GET    /members/map(.:format)                                                                   members#map
 #                       all_members GET    /members/all(.:format)                                                                   members#all
 #             login_history_members GET    /members/login_history(.:format)                                                         members#login_history
-#                 update_ex_members PUT    /members/update_ex(.:format)                                                             members#update_ex
 #                           members GET    /members(.:format)                                                                       members#index
 #                                   POST   /members(.:format)                                                                       members#create
 #                        new_member GET    /members/new(.:format)                                                                   members#new
@@ -129,7 +120,6 @@
 #                     graph_mutters GET    /mutters/graph(.:format)                                                                 mutters#graph
 #            update_allview_mutters GET    /mutters/update_allview(.:format)                                                        mutters#update_allview
 #              update_check_mutters GET    /mutters/update_check(.:format)                                                          mutters#update_check
-#               update_disp_mutters GET    /mutters/update_disp(.:format)                                                           mutters#update_disp
 #        update_history_all_mutters GET    /mutters/update_history_all(.:format)                                                    mutters#update_history_all
 #                       all_mutters GET    /mutters/all(.:format)                                                                   mutters#all
 #                    search_mutters GET    /mutters/search(.:format)                                                                mutters#search

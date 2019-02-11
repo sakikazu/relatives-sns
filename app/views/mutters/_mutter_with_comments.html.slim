@@ -1,0 +1,40 @@
+li.bg-light
+  = render 'mutters/mutter', mutter: mutter_with_comments
+
+  / つぶやきへのレス
+  - has_children = mutter_with_comments.children.present?
+  ul[class="children" style="display:#{has_children ? 'block' : 'none'}"]
+    - if has_children
+      - #childrenはつぶやき時間昇順で表示する
+      - count = mutter_with_comments.children.size
+      - if count > Mutter::VISIBLE_INITIAL_COMMENTS
+        .btn.btn-light.btn-block[onclick="javascript:showComments(this)"]
+          | #{fa_icon 'plus'} 全部見る #{fa_icon 'plus'}
+      - mutter_with_comments.children.reverse.each_with_index do |child, idx|
+        li.clearfix[class="#{'last_children' if idx + 1 == count}" style="#{'display:none' if idx + Mutter::VISIBLE_INITIAL_COMMENTS < count}"]
+          = render 'mutters/mutter', mutter: child
+
+  / レス用モーダル
+  .modal.fade.modal-mutter-reply[id="myModal#{mutter_with_comments.id}"]
+    .modal-dialog
+      .modal-content
+        - mutter = Mutter.new(reply_id: mutter_with_comments.id)
+        = form_for mutter, html: {multi_part: true}, remote: true do |f|
+          .modal-header
+            h3.modal-title 返信
+            button.close[type="button" data-dismiss="modal"]
+              span &times;
+          .modal-body
+            .clearfix
+              .left
+                = f.text_area :content, rows: 3, class: "form-control", placeholder: "「#{mutter_with_comments.content}」へのレス", tabindex: 20
+                br
+                = f.file_field :image, class: 'form-control'
+                = f.hidden_field :reply_id
+              .left
+                br
+          .modal-footer
+            button.btn.btn-light[type="button" data-dismiss="modal"]
+              | キャンセル
+            = f.submit "返信する", class: "btn btn-primary", :data => {:disable_with => "投稿中..."}, tabindex: 21
+

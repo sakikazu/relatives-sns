@@ -25,6 +25,7 @@ class Mutter < ApplicationRecord
 
   # kaminari
   paginates_per 7
+  PAGINATES_PER_FOR_ALL = 15
 
   belongs_to :user
   belongs_to :celebration, optional: true
@@ -64,8 +65,6 @@ class Mutter < ApplicationRecord
     # :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
   # validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
-
-  scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
 
   # [memo]こうやってそれぞれにuser、user_extを指定するようにすると、最初のリクエスト時にはやっぱ時間短縮されてる。
   # 二度目のリクエストではキャッシュされるらしく、それぞれに指定しなかった時と同じ速度になる。
@@ -208,6 +207,17 @@ class Mutter < ApplicationRecord
 
   def user_image_path
     user.present? ? user.user_ext.image(:small) : "noimage.gif"
+  end
+
+  def self.count_unread_leave_me_mutters(user, shown_leave_me)
+    if shown_leave_me.present?
+      user.save_extension(UserExtension::LAST_READ_LEAVE_ME_AT, Time.now())
+      return 0
+    else
+      ext = user.find_extension(UserExtension::LAST_READ_LEAVE_ME_AT)
+      last_read_at = ext.present? ? ext[:value] : Time.parse("2000/1/1")
+      return self.parents_mod.where(leave_me: true).where.not(user_id: user.id).where("created_at > ?", last_read_at).count
+    end
   end
 
   private

@@ -4,15 +4,13 @@ $(document).on('turbolinks:load', function() {
     showMutterDeleteLink();
   }
 
-// つぶやき検索
-$('#search_form a.js_search_mutter').on('click', function() {
-  $form = $('form#search_form');
-  $('#mutter_action_flg', $form).val($(this).attr('rel'));
-  // TODO: form_for remote:true のフォームだが、Rails5とかにバージョンアップしたらAjaxじゃなくなった。JSのsubmit()でやったからか？UIの考慮から
-  // この仕様でやるなら、jQueryでAjaxしよう（https://qiita.com/HrsUed/items/795799f511f5717c181a）
-  $form.submit();
-  return false;
-});
+  // つぶやき検索
+  $('#search_mutter_buttons > a').on('click', function() {
+    $form = $(this).closest('form');
+    $form.find('#mutter_action_flg').val($(this).attr('rel'));
+    $form.submit();
+    return false;
+  });
 
 // Ajax用エラーハンドリング
 //$("form#new_mutter:first").bind('ajax:error', function(XMLHttpRequest, textStatus, errorThrown) {
@@ -48,9 +46,9 @@ function showMutterDeleteLink() {
     return;
   }
   if (current_user.is_admin) {
-    $('.content-area > .delete').show();
+    $('.mutter_content .delete').show();
   } else {
-    $('.content-area > .delete[data-mutter-id=' + current_user.id + ']').show();
+    $('.mutter_content .delete[data-mutter-id=' + current_user.id + ']').show();
   }
 }
 

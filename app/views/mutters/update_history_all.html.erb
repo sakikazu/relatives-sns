@@ -1,5 +1,9 @@
 <div class="col-sm-5">
 
+<div class="mb40">
+  <%= link_to 'トップに戻る', root_path, class: 'btn btn-light' %>
+</div>
+
 <div id="update_history">
   <%= paginate @updates, window: 3, outer_window: 2 %>
   <table class="table table-striped table-condensed mgn-t20">

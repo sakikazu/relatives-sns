@@ -4,7 +4,6 @@ class MuttersController < ApplicationController
   after_action :update_request_at, only: [:index, :create]
 
   before_action :authenticate_user!, :except => :rss
-  before_action :set_new_mutter_obj, only: [:index, :all, :search]
   # todo 2014-05-12
   # cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
@@ -51,17 +50,16 @@ class MuttersController < ApplicationController
   end
 
 
+  # TODO: allに統合したいけど、これなくして大丈夫かなー。
+  # あとleave_meは_listからのページネーションによる検索のなごりやな。修正する
   #
   # つぶやき検索
   # (親子構造にせず、フラットに表示する）
-  # mutters#indexからはAjaxで呼ばれる
-  # mutters#allからはgetで呼ばれる
   #
   def search
     if params["mutter"].blank? or params["mutter"]["action_flg"].blank? # mutters#indexでAutoPagerで読み込まれた場合
       @action_flg = 0
     else
-      params[:mutter] = params["mutter"]
       @action_flg = params[:mutter][:action_flg].to_i
       @search_word = params[:mutter][:search_word]
       @user_id = params[:mutter][:user_id]
@@ -88,27 +86,18 @@ class MuttersController < ApplicationController
     # 「ひとりごと」
     @mutters = @mutters.where(leave_me: @leave_me)
 
-    @mutters = @mutters.page(params[:page])
+    @mutters = @mutters.page(params[:page]).per(Mutter::PAGINATES_PER_FOR_ALL)
 
     # 検索ワードを画面に表示し続けるため
     @mutter = Mutter.new(mutter_params) if params[:mutter].present?
 
-    # 検索時は右サイドバーを出さないように
-    # （理由は右サイドバーを表示するためのデータ取得をやりたくないからだったはず）
-    @action_is_search = true
+    # todo: allアクションにまとめることができれば、このサイドバーのためのデータは不要
+    @users_mcnt = Mutter.group(:user_id).count
+    @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
 
-    if request.xhr?
-      if params[:page].present?
-        render partial: 'list'
-      else
-        render 'search.js'
-      end
-      return
-    else
-      respond_to do |format|
-        format.html {render :action => "all"}
-        format.js
-      end
+    respond_to do |format|
+      format.html {render :action => "all"}
+      format.js
     end
   end
 
@@ -140,57 +129,40 @@ class MuttersController < ApplicationController
   end
 
   def all
-#sakimura ↓だとMutterすべてのレコードのカウントをJOINして出すので時間かかってる。kaminariならそんなことないのかなぁ。limit(30)とかやってもダメね。
-    # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
-#sakimura ページネート時のフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
-#todo kaminariにしてみたけどincludeしたらどうなる？？
-    @mutters = Mutter.includes_all.user_is(params[:user_id]).parents_mod.page(params[:page]).per(15)
+    #todo 速度を調査してみる
+    @mutters = Mutter.includes_all
+    # user_idが指定された時は、レスも含めて表示する
+    @mutters = if params[:user_id].present?
+                 @mutters.where(user_id: params[:user_id])
+               else
+                 @mutters.parents_mod
+               end
+    @mutters = @mutters.page(params[:page]).per(Mutter::PAGINATES_PER_FOR_ALL)
 
-    unless read_fragment :mutter_by_user
-      @users_mcnt = Mutter.group(:user_id).count
-      @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
-    end
+    opts = params[:user_id].present? ? { user_id: params[:user_id] } : {}
+    @mutter = Mutter.new(opts)
+
+    @users_mcnt = Mutter.group(:user_id).count
+    @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
   end
 
   def index
-    @slideshow_visible = true
-    @page_title = "トップ"
-
-    updates_count = request.smart_phone? ? 5 : 10
-    @updates = UpdateHistory.view_normal.limit(updates_count)
-    login_users_count = 40
-    @login_users = User.requested_users(login_users_count)
-    @login_users_hidden_cnt = 10
-
-    # from lesys
-    @fix_title = ""
-    #sakikazu ↓は、includesだったら、関連先が存在しないデータでも取得されてしまって不都合になるんだけど、joinsなら存在するデータのみなので良い。
-    #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
-    # @mutters = mutter.includes_all.id_desc.limit(30)
-
-    # つぶやき時間降順で親つぶやきのみを取得
+    @leave_me = params[:leave_me].blank? ? false : true
     # unless read_fragment :mutter_data
     @mutters = Mutter.includes_all.parents_mod.page(params[:page])
     # end
-
-    @leave_me = params[:leave_me].blank? ? false : true
-    if @leave_me.present?
-      current_user.save_extension(UserExtension::LAST_READ_LEAVE_ME_AT, Time.now())
-      @count_unread_leave_me_mutters = 0
-    else
-      ext = current_user.find_extension(UserExtension::LAST_READ_LEAVE_ME_AT)
-      last_read_at = ext.present? ? ext[:value] : Time.parse("2000/1/1")
-      @count_unread_leave_me_mutters = @mutters.where(leave_me: true).where.not(user_id: current_user.id).where("created_at > ?", last_read_at).count
-    end
     @mutters = @mutters.where(leave_me: @leave_me)
+    @mutter = Mutter.new(user_id: current_user.id)
+    @count_unread_leave_me_mutters = Mutter.count_unread_leave_me_mutters(current_user, @leave_me)
 
-    @album_thumbs = Photo.rnd_photos
+    # TODO: もっとうまいことやりたい
+    # autopagerizeで読み込まれた場合
+    if params[:page].present?
+      render partial: 'list'
+      return
+    end
 
-    ###日齢
-    @nichirei, @nichirei_future = current_user.user_ext.nichirei
-
-    ###誕生記念日(年齢／日齢)
-    @kinen = UserExt.kinen
+    top_page_valiables
   end
 
 
@@ -340,14 +312,6 @@ class MuttersController < ApplicationController
 
   private
 
-  #
-  # 新規レス用のオブジェクト生成
-  # ※トップページでは、メインつぶやきのオブジェクトにもなる
-  #
-  def set_new_mutter_obj
-    @mutter = Mutter.new(:user_id => current_user.id)
-  end
-
   # Use callbacks to share common setup or constraints between actions.
   def set_mutter
       @mutter = Mutter.find(params[:id])
@@ -360,5 +324,32 @@ class MuttersController < ApplicationController
 
   def celebration_params
       params.require(:celebration).permit(:anniversary_at, :user_id)
+  end
+
+  def top_page_valiables
+    @slideshow_visible = true
+    @page_title = "トップ"
+
+    updates_count = request.smart_phone? ? 5 : 10
+    @updates = UpdateHistory.view_normal.limit(updates_count)
+
+    login_users_count = 40
+    @login_users = User.requested_users(login_users_count)
+    @login_users_hidden_cnt = 10
+
+    # TODO: なにこれ？不要？
+    # from lesys
+    @fix_title = ""
+    #sakikazu ↓は、includesだったら、関連先が存在しないデータでも取得されてしまって不都合になるんだけど、joinsなら存在するデータのみなので良い。
+    #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
+    # @mutters = mutter.includes_all.id_desc.limit(30)
+
+    @album_thumbs = Photo.rnd_photos
+
+    ###日齢
+    @nichirei, @nichirei_future = current_user.user_ext.nichirei
+
+    ###誕生記念日(年齢／日齢)
+    @kinen = UserExt.kinen
   end
 end
