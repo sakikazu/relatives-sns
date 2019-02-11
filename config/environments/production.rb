@@ -89,6 +89,8 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'a-dan.com' }
 
+  config.action_cable.allowed_request_origins = ['http://a-dan.com']
+
   # Gmail設定
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
