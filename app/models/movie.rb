@@ -93,7 +93,7 @@ class Movie < ApplicationRecord
     generate_thumb(ffmp.rotation.to_i)
     encoded_path = "#{Rails.root}/public/upload/movie/#{id}/original/encoded.mp4"
     # p "rotation: #{ffmp.rotation}"
-    transpose = "-vf transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
+    transpose = "transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
 
     max_video_wid_hei = 720
     p "original size: width: #{ffmp.width} / height: #{ffmp.height}"
@@ -107,18 +107,21 @@ class Movie < ApplicationRecord
         width = max_video_wid_hei 
         height = fix_height((ffmp.height * ratio).to_i)
       end
-      size = "-s #{width}x#{height}"
+      size = "#{width}x#{height}"
       p "computed size: #{size}"
     end
 
     max_video_bitrate = 1000
     vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
 
-    # note: http://qiita.com/yuya_presto/items/9fed29296dbdc7fd1d5d
-    profile_option = "-profile:v baseline -level:v 3.1"
+    # note: about profile -> http://qiita.com/yuya_presto/items/9fed29296dbdc7fd1d5d
+    profile_option = %w(-profile:v baseline -level:v 3.1)
     # note: 既にエンコードされた「encoded.mp4」を再エンコードする場合、同じファイルをエンコード、出力するとおかしくなるので、テンポラリファイルにエンコード出力する
     encoding_path = "encoding_#{Time.now.to_i}.mp4"
-    ffmp.transcode(encoding_path, "-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k #{size} #{transpose} #{profile_option}")
+    transcode_options = %W(-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k -s #{size})
+    transcode_options += %W(-vf #{transpose}) if transpose.present?
+    transcode_options += profile_option
+    ffmp.transcode(encoding_path, transcode_options)
     FileUtils.mv(encoding_path, encoded_path)
     self.is_ready = true
     self.movie = File.open("#{encoded_path}", "r")
