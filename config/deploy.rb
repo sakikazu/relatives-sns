@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.2.1
-lock '3.2.1'
+lock '3.11.0'
 
 set :application, 'adan'
 set :repo_url, 'git@bitbucket.org:sakikazu15/adan.git'
@@ -7,16 +7,18 @@ set :repo_url, 'git@bitbucket.org:sakikazu15/adan.git'
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-# for sidekiq that perform a proccess asyncronously
-# todo 動いてない。（2014/05/17）
-require 'sidekiq/capistrano'
+# RVM
+set :rvm1_ruby_version, '2.5.1'
+
+# todo: できてる？
+# sidekiq
+set :sidekiq_config, 'config/sidekiq.yml'
 set :sidekiq_role, :web
+SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
+SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/usr/local/site/adan'
-
-# Default value for :scm is :git
-set :scm, :git
 
 # Default value for :format is :pretty
 # set :format, :pretty

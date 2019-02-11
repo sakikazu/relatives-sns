@@ -104,6 +104,9 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
+  gem 'capistrano-sidekiq'
+  gem 'capistrano3-nginx'
+  gem 'capistrano3-puma'
   gem 'rvm1-capistrano3', require: false
 
   # エラー画面をわかりやすく整形してくれる
