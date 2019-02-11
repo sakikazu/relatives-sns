@@ -1,4 +1,16 @@
-class UserExtension < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: user_extensions
+#
+#  id         :integer          not null, primary key
+#  key        :string(255)
+#  value      :text(65535)
+#  created_at :datetime
+#  updated_at :datetime
+#  user_id    :integer
+#
+
+class UserExtension < ApplicationRecord
   belongs_to :user
 
   # つぶやきの「ひとりごと」を最後に閲覧した日時

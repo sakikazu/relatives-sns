@@ -1,6 +1,21 @@
-class UpdateHistory < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: update_histories
+#
+#  id           :integer          not null, primary key
+#  action_type  :integer
+#  content_type :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  content_id   :integer
+#  user_id      :integer
+#
+
+class UpdateHistory < ApplicationRecord
   belongs_to :user
   belongs_to :content, :polymorphic => true
+
+  attr_accessor :next_page
 
   #action_type
   ALBUM_CREATE = 1
@@ -49,4 +64,28 @@ class UpdateHistory < ActiveRecord::Base
     end
   end
 
+  def self.next_by_offset(page)
+    current_page = page.to_i
+    history = nil
+    if current_page > 0
+      prev = self.view_offset(current_page - 1).first
+      current = self.view_offset(current_page).first
+      return nil if current.blank?
+
+      # 同じコンテンツに対する連続したUpdateHistoryは1つのものと見なして、次のページを取得する
+      while prev.content == current.content do
+        current_page += 1
+        current = self.view_offset(current_page).first
+        # 最後のUpdateHistoryがprevのもつコンテンツと同じだった場合
+        return nil if current.blank?
+      end
+
+      current.next_page = current_page + 1
+      history = current
+    else
+      history = self.view_offset(0).first
+      history.next_page = 1
+    end
+    history
+  end
 end

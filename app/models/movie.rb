@@ -1,11 +1,37 @@
-class Movie < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: movies
+#
+#  id                       :integer          not null, primary key
+#  deleted_at               :datetime
+#  description              :text(65535)
+#  is_ready                 :integer          default(0)
+#  movie_content_type       :string(255)
+#  movie_file_name          :string(255)
+#  movie_file_size          :integer
+#  movie_type               :integer
+#  movie_updated_at         :datetime
+#  original_movie_file_name :string(255)
+#  thumb_content_type       :string(255)
+#  thumb_file_name          :string(255)
+#  thumb_file_size          :integer
+#  thumb_updated_at         :datetime
+#  title                    :string(255)
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  album_id                 :integer
+#  mutter_id                :integer
+#  user_id                  :integer
+#
+
+class Movie < ApplicationRecord
   include Utility
 
   acts_as_paranoid
 
   belongs_to :album
   belongs_to :user
-  belongs_to :mutter
+  belongs_to :mutter, optional: true
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
 
@@ -51,7 +77,7 @@ class Movie < ActiveRecord::Base
     :convert_options => { :thumb => ['-quality 80', '-strip']}, #50じゃノイズきつい
     :url => "/upload/#{content_name}/:id/thumb/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/thumb/:style/:basename.:extension",
-    default_url: "/images/missing.gif"
+    default_url: "/assets/missing.gif"
 
   validates_attachment_content_type :thumb, :content_type => Photo::CONTENT_TYPE
 

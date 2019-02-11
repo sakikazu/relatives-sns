@@ -2,13 +2,13 @@
   <tr>
     <td>
       <strong class="left" style="color:gray"><%= up.user.dispname if up.user.present? %></strong>
-      <div class="right" style="color:gray"><%= up.updated_at.to_s(:long) if up.updated_at %></div>
+      <div class="right" style="color:gray"><%= time_shorter(up.updated_at) %></div>
       <br>
       <% ai = action_info(up) -%>
       <% if ai.blank? -%>
         ＜コンテンツが削除されました＞
       <% else -%>
-        <span class='label label-inverse'><%= ai[:content_name] %></span>　<%= ai[:link] %>
+        <span class='badge badge-secondary'><%= ai[:content_name] %></span>　<%= ai[:link] %>
         <br /><%= ai[:info] %>
       <% end -%>
     </td>

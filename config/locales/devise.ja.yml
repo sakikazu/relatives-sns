@@ -18,12 +18,23 @@ ja:
       invalid: 'パスワードが違います.'
       invalid_token: '認証トークンが不正です.'
       timeout: 'セッションがタイムアウトしました。再ログインしてください.'
+      user:
+        not_found_in_database: '指定のユーザーが見つかりません.'
 
     sessions:
       signed_in: 'ログインしました.'
       signed_out: 'ログアウトしました.'
     passwords:
       updated: 'パスワードが更新されました.'
+      user:
+        send_instructions: 'パスワード再設定のためのメールを送りました. メール内容に従い、パスワードの再設定を行ってください.'
     registrations:
       signed_up: '登録しました.'
       updated: '情報が更新されました.'
+    mailer:
+      confirmation_instructions:
+        subject: 'Confirmation instructions'
+      reset_password_instructions:
+        subject: 'パスワード再設定の手続き'
+      unlock_instructions:
+        subject: 'Unlock Instructions'

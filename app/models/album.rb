@@ -1,7 +1,23 @@
-class Album < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: albums
+#
+#  id          :integer          not null, primary key
+#  deleted_at  :datetime
+#  description :text(65535)
+#  title       :string(255)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  mutter_id   :integer
+#  owner_id    :integer
+#  thumb_id    :integer
+#  user_id     :integer
+#
+
+class Album < ApplicationRecord
   belongs_to :user
-  belongs_to :owner, :class_name => "User", :foreign_key => :owner_id
-  belongs_to :thumb, :class_name => "Photo", :foreign_key => :thumb_id
+  belongs_to :owner, :class_name => "User", :foreign_key => :owner_id, optional: true
+  belongs_to :thumb, :class_name => "Photo", :foreign_key => :thumb_id, optional: true
   has_many :photos
   has_many :movies
   has_many :update_histories, :as => :content, :dependent => :destroy

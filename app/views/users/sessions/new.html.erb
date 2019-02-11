@@ -1,15 +1,19 @@
-<h2>ログイン <small>ログインができない方は、和孝に問い合わせてください（sakikazu15@gmail.com）</small></h2>
+<div class='col-sm-6'>
+  <div class='jumbotron'>
+<h2 class='mb20'>ログイン <small>ログインができない方は和孝に聞いてください</small></h2>
 
 <%= simple_form_for(resource_name, :as => resource_name, :url => session_path(resource_name)) do |f| %>
   <div class="form-inputs">
-    <%= f.input :username, :required => false, :autofocus => true %>
-    <%= f.input :password, :required => false %>
-    <%= f.input :remember_me, :as => :boolean if devise_mapping.rememberable? %>
+    <%= f.input :login, :required => false, :autofocus => true, input_html: {class: 'form-control'}, wrapper_html: {class: 'mb15'} %>
+    <%= f.input :password, :required => false, input_html: {class: 'form-control'} %>
+    <%= f.input :remember_me, :as => :boolean, input_html: {class: 'form-check_input'}, label_html: {class: 'form-check-label'}, wrapper_html: {class: 'form-check mt15 mb15 pl-0'} if devise_mapping.rememberable? %>
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, t("helpers.submit.Sign in") %>
+  <div class="form-actions mt30">
+    <%= f.button :submit, t("helpers.submit.Sign in"), class: 'btn btn-secondary' %>
   </div>
 <% end %>
 
 <%= render "users/shared/links" %>
+  </div>
+</div>

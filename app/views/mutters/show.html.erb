@@ -1,8 +1,8 @@
-<div id="mutter" style="width:710px;margin:auto;float:none">
-<%= link_to '戻る', :back, class: "btn" %><br>
-<h3 class="normal">つぶやきの前後もろともはちゅまれー</h3>
-<ul class="mutter_rows">
-  <%= render :partial => 'mutter_row', :collection => @mutters %>
+<div id="mutter" class="col-sm-6">
+<%= link_to '戻る', :back, class: "btn btn-light" %><br>
+<h3 class="normal mt30">つぶやきの前後もろともはちゅまれー</h3>
+<ul class="mutter_rows mt20">
+  <%= render :partial => 'mutter_with_comments', :collection => @mutters %>
 </ul>
 
 </div>

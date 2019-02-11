@@ -1,14 +1,12 @@
-<div class="row">
-  <div class="span7 offset2">
+<div class="col-sm-10">
 
-<div class="form-actions">
-<%= link_to "親戚データ一覧へ", members_path, class: "btn" %>
-</div>
+<%= render 'menu' %>
+
 <b>※最近更新した順に並んでいます※</b><br />
 
 <ul>
 <% @users.each do |user| -%>
-  <li><%= link_to "#{user.dispname(User::FULLNICK)} (更新日：#{user.user_ext.updated_at.to_s(:long)})", "##{user.username}" %></li>
+  <li><%= link_to "#{user.dispname(User::FULLNICK)} (更新日：#{time_shorter(user.user_ext.updated_at)})".html_safe, "##{user.username}" %></li>
 <% end -%>
 </ul>
 
@@ -52,5 +50,4 @@
 </div>
 <% end -%>
 
- </div>
 </div>

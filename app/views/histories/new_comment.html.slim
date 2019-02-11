@@ -1,0 +1,17 @@
+/ modalのコンテンツの部分のみ
+.modal-header
+  h5.modal-title コメントをする
+  button.close[type="button" data-dismiss="modal"]
+    span &times;
+.modal-body
+  #his_form
+    = form_for @comment, url: create_comment_histories_path, remote: true do |f|
+      #error_message.alert.alert-danger[style="display:none;"]
+        p
+          | 入力エラーがあります。下記のエラー内容を確認してください。
+        ul.pl-4
+      = f.text_area :content, class: "form-control", rows: 4
+      br
+      = f.hidden_field :parent_id
+      = f.hidden_field :parent_type
+      = f.submit "投稿する", class: "btn btn-primary", data: { disable_with: '投稿しています' }

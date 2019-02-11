@@ -1,4 +1,6 @@
-$('#background_black')
+$('body').prepend('<div id="background_black"></div>');
+var $background = $('#background_black');
+$background
   .css({
     'display': 'block',
     'z-index': '100',
@@ -12,9 +14,8 @@ $('#background_black')
     'width':'100%',
     'height':'100%',
   })
-  .click(function(){
-    $(this).hide();
-    $('.celebration_msg').remove();
+  .on('click', function() {
+    $(this).remove();
   });
 
 <% if @celeb_mutters.size > 0 -%>
@@ -22,10 +23,10 @@ $('#background_black')
   fontsize = 40;
   fontsize2 = 50;
 
-  //sakikazu ここはデータをJS配列にして、それを回すようにしたいなぁ。生成されたソースが汚い
+  // TODO: ここはデータをJS配列にして、それを回すようにしたいなぁ。生成されたソースが汚い
   <% @celeb_mutters.each_with_index do |m, i| -%>
-    $('#background_black')
-      .after('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= m.user.dispname(User::FULLNICK) %></span><br /><span class="moji"><%= sani_for_js(m.content) %></span></div>');
+    $background
+      .append('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= m.user.dispname(User::FULLNICK) %></span><br /><span class="moji"><%= sani_for_js(m.content) %></span></div>');
       //## 画像がうまく表示できない(image_tag)
       //sakikazu memo ここで「content」に改行（\r\n）が入っていたら、実際のJSで改行が入ってスクリプトエラーになった。これを事前に回避するの難しいな。。
       //→どこの環境かわからんけど、(\n\n)が入ったことがあった。なので/[\r\n]+/で、スペース変換するようにした→「sani_for_js」
@@ -63,21 +64,21 @@ $('#background_black')
 
   //最後のメッセージのキューに、メッセージモードを終了させる処理を入れる
   $msg.queue(function(){
-    $('#background_black').hide();
-    $('.celebration_msg').remove();
+    $background.remove();
   });
 
 <% else -%>
-  $('#background_black')
-    .after('<div class="celebration_msg">まだお祝いなし。<br />本人でも祝えるよ＞＜</div>');
+  $background
+    .append('<div class="celebration_msg">まだお祝いなし。<br />本人でも祝えるよ＞＜</div>');
   $('.celebration_msg')
     .css({
       'position': 'fixed',
       'z-index': '101',
-      'top':'150px',
-      'right':'300px',
-      'line-height': '70px',
-      'font-size': '50px',
+      'width': '100%',
+      'margin-top': '50px',
+      'text-align':'center',
+      'line-height': '50px',
+      'font-size': '35px',
       'color': 'white',
     });
 <% end -%>

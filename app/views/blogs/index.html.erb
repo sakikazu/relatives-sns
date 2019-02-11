@@ -1,10 +1,9 @@
-<% if @user.present? -%>
-  <%= link_to "自分の日記", blogs_path, class: "btn" %>
-<% end -%>
-<%= link_to "日記を書く", new_blog_path, class: "btn btn-info" %>
+  <div class="col-sm-6">
+    <% if @user.present? -%>
+      <%= link_to "自分の日記", blogs_path, class: "btn btn-light" %>
+    <% end -%>
+    <%= link_to "日記を書く", new_blog_path, class: "btn btn-info" %>
 
-<div class="row">
-  <div class="span7">
     <div class="page-header ver2">
       <h3><%= @page_title %><%= "<small>#{@page_desc}</small>" if @page_desc.present? %></h3>
     </div>
@@ -15,8 +14,8 @@
         </div>
 
         <div class="info">
-          <%= link_to "投稿者：#{blog.user.try(:dispname)}", blogs_by_user_path(blog.user.username) %> | <%= "投稿日時：#{l blog.created_at}" %>
-          <%= " | 最新コメント日時：#{blog.comments.try(:last).try(:created_at).try(:to_s, :long)}" %>
+          <%= link_to "投稿者：#{blog.user.try(:dispname)}", blogs_by_user_path(blog.user.username) %> | <%= "投稿日時：#{time_shorter(blog.created_at)}".html_safe %>
+          <%= " | 最新コメント日時：#{time_shorter(blog.comments.last.created_at) if blog.comments.present?}".html_safe %>
         </div>
         <% blog.blog_images.each do |image| -%>
           <%= link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image? %>
@@ -31,14 +30,13 @@
     <%= paginate @blogs, :window => 2, :outer_window => 2 %>
   </div> <!-- .span -->
 
-  <div class="span3">
+  <div class="col-sm-2">
     <div class="page-header ver2"><h3>人ごと(更新日順)</h3></div>
     <% @blog_count_by_user.each do |user, cnt, created_at| -%>
       <div class="blog">
         <p class="normal"><strong><%= link_to "#{user.dispname}(#{cnt})", blogs_by_user_path(user.username) %></strong></p>
-        <p class="normal desc">最終更新日：<%= created_at.to_s(:long) %></p>
+        <p class="normal desc">最終更新日：<%= time_shorter(created_at) %></p>
       </div>
       <hr>
     <% end -%>
-  </div> <!-- .span -->
-</div> <!-- .row -->
+  </div>

@@ -1,5 +1,12 @@
 module ApplicationHelper
 
+  def time_shorter(time, options = {})
+    return '' if time.blank?
+    full_time_str = time.to_s(:normal)
+    fmt = options[:noyear] ? '%m/%d' : '%Y/%m/%d'
+    link_to time.strftime(fmt), 'javascript:void()', data: { toggle: 'tooltip', trigger: 'click' }, title: full_time_str, class: 'text-info text-underline'
+  end
+
   def videojs(movie)
     movie_src = movie.uploaded_full_path.html_safe
 
@@ -10,27 +17,12 @@ module ApplicationHelper
       <source src="#{movie_src}" type='video/mp4' />
     </video>
 EOS
-
-    unless request.smart_phone?
-      videojs_src += <<"EOS"
-      <script>
-      $(function() {
-      if(!videojs.Flash.isSupported()) {
-        var myPlayer = videojs("videojs_#{movie.id}");
-        myPlayer.on("click", function() {
-          $("#flash_install_message").click();
-        });
-      }
-      })
-      </script>
-EOS
-    end
     return videojs_src
   end
 
   def page_title
     title = ""
-    title += "[dev]" if Rails.env != "production"
+    title += "[dev]" unless Rails.env.production?
     title += "A団HP | "
     if @page_title.present?
       title += @page_title
@@ -42,6 +34,12 @@ EOS
     title
   end
 
+  def useragent_short(ua)
+    full = useragent(ua)
+    matched = full.match(/^\w+/)
+    short = matched.present? ? matched[0] : full
+    link_to short, 'javascript:void()', class: 'badge badge-secondary', data: { toggle: 'tooltip' }, title: full
+  end
 
   #
   # UserAgentから各デバイス名を割り出す
@@ -56,76 +54,35 @@ EOS
     end
 
     # browser
-    case ua
-    when /Chrome\/([\d]*)/
-      ret = "Chrome#{$1}"
-    when /Firefox\/([\d]*)/
-      ret = "Firefox#{$1}"
-    when /Opera\/([\d]*)/
-      ret = "Opera#{$1}"
-    when /Safari/
-      ua =~ /Version\/(\d)/
-      ret = "Safari#{$1}"
-    when /MSIE (\d)/
-      ret = "IE#{$1}"
-    else
-      ret = " 不明 "
-    end
+    ret = case ua
+          when /Chrome\/([\d]*)/
+            "Chrome#{$1}"
+          when /Firefox\/([\d]*)/
+            "Firefox#{$1}"
+          when /Opera\/([\d]*)/
+            "Opera#{$1}"
+          when /Safari/
+            ua =~ /Version\/(\d)/
+            "Safari#{$1}"
+          when /MSIE (\d)/
+            "IE#{$1}"
+          else
+            " 不明 "
+          end
 
     # OS
-    case ua
-    when /iPhone OS (\d)/
-      ret += " [iOS#{$1}]"
-    when /Android ([\d\.\s]*)/
-      ret += " [Android #{$1}]"
-    when /Mac OS X (\d+)_(\d+)/
-      ret += " [MacOSX #{$1}.#{$2}]"
-    end
+    ret += case ua
+           when /iPhone OS (\d)/
+             " [iOS#{$1}]"
+           when /Android ([\d\.\s]*)/
+             " [Android #{$1}]"
+           when /Mac OS X (\d+)_(\d+)/
+             " [MacOSX #{$1}.#{$2}]"
+           else
+             ''
+           end
 
     return ret
-  end
-
-
-  #
-  # イイネの表示フィールド
-  # 何度もrenderされるので、無理にヘルパーにした
-  #
-  def nice_field(content, content_type, area)
-    output = ""
-    if content.nices.size > 0
-      output += <<"EOS"
-<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}"><i class='icon-heart'></i> #{content.nices.size}</strong>
-EOS
-    end
-
-    nice = content.nices.blank? ? nil : content.nices.where(:user_id => current_user.id).first
-    if nice.present?
-      output += <<"EOS"
-  :#{link_to ' イイネを取り消す', nice_path(:id => nice.id, :type => content_type, :content_id => content.id, :area => area), :method => :delete, :remote => true, class: "nice_link"}
-EOS
-    else
-      output += <<"EOS"
-  #{link_to '<i class="icon-heart"></i>&nbsp;イイネ '.html_safe, nices_path(:type => content_type, :content_id => content.id, :area => area), :method => :post, :remote => true, class: "nice_link"}
-EOS
-    end
-
-    return output.html_safe
-  end
-
-  def nice_field_disp_only(content)
-    output = ""
-    if content.nices.size > 0
-      output += <<"EOS"
-<strong style="color:red" class="nice_members" nice_members="#{content.nices.map{|n| n.user.dispname}.join(",")}"><i class='icon-heart'></i> #{content.nices.size}</strong>
-EOS
-    end
-
-    return output.html_safe
-  end
-
-
-  def nice_author_and_created_at(obj)
-     "<div class='nice_content_info'>投稿者：#{obj.user.dispname} / 投稿日：#{l obj.created_at}</div>".html_safe
   end
 
   def colorbox_class
@@ -136,14 +93,14 @@ EOS
     request.smart_phone? ? "" : "colorbox_fix_size"
   end
 
-
   def form_html_option
     # request.smart_phone? ? {} : {:multipart => true}
     {:multipart => true}
   end
 
   def editable(login_user, content_user)
-    login_user.role == 0 or login_user.role == 1 or (content_user.present? and (login_user.id == content_user.id))
+    return false if content_user.blank?
+    login_user.admin? || login_user.role == User::SUB_ADMIN || login_user.id == content_user.id
   end
 
   #
@@ -158,8 +115,9 @@ EOS
   end
 
   def sani_br(html)
-    html.gsub!(/\r\n|\r|\n/, "<br>") unless html.blank?
-    auto_link(Sanitize.clean(html, Sanitize::Config::BASIC)).html_safe
+    html_mod = ''
+    html_mod = html.gsub(/\r\n|\r|\n/, "<br>") unless html.blank?
+    auto_link(Sanitize.clean(html_mod, Sanitize::Config::BASIC)).html_safe
   end
 
   def sani_custom(html)
@@ -167,16 +125,18 @@ EOS
   end
 
   def sani_custom_br(html)
-    html.gsub!(/\r\n|\r|\n/, "<br>") unless html.blank?
-    auto_link(Sanitize.clean(html, Sanitize::Config::CUSTOM)).html_safe
+    html_mod = ''
+    html_mod = html.gsub(/\r\n|\r|\n/, "<br>") unless html.blank?
+    auto_link(Sanitize.clean(html_mod, Sanitize::Config::CUSTOM)).html_safe
   end
 
   #jsコード内に出力するときに改行コードがあるとjsコード自体が改行されてしまうのでスペースに変換する
   def sani_for_js(html)
-    html.gsub!(/[\r\n]+/, " ") if html.present?
+    html_mod = ''
+    html_mod = html.gsub(/[\r\n]+/, " ") if html.present?
     # これだとクォーテーションなどがそのままになり、JSの動作に不具合が生じた。タグを有効にしたかったんだろうけどとりあえずJS内ではデザインなしってことで無効。
     # auto_link(Sanitize.clean(h(html), Sanitize::Config::BASIC)).html_safe
-    auto_link(h(html))
+    auto_link(h(html_mod))
   end
 
   def action_info(up)
@@ -214,7 +174,7 @@ EOS
     text2 = strip_tags(text)
     if text2.split(//u).length > 120
       ret = sani_br(text2.truncate(120, :omission => ""))
-      ret += link_to " ...(続き)", "javascript:void(0)", :title => text2, :class => "overstring"
+      ret += link_to " ...(続き)", "javascript:void(0)", :title => '', data: {toggle: 'popover', html: true, trigger: 'hover', placement: 'right', content: sani_br(text2)}
     else
       ret = sani_br(text2)
     end

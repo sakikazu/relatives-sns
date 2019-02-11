@@ -6,6 +6,8 @@ $('#slider_photo').html(
 colorbox_fix_size();
 slide_effect();
 
+$div = $('<div id="slider_update_info">変更しました</div>');
+$('#slider_photo').append($div);
 $("#slider_update_info")
   .show()
   .fadeOut(5000);

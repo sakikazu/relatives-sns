@@ -1,6 +1,7 @@
 class PhotosController < ApplicationController
-  before_filter :authenticate_user!, :except => [:create]  #sakikazu これがないとcreateできない。 for uploadify
+  before_action :authenticate_user!, :except => [:create]  #sakikazu これがないとcreateできない。 for uploadify
   before_action :set_photo, only: [:show, :edit, :update, :destroy, :slideshow, :update_from_slideshow]
+  before_action :set_ups_data, only: [:show]
 
   # GET /photos
   # GET /photos.json
@@ -20,9 +21,6 @@ class PhotosController < ApplicationController
   # →colorboxにした場合にapplication.jsをバックとフロントでどちらも読み込んでしまうと、Ajaxで多重書き込みが起きてしまう
   #
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @photo }
@@ -111,6 +109,11 @@ class PhotosController < ApplicationController
   end
 
   def create_comment
+    if params[:content].blank?
+      @error_message = 'コメントを入力しないと投稿できません'
+      return
+    end
+
     params.merge!(Mutter.extra_params(current_user, request))
     @photo = Photo.find(params[:id])
 

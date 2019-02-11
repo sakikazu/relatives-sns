@@ -4,9 +4,9 @@
   <% photos.each do |photo| -%>
     <div class="thumb">
       <div class="title">
-        <h4><span class="label label-info"><i class="icon-camera"></i></span> <%= link_to (photo.title || "[無題]"), album_photo_path(album, photo) %></h4>
+        <h4><span class="badge badge-info"><%= fa_icon 'camera' %></span> <%= link_to (photo.title || "[無題]"), album_photo_path(album, photo) %></h4>
         <div class="extra">
-          <i class='icon icon-comment'></i> <%= photo.mutter_comments.size %>
+          <%= fa_icon 'comment', text: photo.mutter_comments.size %>
           <br><%= nice_field_disp_only(photo) %>
         </div>
       </div>
@@ -20,9 +20,9 @@
       <div class="info">
         <div>
           投稿者：<%= photo.user.try(:dispname) %><br />
-          投稿：<%= l photo.created_at if photo.created_at %><br />
-          撮影：<%= l photo.exif_at if photo.exif_at %><br />
-          最新コメント：<%= l photo.last_comment_at if photo.last_comment_at %><br />
+          投稿：<%= time_shorter(photo.created_at) %><br />
+          撮影：<%= time_shorter(photo.exif_at) %><br />
+          最新コメント：<%= time_shorter(photo.last_comment_at) %><br />
         </div>
       </div>
 

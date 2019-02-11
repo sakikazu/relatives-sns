@@ -1,0 +1,44 @@
+.card.mb30
+  = render 'anniversary'
+
+.card.mb30
+  .card-header.text-center
+    = toggle_link('― 日齢 ― 生まれて何日？', '#collapsed_nichirei_area')
+  #collapsed_nichirei_area[class='#{"collapse" if request.smart_phone?}']
+    .card-body
+      #nichirei
+        - if @nichirei
+          .main
+            = @nichirei
+            | 日
+          - @nichirei_future.each do |n|
+            = "#{n[0]}日: #{n[1].strftime("%Y/%m/%d")}"
+            br
+        - else
+          |  ※生年月日を登録している人のみ
+
+.card.mb30
+  .card-header.text-center みんなの新着情報
+  .card-body
+    = link_to '一気に見る', update_allview_mutters_path, class: "btn btn-danger btn-block"
+  table.table.table-striped.table-condensed
+    = render :partial => "update_history"
+  .mt10
+    = link_to "すべて見る", {:action => :update_history_all}, class: "btn btn-success btn-block"
+
+.card.mb30
+  .card-header.text-center
+    = toggle_link('みんなのアクセス情報', '#collapsed_accesses_area')
+    br
+    .badge.badge-warning.text-center #{User::recent_request_count} 人がログイン中
+  #collapsed_accesses_area[class='#{"collapse" if request.smart_phone?}']
+    table.table.table-striped.table-sm
+      - @login_users.each_with_index do |user, idx|
+        - tr_options = idx > @login_users_hidden_cnt ? { class: 'hide_row', style: 'display:none' } : {}
+        = content_tag(:tr, tr_options) do
+          td[style="width:5em"]
+            = user.last_request_at.present? ? time_shorter(user.last_request_at, { noyear: true }) : "未ログイン"
+          td
+            = user.dispname(User::FULLNICK)
+    #link_recent_login_users.btn.btn-success.btn-block[onclick="javascript:show_recent_login_users()"]
+      | もっと見る(直近40人分)

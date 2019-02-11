@@ -1,11 +1,33 @@
-class Photo < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: photos
+#
+#  id                 :integer          not null, primary key
+#  deleted_at         :datetime
+#  description        :text(65535)
+#  exif_at            :datetime
+#  image_content_type :string(255)
+#  image_file_name    :string(255)
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  last_comment_at    :datetime
+#  title              :string(255)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  album_id           :integer
+#  comment_id         :integer
+#  mutter_id          :integer
+#  user_id            :integer
+#
+
+class Photo < ApplicationRecord
   include Utility
 
   acts_as_paranoid
 
   belongs_to :album
   belongs_to :user
-  belongs_to :mutter
+  belongs_to :mutter, optional: true
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
 
@@ -25,13 +47,15 @@ class Photo < ActiveRecord::Base
     :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
     :url => "/upload/#{content_name}/:album/:id/:style/:hash.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:hash.:extension",
-    default_url: "/images/missing.gif"
+    default_url: "/assets/noimage.gif"
 
   validates_attachment_content_type :image, content_type: CONTENT_TYPE
 
 
   #全写真からただランダムに抽出する
   def self.rnd_photos
+    return Album.last.photos if Rails.env.development?
+
     photos = self.includes(:album).order("RAND()").limit(15).map{|photo| photo if photo.album.present?}
 #sakikazu 上でalbumが実際に存在しなかったら、if文のせいで(？)、nilが入ってしまう。なので削除しておく
 # ★これってどうしようかな。アルバムない写真を全削除？上のはもっと良いやり方ある？これは注意すべき事象なので、解析してメモっておきたい

@@ -1,0 +1,7 @@
+.autopagerize_page_element
+  ul.mutter_rows
+    = render :partial => 'mutter_with_comments', :collection => @mutters
+  - # 通常時はページネーションは表示せず、AutoPagerによって読み込まれる
+  div[style="display:none"]
+    = paginate @mutters, params: { leave_me: (@leave_me.blank? ? "" : 1) }
+  = link_to "すべて見る", {:action => :all}, class: "btn btn-secondary btn-block"

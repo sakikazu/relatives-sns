@@ -1,10 +1,34 @@
-.page-header
-  %h3 家系図
+.col-sm-10
+
+  = render 'menu'
+
+  .row.mb30
+    .col-sm-8
+      .card
+        .card-header
+          %h3 人数データ
+        .card-body
+          %ul.pl-4
+            %li A団の構成のみに対応させているため、それ以外の家族では正しい値が出ない
+            %li 1世代目がそうへい夫妻、2世代目が11人兄弟となる
+            %li この人数には配偶者も含む
+          %table.table.table-bordered.table-striped.table-warning.text-center
+            %tr
+              %th 合計
+              - 1.upto(@count_by_generation.size - 1) do |n|
+                %th #{n}世代
+            %tr
+              %td #{@count_by_generation[0]}
+              - 1.upto(@count_by_generation.size - 1) do |n|
+                %td #{@count_by_generation[n]}人
 
 #sakimuras
   #generation1
+    -# NOTE: partialにしたかったが、単純にやるとhtml階層を潜りながらrenderは書けず、partial内で再帰にしようかとも思ったが、カウンターがわかりづらそうなのと、
+    -# ループ内でこれ以上renderを増やしたくないと思ったので辞めた。クリックしたらAjaxで子メンバーをレンダリングも良いが、頻繁にクリックするし、
+    -# その度にクリアしてレンダリングってなると速度面で怪しいのでとりあえずこのまま。
     %ul.members
-      - @users.each do |u|
+      - @relationed_users.each do |u|
         %li.list.clearfix{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
           = render partial: 'member_list', locals: {user: u}
         %div{style: "display:none"}
@@ -12,8 +36,9 @@
             %li.zoom.clearfix{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
               = render partial: 'member_zoom', locals: {user: u}
 
-            %li.add_user
-              = link_to "家族追加", new_member_path(parent_user_id: u[:id]), class: "btn btn-warning btn-block"
+            - if current_user.editable(u)
+              %li.add_user
+                = link_to "家族追加", new_member_path(parent_user_id: u[:id]), class: "btn btn-warning btn-block"
 
             - if u[:family].present?
               - u[:family].each do |uu|
@@ -25,8 +50,9 @@
                     %li.zoom.clearfix{id: "id#{uu[:id]}", class: (uu[:is_dead] ? "dead" : "alive")}
                       = render partial: 'member_zoom', locals: {user: uu}
 
-                    %li.add_user
-                      = link_to "家族追加", new_member_path(parent_user_id: uu[:id]), class: "btn btn-warning btn-block"
+                    - if current_user.editable(uu)
+                      %li.add_user
+                        = link_to "家族追加", new_member_path(parent_user_id: uu[:id]), class: "btn btn-warning btn-block"
 
                     - if uu[:family].present?
                       - uu[:family].each do |uuu|
@@ -38,20 +64,23 @@
                             %li.zoom.clearfix{id: "id#{uuu[:id]}", class: (uuu[:is_dead] ? "dead" : "alive")}
                               = render partial: 'member_zoom', locals: {user: uuu}
 
-                            %li.add_user
-                              = link_to "家族追加", new_member_path(parent_user_id: uuu[:id]), class: "btn btn-warning btn-block"
+                            - if current_user.editable(uuu)
+                              %li.add_user
+                                = link_to "家族追加", new_member_path(parent_user_id: uuu[:id]), class: "btn btn-warning btn-block"
 
                             - if uuu[:family].present?
                               - uuu[:family].each do |uuuu|
                                 %li.list.clearfix{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
                                   = render partial: 'member_list', locals: {user: uuuu}
 
-                                %ul.members.child{id: "id#{uuuu[:id]}-family"}
-                                  %li.zoom.clearfix{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
-                                    = render partial: 'member_zoom', locals: {user: uuuu}
+                                %div{style: "display:none"}
+                                  %ul.members.child{id: "id#{uuuu[:id]}-family"}
+                                    %li.zoom.clearfix{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
+                                      = render partial: 'member_zoom', locals: {user: uuuu}
 
-                                  %li.add_user
-                                    = link_to "家族追加", new_member_path(parent_user_id: uuuu[:id]), class: "btn btn-warning btn-block"
+                                    - if current_user.editable(uuuu)
+                                      %li.add_user
+                                        = link_to "家族追加", new_member_path(parent_user_id: uuuu[:id]), class: "btn btn-warning btn-block"
 
   #generation2
   #generation3

@@ -3,7 +3,9 @@
   <div class="nice_rank">
     <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
     <%= data[:nice_count] %> イイネ
-    <span class="nice_user">(イイネした人： <%= content.nices.map{|n| n.user.dispname}.join(" / ") %>)</span>
+  </div>
+  <div class="mb10">
+    <%= nicing_user_names(data.content) %>
   </div>
   <% if content.present? -%>
     <%= link_to(image_tag(content.image(:thumb)), slideshow_album_photo_path(content.album, content), {:class => colorbox_fix_size}) if content.image?  %><br>

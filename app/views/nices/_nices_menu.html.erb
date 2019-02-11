@@ -1,10 +1,7 @@
-<div class="select_menu clearfix">
-  <%# [["最近", 1, recent_nices_path], ["ランキング", 2, ranking_nices_path], ["各人がイイネしたもの", 3, donice_nices_path], ["各人がイイネされたもの", 4, wasnice_nices_path]].each do |n, i, path| -%>
-  <% [["最近", 1, recent_nices_path], ["ランキング", 2, ranking_nices_path]].each do |n, i, path| -%>
-    <% if @sort == i -%>
-      <%= link_to n, path, class: "btn btn-danger" %>
-    <% else -%>
-      <%= link_to n, path, class: "btn" %>
-    <% end -%>
+<ul class="nav nav-tabs mt20 mb20">
+  <% [["最近", 1, recent_nices_path], ["ランキング", 2, ranking_nices_path], ["イイネしたもの", 3, donice_nices_path], ["イイネされたもの", 4, wasnice_nices_path]].each do |n, i, path| -%>
+    <% activable = @sort == i ? 'active' : '' -%>
+	<li class="nav-item"><%= link_to n, path, class: "nav-link #{activable}" %></li>
   <% end -%>
-</div>
+</ul>
+

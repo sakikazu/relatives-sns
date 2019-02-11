@@ -1,10 +1,9 @@
 class MuttersController < ApplicationController
-  # for mobile
-  before_filter :redirect_if_mobile, :except => [:new_from_mail, :create_from_mail]
-  after_filter :update_request_at, only: [:index, :update_disp, :create]
+  include ApplicationHelper
 
-  before_filter :authenticate_user!, :except => :rss
-  before_filter :set_new_mutter_obj, only: [:index, :all, :search, :update_disp]
+  after_action :update_request_at, only: [:index, :create]
+
+  before_action :authenticate_user!, :except => :rss
   # todo 2014-05-12
   # cache_sweeper :mutter_sweeper, :only => [:create, :destroy, :create_from_mail, :celebration_create]
 
@@ -18,6 +17,7 @@ class MuttersController < ApplicationController
       @mutter = Mutter.new(mutter_params)
     end
 
+    @all_mode = false
     if params[:all].present?
       @mutters_count = Mutter.group("DATE_FORMAT(created_at, '%Y/%m')").count
       @mutters_count = @mutters_count.map{|m| ["#{m[0]}/01", m[1]]}
@@ -25,7 +25,7 @@ class MuttersController < ApplicationController
       @min = '2008-04'
       @interval = "1 year"
       @range_for_title = "全期間：2008年 - #{Date.today.year}年"
-      @flg = 0
+      @all_mode = true
     else
       year = @mutter.year
       month = @mutter.month
@@ -49,34 +49,17 @@ class MuttersController < ApplicationController
     end
   end
 
-  def new_from_mail
-    config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
-    @to = config['to']
-    env = Rails.env == "development" ? "[dev]" : ""
-    @subject = "[a-dan-hp]#{env}mutter[user_id]#{current_user.id}"
-    if request.mobile?
-      @content_title = "画像付きつぶやき"
-      render :layout => 'mobile'
-    end
-  end
 
-  def create_from_mail
-    Mutter.create_from_mail
-    redirect_to(mutters_path, :notice => 'メールからつぶやきました。それが表示されてないときは、前の画面に戻って再度「つぶやく」ボタンを押してください。')
-  end
-
-
+  # TODO: allに統合したいけど、これなくして大丈夫かなー。
+  # あとleave_meは_listからのページネーションによる検索のなごりやな。修正する
   #
   # つぶやき検索
   # (親子構造にせず、フラットに表示する）
-  # mutters#indexからはAjaxで呼ばれる
-  # mutters#allからはgetで呼ばれる
   #
   def search
     if params["mutter"].blank? or params["mutter"]["action_flg"].blank? # mutters#indexでAutoPagerで読み込まれた場合
       @action_flg = 0
     else
-      params[:mutter] = params["mutter"]
       @action_flg = params[:mutter][:action_flg].to_i
       @search_word = params[:mutter][:search_word]
       @user_id = params[:mutter][:user_id]
@@ -103,27 +86,18 @@ class MuttersController < ApplicationController
     # 「ひとりごと」
     @mutters = @mutters.where(leave_me: @leave_me)
 
-    @mutters = @mutters.page(params[:page])
+    @mutters = @mutters.page(params[:page]).per(Mutter::PAGINATES_PER_FOR_ALL)
 
     # 検索ワードを画面に表示し続けるため
     @mutter = Mutter.new(mutter_params) if params[:mutter].present?
 
-    # 検索時は右サイドバーを出さないように
-    # （理由は右サイドバーを表示するためのデータ取得をやりたくないからだったはず）
-    @action_is_search = true
+    # todo: allアクションにまとめることができれば、このサイドバーのためのデータは不要
+    @users_mcnt = Mutter.group(:user_id).count
+    @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
 
-    if request.xhr?
-      if params[:page].present?
-        render partial: 'list'
-      else
-        render 'search.js'
-      end
-      return
-    else
-      respond_to do |format|
-        format.html {render :action => "all"}
-        format.js
-      end
+    respond_to do |format|
+      format.html {render :action => "all"}
+      format.js
     end
   end
 
@@ -155,67 +129,40 @@ class MuttersController < ApplicationController
   end
 
   def all
-#sakimura ↓だとMutterすべてのレコードのカウントをJOINして出すので時間かかってる。kaminariならそんなことないのかなぁ。limit(30)とかやってもダメね。
-    # @mutters = Mutter.includes([{:user => :user_ext}]).order("id DESC").paginate(:page => params[:page], :per_page => 30)
-#sakimura ページネート時のフラグメントキャッシュ方法がわからん。いらんかなー。いや要らんでしょう。更新頻度高いのにページごとに保存て効率悪そう
-#todo kaminariにしてみたけどincludeしたらどうなる？？
-    @mutters = Mutter.includes_all.user_is(params[:user_id]).parents_mod.page(params[:page]).per(15)
+    #todo 速度を調査してみる
+    @mutters = Mutter.includes_all
+    # user_idが指定された時は、レスも含めて表示する
+    @mutters = if params[:user_id].present?
+                 @mutters.where(user_id: params[:user_id])
+               else
+                 @mutters.parents_mod
+               end
+    @mutters = @mutters.page(params[:page]).per(Mutter::PAGINATES_PER_FOR_ALL)
 
-    # AutoPager対応
-    @autopagerable = true
+    opts = params[:user_id].present? ? { user_id: params[:user_id] } : {}
+    @mutter = Mutter.new(opts)
 
-    unless read_fragment :mutter_by_user
-      @users_mcnt = Mutter.group(:user_id).count
-      @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
-    end
+    @users_mcnt = Mutter.group(:user_id).count
+    @users = User.where(:id => @users_mcnt.keys).includes(:user_ext)
   end
 
   def index
-    @layout_type = 1
-    @slideshow_visible = true
-    @page_title = "トップ"
-
-    updates_count = request.smart_phone? ? 5 : 10
-    @updates = UpdateHistory.view_normal.limit(updates_count)
-    login_users_count = request.smart_phone? ? 7 : 40
-    @login_users = User.requested_users(login_users_count)
-
-    # from lesys
-    @fix_title = ""
-    #sakikazu ↓は、includesだったら、関連先が存在しないデータでも取得されてしまって不都合になるんだけど、joinsなら存在するデータのみなので良い。
-    #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
-    # @mutters = mutter.includes_all.id_desc.limit(30)
-
-    # つぶやき時間降順で親つぶやきのみを取得
+    @leave_me = params[:leave_me].blank? ? false : true
     # unless read_fragment :mutter_data
     @mutters = Mutter.includes_all.parents_mod.page(params[:page])
     # end
-
-    @leave_me = params[:leave_me].blank? ? false : true
-    if @leave_me.present?
-      current_user.save_extension(UserExtension::LAST_READ_LEAVE_ME_AT, Time.now())
-      @count_unread_leave_me_mutters = 0
-    else
-      ext = current_user.find_extension(UserExtension::LAST_READ_LEAVE_ME_AT)
-      last_read_at = ext.present? ? ext[:value] : Time.parse("2000/1/1")
-      @count_unread_leave_me_mutters = @mutters.where(leave_me: true).where.not(user_id: current_user.id).where("created_at > ?", last_read_at).count
-    end
     @mutters = @mutters.where(leave_me: @leave_me)
+    @mutter = Mutter.new(user_id: current_user.id)
+    @count_unread_leave_me_mutters = Mutter.count_unread_leave_me_mutters(current_user, @leave_me)
 
-    @album_thumbs = Photo.rnd_photos
+    # TODO: もっとうまいことやりたい
+    # autopagerizeで読み込まれた場合
+    if params[:page].present?
+      render partial: 'list'
+      return
+    end
 
-    # つぶやきの表示更新時間（ミリ秒指定）
-    @dispupdate_interval = 300 * 1000
-
-    ###日齢
-    @nichirei, @nichirei_future = current_user.user_ext.nichirei
-
-    ###誕生記念日(年齢／日齢)
-    @kinen = UserExt.kinen
-
-    # AutoPager対応
-    @autopagerable = true
-
+    top_page_valiables
   end
 
 
@@ -225,7 +172,7 @@ class MuttersController < ApplicationController
   #
   def show
     # todo
-    # このときのMutter一覧の中で削除すると、_mutter_row.html.erbがホームでの削除前提なのか、動的にViewが更新されない。削除はされる。気が向いたら修正しよう
+    # このときのMutter一覧の中で削除すると、_mutter_with_comments.html.erbがホームでの削除前提なのか、動的にViewが更新されない。削除はされる。気が向いたら修正しよう
     # ここでレスしたら、この画面で更新されてほしいがホームに行ってしまう。これもー。
     mutter = Mutter.find(params[:id])
     num = 5
@@ -238,59 +185,31 @@ class MuttersController < ApplicationController
     @mutters = Mutter.includes_all.where(id: mutter_ids)
   end
 
+  # NOTE: 作成後の画面更新は、MutterのコールバックでActionCableによって行っている
   def create
     if params[:mutter][:content].blank?
-      @status = "error"
+      @error_message = 'つぶやきを入力しないと投稿できません'
       render 'create.js'
       return
     end
 
     params[:mutter].merge!(Mutter.extra_params(current_user, request))
     @mutter = Mutter.new(mutter_params)
-
-    if @mutter.leave_me.blank?
-      leave_me_option = {}
-      @leave_me = false
-    else
-      leave_me_option = {leave_me: 1}
-      @leave_me = true
+    unless @mutter.save
+      @error_message = @mutter.errors.full_messages.first
     end
-
-    # memo remotipart_submittedは、ファイルなしのAjaxポストではtrueにならないので、xhrの判定も必要
-    if request.xhr? or remotipart_submitted?
-      @mutter.save
-      @mutters = Mutter.includes_all.parents_mod.page(params[:page])
-      # todo こういうところとかリファクタリングしたい〜〜。allメソッドやsearchとの関連をまとめたい
-      @mutters = @mutters.where(leave_me: @mutter.leave_me)
-      # @create_notification = "に投稿しました"
-
-      # 新規post用に入れ替える
-      @created_mutter = @mutter
-      @mutter = Mutter.new(:user_id => current_user.id)
-      render 'create.js'
-      return
-    else
-      respond_to do |format|
-        if @mutter.save
-          format.html { redirect_to mutters_path(leave_me_option), notice: 'つぶやきを投稿しました。' }
-          format.json { render json: @mutter, status: :created, location: @mutter }
-        else
-          format.html { redirect_to(mutters_path, :notice => 'つぶやきを入力しないと投稿できません') }
-          format.json { render json: @mutter.errors, status: :unprocessable_entity }
-        end
-      end
-    end
-
-### ajax 失敗
-    #@mutters = Mutter.all(:order => "id desc")
-    #render :partial => "list", :locals => {:mutters => @mutters}
   end
 
   def destroy
-    mutter = @mutter
+    unless editable(current_user, @mutter.user)
+      @error_message = '削除権限がありません。'
+      render "update_list.js"
+      return
+    end
+    mutter_leave_me = @mutter.leave_me
     @mutter.destroy
     @mutters = Mutter.includes_all.parents_mod.page(params[:page])
-    @mutters = @mutters.where(leave_me: mutter.leave_me)
+    @mutters = @mutters.where(leave_me: mutter_leave_me)
     render "update_list.js"
   end
 
@@ -305,29 +224,24 @@ class MuttersController < ApplicationController
   def celebration_new
     # お祝いする対象ユーザーの今日か昨日のCelebrationデータを取得
     user = User.find(params[:user_id])
-    celeb = Celebration.where(:anniversary_at => [Date.today, Date.today - 1.day], :user_id => user.id).first
-    if celeb.present?
-      if celeb.mutters.where(:user_id => current_user.id).present?
-        @flag = false
+    @celebration = Celebration.where(:anniversary_at => [Date.today, Date.today - 1.day], :user_id => user.id).first
+    @celebratable = true
+    celebration_mutter_params = { user_id: current_user.id, content: 'おめでとう！' }
+    if @celebration.present?
+      if @celebration.mutters.where(:user_id => current_user.id).present?
+        @celebratable = false
       else
-        @mutter = celeb.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
-        @flag = true
+        @mutter = @celebration.mutters.new(celebration_mutter_params)
       end
-      @celebration = celeb
     else
       @celebration = Celebration.new(:anniversary_at => Date.today, :user_id => user.id)
-      @mutter = @celebration.mutters.new(:user_id => current_user.id, :content => 'おめでとう！')
-      @flag = true
+      @mutter = @celebration.mutters.new(celebration_mutter_params)
     end
-    render :layout => "simple"
+    render layout: false
   end
 
   def celebration_create
-    @celebration = Celebration.where(celebration_params).first
-    if @celebration.blank?
-      @celebration = Celebration.create(celebration_params)
-    end
-
+    @celebration = Celebration.where(celebration_params).first || Celebration.create(celebration_params)
     params[:mutter].merge!(Mutter.extra_params(current_user, request, @celebration.id))
     Mutter.create(mutter_params)
     redirect_to({:action => :index}, :notice => 'お祝いをしました。「お祝いを見る」から確認できます。')
@@ -344,25 +258,6 @@ class MuttersController < ApplicationController
     @celeb_mutters = cel.present? ? cel.mutters.sample(cel.mutters.size) : []
   end
 
-
-  #
-  # つぶやき表示更新
-  #
-  # 最後にされたつぶやきのIDをcookieに入れておき、
-  # その後、定期的なJSでの呼び出しによって新しいつぶやきがないかチェックし、
-  # 存在したら表示を更新する
-  #
-  def update_disp
-    @mutters = Mutter.updated_datas(cookies)
-    if @mutters.blank?
-      render :text => ""
-    else
-      @mutters = @mutters.page(params[:page])
-      render :partial => "list"
-    end
-  end
-
-
   # つぶやき新着チェック
   # (ブラウザのNotificationにて表示する用)
   # (JSで一定時間ごとに呼び出している)
@@ -370,7 +265,7 @@ class MuttersController < ApplicationController
   def update_check
     if cookies[:update_check_id].blank?
       cookies[:update_check_id] = Mutter.last.id
-      render :text => ""
+      render plain: ""
       return
     end
 
@@ -380,72 +275,42 @@ class MuttersController < ApplicationController
     @mutters.reject!{|m| m.user.id == current_user.id}
     if @mutters.size > 0
       cookies[:update_check_id] = Mutter.last.id
-      # render :text => @mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
+      # render plain: @mutters.uniq_by{|m| m.user}.map{|m| m.user.dispname}.join(",")
       render :partial => "mutter_update"
     else
-      render :text => ""
+      render plain: ""
     end
   end
 
   # 更新情報一括閲覧
   def update_allview
-    next_page = params[:ups_page].blank? ? 0 : params[:ups_page].to_i
-    if next_page > 0
-      up_prev = UpdateHistory.view_offset(next_page - 1).first
-      up_current = UpdateHistory.view_offset(next_page).first
-      up, next_page = recursive_for_update_all_view(up_prev, up_current, next_page)
-    else
-      up = UpdateHistory.view_offset(next_page).first
-    end
-
-    if up.blank?
+    update_history = UpdateHistory.next_by_offset(params[:ups_page])
+    if update_history.blank?
       redirect_to root_path
       return
     end
 
-    @ups_page = next_page + 1
-
-    ai = UpdateHistory::ACTION_INFO[up.action_type]
-    case up.action_type
+    ups_options = { ups_page: update_history.next_page, ups_id: update_history.id }
+    case update_history.action_type
     when UpdateHistory::ALBUM_CREATE
-      redirect_to album_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(update_history.content, ups_options)
     when UpdateHistory::ALBUM_COMMENT
-      redirect_to album_path(up.content, focus_comment: 1, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(update_history.content, { focus_comment: 1 }.merge(ups_options))
     when UpdateHistory::ALBUMPHOTO_CREATE
-      redirect_to album_path(up.content, "album[sort_flg]" => 1, "album[user_id]" => up.user_id, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_path(update_history.content, { "album[sort_flg]" => 1, "album[user_id]" => update_history.user_id }.merge(ups_options))
     when UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO
-      redirect_to album_photo_path(up.content.album, up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to album_photo_path(update_history.content.album, update_history.content, ups_options)
     when UpdateHistory::BOARD_CREATE, UpdateHistory::BOARD_COMMENT
-      redirect_to board_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to board_path(update_history.content, ups_options)
     when UpdateHistory::MOVIE_CREATE, UpdateHistory::MOVIE_COMMENT
-      redirect_to movie_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to movie_path(update_history.content, ups_options)
     when UpdateHistory::BLOG_CREATE, UpdateHistory::BLOG_COMMENT
-      redirect_to blog_path(up.content, "ups_page" => @ups_page, "ups_id" => up.id)
+      redirect_to blog_path(update_history.content, ups_options)
     end
   end
-
 
 
   private
-  def recursive_for_update_all_view(prev, current, next_page)
-    return nil, nil if prev.blank? or current.blank?
-    if prev.content == current.content
-      next_page += 1
-      up_next = UpdateHistory.view_offset(next_page).first
-      recursive_for_update_all_view(current, up_next, next_page)
-    else
-      return current, next_page
-    end
-  end
-
-
-  #
-  # 新規レス用のオブジェクト生成
-  # ※トップページでは、メインつぶやきのオブジェクトにもなる
-  #
-  def set_new_mutter_obj
-    @mutter = Mutter.new(:user_id => current_user.id)
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_mutter
@@ -459,5 +324,32 @@ class MuttersController < ApplicationController
 
   def celebration_params
       params.require(:celebration).permit(:anniversary_at, :user_id)
+  end
+
+  def top_page_valiables
+    @slideshow_visible = true
+    @page_title = "トップ"
+
+    updates_count = request.smart_phone? ? 5 : 10
+    @updates = UpdateHistory.view_normal.limit(updates_count)
+
+    login_users_count = 40
+    @login_users = User.requested_users(login_users_count)
+    @login_users_hidden_cnt = 10
+
+    # TODO: なにこれ？不要？
+    # from lesys
+    @fix_title = ""
+    #sakikazu ↓は、includesだったら、関連先が存在しないデータでも取得されてしまって不都合になるんだけど、joinsなら存在するデータのみなので良い。
+    #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
+    # @mutters = mutter.includes_all.id_desc.limit(30)
+
+    @album_thumbs = Photo.rnd_photos
+
+    ###日齢
+    @nichirei, @nichirei_future = current_user.user_ext.nichirei
+
+    ###誕生記念日(年齢／日齢)
+    @kinen = UserExt.kinen
   end
 end

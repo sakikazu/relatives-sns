@@ -1,0 +1,41 @@
+.col-sm-3
+  = render 'top_left_sidebar'
+.col-sm-6
+  ul#mutters_nav.nav.nav-tabs.mb15
+    li.nav-item
+      = link_to "みんなの", mutters_path(anchor: 'mutters_nav'), class: "nav-link #{'active' if @leave_me.blank?}"
+    li.nav-item
+      = link_to "ひとりごと <span class='badge badge-warning'>#{@count_unread_leave_me_mutters}</span>".html_safe, mutters_path(leave_me: true, anchor: 'mutters_nav'), class: "nav-link #{'active' if @leave_me.present?}"
+    li.nav-item
+      = link_to "一覧", all_mutters_path, class: "nav-link"
+
+  #mutter.clearfix
+    #form.mb30
+      = simple_form_for @mutter, html: {multipart: true}, remote: true do |f|
+        .row.no-gutters.justify-content-center.p-2.border.border-light.bg-light
+          .col-sm-8
+            = f.text_area :content, rows: 3, class: "form-control mb5", placeholder: @leave_me.present? ? "ひとりごとをつぶやく" : "つぶやき", tabindex: 1
+            = f.hidden_field :user_id
+            = f.hidden_field :leave_me, value: @leave_me.present?
+            - if request.smart_phone?
+              = f.file_field :image
+            - else
+              .custom-file
+                = f.file_field :image, class: 'custom-file-input', id: 'customFile'
+                label.custom-file-label[for="customFile"]
+                  | 写真や動画がアップロードできます
+          .col-sm-4
+            br
+            = f.submit "投稿する", class: "btn btn-primary btn-lg", :data => {:disable_with => "投稿中..."}, tabindex: 2
+
+    #mutter_data
+      / - cache :mutter_data do
+      = render :partial => "list"
+
+    .mgn-t40.text-center
+      - #= link_to "もっと見る", "javascript:void(0)", {id: "show_more", class: "left btn"}
+      #autopager_loading.btn.btn-warning.btn-block
+        = fa_icon 'refresh', class: 'fa-spin'
+        | 　次のページを読込中です　
+        = fa_icon 'refresh', class: 'fa-spin'
+

@@ -1,9 +1,8 @@
 class BlogsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
-  before_action :set_blog, only: [:show, :edit, :update, :destroy, :show_mobile, :destroy_mobile, :edit_mobile, :destroy_confirm_mobile]
+  before_action :authenticate_user!, :except => [:create_images]  #sakikazu これがないとcreateアクションの中に入ることすらない。 for uploadify
+  before_action :set_blog, only: [:show, :edit, :update, :destroy]
   before_action :init
-
-  hankaku_filter
+  before_action :set_ups_data, only: [:show]
 
   # GET /blogs
   # GET /blogs.xml
@@ -32,41 +31,9 @@ class BlogsController < ApplicationController
     end
   end
 
-  def index_mobile
-    if params[:username] && (params[:username] != current_user.username)
-      @user = User.find_by_username(params[:username])
-      @blogs = Blog.joins(:user).where(user_id: @user.id).page(params[:page]).per(5)
-    else
-      @blogs = Blog.joins(:user).where(user_id: current_user.id).page(params[:page]).per(5)
-    end
-    @content_title = (@user ? @user.dispname : "自分") + "の日記"
-
-    render :action => :index_mobile, :layout => "mobile"
-  end
-
-  def everyone_mobile
-    @content_title = "みんなの日記(更新日順)"
-    @blog_count_by_user = []
-    tmp1 = Blog.count(:group => :user_id)
-    tmp2 = Blog.maximum(:created_at, :group => :user_id, :order => "created_at DESC")
-    tmp2.each do |user_id, val|
-      user = User.find_by_id(user_id)
-      @blog_count_by_user << [user, tmp1[user_id], val]
-    end
-
-    render :action => :everyone_mobile, :layout => "mobile"
-  end
-
-  def show_mobile
-    @content_title = @blog.user.dispname + "の日記"
-    render :action => :show_mobile, :layout => "mobile"
-  end
-
   # GET /blogs/1
   # GET /blogs/1.json
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
     @new_comment = @blog.comments.build
 
     respond_to do |format|
@@ -87,19 +54,8 @@ class BlogsController < ApplicationController
     end
   end
 
-  def new_mobile
-    @content_title = "日記を書く"
-    @blog = Blog.new
-    render :action => :new_mobile, :layout => "mobile"
-  end
-
   # GET /blogs/1/edit
   def edit
-  end
-
-  def edit_mobile
-    @content_title = "日記を編集する"
-    render :action => :edit_mobile, :layout => "mobile"
   end
 
   # POST /blogs
@@ -164,21 +120,9 @@ class BlogsController < ApplicationController
     redirect_to(blogs_url)
   end
 
-  def destroy_mobile
-    @blog = Blog.find(params[:id])
-    @blog.destroy
-
-    redirect_to :action => :index_mobile, :layout => "mobile"
-  end
-
-  def destroy_confirm_mobile
-    @content_title = "削除の確認"
-    render :action => :destroy_confirm_mobile, :layout => "mobile"
-  end
-
   def create_comment
     if params[:comment][:content].blank?
-      render :text => "", :status => 500
+      @error_message = 'コメントを入力しないと投稿できません'
       return
     end
 
@@ -201,12 +145,6 @@ class BlogsController < ApplicationController
     @bcom.destroy
 
     render "create_comment.js"
-  end
-
-  def destroy_comment_confirm_mobile
-    @content_title = "削除の確認"
-    @bcom = Comment.find(params[:id])
-    render :action => :destroy_comment_confirm_mobile, :layout => "mobile"
   end
 
   def destroy_image

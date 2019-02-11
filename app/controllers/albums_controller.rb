@@ -1,8 +1,9 @@
 class AlbumsController < ApplicationController
-  before_filter :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
-  before_filter :authenticate_user!
+  before_action :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
+  before_action :authenticate_user!
   before_action :set_album, only: [:show, :edit, :update, :destroy, :download]
   before_action :init
+  before_action :set_ups_data, only: [:show]
 
   # GET /albums
   # GET /albums.json
@@ -51,9 +52,6 @@ class AlbumsController < ApplicationController
   # GET /albums/1
   # GET /albums/1.json
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
     uploader = nil
     @sort_flg = 2
     @media_filter = 1
@@ -111,9 +109,6 @@ class AlbumsController < ApplicationController
 
     # アップロード者リスト
     @uploader_list = @album.photos.includes(user: :user_ext).select('distinct user_id').map{|p| [p.user.id, p.user.dispname]}
-
-    # AutoPager対応
-    @autopagerable = true
 
     # 動画アップロード用
     @movie = @album.movies.build
@@ -223,6 +218,11 @@ class AlbumsController < ApplicationController
   end
 
   def create_comment
+    if params[:comment][:content].blank?
+      @error_message = 'コメントを入力しないと投稿できません'
+      return
+    end
+
     @comment = Comment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.save

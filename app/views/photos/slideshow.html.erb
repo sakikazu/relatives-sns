@@ -1,12 +1,13 @@
+<div class="col-sm-12">
 <% if @from_top_flg %>
   <div class="well">
   <% if editable(current_user, @photo.user) %>
     <legend>写真情報の編集</legend>
     <%= form_for @photo, :url => update_from_slideshow_album_photo_path(@photo.album, @photo), :remote => true do |f| %>
       タイトル<br />
-      <%= f.text_field :title %><br />
+      <%= f.text_field :title, class: 'form-control' %><br />
       写真の説明<br />
-      <%= f.text_area :description, rows: 5, class: "span5" %><br />
+      <%= f.text_area :description, rows: 5, class: "form-control" %><br />
       <%= f.submit "編集する", class: "btn btn-primary" %>※この画像のアップロード者のみ可能
     <% end -%>
     <div id="info"></div>
@@ -24,16 +25,15 @@
   <%= render :partial => "slidecontent" %>
 </div>
 
-<div class="span6 offset1">
-<h3 class="normal">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
+<h3 class="normal mt30">コメント <span id="comment_area"><%= link_to "(上部に移動)", "#slideshow" %></h3>
 <div id="photo_comments">
   <%= render :partial => "comments" %>
 </div>
 
-<div id="photo_comment_form">
+<div id="photo_comment_form" class="mb20">
   <%= form_tag create_comment_album_photo_path(@photo.album, @photo), remote: true do |f| %>
-    <%= text_area_tag :content, nil, rows: 5, class: "span5", placeholder: "コメントする" %><br />
-    <%= submit_tag "投稿する", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
+    <%= text_area_tag :content, nil, rows: 4, class: "form-control", placeholder: "コメントする" %><br />
+    <%= submit_tag "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
   <% end -%>
 </div>
 </div>

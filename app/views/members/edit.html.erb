@@ -1,0 +1,84 @@
+<div class="col-sm-7">
+
+  <div class='mb25'>
+    <%= link_to "一覧へ", members_path, class: "btn btn-light" %>
+    <%= link_to "詳細へ", member_path(@user), class: "btn btn-light" %>
+  </div>
+
+<h2 class='mt30 mb30'><%= @user.dispname(User::FULLNICK) %></h2>
+
+<% if current_user.editable(@user) %>
+  <%= render 'account_info' %>
+<% end %>
+
+<div class="page-header">
+  <h3>情報を変更する</h3>
+</div>
+
+<%= form_for @user.user_ext, html: form_html_option, url: member_path(@user), method: "put" do |f| %>
+<table class="table table-striped table-bordered table-hover">
+  <%# todo: new.html.hamlみたいに子formみたいにするかなぁ %>
+  <tr><th>家族</th><td><%#= f.select :parent_id, @users.map{|u| ["#{u.dispname(User::FULLNAME)}の家族", u.id]}, {:include_blank => true}, class: 'form-control' %></td></tr>
+  <tr><th>姓</th><td><%= f.text_field :familyname, class: 'form-control' %></td></tr>
+  <tr><th>名</th><td><%= f.text_field :givenname, class: 'form-control' %></td></tr>
+  <tr><th>プロフィール画像</th>
+    <td>
+      <div class='mb20'>
+        <%= link_to(image_tag(@user.user_ext.image(:thumb), class: "img-polaroid"), @user.user_ext.image.url(:large), {:class => colorbox_class}) %>
+      </div>
+      <%= f.file_field :image, class: 'form-control' %>
+    </td>
+  </tr>
+  <tr><th>ニックネーム</th><td><%= f.text_field :nickname, class: 'form-control' %></td></tr>
+  <tr><th>性別</th><td><%= f.select :sex, UserExt::SEX_LIST, {:include_blank => true}, class: 'form-control' %></td></tr>
+  <tr><th>血液型</th><td><%= f.select :blood, UserExt::BLOOD_LIST, {:include_blank => true}, class: 'form-control' %></td></tr>
+  <tr><th>住所(都道府県)</th><td><%= f.text_field :addr1, class: 'form-control' %></td></tr>
+  <tr><th>住所(市区町村)</th><td><%= f.text_field :addr2, class: 'form-control' %></td></tr>
+  <tr><th>住所(番地とか)</th><td><%= f.text_field :addr3, class: 'form-control' %></td></tr>
+  <tr><th>住所(アパート名とか)</th><td><%= f.text_field :addr4, class: 'form-control' %></td></tr>
+  <tr><th>出身地</th><td><%= f.text_field :addr_from, class: 'form-control' %></td></tr>
+  <tr><th>誕生日</th>
+    <td>
+      <div class='form-date-select-wrapper'>
+        <%= f.date_select :birth_day, {:start_year => 1910, :end_year => Date.today.year, :use_month_numbers => true, :include_blank => true}, class: 'form-control' %>
+      </div>
+      <%#= f.calendar_date_select :birth_day, :popup=>:force, :embedded => true, :year_range => Time.local(1910,1,1,1,1,1)..0.years.ago %>
+    </td>
+  </tr>
+  <tr><th>仕事</th><td><%= f.text_field :job, class: 'form-control' %></td></tr>
+  <tr><th>趣味</th><td><%= f.text_field :hobby, class: 'form-control' %></td></tr>
+  <tr><th>特技</th><td><%= f.text_field :skill, class: 'form-control' %></td></tr>
+  <tr><th>性格</th><td><%= f.text_field :character, class: 'form-control' %></td></tr>
+  <tr><th>自慢</th><td><%= f.text_field :jiman, class: 'form-control' %></td></tr>
+  <tr><th>夢</th><td><%= f.text_field :dream, class: 'form-control' %></td></tr>
+  <tr><th>尊敬する人</th><td><%= f.text_field :sonkei, class: 'form-control' %></td></tr>
+  <tr><th>休日の過ごし方</th><td><%= f.text_field :kyujitsu, class: 'form-control' %></td></tr>
+  <tr><th>マイブーム</th><td><%= f.text_field :myboom, class: 'form-control' %></td></tr>
+  <tr><th>好きな食べ物</th><td><%= f.text_field :fav_food, class: 'form-control' %></td></tr>
+  <tr><th>嫌いな食べ物</th><td><%= f.text_field :unfav_food, class: 'form-control' %></td></tr>
+  <tr><th>好きな映画</th><td><%= f.text_field :fav_movie, class: 'form-control' %></td></tr>
+  <tr><th>好きな本</th><td><%= f.text_field :fav_book, class: 'form-control' %></td></tr>
+  <tr><th>好きなスポーツ</th><td><%= f.text_field :fav_sports, class: 'form-control' %></td></tr>
+  <tr><th>好きな音楽</th><td><%= f.text_field :fav_music, class: 'form-control' %></td></tr>
+  <tr><th>好きなゲーム</th><td><%= f.text_field :fav_game, class: 'form-control' %></td></tr>
+  <tr><th>好きなブランド</th><td><%= f.text_field :fav_brand, class: 'form-control' %></td></tr>
+  <tr><th>今欲しいもの</th><td><%= f.text_field :hosii, class: 'form-control' %></td></tr>
+  <tr><th>今行きたいところ</th><td><%= f.text_field :ikitai, class: 'form-control' %></td></tr>
+  <tr><th>今やりたいこと</th><td><%= f.text_field :yaritai, class: 'form-control' %></td></tr>
+  <tr><th>自由欄</th><td><%= f.text_area :free_text, class: 'form-control', rows: 7 %></td></tr>
+</table>
+
+  <%= f.hidden_field :user_id %>
+  <tr><th><%= f.submit "更新", class: "btn btn-primary btn-block" %></td></tr>
+<% end %>
+
+<% if current_user.admin? %>
+  <div class="mt20 text-center alert alert-danger">
+    <p class="important">管理者のみ</p>
+    <%= link_to "削除", member_path(@user), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger" %>
+  </div>
+<% end %>
+
+</div>
+
+

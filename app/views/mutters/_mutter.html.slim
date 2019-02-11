@@ -1,0 +1,46 @@
+.mutter_content[id="mutter#{mutter.id}"]
+  - if request.smart_phone?
+    .info-area-smp
+      .icon
+        p = image_tag mutter.user_image_path, :size => "50x50", alt: "プロフィール画像", class: 'img-thumbnail'
+      .info-area-right
+        = link_to mutter.user.dispname, mutter_by_user_path(mutter.user.id), {:title => mutter.user.dispname(User::FULLNAME)} if mutter.user.present?
+        br
+        = link_to (l mutter.created_at), mutter_path(mutter, anchor: "mutter#{mutter.id}")
+        br
+        span.nice
+          span[id="cont_#{mutter.id}"]
+            = nice_field(mutter, "mutter", "#cont_#{mutter.id}")
+          - # 検索時などはmutterが子である場合もあるので要判定
+          - if mutter.parent?
+            = link_to fa_icon('comment', text: 'レス'), "#myModal#{mutter.id}", data: { toggle: 'modal' }
+
+    .content-area-smp
+      .content
+        == draw_content(mutter)
+      .delete[data-mutter-id="#{mutter.user&.id}" style="display:none"]
+        p = link_to("削除", mutter, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true)
+
+  - else
+    .icon
+      p = image_tag mutter.user_image_path, :size => "50x50", alt: "プロフィール画像", class: 'img-thumbnail'
+    .content-area
+      .info-area
+        .info-left
+          span.name
+            = link_to mutter.user.dispname, mutter_by_user_path(mutter.user.id), {:title => mutter.user.dispname(User::FULLNAME)} if mutter.user.present?
+          span.ml10
+            = useragent_short(mutter.ua)
+          span.time
+            = link_to (l mutter.created_at), mutter_path(mutter, anchor: "mutter#{mutter.id}")
+        .info-right
+          span.nice
+            span[id="cont_#{mutter.id}"]
+              = nice_field(mutter, "mutter", "#cont_#{mutter.id}")
+            - # 検索時などはmutterが子である場合もあるので要判定
+            - if mutter.parent?
+              = link_to fa_icon('comment', text: 'レス'), "#myModal#{mutter.id}", data: { toggle: 'modal' }
+      .content
+        == draw_content(mutter)
+      .delete[data-mutter-id="#{mutter.user&.id}" style="display:none"]
+        p = link_to("削除", mutter, data: {confirm: "本当に削除してもよろしいですか？"}, :method => :delete, remote: true)

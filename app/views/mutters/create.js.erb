@@ -1,19 +1,10 @@
-<% if @status == "error" %>
-  alert('つぶやきを入力しないと投稿できません');
-  return
-
+<% if @error_message.present? %>
+    alert("<%= @error_message %>");
 <% else %>
 $('.modal-mutter-reply').modal('hide');
-$('#mutter_content').val('');
-$("#mutter_image").siblings().val('')
-$("#create_notification").show().fadeOut(3000);
-
-$('#mutter_data').html(
-  "<%= escape_javascript(render :partial => 'list', :locals => {mutters: @mutters, mutter: @mutter}) %>"
-);
-
-$(function(){
-  $(".colorbox").colorbox();
-});
-
+$("textarea[name='mutter[content]']").val('')
+$("input[name='mutter[image]']").val('')
+// TODO: toastrに置き換えたい
+$("#mutter > #form").after('<div id="create_notification" class="alert alert-success text-center">つぶやきを投稿しました</div>');
+$("#create_notification").fadeOut(3000);
 <% end %>

@@ -1,12 +1,35 @@
-class Mutter < ActiveRecord::Base
+# == Schema Information
+#
+# Table name: mutters
+#
+#  id                    :integer          not null, primary key
+#  content               :text(65535)
+#  deleted_at            :datetime
+#  for_sort_at           :datetime
+#  image_content_type    :string(255)
+#  image_file_name       :string(255)
+#  image_file_size       :integer
+#  image_updated_at      :datetime
+#  invisible_in_timeline :boolean          default(FALSE)
+#  leave_me              :boolean          default(FALSE)
+#  ua                    :string(255)
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  celebration_id        :integer
+#  reply_id              :integer
+#  user_id               :integer
+#
+
+class Mutter < ApplicationRecord
   acts_as_paranoid
 
   # kaminari
   paginates_per 7
+  PAGINATES_PER_FOR_ALL = 15
 
   belongs_to :user
-  belongs_to :celebration
-  belongs_to :parent, class_name: "Mutter", foreign_key: "reply_id"
+  belongs_to :celebration, optional: true
+  belongs_to :parent, class_name: "Mutter", foreign_key: "reply_id", optional: true
   has_many :children, class_name: "Mutter", foreign_key: "reply_id"
   has_many :nices, :as => :asset
 
@@ -23,10 +46,13 @@ class Mutter < ActiveRecord::Base
   before_save :fill_for_sort_at
   after_save :save_related_media
   after_create :update_sort_at
+  after_create_commit :broadcast_mutter_channel
+
   # validates_presence_of :content
+
   attr_accessor :search_word, :action_flg, :year, :month, :image, :is_save_related_media
 
-  @@imap = nil
+  VISIBLE_INITIAL_COMMENTS = 3
 
   # content_name = "mutter"
   # has_attached_file :image,
@@ -39,8 +65,6 @@ class Mutter < ActiveRecord::Base
     # :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
 
   # validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
-
-  scope :user_is, lambda {|n| n.present? ? where(:user_id => n).id_desc : id_desc}
 
   # [memo]こうやってそれぞれにuser、user_extを指定するようにすると、最初のリクエスト時にはやっぱ時間短縮されてる。
   # 二度目のリクエストではキャッシュされるらしく、それぞれに指定しなかった時と同じ速度になる。
@@ -118,7 +142,7 @@ class Mutter < ActiveRecord::Base
     # [後方不一致の正規表現]
     # 顔文字対策(ex. 「(・ω<)ああ」と書くと、sanitizeによって「<」以降が消えてしまうので、タグとしての「<」でなければ、「＜」に置換する
     # この正規表現だと、(・ω<)のあとにタグ<iframe>とか入れられたら顔文字の置換はされないけどな
-    content = self.content.gsub(/<(?!.*>)/, "＜")
+    content = self.content&.gsub(/<(?!.*>)/, "＜")
 
     if self.celebration.present?
       "<span class='badge badge-warning'>【祝】 #{self.celebration.user.try(:dispname)}さんへ</span> #{content}"
@@ -126,70 +150,6 @@ class Mutter < ActiveRecord::Base
       content
     end
   end
-
-  # -------------------------------------
-  # メールからつぶやき、画像を取得する
-  # ※指定したラベルにある、未読のメールで、件名に特定の文字列が入っており、ファイルが添付されているメールが処理対象
-  #
-  # ref: ruby-gmailを使ってRubyからGmailのメールを受信して本文を取得 - Shoken OpenSource Society http://shoken.hatenablog.com/entry/20120401/p1
-  # -------------------------------------
-  require 'gmail'
-  def self.create_from_mail
-    config = YAML.load(File.read(File.join(Rails.root, 'config', 'gmail.yml')))
-    gmail = Gmail.new(config['username'], config['password'])
-    mails =  gmail.mailbox(config['gmail_label']).emails(:unread).each do |mail| #emailsの引数には:all,:read,:unreadがある
-      self.create_from_mail2(mail)
-    end
-    gmail.disconnect
-  end
-
-  # ファイルが添付されてないとMutterを作成しない
-  def self.create_from_mail2(email)
-    # check -- タイトルは正しいか、user_idは取得できたか、ファイルが添付されているか
-    sub = email.subject
-    title_check = [sub.index("[a-dan-hp]").present?, sub.index("[user_id]").present?].all?
-    u = sub.split("[user_id]")[1]
-    u_check = u.present? && u =~ /\d/
-    return if [title_check, u_check, email.attachments.present?].any?{|x| x.blank?}
-    p '### mail has attachments & title check ok -------------'
-
-    user_id = u.to_i
-    content = self.get_content(email)
-
-    # todo 1メール中の複数ファイルって対応できるのかな？
-    # todo 現在、まずはファイルに保存してそれを読み込んでPaperclipに登録しているが、もっと簡易化できると思うんだけど
-    #メールの判定などのコード(省略)  ←って何をすべきなんだろう？
-    email.attachments.each do |attach|
-      # p attach.content_type
-      # p attach.methods
-      # p attach.filename
-      imagefilename = '/tmp/adanhp_for_mutter_image.jpg'
-      File.open(imagefilename, "w+b", 0644) {|f| f.write attach.body.decoded}
-      image = File.new(imagefilename)
-      if attach.content_type.start_with?('image/')
-        mutter = self.new(:user_id => user_id, :content => content)
-        mutter.image = image #paperclip 関連が生成される(画像、ディレクトリ)
-        mutter.save
-        p "### save one image"
-      end
-    end
-  end
-
-   def self.get_content(email)
-     body = email.text_part.decoded
-     delim = $&
-     parts = body.split(delim)
-     p parts
-     # bodyに「Attachment:」文字列が存在したら削除する（念のため2回）
-     idx = parts.index("Attachment:")
-     if idx.present?
-       parts.delete_at(idx)
-       parts.delete_at(idx)
-     end
-     content = parts.join(" ")
-     content.blank? ? "(本文なし)" : content
-   end
-
 
    #
    # 更新されたMutterデータを取得する（つぶやき自動表示更新用）
@@ -246,7 +206,31 @@ class Mutter < ActiveRecord::Base
    end
 
   def user_image_path
-    user.present? ? user.profile_path : "noimage.gif"
+    user.present? ? user.user_ext.image(:small) : "noimage.gif"
   end
 
+  def self.count_unread_leave_me_mutters(user, shown_leave_me)
+    if shown_leave_me.present?
+      user.save_extension(UserExtension::LAST_READ_LEAVE_ME_AT, Time.now())
+      return 0
+    else
+      ext = user.find_extension(UserExtension::LAST_READ_LEAVE_ME_AT)
+      last_read_at = ext.present? ? ext[:value] : Time.parse("2000/1/1")
+      return self.parents_mod.where(leave_me: true).where.not(user_id: user.id).where("created_at > ?", last_read_at).count
+    end
+  end
+
+  private
+
+  def broadcast_mutter_channel
+    ActionCable.server.broadcast 'mutter_channel', mutter_html: render_mutter, parent_mutter_id: self.reply_id
+  end
+
+  def render_mutter
+    if self.parent?
+      ApplicationController.renderer.render(partial: 'mutters/mutter_with_comments', locals: { mutter_with_comments: self })
+    else
+      ApplicationController.renderer.render(partial: 'mutters/mutter', locals: { mutter: self })
+    end
+  end
 end

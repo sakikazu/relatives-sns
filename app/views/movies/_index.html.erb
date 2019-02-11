@@ -3,9 +3,9 @@
   <% movies.each do |movie| -%>
     <div class="thumb">
       <div class="title">
-        <h4><span class="label label-success"><i class="icon-facetime-video"></i></span> <%= link_to movie.title, movie %></h4>
+        <h4><span class="badge badge-success"><%= fa_icon 'video-camera' %></span> <%= link_to movie.title, movie %></h4>
         <div class="extra">
-          <i class='icon icon-comment'></i> <%= movie.comments.size %>
+          <%= fa_icon 'comment', text: movie.comments.size %>
           <br><%= nice_field_disp_only(movie) %>
         </div>
       </div>
@@ -13,11 +13,11 @@
       <div class="info">
         <div>
           <%= "投稿者：#{movie.user.dispname}" %><br>
-          <%= "投稿：#{movie.created_at.to_s(:short2)}" %>
+          <%= "投稿：#{time_shorter(movie.created_at)}".html_safe %>
         </div>
         <% if movie.comments.last.try(:created_at) %>
         <div>
-          <%= "最新コメント：#{movie.comments.last.created_at.to_s(:short2)}" %>
+          <%= "最新コメント：#{time_shorter(movie.comments.last.created_at)}".html_safe %>
         </div>
         <% end %>
       </div>

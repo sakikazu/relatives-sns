@@ -75,7 +75,7 @@ class API < Grape::API
       timeline = build_timeline_data(mutters)
       return {
         timeline: timeline,
-        latest_request_at: Time.now.to_s(:long)
+        latest_request_at: Time.now.to_s(:normal)
       }
     end
 
@@ -105,7 +105,7 @@ class API < Grape::API
       timeline = build_timeline_data(mutters)
       return {
         timeline: timeline,
-        latest_request_at: Time.now.to_s(:long)
+        latest_request_at: Time.now.to_s(:normal)
       }
     end
 
@@ -187,7 +187,7 @@ class API < Grape::API
         access_time = user.last_request_at.present? ? user.last_request_at.strftime("%Y-%m-%d %H:%M:%S") : ""
         requested_users << {
           name: user.dispname,
-          profile_image_path: user.profile_path,
+          profile_image_path: user.user_ext.image(:small),
           access_time: access_time,
         }
       end

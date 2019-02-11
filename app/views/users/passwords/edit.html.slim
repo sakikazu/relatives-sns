@@ -1,0 +1,28 @@
+.col-sm-6
+  .mb30
+    = link_to '戻る', root_path, class: 'btn btn-light'
+
+  .page-header
+    h2 パスワード再設定
+
+  = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+    - if resource.errors.any?
+      .alert.alert-danger
+        p 入力エラーがあります。下記のエラー内容を確認してください。
+        - if resource.errors.messages.has_key?(:reset_password_token)
+          strong
+            | [リセットパスワードトークン不正]
+            br
+            | このパスワード再設定用リンクは古い可能性があります。再度、パスワード再設定の手続きを行い、新しいメールからやり直してください。
+          / = f.full_error :reset_password_token
+
+    .form-inputs
+      = f.input :reset_password_token, as: :hidden
+      = f.input :password, label: "新しいパスワード", required: true, autofocus: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), input_html: { class: 'form-control' }
+      = f.input :password_confirmation, label: "新しいパスワードを再入力", required: true, input_html: { class: 'form-control' }
+
+    .form-actions.mt30
+      = f.button :submit, "パスワードを再設定する", class: 'btn btn-warning'
+
+  / NOTE: ここに「ログイン」があるとユーザーが混乱しそうなので消す
+  / = render "users/shared/links"

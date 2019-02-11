@@ -1,32 +1,17 @@
-<div class="row">
-  <div class="span7 offset2">
-
-<script>
-jQuery(document).ready(function(){
-  jQuery("#new_board_info").popover({
-    placement: "bottom",
-    trigger: 'click',
-    html: true,
-    delay: 0,
-  });
-});
-</script>
-
+  <div class="col-sm-6">
 <%= link_to "新規作成", new_board_path, class: "btn btn-info" %>
-<a href="#" id="new_board_info" data-content="<div style='font-size:13px'>長期に渡って報告したいことがあったり<br>みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br><br>また、コメントに画像をつけられるのは掲示板だけなので<br>そこも考慮するといいでしょう。</div>" data-original-title="日記との使い分け"><i class="icon-exclamation-sign"></i>&nbsp;日記との使い分け</a>
 
 <div class="page-header"><h3>掲示板一覧</h3></div>
-<div class="select_menu clearfix">
-  <% [["最新コメント順", 1], ["作成日時順", 2]].each do |n, i| -%>
-    <% if @sort == i -%>
-      <%= link_to n, boards_path(:sort => i), class: "btn btn-danger disabled" %>
-    <% else -%>
-      <%= link_to n, boards_path(:sort => i), class: "btn btn-danger" %>
-    <% end -%>
-  <% end -%>
-</div>
+<ul class="nav nav-pills nav-fill mt20 mb20">
+  <li class="nav-item">
+    <%= link_to '最新コメント順', boards_path(sort: 1), class: "nav-link #{'active' if @sort == 1}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to '作成日時順', boards_path(sort: 2), class: "nav-link #{'active' if @sort == 2}" %>
+  </li>
+</ul>
 
-<%= paginate @boards, window: 2 %>
+<%= paginate @boards, window: 3, outer_window: 2 %>
 <% @boards.each do |board| %>
   <div class="well well-small">
     <legend><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", board %></legend>
@@ -35,8 +20,8 @@ jQuery(document).ready(function(){
       <br />
     <% end -%>
     <div class="bar">
-      <%= "作成者：#{board.user.dispname}" %> | <%= "作成日時：#{board.created_at.to_s(:short2)}" %>
-      <%= " | 最新コメント日時：#{board.board_comments.last.created_at.to_s(:short2)}" if board.board_comments.last && board.board_comments.last.created_at %>
+      <%= "作成者：#{board.user.dispname}" %> | <%= "作成日時：#{time_shorter(board.created_at)}".html_safe %>
+      <%= " | 最新コメント日時：#{time_shorter(board.board_comments.last.created_at)}".html_safe if board.board_comments.present? %>
       <br />
       <% if editable(current_user, board.user) -%>
         <%= link_to '編集', edit_board_path(board) %>
@@ -45,7 +30,6 @@ jQuery(document).ready(function(){
     </div>
   </div>
 <% end %>
-<%= paginate @boards, window: 2 %>
+<%= paginate @boards, window: 3, outer_window: 2 %>
 
   </div>
-</div>

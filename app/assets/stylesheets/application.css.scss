@@ -8,10 +8,13 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require font-awesome
  *= require_self
  *= require_tree .
  */
 
+// Custom bootstrap variables must be set or imported *before* bootstrap.
+@import "bootstrap";
 
 /**********************************************
  from scaffold.css
@@ -50,6 +53,16 @@
 
 
 /**********************************************
+ error page
+**********************************************/
+#error {
+  .alert {
+    margin: 50px 0 30px;
+    padding: 0 30px 45px;
+  }
+}
+
+/**********************************************
  other
 **********************************************/
 #about_contents {
@@ -67,9 +80,57 @@
   font-size: 20px;
 }
 
+/* 地図(members#map) */
+#gmap {
+  width: 800px;
+  height: 550px;
+  float: left;
+}
+#gmap_sidebar {
+  margin-left: 30px;
+  width: 200px;
+  float: left;
+}
+
+
 /**********************************************
  mutter
 **********************************************/
+#slider_photo {
+  position: relative;
+
+  #slider_update_info {
+    z-index: 100;
+    background-color: black;
+    opacity: 0.8;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    font-size: 2em;
+    padding: 20px;
+    text-align: center;
+    color: yellow;
+  }
+}
+
+.view_updated_contents {
+  padding: 7px 8px;
+
+  .message {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+  .buttons {
+    text-align: right;
+    a {
+      color: white;
+      padding-right: 5px
+    }
+  }
+}
+
 #mutter .leave_me {
   margin-top: 15px;
 }
@@ -92,6 +153,7 @@
   background-color: white;
   /* border: 1px outset gray; */
   border: 2px solid lightgray;
+  border-radius: 8px;
 }
 .mutter_rows li.even{
   background-color: MistyRose;
@@ -99,74 +161,101 @@
 
 .mutter_content {
   position:relative;
-}
-.mutter_content .icon {
-  margin-left: 6px;
-  position:absolute;
-  top: 5px;
-  left: 0px;
-}
-.mutter_content .icon p {
-  margin: 4px 0px;
-}
-.mutter_content .icon p img {
-  border: 1px gray solid;
-  padding: 4px;
+
+  .delete > p {
+    text-align: right;
+    margin-bottom: 0;
+  }
+
+  .mutter-media {
+    margin-top: 18px;
+  }
 }
 
-.mutter_content .content-area {
-  margin-left: 78px;
-}
-.mutter_content .content {
-  padding: 5px 4px;
-}
-.mutter_content .mutter-media {
-  margin-top: 18px;
+// PC版
+.mutter_content {
+  .icon {
+    margin-left: 6px;
+    position:absolute;
+    top: 5px;
+    left: 0px;
+
+    p {
+      margin: 4px 0px;
+    }
+  }
+
+  .content-area {
+    margin-left: 75px;
+
+    .content {
+      padding: 10px 4px;
+    }
+  }
+
+  .info-area {
+    padding-bottom: 3px;
+    border-bottom: 1px dotted gray;
+    margin-bottom: 5px;
+    height: 30px;
+
+    .info-left {
+      position:absolute;
+      top: 0px;
+      left: 80px;
+      .time {
+        margin-left: 15px;
+        color: DimGray;
+      }
+      .name a{
+        font-weight: bold;
+        /* color: blue; */
+      }
+    }
+    .info-right {
+      position:absolute;
+      top: 0px;
+      right: 0px;
+      .nice {
+      }
+    }
+  }
 }
 
-.mutter_content .info-area {
-  padding-bottom: 3px;
-  border-bottom: 1px dotted gray;
-  margin-bottom: 5px;
-  height: 30px;
-}
-.mutter_content .info-area.smp {
-  height: 65px;
-}
+// スマホ版
+.mutter_content {
+  .info-area-smp {
+    border-bottom: 1px dotted gray;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
 
-.mutter_content .info-left {
-  position:absolute;
-  top: 5px;
-  left: 80px;
-}
-.mutter_content .info-left .time {
-  margin-left: 15px;
-  color: DimGray;
-}
-.mutter_content .info-left .name a{
-  font-weight: bold;
-  /* color: blue; */
-}
-.mutter_content .info-right {
-  position:absolute;
-  top: 5px;
-  right: 0px;
-}
-.mutter_content .info-right .nice {
-}
-.mutter_content .delete {
-  height: 30px;
-}
-.mutter_content .delete p {
-  position:absolute;
-  bottom: 0px;
-  right: 0px;
+    .icon {
+      margin-left: 6px;
+      position:absolute;
+      top: 5px;
+      left: 0px;
+
+      p {
+        margin: 4px 0px;
+      }
+    }
+    .info-area-right {
+      margin-left: 70px
+    }
+  }
+  .content-area-smp {
+    padding: 5px;
+    .content {
+      padding: 4px;
+    }
+  }
 }
 
 ul.children {
-  background: #DCEAF4;
+  // background: #DCEAF4;
   /* width: 550px; */
   /* margin-left: 80px; */
+  padding-left: 0;
   margin: 15px;
 }
 
@@ -181,9 +270,8 @@ ul.children li {
   /* padding: 5px 0px 5px; */
   text-align:center;
 }
-#nichirei .main{
+#nichirei .main {
   font-size:150%;
-  margin: 7px;
   font-weight:bold;
   color:red;
 }
@@ -225,21 +313,12 @@ ul.children li {
   width: 90px;
 }
 
-#form_search{
-  margin: 30px auto;
-}
-#form_search form{
-  text-align: center;
-  margin-left: 13px;
-  display: inline;
-}
-
 
 /* slider-kit */
 .carousel-demo2{width:100%;height:130px;background:black;}
 
 /* Navbar */
-.carousel-demo2 .sliderkit-nav{left:0;bottom:0;width:100%;height:115px;padding:10px;}
+.carousel-demo2 .sliderkit-nav{left:0;bottom:0;width:100%;height:132px;padding:10px;}
 .carousel-demo2 .sliderkit-nav-clip ul li{float:left;margin:0 10px 0 0;}
 .carousel-demo2 .sliderkit-nav-clip ul li a{display:block;width:152px;height:115px;overflow:hidden;margin:0;opacity:1;}
 .carousel-demo2 .sliderkit-nav-clip ul li a:hover{opacity:0.7;}
@@ -266,15 +345,19 @@ ul.children li {
 
 /*footer*/
 footer {
-  margin-top: 80px;
+  margin-top: 70px;
   background-color: black;
   color: white;
   text-align: center;
-  padding: 5px 0px;
+  padding: 6px 0px;
   width: 100%;
   filter: alpha(opacity=80);
   -moz-opacity:0.8;
   opacity:0.8;
+}
+footer > p {
+  margin: 1px 0;
+  font-size: 90%;
 }
 
 /* hr.strong { */
@@ -314,22 +397,6 @@ footer {
   color:red;
   margin:25px 0px 5px;
 }
-.nice_user {
-  margin: 12px 0px;
-  color: olive;
-  font-weight: bold;
-  font-size: 14px;
-}
-.nice_rank .nice_user {
-  margin: 0px 0px 0px 7px;
-  font-size: 12px;
-}
-/* .nice_content_info { */
-  /* margin-top: 10px; */
-  /* color: gray; */
-/* } */
-
-
 
 
 /**********************************************
@@ -388,8 +455,11 @@ footer {
   font-weight: bold;
   color: red;
 }
-.big {
+.big, .text-big {
   font-size: 120%;
+}
+.text-small {
+  font-size: 85%;
 }
 .block {
   display: block;
@@ -402,6 +472,12 @@ footer {
 }
 .text-center {
   text-align: center;
+}
+.text-underline {
+  text-decoration: underline !important;
+}
+ul {
+  padding-left: 0;
 }
 
 table.th-vertical-top th {
@@ -418,9 +494,6 @@ table.th-vertical-top th {
 /* tableでURLなど一単語のものが改行されずレイアウトが崩れてしまう問題の対処 */
 td {
   word-break: break-all;
-}
-.select_menu {
-  margin: 20px 0px 30px 0px;
 }
 a.colorbox:hover, a.colorbox_fix_size:hover {
   opacity: 0.8;
@@ -777,19 +850,24 @@ h2.normal3 {
 	border:1px solid #ccc;
 }
 
-#members_controller {
+
+/**********************************************
+ 家系図
+**********************************************/
+
+#sakimuras {
   ul.members {
     margin-left: 0;
-    width: 220px;
+    width: 250px;
   }
   ul.child {
-	position:absolute;
+    position:absolute;
   }
   ul.members>li {
     border: 1px solid #666;
     border-radius: 4px;
     list-style-type: none;
-    margin: 0 0 5px 0;
+    margin: 0 0 7px 0;
   }
   ul.members>li.selected {
 	  border: 2px solid red;
@@ -799,17 +877,17 @@ h2.normal3 {
   }
   ul.members>li.zoom {
     padding: 5px;
-    height: 210px;
+    height: 250px;
     cursor: default;
 
     .img {
       text-align:center;
       /* width: 100px; */
-	  height: 100px;
+      height: 100px;
 
-	  img {
-		height: 90px;
-	  }
+      img {
+        height: 90px;
+      }
     }
     .name {
       text-align:center;
@@ -837,13 +915,13 @@ h2.normal3 {
   ul.members>li.list {
     position:relative;
     padding: 5px;
-    height: 60px;
+    height: 85px;
     cursor: pointer;
 
     .img {
       position:absolute;
-      top: 5px;
-      left: 5px;
+      top: 7px;
+      left: 7px;
       width: 50px;
       height: 50px;
 
@@ -860,7 +938,7 @@ h2.normal3 {
       position:absolute;
       top: 5px;
       right: 0px;
-      width: 60px;
+      width: 70px;
       height: 50px;
       margin-right: 5px;
 
@@ -883,10 +961,120 @@ h2.normal3 {
   }
   #generation2, #generation3, #generation4, #generation5 {
     float: left;
-	height: 600px;
-	width: 220px;
+    height: 600px;
+    width: 250px;
     margin-left:5px;
     position:relative;
   }
 
+}
+
+/**********************************************
+ from bootstrap_and_overrides.css.less
+ todo グルーピングして別ファイル切り出したい
+**********************************************/
+*[data-toggle="popover"] {
+  cursor: pointer;
+  color: red;
+}
+
+h1 > small, h2 > small, h3 > small {
+  color: #6c757d;
+  font-size: 65%;
+
+  span.badge {
+    font-size: 85%;
+    padding: 5px 8px;
+  }
+}
+.nav-header {
+  padding: 0px 5px 12px;
+  font-size: 17px;
+}
+
+.page-header {
+  padding-bottom: 0px;
+  margin: 25px 0 25px;
+  border-bottom: 1px solid #eeeeee;
+}
+.page-header h3, .page-header h2 {
+  // color: #003F8E;
+}
+.page-header.ver2 h3, .page-header.ver2 h2 {
+  text-shadow: 1px 1px 0px white, 2px 2px 1px #B0D3FF;
+}
+.page-header small {
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+abbr {
+  font-weight: bold;
+  color: red;
+  font-size: 25px;
+}
+.require_check {
+  font-size: 20px;
+  color: red;
+  font-weight: bold;
+}
+h3 {
+  font-size: 22px;
+  line-height: 25px;
+}
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.well blockquote {
+  border-color: #ddd;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+.well-lg {
+  padding: 24px;
+  border-radius: 6px;
+}
+
+.well.well-narrow {
+  padding: 6px 8px 0px 8px;
+}
+
+.btn-light {
+  border-color: #ccc;
+}
+
+a > i[class^="fa-"], a > i[class*=" fa-"] {
+  color: #3A3838;
+}
+
+/* form error */
+.field_with_errors input {
+  border: 2px solid red;
+}
+.field_with_errors .error {
+  color: red;
+  font-weight: bold;
+  margin-left: 10px;
+}
+/* hidden要素に対するエラーメッセージは非表示にする */
+.input.hidden.field_with_errors {
+  span.error {
+    display: none;
+  }
+}
+
+.form-date-select-wrapper {
+  label {
+    display: block;
+  }
+  .form-control {
+    display: inline-block !important;
+    width: auto !important;
+  }
 }

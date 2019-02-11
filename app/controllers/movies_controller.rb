@@ -1,7 +1,8 @@
 class MoviesController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_movie, only: [:show, :edit, :update, :destroy]
   before_action :init
+  before_action :set_ups_data, only: [:show]
 
   # GET /movies
   # GET /movies.xml
@@ -23,22 +24,8 @@ class MoviesController < ApplicationController
   # GET /movies/1
   # GET /movies/1.xml
   def show
-    #更新情報一括閲覧用
-    @ups_page, @ups_action_info = update_allview_helper(params[:ups_page], params[:ups_id])
-
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @movie }
-    end
-  end
-
-  # GET /movies/new
-  # GET /movies/new.xml
-  def new
-    @movie = Movie.new
-
-    respond_to do |format|
-      format.html # new.html.erb
       format.xml  { render :xml => @movie }
     end
   end
@@ -47,6 +34,7 @@ class MoviesController < ApplicationController
   def edit
   end
 
+  # NOTE: 動画作成はアルバムからなので、これは使ってないような
   # POST /movies
   # POST /movies.xml
   def create
@@ -102,7 +90,7 @@ class MoviesController < ApplicationController
 
   def create_comment
     if params[:content].blank?
-      render :text => "", :status => 500
+      @error_message = 'コメントを入力しないと投稿できません'
       return
     end
 
