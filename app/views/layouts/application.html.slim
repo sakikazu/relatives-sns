@@ -87,6 +87,8 @@ html[lang="ja"]
       = bootstrap_flash
       .row.justify-content-center
         = yield
+      .free-layout-wrapper
+        = yield :free_layout
 
     = render 'shared/qr_modal'
 

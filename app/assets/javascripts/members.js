@@ -54,6 +54,6 @@ function wide_wrapper(id) {
   // #generationのfloatが折り返さない幅にしておくこと
   $('#' + id).width(1300);
   // TODO: floatじゃなくflexでやれば必要なくなるはず
-  $("footer").css({"margin-top" : 800});
+  $("footer").css({"margin-top" : 80});
 }
 
