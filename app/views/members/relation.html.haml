@@ -21,18 +21,18 @@
                 %td #{@count_by_generation[n]}人
 
 - content_for :free_layout do
-  #sakimuras.clearfix
+  #sakimuras
     #generation1
       -# NOTE: partialにしたかったが、単純にやるとhtml階層を潜りながらrenderは書けず、partial内で再帰にしようかとも思ったが、カウンターがわかりづらそうなのと、
       -# ループ内でこれ以上renderを増やしたくないと思ったので辞めた。クリックしたらAjaxで子メンバーをレンダリングも良いが、頻繁にクリックするし、
       -# その度にクリアしてレンダリングってなると速度面で怪しいのでとりあえずこのまま。
       %ul.members
         - @relationed_users.each do |u|
-          %li.list.clearfix{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
+          %li.list{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
             = render partial: 'member_list', locals: {user: u}
           %div{style: "display:none"}
             %ul.members.child{id: "id#{u[:id]}-family"}
-              %li.zoom.clearfix{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
+              %li.zoom{id: "id#{u[:id]}", class: (u[:is_dead] ? "dead" : "alive")}
                 = render partial: 'member_zoom', locals: {user: u}
   
               - if current_user.editable(u)
@@ -41,12 +41,12 @@
   
               - if u[:family].present?
                 - u[:family].each do |uu|
-                  %li.list.clearfix{id: "id#{uu[:id]}", class: (uu[:is_dead] ? "dead" : "alive")}
+                  %li.list{id: "id#{uu[:id]}", class: (uu[:is_dead] ? "dead" : "alive")}
                     = render partial: 'member_list', locals: {user: uu}
   
                   %div{style: "display:none"}
                     %ul.members.child{id: "id#{uu[:id]}-family"}
-                      %li.zoom.clearfix{id: "id#{uu[:id]}", class: (uu[:is_dead] ? "dead" : "alive")}
+                      %li.zoom{id: "id#{uu[:id]}", class: (uu[:is_dead] ? "dead" : "alive")}
                         = render partial: 'member_zoom', locals: {user: uu}
   
                       - if current_user.editable(uu)
@@ -55,12 +55,12 @@
   
                       - if uu[:family].present?
                         - uu[:family].each do |uuu|
-                          %li.list.clearfix{id: "id#{uuu[:id]}", class: (uuu[:is_dead] ? "dead" : "alive")}
+                          %li.list{id: "id#{uuu[:id]}", class: (uuu[:is_dead] ? "dead" : "alive")}
                             = render partial: 'member_list', locals: {user: uuu}
   
                           %div{style: "display:none"}
                             %ul.members.child{id: "id#{uuu[:id]}-family"}
-                              %li.zoom.clearfix{id: "id#{uuu[:id]}", class: (uuu[:is_dead] ? "dead" : "alive")}
+                              %li.zoom{id: "id#{uuu[:id]}", class: (uuu[:is_dead] ? "dead" : "alive")}
                                 = render partial: 'member_zoom', locals: {user: uuu}
   
                               - if current_user.editable(uuu)
@@ -69,12 +69,12 @@
   
                               - if uuu[:family].present?
                                 - uuu[:family].each do |uuuu|
-                                  %li.list.clearfix{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
+                                  %li.list{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
                                     = render partial: 'member_list', locals: {user: uuuu}
   
                                   %div{style: "display:none"}
                                     %ul.members.child{id: "id#{uuuu[:id]}-family"}
-                                      %li.zoom.clearfix{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
+                                      %li.zoom{id: "id#{uuuu[:id]}", class: (uuuu[:is_dead] ? "dead" : "alive")}
                                         = render partial: 'member_zoom', locals: {user: uuuu}
   
                                       - if current_user.editable(uuuu)

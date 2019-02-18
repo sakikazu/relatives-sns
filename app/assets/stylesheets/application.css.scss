@@ -853,6 +853,8 @@ h2.normal3 {
 **********************************************/
 
 #sakimuras {
+  display: flex;
+  justify-content: center;
   margin: auto;
   ul.members {
     margin-left: 0;
@@ -955,11 +957,8 @@ h2.normal3 {
   }
 
   #generation1 {
-    float: left;
   }
   #generation2, #generation3, #generation4, #generation5 {
-    float: left;
-    height: 600px;
     width: 250px;
     margin-left:5px;
     position:relative;
