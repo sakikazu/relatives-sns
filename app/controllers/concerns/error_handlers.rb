@@ -11,18 +11,31 @@ module ErrorHandlers
 
   private
 
+  # NOTE: Exceptionをキャッチしているため、exception_notificationが処理されずメールが飛ばない
+  # 手動でメールを飛ばすようにする
   def rescue500(e)
+    ExceptionNotifier.notify_exception(e)
+    error_log(e, false)
     @exception = e
     render 'errors/500', status: 500
   end
 
   def rescue403(e)
+    error_log(e)
     @exception = e
     render 'errors/403', status: 403
   end
 
   def rescue404(e)
+    error_log(e)
     @exception = e
     render 'errors/404', status: 404
+  end
+
+  def error_log(e, backtracable = false)
+    logger.error '---- ERROR START'
+    logger.error "[#{e.class}] #{e.message}"
+    logger.error e.backtrace.join('\n') if backtracable
+    logger.error '---- ERROR END'
   end
 end
