@@ -12,11 +12,12 @@ $(document).ready(function(){
 });
 </script>
 
-<div id="show" class="btn" style="margin: 5px 2px;">非表示</div>
+<div id="show" class="btn btn-info" style="margin: 5px 2px 20px;">非表示</div>
 <div id="title_index_area">
   <table class="table table-striped table-bordered table-hover table-condensed">
+    <thead>
   <tr>
-    <th>タイトル</th>
+    <th width="200px">タイトル</th>
     <th>写真数</th>
     <th>作成者</th>
     <th>作成日時</th>
@@ -24,8 +25,9 @@ $(document).ready(function(){
     <th>最新コメント日時</th>
     <th>ダウンロード</th>
   </tr>
-  <% @albums.each_with_index do |album, idx| %>
-  <tr<%= " class='odd'" if idx%2==1 %>>
+    </thead>
+    <tbody>
+  <% @albums.each do |album| %>
     <td><%= link_to album.title, album %></td>
     <td><%= @photo_count[album.id] || "0" %></td>
     <td><%= album.user.try(:dispname) %></td>
@@ -35,5 +37,6 @@ $(document).ready(function(){
     <td><%= link_to "ダウンロードする", :action => :download, :id => album.id %></td>
   </tr>
   <% end %>
+    </tbody>
   </table>
 </div>

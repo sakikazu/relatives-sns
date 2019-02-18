@@ -2,7 +2,6 @@
     <%= link_to '自分の日記へ', blogs_path, class: "btn btn-light" %>
     <%= link_to "#{@blog.user.dispname}の日記一覧を見る", blogs_path(:username => @blog.user.username), class: "btn" if @blog.user != current_user %>
     <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
-    <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @blog.user) %>
 
     <div class="page-header ver2">
       <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.comments.select{|n| n.id.present?}.size}）", "#comments" %></small></h3>

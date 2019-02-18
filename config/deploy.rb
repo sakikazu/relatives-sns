@@ -10,7 +10,6 @@ set :repo_url, 'git@bitbucket.org:sakikazu15/adan.git'
 # RVM
 set :rvm1_ruby_version, '2.5.1'
 
-# todo: できてる？
 # sidekiq
 set :sidekiq_config, 'config/sidekiq.yml'
 set :sidekiq_role, :web

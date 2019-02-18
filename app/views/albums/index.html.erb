@@ -13,11 +13,11 @@
     <%= link_to "アルバムトップへ", top_albums_path, class: "btn btn-light" %>
     <div class="page-header"><h3>アルバム詳細一覧<small>写真のダウンロードも可能</small></h3></div>
     <div id="title_index">
-      <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn btn-light" %>
+      <%= link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn btn-info" %>
     </div>
 
     <div class="page-header"><h3>アルバム一覧</h3></div>
-    <div class="select_menu clearfix">
+    <div class="select_menu clearfix mb30">
       <% [["最新写真アップ順", 1], ["アルバム作成順", 2]].each do |n, i| -%>
         <% if @sort == i -%>
           <%= link_to n, "javascript:void()", class: "btn btn-danger disabled" %>

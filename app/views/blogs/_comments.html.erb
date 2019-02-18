@@ -1,8 +1,6 @@
 <% @blog.comments.select{|n| n.id.present?}.each do |co| -%>
   <div class="well well-small">
-    <ul class="nav nav-list">
-      <li class="nav-header"><%= co.user.dispname %>　投稿日時：<%= l co.created_at %></li>
-    </ul>
+    <h5><%= co.user.dispname %>　投稿日時：<%= l co.created_at %></h5>
     <p><%= sani_custom_br(co.content) %></p>
     <%= link_to "削除する", destroy_comment_blog_path(co), data: {confirm: "本当に削除してもよろしいですか？"}, method: "delete", remote: true if editable(current_user, co.user) %>
   </div>

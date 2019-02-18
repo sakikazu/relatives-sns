@@ -1,6 +1,7 @@
 <% @board.board_comments.each do |co| -%>
   <div class="well well-small">
-    <legend><%= co.user.try(:dispname) %>　投稿日時：<%= l co.created_at %></legend>
+    <h5><%= co.user.try(:dispname) %>　投稿日時：<%= l co.created_at %></h5>
+    <hr>
     <div class="image">
       <% if co.attach? -%> 
         <%= link_to image_tag(co.attach(:thumb)), co.attach(:large), {:class => colorbox_class} %><br />

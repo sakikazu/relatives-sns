@@ -9,4 +9,8 @@
 
 <%= render 'form' %>
 
+  <div class="mt50 text-center alert alert-danger">
+    <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @blog.user) %>
+  </div>
+
 </div>

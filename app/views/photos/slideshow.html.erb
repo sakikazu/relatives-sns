@@ -2,7 +2,7 @@
 <% if @from_top_flg %>
   <div class="well">
   <% if editable(current_user, @photo.user) %>
-    <legend>写真情報の編集</legend>
+    <h3>写真情報の編集</h3>
     <%= form_for @photo, :url => update_from_slideshow_album_photo_path(@photo.album, @photo), :remote => true do |f| %>
       タイトル<br />
       <%= f.text_field :title, class: 'form-control' %><br />

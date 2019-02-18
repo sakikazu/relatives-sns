@@ -117,7 +117,7 @@ class BlogsController < ApplicationController
   def destroy
     @blog.destroy
 
-    redirect_to(blogs_url)
+    redirect_to(blogs_url, notice: '日記を削除しました')
   end
 
   def create_comment

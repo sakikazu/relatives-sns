@@ -73,7 +73,7 @@
 <% end %>
 
 <% if current_user.admin? %>
-  <div class="mt20 text-center alert alert-danger">
+  <div class="mt50 text-center alert alert-danger">
     <p class="important">管理者のみ</p>
     <%= link_to "削除", member_path(@user), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger" %>
   </div>

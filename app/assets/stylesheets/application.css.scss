@@ -71,13 +71,10 @@
   opacity: 0.8;
   color: white;
   border-radius: 15px;
-}
 
-#prev-btn {
-  background-color: black;
-  opacity: 0.8;
-  color: white;
-  font-size: 20px;
+  ul {
+    padding-left: 2em;
+  }
 }
 
 /* 地図(members#map) */

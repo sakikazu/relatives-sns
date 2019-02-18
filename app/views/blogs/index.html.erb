@@ -23,7 +23,6 @@
         <p class="text">(本文抜粋)<%= truncate_120_link(blog.content) %></p>
         <% if editable(current_user, blog.user) -%>
           <%= link_to '編集', edit_blog_path(blog) %>
-          <%= link_to '削除', blog, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
         <% end -%>
       </div>
     <% end %>
