@@ -1,0 +1,117 @@
+/**********************************************
+ 家系図
+**********************************************/
+
+#sakimuras {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  ul.members {
+    margin-left: 0;
+    width: 250px;
+  }
+  ul.child {
+    position:absolute;
+  }
+  ul.members>li {
+    border: 1px solid #666;
+    border-radius: 4px;
+    list-style-type: none;
+    margin: 0 0 7px 0;
+  }
+  ul.members>li.selected {
+	  border: 2px solid red;
+  }
+  ul.members>li.add_user {
+	  border: none;
+  }
+  ul.members>li.zoom {
+    padding: 5px;
+    height: 250px;
+    cursor: default;
+
+    .img {
+      text-align:center;
+      /* width: 100px; */
+      height: 100px;
+
+      img {
+        height: 90px;
+      }
+    }
+    .name {
+      text-align:center;
+      font-weight:bold;
+      margin-top: 5px;
+    }
+    .info {
+      text-align:center;
+      font-weight:bold;
+      margin-top: 5px;
+
+      p {
+        margin-bottom: 0;
+        text-align:center;
+      }
+      p.underline {
+        border-bottom: 1px dotted #666;
+      }
+    }
+  }
+  ul.members>li.zoom.dead {
+    background-color: #C9C3C3;
+  }
+
+  ul.members>li.list {
+    position:relative;
+    padding: 5px;
+    height: 85px;
+    cursor: pointer;
+
+    .img {
+      position:absolute;
+      top: 7px;
+      left: 7px;
+      width: 50px;
+      height: 50px;
+
+      img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+    .name {
+      margin-left: 60px;
+      margin-right: 60px;
+    }
+    .info {
+      position:absolute;
+      top: 5px;
+      right: 0px;
+      width: 70px;
+      height: 50px;
+      margin-right: 5px;
+
+      p {
+        margin-bottom: 0;
+        text-align:center;
+      }
+      p.underline {
+        border-bottom: 1px dotted #666;
+      }
+    }
+  }
+
+  ul.members>li.list.dead {
+    background-color: #C9C3C3;
+  }
+
+  #generation1 {
+  }
+  #generation2, #generation3, #generation4, #generation5 {
+    width: 250px;
+    margin-left:5px;
+    position:relative;
+  }
+}
+
