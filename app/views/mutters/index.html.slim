@@ -15,13 +15,10 @@
         .p-2.border.border-light.bg-light
           .row.no-gutters
             .col-sm-9
-              = f.text_area :content, rows: 3, class: "form-control mb5", placeholder: @leave_me.present? ? "ひとりごとをつぶやく" : "つぶやき", tabindex: 1
+              .up-field.mb10
+                = f.text_area :content, class: "form-control", placeholder: @leave_me.present? ? "ひとりごとをつぶやく" : "つぶやき", tabindex: 1
               = f.hidden_field :user_id
               = f.hidden_field :leave_me, value: @leave_me.present?
-            .col-sm-3
-              = f.submit "投稿する", class: "btn btn-primary", style: 'height:100%;width:100%;font-size:1.4em', :data => {:disable_with => "投稿中..."}, tabindex: 2
-          .row.no-gutters
-            .col-sm-9
               - if request.smart_phone?
                 = f.file_field :image
               - else
@@ -29,6 +26,9 @@
                   = f.file_field :image, class: 'custom-file-input', id: 'customFile'
                   label.custom-file-label[for="customFile"]
                     | 写真や動画がアップロードできます
+            .col-sm-3
+              .up-field
+                = f.submit "投稿する", class: "btn btn-primary", :data => {:disable_with => "投稿中..."}, tabindex: 2
 
     #mutter_data
       / - cache :mutter_data do

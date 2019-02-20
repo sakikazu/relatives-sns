@@ -116,6 +116,7 @@
   padding: 7px 8px;
 
   .message {
+    text-align: center;
     font-size: 1.3rem;
     margin-bottom: 8px;
   }
@@ -134,6 +135,19 @@
 #mutter .leave_me label {
   display: inline;
   margin-left: 7px;
+}
+#mutter .up-field {
+  height: 5em;
+
+  textarea {
+    font-size: 1.3em;
+    height: 100%;
+  }
+  input[type='submit'] {
+    height:100%;
+    width:100%;
+    font-size:1.4em;
+  }
 }
 
 .mutter_rows {
