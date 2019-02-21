@@ -1,10 +1,7 @@
-<% if @error_message.present? %>
-    alert("<%= @error_message %>");
-<% else %>
 $('.modal-mutter-reply').modal('hide');
 $("textarea[name='mutter[content]']").val('')
 $("input[name='mutter[image]']").val('')
 // TODO: toastrに置き換えたい
 $("form#mutter_new_post").after('<div id="create_notification" class="alert alert-success text-center">つぶやきを投稿しました</div>');
 $("#create_notification").fadeOut(3000);
-<% end %>
+

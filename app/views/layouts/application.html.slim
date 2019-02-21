@@ -58,7 +58,7 @@ html[lang="ja"]
               .dropdown-menu.dropdown-menu-right
                 |  <a data-toggle="modal" href="#modalQR", class='dropdown-item'>QRコード
                 = link_to "その他", others_path, class: 'dropdown-item'
-                = link_to 'トップ写真の入れ替え', slider_update_mutters_path, remote: true, class: 'dropdown-item' if @slideshow_visible
+                = link_to 'トップ写真の入れ替え', slider_update_mutters_path, remote: true, class: 'dropdown-item' if @slide_photos.present?
                 strike
                   | RSS
                 .dropdown-divider
@@ -79,7 +79,7 @@ html[lang="ja"]
           = link_to fa_stacked_icon('chevron-right', text: '次へ'), update_allview_mutters_path(ups_page: @ups_page) if @ups_page
           = link_to fa_stacked_icon('home', text: '戻る'), root_path
 
-    - if @slideshow_visible
+    - if @slide_photos.present?
       #slider_photo
         = render "mutters/slider"
 

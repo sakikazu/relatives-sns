@@ -47,6 +47,8 @@ class Mutter < ApplicationRecord
   after_save :save_related_media
   after_create :update_sort_at
   after_create_commit :broadcast_mutter_channel
+  # NOTE: destroy時にacts_as_paranoidがafter_destroyをトリガーする（実際はupdate）
+  after_destroy :broadcast_mutter_channel_on_destroy
 
   # validates_presence_of :content
 
@@ -223,7 +225,11 @@ class Mutter < ApplicationRecord
   private
 
   def broadcast_mutter_channel
-    ActionCable.server.broadcast 'mutter_channel', mutter_html: render_mutter, parent_mutter_id: self.reply_id
+    ActionCable.server.broadcast 'mutter_channel', deleted: false, mutter_id: self.id, mutter_html: render_mutter, parent_mutter_id: self.reply_id
+  end
+
+  def broadcast_mutter_channel_on_destroy
+    ActionCable.server.broadcast 'mutter_channel', deleted: true, mutter_id: self.id
   end
 
   def render_mutter

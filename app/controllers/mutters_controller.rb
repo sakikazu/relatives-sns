@@ -189,7 +189,7 @@ class MuttersController < ApplicationController
   def create
     if params[:mutter][:content].blank?
       @error_message = 'つぶやきを入力しないと投稿できません'
-      render 'create.js'
+      render 'shared/error_alert.js'
       return
     end
 
@@ -203,14 +203,12 @@ class MuttersController < ApplicationController
   def destroy
     unless editable(current_user, @mutter.user)
       @error_message = '削除権限がありません。'
-      render "update_list.js"
+      render 'shared/error_alert.js'
       return
     end
-    mutter_leave_me = @mutter.leave_me
+
     @mutter.destroy
-    @mutters = Mutter.includes_all.parents_mod.page(params[:page])
-    @mutters = @mutters.where(leave_me: mutter_leave_me)
-    render "update_list.js"
+    head :no_content
   end
 
   def update_history_all
@@ -218,7 +216,7 @@ class MuttersController < ApplicationController
   end
 
   def slider_update
-    @album_thumbs = Photo.rnd_photos
+    set_slide_photos
   end
 
   def celebration_new
@@ -327,7 +325,6 @@ class MuttersController < ApplicationController
   end
 
   def top_page_valiables
-    @slideshow_visible = true
     @page_title = "トップ"
 
     updates_count = request.smart_phone? ? 5 : 10
@@ -344,12 +341,16 @@ class MuttersController < ApplicationController
     #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
     # @mutters = mutter.includes_all.id_desc.limit(30)
 
-    @album_thumbs = Photo.rnd_photos
+    set_slide_photos unless request.smart_phone?
 
     ###日齢
     @nichirei, @nichirei_future = current_user.user_ext.nichirei
 
     ###誕生記念日(年齢／日齢)
     @kinen = UserExt.kinen
+  end
+
+  def set_slide_photos
+    @slide_photos = Photo.rnd_photos
   end
 end

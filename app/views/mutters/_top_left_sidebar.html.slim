@@ -18,13 +18,13 @@
           |  ※生年月日を登録している人のみ
 
 .card.mb30
-  .card-header.text-center みんなの新着情報
-  .card-body
-    = link_to '一気に見る', update_allview_mutters_path, class: "btn btn-danger btn-block"
+  .card-header.text-center
+    | みんなの新着情報
+    = link_to fa_icon('bell', text: "まとめてチェック", class: 'text-white'), update_allview_mutters_path, class: 'btn btn-sm btn-danger btn-block mt10'
   table.table.table-striped.table-condensed
     = render :partial => "update_history"
-  .mt10
-    = link_to "すべて見る", {:action => :update_history_all}, class: "btn btn-success btn-block"
+  .mt0
+    = link_to "一覧を見る", {:action => :update_history_all}, class: "btn btn-outline-info btn-block"
 
 .card.mb30
   .card-header.text-center

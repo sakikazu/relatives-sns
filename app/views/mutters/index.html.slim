@@ -18,7 +18,8 @@
           = f.hidden_field :user_id
           = f.hidden_field :leave_me, value: @leave_me.present?
           - if request.smart_phone?
-            = f.file_field :image
+            .mb20
+              = f.file_field :image
           - else
             .custom-file
               = f.file_field :image, class: 'custom-file-input', id: 'customFile'

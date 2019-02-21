@@ -12,24 +12,27 @@
       });
     });
 
-.card-header.text-center みんなの誕生記念日
+.card-header.text-center
+  | みんなの誕生記念日
+  =< link_to fa_icon('info-circle', class: 'fa-lg text-info'), 'javascript:void(0)',
+       data: { toggle: 'tooltip', trigger: 'click', title: '生年月日を登録している人のみ表示されます' }
 .card-body
   .text-center[style="margin:auto"]
-    - @kinen.each do |k|
-      - if k[:count] == 0 || k[:count] == -1
-        p[style="margin-bottom: 5px"]
-          => fa_icon 'music'
-          = "#{k[:user].dispname}さん"
-          span.important.big
-            = k[:count] == 0 ? "本日" : "昨日"
-          span.main
-            = "#{k[:kinen_name]}"
-          =< fa_icon 'music'
-        .mgn-b20
-          = button_tag "祝う", data: { toggle: 'modal', target: '#anniversaryFormModal', path: celebration_new_mutters_path(user_id: k[:user].id) }, class: 'btn btn-info'
-          =< link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id}, :remote => true, :class => "btn btn-warning"
-      - else
-        p.mgn-b20
+    - @kinen.each.with_index(1) do |k, idx|
+      div[class="#{'mb20' if idx < @kinen.size}"]
+        - if k[:count] == 0 || k[:count] == -1
+          p.mb5
+            => fa_icon 'music'
+            = "#{k[:user].dispname}さん"
+            span.important.big
+              = k[:count] == 0 ? "本日" : "昨日"
+            span.main
+              = "#{k[:kinen_name]}"
+            =< fa_icon 'music'
+          p
+            = button_tag "祝う", data: { toggle: 'modal', target: '#anniversaryFormModal', path: celebration_new_mutters_path(user_id: k[:user].id) }, class: 'btn btn-info'
+            =< link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id}, :remote => true, :class => "btn btn-warning"
+        - else
           => fa_icon 'music'
           = "#{k[:user].dispname}さん" if k[:user].present?
           span.important.big
@@ -37,8 +40,6 @@
           span.main
             = "#{k[:kinen_name]}"
           =< fa_icon 'music'
-  .text-center.mgn-t20
-    | (生年月日を登録している人のみ)
 
 / モーダルフォームのラッパー
 .modal.fade[id="anniversaryFormModal" tabindex="-1"]
