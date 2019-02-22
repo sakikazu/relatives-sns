@@ -104,6 +104,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
+  gem 'capistrano3-unicorn'
   gem 'capistrano-sidekiq'
   gem 'capistrano3-nginx'
   gem 'capistrano3-puma'

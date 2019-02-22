@@ -7,15 +7,6 @@ set :repo_url, 'git@bitbucket.org:sakikazu15/adan.git'
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-# RVM
-set :rvm1_ruby_version, '2.5.1'
-
-# sidekiq
-set :sidekiq_config, 'config/sidekiq.yml'
-set :sidekiq_role, :web
-SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
-SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
-
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/usr/local/site/adan'
 
@@ -41,14 +32,26 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/upl
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+
+# RVM
+set :rvm1_ruby_version, '2.5.1'
+
+# unicorn
+set :unicorn_config_path, "#{current_path}/config/unicorn.conf.rb"
+# set :unicorn_pid, 'default'
+
+# sidekiq
+set :sidekiq_config, 'config/sidekiq.yml'
+set :sidekiq_role, :web
+SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
+SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
+
+
 namespace :deploy do
 
   desc 'Restart application'
   task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # for unicorn
-      execute :cat, "#{File.join(current_path, 'tmp/pids/unicorn.adan.pid')} | xargs kill -USR2"
-    end
+    invoke 'unicorn:restart'
   end
 
   after :publishing, :restart

@@ -23,6 +23,7 @@ install_plugin Capistrano::SCM::Git
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
+require 'capistrano3/unicorn'
 require 'rvm1/capistrano3'
 require 'capistrano/sidekiq'
 
