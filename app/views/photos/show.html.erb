@@ -14,7 +14,7 @@
     撮影：<%= l @photo.exif_at if @photo.exif_at %>
   </div>
   <div class="description">
-    <div style="text-align:center"><%= image_tag(@photo.image(:large)) if @photo.image? %></div>
+    <div class="text-center"><%= image_tag(@photo.image(:large), class: 'img-thumbnail') if @photo.image? %></div>
     <%= link_to "元画像", @photo.image(:original) if @photo.image? %>
     <p class="text"><%= sani_custom_br(@photo.description) %></p>
   </div>
