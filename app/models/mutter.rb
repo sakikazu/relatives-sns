@@ -31,7 +31,7 @@ class Mutter < ApplicationRecord
   belongs_to :celebration, optional: true
   belongs_to :parent, class_name: "Mutter", foreign_key: "reply_id", optional: true
   has_many :children, class_name: "Mutter", foreign_key: "reply_id"
-  has_many :nices, :as => :asset
+  has_many :nices, as: :asset
 
   has_one :movie, dependent: :destroy
   has_one :photo, dependent: :destroy
@@ -56,29 +56,16 @@ class Mutter < ApplicationRecord
 
   VISIBLE_INITIAL_COMMENTS = 3
 
-  # content_name = "mutter"
-  # has_attached_file :image,
-    # :styles => {
-      # :thumb => "150x150>",
-      # :large => "800x800>"
-    # },
-    # :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
-    # :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
-    # :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension"
-
-  # validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
-
   # [memo]こうやってそれぞれにuser、user_extを指定するようにすると、最初のリクエスト時にはやっぱ時間短縮されてる。
   # 二度目のリクエストではキャッシュされるらしく、それぞれに指定しなかった時と同じ速度になる。
   # 2014/06/05、とりあえず、つぶやきにひもづけるのはphotoとmovieのみ
-  # scope :includes_all, lambda { includes(:photo, :movie, :album, :blog, :board, {:user => :user_ext}, {:nices => {:user => :user_ext}}, {children: [:photo, :movie, :album, :blog, :board, {nices: {user: :user_ext}}]}) }
   scope :includes_all, lambda { includes(:photo, :movie, {:user => :user_ext}, {nices: {user: :user_ext}}, {children: [{user: :user_ext}, :photo, :movie, {nices: {user: :user_ext}}]}) }
-
-  scope :parents_mod, lambda { where("mutters.reply_id IS NULL").where(invisible_in_timeline: false) } #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
+  scope :only_parents, lambda { where("mutters.reply_id IS NULL") } #「parents」が自動で定義されていたので。返り値がArrayだったので使えなかった
+  # つぶやき以外の機能のための空の親用Mutterを除外する
+  scope :without_wrapper, lambda { where(invisible_in_timeline: false) }
   scope :id_desc, lambda { order("mutters.id DESC") }
   scope :id_asc, lambda { order("mutters.id ASC") }
-
-  default_scope {order("mutters.for_sort_at DESC")}
+  scope :updated_order, lambda { order("mutters.for_sort_at DESC") }
 
 
   def trans_space
@@ -176,7 +163,7 @@ class Mutter < ApplicationRecord
      prev_id = cookies[:update_disp_id].to_i
      if last_id > prev_id
        cookies[:update_disp_id] = last_id
-       return self.includes_all.parents_mod.where(leave_me: false)
+       return self.includes_all.only_parents.without_wrapper.where(leave_me: false)
      else
        return false
      end
@@ -218,13 +205,14 @@ class Mutter < ApplicationRecord
     else
       ext = user.find_extension(UserExtension::LAST_READ_LEAVE_ME_AT)
       last_read_at = ext.present? ? ext[:value] : Time.parse("2000/1/1")
-      return self.parents_mod.where(leave_me: true).where.not(user_id: user.id).where("created_at > ?", last_read_at).count
+      return self.without_wrapper.where(leave_me: true).where.not(user_id: user.id).where("created_at > ?", last_read_at).count
     end
   end
 
   private
 
   def broadcast_mutter_channel
+    return if self.invisible? || self.parent&.invisible?
     ActionCable.server.broadcast 'mutter_channel', deleted: false, mutter_id: self.id, mutter_html: render_mutter, parent_mutter_id: self.reply_id
   end
 

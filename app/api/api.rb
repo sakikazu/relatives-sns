@@ -68,7 +68,7 @@ class API < Grape::API
       limit = params[:limit].presence || 15
 
       # とりあえず、「ひとりごと」はアプリには表示しないようにしよう
-      parents = Mutter.includes_all.parents_mod.limit(limit)
+      parents = Mutter.includes_all.only_parents.without_wrapper.updated_order.limit(limit)
       # note: pluck(:id)だとすごい時間かかる。なぜ？？
       children = Mutter.includes_all.where(reply_id: parents.map{|n| n.id})
       mutters = parents + children
@@ -99,7 +99,7 @@ class API < Grape::API
       # todo refactoring
       # とりあえず、「ひとりごと」はアプリには表示しないようにしよう
       # 削除されたものも返したいので含む
-      parents = Mutter.with_deleted.includes_all.parents_mod.limit(limit)
+      parents = Mutter.with_deleted.includes_all.only_parents.without_wrapper.updated_order.limit(limit)
       children = Mutter.with_deleted.includes_all.where(reply_id: parents.map{|n| n.id})
       mutters = parents + children
       timeline = build_timeline_data(mutters)

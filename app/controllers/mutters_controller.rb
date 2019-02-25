@@ -66,17 +66,19 @@ class MuttersController < ApplicationController
     end
     @leave_me = params[:leave_me].blank? ? false : true
 
+    @mutters = Mutter.includes_all.without_wrapper
+
     case @action_flg
     when 0 # 検索結果解除
-      @mutters = Mutter.includes_all.parents_mod
+      @mutters = @mutters.only_parents.updated_order
     when 1 # ワードから検索
-      @mutters = Mutter.includes_all.order('id DESC')
+      @mutters = @mutters.id_desc
     when 2 # 画像か動画を含むものを検索
       mutter_ids_with_photo = Photo.pluck("mutter_id").compact
       mutter_ids_with_photo += Movie.pluck("mutter_id").compact
-      @mutters = Mutter.includes_all.where(id: mutter_ids_with_photo).order('id DESC')
+      @mutters = @mutters.where(id: mutter_ids_with_photo).id_desc
     when 3 # URLを含むものを検索
-      @mutters = Mutter.includes_all.where('content like :q', :q => "%http%").order('id DESC')
+      @mutters = @mutters.where('content like :q', :q => "%http%").id_desc
     end
 
     # 検索時の共通処理(解除操作の場合はパラメータがないので通らない)
@@ -130,12 +132,12 @@ class MuttersController < ApplicationController
 
   def all
     #todo 速度を調査してみる
-    @mutters = Mutter.includes_all
+    @mutters = Mutter.includes_all.without_wrapper.updated_order
     # user_idが指定された時は、レスも含めて表示する
     @mutters = if params[:user_id].present?
                  @mutters.where(user_id: params[:user_id])
                else
-                 @mutters.parents_mod
+                 @mutters.only_parents
                end
     @mutters = @mutters.page(params[:page]).per(Mutter::PAGINATES_PER_FOR_ALL)
 
@@ -149,7 +151,7 @@ class MuttersController < ApplicationController
   def index
     @leave_me = params[:leave_me].blank? ? false : true
     # unless read_fragment :mutter_data
-    @mutters = Mutter.includes_all.parents_mod.page(params[:page])
+    @mutters = Mutter.includes_all.only_parents.without_wrapper.updated_order.page(params[:page])
     # end
     @mutters = @mutters.where(leave_me: @leave_me)
     @mutter = Mutter.new(user_id: current_user.id)
@@ -333,13 +335,6 @@ class MuttersController < ApplicationController
     login_users_count = 40
     @login_users = User.requested_users(login_users_count)
     @login_users_hidden_cnt = 10
-
-    # TODO: なにこれ？不要？
-    # from lesys
-    @fix_title = ""
-    #sakikazu ↓は、includesだったら、関連先が存在しないデータでも取得されてしまって不都合になるんだけど、joinsなら存在するデータのみなので良い。
-    #この対応で合ってるのかな？ちなみに、joinsしたところに、includesも入れるとエラーになった
-    # @mutters = mutter.includes_all.id_desc.limit(30)
 
     set_slide_photos unless request.smart_phone?
 

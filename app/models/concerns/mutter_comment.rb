@@ -1,3 +1,7 @@
+# NOTE: Photo, MovieのコメントをMutterで作成するようにしているが、無理があった
+# 理由は、つぶやき機能でアップロードされる写真、動画へのコメントをMutterとして作り、それをさらにアルバムの中でそのまま見たいとうことで、
+# コメントをMutterに一元化するというものだったはず。速度面でも、つぶやき一覧ではPhotoやMovieも読み込む必要があり、問題がある。
+# TODO: Facebookのタイムラインみたいにするにはどう設計すればいい？Mutterモデルがもっと上のレイヤーになってかぶせる感じかなぁ
 module MutterComment
   def create_comment_by_mutter(params)
     # mutterとの関連があれば、そのmutterのchildren（レス）を作成
@@ -19,6 +23,6 @@ module MutterComment
   # TODO: CommentからMutterに変更する前のコメントデータはどうしてるの？移行してる？
   def mutter_comments
     return [] unless self.has_parent_mutter?
-    @comments ||= self.mutter.children.includes({user: :user_ext}).reorder("id ASC")
+    @comments ||= self.mutter.children.includes({user: :user_ext}).id_asc
   end
 end
