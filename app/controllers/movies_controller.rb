@@ -45,7 +45,7 @@ class MoviesController < ApplicationController
     respond_to do |format|
       if @movie.save and @movie.ffmp.valid?
         EncodeWorker.perform_async @movie.id
-        @movie.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::MOVIE_CREATE)
+        @movie.update_histories.create(user_id: current_user.id, action_type: UpdateHistory::MOVIE_CREATE)
         format.html { redirect_to @movie, notice: '動画をアップロードしました.' }
         format.json { render :show, status: :created, location: @movie }
       else
@@ -100,12 +100,13 @@ class MoviesController < ApplicationController
 
     @movie.create_comment_by_mutter(comment_params)
 
-    UpdateHistory.create_or_update(current_user.id, UpdateHistory::MOVIE_COMMENT, @movie)
+    UpdateHistory.for_creating_comment(@movie, UpdateHistory::MOVIE_COMMENT, current_user.id)
   end
 
   def destroy_comment
     Mutter.find(params[:mutter_id]).destroy
     @movie = Movie.find(params[:id])
+    UpdateHistory.for_destroying_comment(@movie, UpdateHistory::MOVIE_COMMENT, current_user.id, @movie.mutter_comments.last)
     render 'create_comment.js'
   end
 

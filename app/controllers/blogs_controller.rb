@@ -74,7 +74,7 @@ class BlogsController < ApplicationController
           @blog.blog_images << image
         end
 
-        @blog.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BLOG_CREATE)
+        @blog.update_histories.create(user_id: current_user.id, action_type: UpdateHistory::BLOG_CREATE)
 
         if request.mobile?
           format.html { redirect_to({:action => :show_mobile, :id => @blog.id}, notice: '日記を投稿しました。') }
@@ -134,7 +134,7 @@ class BlogsController < ApplicationController
     @comment.save
     @blog = @comment.parent
 
-    UpdateHistory.create_or_update(current_user.id, UpdateHistory::BLOG_COMMENT, @blog)
+    UpdateHistory.for_creating_comment(@blog, UpdateHistory::BLOG_COMMENT, current_user.id)
 
     # PCの場合はAjaxなのでcreate.jsが呼ばれる
     if request.mobile?
@@ -146,6 +146,7 @@ class BlogsController < ApplicationController
     @bcom = Comment.find(params[:id])
     @blog = @bcom.parent
     @bcom.destroy
+    UpdateHistory.for_destroying_comment(@blog, UpdateHistory::BLOG_COMMENT, current_user.id, @blog.comments.last)
 
     render "create_comment.js"
   end

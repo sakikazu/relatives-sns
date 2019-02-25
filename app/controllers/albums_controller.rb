@@ -150,7 +150,7 @@ class AlbumsController < ApplicationController
 
     respond_to do |format|
       if @album.save
-        @album.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::ALBUM_CREATE)
+        @album.update_histories.create(user_id: current_user.id, action_type: UpdateHistory::ALBUM_CREATE)
         format.html { redirect_to @album, notice: 'アルバムを作成しました。' }
         format.json { render json: @album, status: :created, location: @album }
       else
@@ -231,13 +231,14 @@ class AlbumsController < ApplicationController
     @album = @comment.parent
     @comments = @album.comments
 
-    UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUM_COMMENT, @album)
+    UpdateHistory.for_creating_comment(@album, UpdateHistory::ALBUM_COMMENT, current_user.id)
   end
 
   def destroy_comment
     @comment = Comment.find(params[:id])
     @album = @comment.parent
     @comment.destroy
+    UpdateHistory.for_destroying_comment(@album, UpdateHistory::ALBUM_COMMENT, current_user.id, @album.comments.last)
     @comments = @album.comments
     @destroy_flg = true
     render 'create_comment.js'

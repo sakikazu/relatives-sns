@@ -62,7 +62,7 @@ class BoardsController < ApplicationController
 
     respond_to do |format|
       if @board.save
-        @board.update_histories << UpdateHistory.create(:user_id => current_user.id, :action_type => UpdateHistory::BOARD_CREATE)
+        @board.update_histories.create(user_id: current_user.id, action_type: UpdateHistory::BOARD_CREATE)
         format.html { redirect_to(@board, :notice => '作成しました') }
         format.xml  { render :xml => @board, :status => :created, :location => @board }
       else
@@ -101,7 +101,7 @@ class BoardsController < ApplicationController
     @board = Board.find(params[:board_id])
     @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
 
-    UpdateHistory.create_or_update(current_user.id, UpdateHistory::BOARD_COMMENT, @board)
+    UpdateHistory.for_creating_comment(@board, UpdateHistory::BOARD_COMMENT, current_user.id)
 
     flash[:notice] = "コメントを投稿しました"
     redirect_to :action => :show, :id => @board.id
@@ -111,6 +111,7 @@ class BoardsController < ApplicationController
     @bcom = BoardComment.find(params[:id])
     board = @bcom.board
     @bcom.destroy
+    UpdateHistory.for_destroying_comment(board, UpdateHistory::BOARD_COMMENT, current_user.id, board.board_comments.last)
     redirect_to({:action => :show, :id => board.id}, :notice => "コメントを削除しました")
   end
 

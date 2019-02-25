@@ -57,15 +57,15 @@ class PhotosController < ApplicationController
     params[:photo][:title] = "[無題]"
     @photo = Photo.new(photo_params)
 
-# ここは認証を解除しているからcurrent_userは使えないので、@photo.userを使う
-    UpdateHistory.create_or_update(@photo.user.id, UpdateHistory::ALBUMPHOTO_CREATE, @photo.album)
-
     # memo Ajaxでのpostはsaveのエラーが画面には表示されないので、自分で出力してあげる
     # あと、pメソッドでログに出力されないため、loggerを使用する
     # logger.debug @photo.errors.full_messages.inspect
     # logger.debug @photo.errors.full_messages.to_sentence
 
     @photo.save
+
+    # ここは認証を解除しているからcurrent_userは使えないので、@photo.userを使う
+    @photo.album.update_histories.create(user_id: @photo.user.id, action_type: UpdateHistory::ALBUMPHOTO_CREATE)
   end
 
   # PCからはcolorboxで使用する前提。スマホからは一つのページとして表示する
@@ -121,15 +121,17 @@ class PhotosController < ApplicationController
     @photo.create_comment_by_mutter(comment_params)
     @photo.update_attributes(:last_comment_at => Time.now)
 
-    UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUMPHOTO_COMMENT, @photo.album)
+    UpdateHistory.for_creating_comment(@photo.album, UpdateHistory::ALBUMPHOTO_COMMENT, current_user.id)
 
-    # 「更新情報一括閲覧」用
-    UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO, @photo)
+    # 「更新情報一括閲覧」用に、AlbumでなくPhotoを対象とする
+    UpdateHistory.for_creating_comment(@photo, UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO, current_user.id)
    end
 
   def destroy_comment
     Mutter.find(params[:mutter_id]).destroy
     @photo = Photo.find(params[:id])
+    UpdateHistory.for_destroying_comment(@photo.album, UpdateHistory::ALBUMPHOTO_COMMENT, current_user.id, @photo.mutter_comments.last)
+    UpdateHistory.for_destroying_comment(@photo, UpdateHistory::ALBUMPHOTO_COMMENT_FOR_PHOTO, current_user.id, @photo.mutter_comments.last)
     render 'create_comment.js'
   end
 

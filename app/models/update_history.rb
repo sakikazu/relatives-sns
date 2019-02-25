@@ -37,7 +37,7 @@ class UpdateHistory < ApplicationRecord
   scope :view_normal, lambda{ includes({:user => :user_ext}).reject_photo_comment.sort_updated }
 
   # 更新内容一括表示機能用）ALBUMPHOTO_COMMENTのものはコンテンツがアルバムであり、出しても意味ないので無視する
-  scope :view_offset, lambda{|n| where("action_type != ?", ALBUMPHOTO_COMMENT).order("updated_at DESC").limit(1).offset(n)}
+  scope :offset_one, -> (n) { where("action_type != ?", ALBUMPHOTO_COMMENT).sort_updated.offset(n).first }
 
 
   ACTION_INFO = {
@@ -55,12 +55,26 @@ class UpdateHistory < ApplicationRecord
   }
 
 
-  def self.create_or_update(user_id, action_type, content)
-    update_history = where(user_id: user_id, action_type: action_type, content_id: content.id).first
-    if update_history
-      update_history.update_attributes(updated_at: Time.now)
+  # 各コンテンツに対するコメント作成時用
+  # 同じコンテンツへのコメントでは、UpdateHistoryは複数作られないようにする
+  def self.for_creating_comment(content, action_type, user_id)
+    update_history = content.update_histories.where(user_id: user_id, action_type: action_type).first
+    if update_history.present?
+      update_history.update(updated_at: Time.now)
     else
-      content.update_histories << create(user_id: user_id, action_type: action_type)
+      content.update_histories.create(user_id: user_id, action_type: action_type)
+    end
+  end
+
+  # 各コンテンツに対するコメント削除時用
+  # コンテンツ(Blog, Photoなど)自体を削除した場合は、has_manyのdependent:destroyによって自動で削除されるので対応不要
+  def self.for_destroying_comment(content, action_type, user_id, prev_comment)
+    update_history = content.update_histories.where(user_id: user_id, action_type: action_type).first
+    return if update_history.blank?
+    if prev_comment.present?
+      update_history.update(updated_at: prev_comment.created_at)
+    else
+      update_history.destroy
     end
   end
 
@@ -68,14 +82,14 @@ class UpdateHistory < ApplicationRecord
     current_page = page.to_i
     history = nil
     if current_page > 0
-      prev = self.view_offset(current_page - 1).first
-      current = self.view_offset(current_page).first
+      prev = self.offset_one(current_page - 1)
+      current = self.offset_one(current_page)
       return nil if current.blank?
 
       # 同じコンテンツに対する連続したUpdateHistoryは1つのものと見なして、次のページを取得する
       while prev.content == current.content do
         current_page += 1
-        current = self.view_offset(current_page).first
+        current = self.offset_one(current_page)
         # 最後のUpdateHistoryがprevのもつコンテンツと同じだった場合
         return nil if current.blank?
       end
@@ -83,7 +97,7 @@ class UpdateHistory < ApplicationRecord
       current.next_page = current_page + 1
       history = current
     else
-      history = self.view_offset(0).first
+      history = self.offset_one(0)
       history.next_page = 1
     end
     history
