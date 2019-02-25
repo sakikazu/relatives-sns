@@ -91,6 +91,7 @@ class MoviesController < ApplicationController
   def create_comment
     if params[:content].blank?
       @error_message = 'コメントを入力しないと投稿できません'
+      render 'shared/error_alert.js'
       return
     end
 

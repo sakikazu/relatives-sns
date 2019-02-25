@@ -22,7 +22,9 @@
         <% end -%>
         <p class="text">(本文抜粋)<%= truncate_120_link(blog.content) %></p>
         <% if editable(current_user, blog.user) -%>
+          <div class='text-right mt20'>
           <%= link_to '編集', edit_blog_path(blog) %>
+          </div>
         <% end -%>
       </div>
     <% end %>

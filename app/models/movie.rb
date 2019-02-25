@@ -25,7 +25,7 @@
 #
 
 class Movie < ApplicationRecord
-  include Utility
+  include MutterComment
 
   acts_as_paranoid
 
@@ -169,15 +169,6 @@ class Movie < ApplicationRecord
       thumb = File.open(tmp_path, "r")
       update(thumb: thumb)
     # end
-  end
-
-  def has_parent_mutter?
-    self.mutter.present?
-  end
-
-  def comments
-    return [] unless self.has_parent_mutter?
-    self.mutter.children.includes({user: :user_ext}).reorder("id ASC")
   end
 
   # memo content_typeではなく拡張子で判定した理由は、動画も写真とも「application/octet-stream」でアップされることがあるため。Ajaxの時だけかも。

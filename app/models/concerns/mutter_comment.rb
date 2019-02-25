@@ -1,4 +1,4 @@
-module Utility
+module MutterComment
   def create_comment_by_mutter(params)
     # mutterとの関連があれば、そのmutterのchildren（レス）を作成
     if self.mutter.present?
@@ -16,8 +16,9 @@ module Utility
     self.mutter.present?
   end
 
+  # TODO: CommentからMutterに変更する前のコメントデータはどうしてるの？移行してる？
   def mutter_comments
     return [] unless self.has_parent_mutter?
-    self.mutter.children.includes({user: :user_ext}).reorder("id ASC")
+    @comments ||= self.mutter.children.includes({user: :user_ext}).reorder("id ASC")
   end
 end

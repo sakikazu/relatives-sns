@@ -1,8 +1,4 @@
-<% if @error_message.present? %>
-    alert("<%= @error_message %>");
-<% else %>
 $('#comment_form #content').val('');
 $('#comments').html(
-  '<%= escape_javascript(render "comments") %>'
+  '<%= escape_javascript(render partial: "shared/comments", locals: { model_name: 'Movie', comments: @movie.mutter_comments, movie: @movie }) %>'
 );
-<% end %>

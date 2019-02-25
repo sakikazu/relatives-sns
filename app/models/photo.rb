@@ -21,7 +21,7 @@
 #
 
 class Photo < ApplicationRecord
-  include Utility
+  include MutterComment
 
   acts_as_paranoid
 

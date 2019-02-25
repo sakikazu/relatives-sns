@@ -1,0 +1,61 @@
+ul.nav.nav-tabs.mb15
+  li.nav-item
+    a.nav-link[href="#tab-description" data-toggle="tab"]
+      = fa_icon 'th-large', text: @album.title
+  li.nav-item
+    a.nav-link[href="#tab-comments" data-toggle="tab"]
+      = fa_icon 'comment', text: "アルバムへのコメント(#{@comments.size})"
+  li.nav-item
+    a.nav-link[href="#tab-photo-upload" data-toggle="tab"]
+      = fa_icon 'camera', text: '写真アップロード'
+  li.nav-item
+    a.nav-link[href="#tab-movie-upload" data-toggle="tab"]
+      = fa_icon 'video-camera', text: '動画アップロード'
+
+.row.justify-content-center
+  .tab-content.col-sm-6.well.well-small
+    #tab-description.tab-pane
+      h3
+        = "写真数(動画含む)：#{@medias_all_num}</small>".html_safe
+        small
+          |  作成者：
+          = @album.user.try(:dispname)
+          |  | 作成日時：
+          = l @album.created_at if @album.created_at
+      .description
+        = sani_custom_br(@album.description)
+    #tab-comments.tab-pane
+      .page-header
+        h3
+          | このアルバムへのコメント
+          small
+            | コメント数：
+            = @comments.size
+      #comment_area.p-1.bg-white
+        #comments
+          = render partial: 'shared/comments', locals: { model_name: 'Album', comments: @comments }
+        = form_for @new_comment, url: create_comment_album_path(@album), remote: true do |f|
+          .field
+            = f.text_area :content, rows: 4, class: "form-control"
+            = f.hidden_field :parent_id
+            = f.hidden_field :parent_type
+          .actions.mt10
+            = f.submit "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"}
+    #tab-photo-upload.tab-pane
+      .page-header
+        h3
+          | このアルバムに写真をアップする
+          small
+            | 複数ファイル選択可能
+      #fileQueue
+      = hidden_field_tag :user_id
+      = hidden_field_tag :album_id
+      = file_field_tag :uploadify
+      br
+      strong.important
+        | ※スマホからはアップできません
+    #tab-movie-upload.tab-pane
+      .page-header
+        h3
+          | このアルバムに動画をアップする
+      = render :partial => 'movies/form'

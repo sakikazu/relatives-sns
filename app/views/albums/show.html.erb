@@ -92,71 +92,7 @@ $(document).on('turbolinks:load', function() {
 <%= link_to '編集する', edit_album_path(@album), class: "btn btn-info" %>
 </div>
 
-<ul class="nav nav-tabs mb15">
-  <li class="nav-item"><a href="#tab-description" data-toggle="tab" class="nav-link"><%= fa_icon 'th-large', text: @album.title %></a></li>
-  <li class="nav-item"><a href="#tab-comments" data-toggle="tab" class="nav-link">
-      <%= fa_icon 'comment', text: "アルバムへのコメント(#{@album.comments.select{|n| n.id.present?}.size})" %>
-  </a></li>
-  <li class="nav-item"><a href="#tab-photo-upload" data-toggle="tab" class="nav-link"><%= fa_icon 'camera', text: '写真アップロード' %></a></li>
-  <li class="nav-item"><a href="#tab-movie-upload" data-toggle="tab" class="nav-link"><%= fa_icon 'video-camera', text: '動画アップロード' %></a></li>
-</ul>
-
-<div class="tab-content well well-small">
-  <div id="tab-description" class="tab-pane">
-    <h3>
-      <%= "写真数(動画含む)：#{@medias_all_num}</small>".html_safe %>
-      <small> 作成者：<%= @album.user.try(:dispname) %> | 作成日時：<%= l @album.created_at if @album.created_at %></small>
-    </h3>
-    <div class="description"><%= sani_custom_br(@album.description) %></div>
-  </div>
-
-  <div id="tab-comments" class="tab-pane">
-    <div class="page-header">
-      <h3>このアルバムへのコメント<small>コメント数：<%= @album.comments.select{|n| n.id.present?}.size %></small></h3>
-    </div>
-
-    <!-- アルバムへのコメント -->
-    <div class="clearfix">
-        <div id="comment_area">
-          <div id="comments">
-            <%= render "comments" %>
-          </div>
-
-          <%= form_for @new_comment, url: create_comment_album_path(@album), remote: true do |f| %>
-            <div class="field">
-            <%= f.text_area :content, rows: 4, class: "form-control" %>
-            <%= f.hidden_field :parent_id %>
-            <%= f.hidden_field :parent_type %>
-          </div>
-          <div class="actions mt10">
-            <%= f.submit "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
-          </div>
-        <% end -%>
-        </div>
-    </div>
-  </div>
-
-  <div id="tab-photo-upload" class="tab-pane">
-    <div class="page-header">
-      <h3>このアルバムに写真をアップする<small>複数ファイル選択可能</small></h3>
-    </div>
-
-    <div id="fileQueue"></div>
-    <%= hidden_field_tag :user_id %>
-    <%= hidden_field_tag :album_id %>
-    <%= file_field_tag :uploadify %><br />
-    <strong class="important">※スマホからはアップできません</strong>
-  </div>
-
-  <div id="tab-movie-upload" class="tab-pane">
-    <div class="page-header">
-      <h3>このアルバムに動画をアップする</h3>
-    </div>
-    <%= render :partial => 'movies/form' %>
-  </div>
-
-</div> <!-- .tab-content -->
-
+<%= render partial: 'show_header' %>
 
 <% if @medias.size > 0 -%>
   <div class="page-header mt-50"><h3 class="normal">このアルバムの写真・動画<small>写真をクリックするとスライドショーが開始されます</small></h3></div>

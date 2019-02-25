@@ -104,6 +104,7 @@ class AlbumsController < ApplicationController
     @medias = Kaminari.paginate_array(@medias).page(params[:page])
 
     @new_comment = @album.comments.build
+    @comments = @album.comments.select { |comment| comment.persisted? }
 
     @medias_all_num = @album.photos.size + @album.movies.size
 
@@ -220,6 +221,7 @@ class AlbumsController < ApplicationController
   def create_comment
     if params[:comment][:content].blank?
       @error_message = 'コメントを入力しないと投稿できません'
+      render 'shared/error_alert.js'
       return
     end
 
@@ -227,6 +229,7 @@ class AlbumsController < ApplicationController
     @comment.user_id = current_user.id
     @comment.save
     @album = @comment.parent
+    @comments = @album.comments
 
     UpdateHistory.create_or_update(current_user.id, UpdateHistory::ALBUM_COMMENT, @album)
   end
@@ -235,6 +238,7 @@ class AlbumsController < ApplicationController
     @comment = Comment.find(params[:id])
     @album = @comment.parent
     @comment.destroy
+    @comments = @album.comments
     @destroy_flg = true
     render 'create_comment.js'
   end

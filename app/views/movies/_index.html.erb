@@ -5,7 +5,7 @@
       <div class="title">
         <h4><span class="badge badge-success"><%= fa_icon 'video-camera' %></span> <%= link_to movie.title, movie %></h4>
         <div class="extra">
-          <%= fa_icon 'comment', text: movie.comments.size %>
+          <%= fa_icon 'comment', text: movie.mutter_comments.size %>
           <br><%= nice_field_disp_only(movie) %>
         </div>
       </div>
@@ -15,9 +15,9 @@
           <%= "投稿者：#{movie.user.dispname}" %><br>
           <%= "投稿：#{time_shorter(movie.created_at)}".html_safe %>
         </div>
-        <% if movie.comments.last.try(:created_at) %>
+        <% if movie.mutter_comments.last.try(:created_at) %>
         <div>
-          <%= "最新コメント：#{time_shorter(movie.comments.last.created_at)}".html_safe %>
+          <%= "最新コメント：#{time_shorter(movie.mutter_comments.last.created_at)}".html_safe %>
         </div>
         <% end %>
       </div>

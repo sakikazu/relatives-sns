@@ -4,7 +4,7 @@
     <%= link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user) %>
 
     <div class="page-header ver2">
-      <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@blog.comments.select{|n| n.id.present?}.size}）", "#comments" %></small></h3>
+      <h3><%= @blog.title %><small><%= link_to "（コメント数：#{@comments.size}）", "#comments" %></small></h3>
     </div>
 
     <div class="once_content">
@@ -30,11 +30,11 @@
       </div>
     </div>
 
-    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" if @blog.comments.select{|n| n.id.present?}.size > 5 %>
+    <%= link_to "ページ最下部へ", "#comment_form", class: "btn btn-warning btn-block" if @comments.size > 5 %>
 
     <div class="page-header ver2"><h3>コメント</h3></div>
     <div id="comments">
-      <%= render :partial => "comments" %>
+      <%= render partial: 'shared/comments', locals: { model_name: 'Blog', comments: @comments } %>
     </div>
 
     <div id="comment_form">

@@ -23,12 +23,9 @@
 
 <%= link_to fa_icon('arrow-down') + " 最新コメントへ", "#comment_form", class: "btn btn-warning btn-block" %>
 
-<div class="page-header">
-  <h3>コメント</h3>
-</div>
-
+<h3 class='mt30'><%= fa_icon 'comments', text: 'コメント' %></h3>
 <div id="comments" class="clearfix">
-  <%= render :partial => "comments" %>
+  <%= render partial: 'shared/comments', locals: { model_name: 'Board', comments: @board.board_comments } %>
 </div>
 
 <div id="comment_form">

@@ -1,16 +1,12 @@
-<% if @error_message.present? %>
-    alert("<%= @error_message %>");
-<% else %>
-  <% if @destroy_flg.blank? -%>
-    if($('#comment_content').val() != ''){
-      $('#comment_content').val('');
-      $('#comments').html(
-          '<%= escape_javascript(render "comments") %>'
-      );
-    }
-  <% else -%>
+<% if @destroy_flg.blank? -%>
+  if($('#comment_content').val() != ''){
+    $('#comment_content').val('');
     $('#comments').html(
-        '<%= escape_javascript(render "comments") %>'
+        '<%= escape_javascript(render partial: "shared/comments", locals: { model_name: 'Album', comments: @comments }) %>'
     );
-  <% end -%>
+  }
+<% else -%>
+  $('#comments').html(
+    '<%= escape_javascript(render partial: "shared/comments", locals: { model_name: 'Album', comments: @comments }) %>'
+  );
 <% end -%>

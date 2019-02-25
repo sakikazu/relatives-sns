@@ -28,7 +28,7 @@
     span#comment_area
       = link_to "(上部に移動)", "#slideshow"
   #photo_comments
-    = render :partial => "comments"
+    = render partial: 'shared/comments', locals: { model_name: 'Photo', comments: @photo.mutter_comments, photo: @photo }
   #photo_comment_form.mb20
     = form_tag create_comment_album_photo_path(@photo.album, @photo), remote: true do |f|
       = text_area_tag :content, nil, rows: 4, class: "form-control", placeholder: "コメントする"

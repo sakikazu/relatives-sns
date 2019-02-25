@@ -5,7 +5,7 @@
   <%= link_to '編集する', edit_movie_path(@movie), class: "btn btn-info" %>
 
 <div class="page-header">
-  <h3><%= @movie.title %><small><%= link_to "(コメント数：#{@movie.mutter_comments.select{|n| n.id.present?}.size}）", "#comments" %></small></h3>
+  <h3><%= @movie.title %><small><%= link_to "(コメント数：#{@movie.mutter_comments.size}）", "#comments" %></small></h3>
 </div>
 
 <div class="once_content">
@@ -32,14 +32,14 @@
 </div>
 <div class="clearfix"></div>
 
-<%= link_to "ページ最下部へ", "#comment_form", class: "mt-30 btn btn-warning btn-block" if @movie.mutter_comments.select{|n| n.id.present?}.size > 5 %>
+<%= link_to "ページ最下部へ", "#comment_form", class: "mt-30 btn btn-warning btn-block" if @movie.mutter_comments.size > 5 %>
 
 <div class="page-header">
   <h3>コメント</h3>
 </div>
 
 <div id="comments" class="clearfix">
-  <%= render :partial => "comments" %>
+  <%= render partial: 'shared/comments', locals: { model_name: 'Movie', comments: @movie.mutter_comments, movie: @movie } %>
 </div>
 
 <div id="comment_form">

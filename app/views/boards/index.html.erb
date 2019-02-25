@@ -24,7 +24,9 @@
       <%= " | 最新コメント日時：#{time_shorter(board.board_comments.last.created_at)}".html_safe if board.board_comments.present? %>
       <br />
       <% if editable(current_user, board.user) -%>
+        <div class='text-right mt20'>
         <%= link_to '編集', edit_board_path(board) %>
+        </div>
       <% end -%>
     </div>
   </div>

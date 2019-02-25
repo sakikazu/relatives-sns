@@ -35,6 +35,7 @@ class BlogsController < ApplicationController
   # GET /blogs/1.json
   def show
     @new_comment = @blog.comments.build
+    @comments = @blog.comments.select { |comment| comment.persisted? }
 
     respond_to do |format|
       format.html # show.html.erb
@@ -123,6 +124,7 @@ class BlogsController < ApplicationController
   def create_comment
     if params[:comment][:content].blank?
       @error_message = 'コメントを入力しないと投稿できません'
+      render 'shared/error_alert.js'
       return
     end
 
