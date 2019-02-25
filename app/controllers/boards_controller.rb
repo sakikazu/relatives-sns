@@ -13,15 +13,16 @@ class BoardsController < ApplicationController
       buf = BoardComment.group(:board_id).maximum(:created_at)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
-      @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(20)
+      @boards = Kaminari.paginate_array(@boards)
     when 2
-      @boards = Board.page(params[:page]).per(20)
+      @boards = Board.all
     else
       buf = BoardComment.group(:board_id).maximum(:created_at)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
-      @boards = Kaminari.paginate_array(@boards).page(params[:page]).per(20)
+      @boards = Kaminari.paginate_array(@boards)
     end
+    @boards = @boards.page(params[:page]).per(10)
 
     respond_to do |format|
       format.html # index.html.erb

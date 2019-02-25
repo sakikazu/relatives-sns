@@ -7,22 +7,23 @@ class BlogsController < ApplicationController
   # GET /blogs
   # GET /blogs.xml
   def index
+    user_id = nil
     if params[:username] && (params[:username] != current_user.username)
       @user = User.find_by_username(params[:username])
-      @blogs = Blog.joins(:user).where(user_id: @user.id).page(params[:page]).per(15)
+      user_id = @user.id
       @page_title = "#{@user.dispname}の日記"
     else
-      @blogs = Blog.joins(:user).where(user_id: current_user.id).page(params[:page]).per(15)
+      user_id = current_user.id
       @page_title = "自分の日記"
     end
+    @blogs = Blog.joins(:user).where(user_id: user_id).page(params[:page]).per(10)
 
     # ブログの最終作成日が直近の人の順に、ブログ記事のカウントとともにデータをセットする
-    @blog_count_by_user = []
-    tmp1 = Blog.group(:user_id).count
-    tmp2 = Blog.group(:user_id).order("created_at DESC").maximum(:created_at)
-    tmp2.each do |user_id, val|
+    counts = Blog.group(:user_id).count
+    latest_blogs = Blog.group(:user_id).maximum(:created_at).sort { |a, b| b[1] <=> a[1] }
+    @blog_count_by_user = latest_blogs.map do |user_id, created_at|
       user = User.find_by_id(user_id)
-      @blog_count_by_user << [user, tmp1[user_id], val]
+      [user, counts[user_id], created_at]
     end
 
     respond_to do |format|

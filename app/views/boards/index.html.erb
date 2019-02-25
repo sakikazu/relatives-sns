@@ -11,10 +11,14 @@
   </li>
 </ul>
 
+<div class="autopagerize_page_element">
 <%= paginate @boards, window: 3, outer_window: 2 %>
 <% @boards.each do |board| %>
   <div class="well well-small">
-    <h5><%= link_to "#{board.title} (コメント数：#{board.board_comments.size})", board %></h5>
+    <h5>
+      <%= link_to board.title, board %>
+      <span class='badge badge-info'><%= fa_icon 'comments', text: board.board_comments.size %></span>
+    </h5>
     <% if board.attach? -%> 
       <%= link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => colorbox_class} %>
       <br />
@@ -32,5 +36,7 @@
   </div>
 <% end %>
 <%= paginate @boards, window: 3, outer_window: 2 %>
+</div>
+<div id="autopager_loading" class="btn btn-warning btn-block" style="display:none">次のページを読込中です</div>
 
   </div>

@@ -10,7 +10,7 @@ li.bg-light
       - if count > Mutter::VISIBLE_INITIAL_COMMENTS
         .btn.btn-light.btn-block[onclick="javascript:showComments(this)"]
           | #{fa_icon 'plus'} 全部見る #{fa_icon 'plus'}
-      - mutter_with_comments.children.reverse.each_with_index do |child, idx|
+      - mutter_with_comments.children.each_with_index do |child, idx|
         li.clearfix[class="#{'last_children' if idx + 1 == count}" style="#{'display:none' if idx + Mutter::VISIBLE_INITIAL_COMMENTS < count}"]
           = render 'mutters/mutter', mutter: child
 

@@ -8,10 +8,13 @@
       <h3><%= @page_title %><%= "<small>#{@page_desc}</small>" if @page_desc.present? %></h3>
     </div>
 
+    <div class="autopagerize_page_element">
     <% @blogs.each do |blog| %>
       <div class="once_content">
-        <div class="title for_index"><%= link_to "#{blog.title} (コメント数：#{blog.comments.size})", blog %>
-        </div>
+        <h5 class="title for_index">
+          <%= link_to blog.title, blog %>
+          <span class='badge badge-info'><%= fa_icon 'comments', text: blog.comments.size %></span>
+        </h5>
 
         <div class="info">
           <%= link_to "投稿者：#{blog.user.try(:dispname)}", blogs_by_user_path(blog.user.username) %> | <%= "投稿日時：#{time_shorter(blog.created_at)}".html_safe %>
@@ -28,7 +31,9 @@
         <% end -%>
       </div>
     <% end %>
-    <%= paginate @blogs, :window => 2, :outer_window => 2 %>
+    <div class='mt20'><%= paginate @blogs, :window => 2, :outer_window => 2 %></div>
+    </div>
+    <div id="autopager_loading" class="btn btn-warning btn-block" style="display:none">次のページを読込中です</div>
   </div> <!-- .span -->
 
   <div class="col-sm-2">
