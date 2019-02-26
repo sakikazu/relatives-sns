@@ -1,0 +1,130 @@
+javascript:
+  $(document).on('turbolinks:load', function() {
+      // 写真アップロード中に他のタブに移動してしまうと、アップロード処理が止まってしまうのでalertを出す
+      $('a[data-toggle="tab"]:not([href="#tab-photo-upload"]').on("click", function() {
+          if ($('body').data('in_upload_progress') == 1) {
+            alert('写真アップロード中のため移動できません。アップロードを中断する場合は、ページを再読み込みしてください。');
+            return false;
+          }
+      });
+  
+  
+      $('a[data-toggle="tab"]:<%= @tab_select_index %>').tab('show');
+  
+    //uploadify
+    $('#uploadify').uploadify({
+      'swf' : '/assets/uploadify/uploadify.swf',
+      'uploader' : '<%= album_photos_path(@album.id) %>',
+      'formData' : {'user_id': <%= current_user.id %>,
+        'authenticity_token' : '<%= form_authenticity_token if protect_against_forgery? %>'
+      },
+      'queueID' : 'fileQueue',
+      'auto' : true,
+      'multi' : true,
+      'buttonText' : 'ファイルを選択',
+      //'buttonImg'      : '/_images/browse-files.png',
+  //    '_http_accept': 'text/html',  //406error対策とかあったらがやっぱエラーになった
+      'onUploadStart' : function () {
+        $('body').data('in_upload_progress', 1);
+      },
+      'onQueueComplete': function (evt, data){
+        alert('ファイルのアップロードが完了しました。');
+        $('body').data('in_upload_progress', 0);
+        //albums#showにuser_id付きでリクエストすることで、セッションが切れてログアウトされてしまった状態から自動でログインするようにする
+        location.href = '<%= album_url(@album, "album[sort_flg]" => 1, "album[user_id]" => current_user.id) %>';
+        <%#= remote_function(:url => {:controller => :albums, :action => :upload_complete, :id => @album.id},
+          :complete => "alert(\" ファイルのアップロードが完了しました。\");location.reload()")
+          #:complete => "alert(data['filesUploaded']+\" ファイルのアップロードが完了しました。\");location.reload()")
+        %>
+      },
+  
+    });
+  
+    //colorbox
+    colorbox_slideshow();
+  
+    // アルバム説明が長すぎたら開閉スイッチを挿入する
+    var min_height = 200;
+    var $desc = $('.description')
+    var desc_height = $desc.height();
+    if(desc_height > min_height) {
+      $desc
+        .height(min_height)
+        .css({"overflow":"hidden"})
+        .after('<div id="desc_open">＞＞続きを読む</div>');
+  
+      $('#desc_open')
+        .css({
+          'font-size':'16px',
+          'color':'red',
+          'font-weight':'bold',
+          'cursor':'pointer'
+        })
+        .click(function(){
+          if ($(this).data('open') == true ) {
+            $(this).data('open', false);
+            $desc.height(min_height);
+            $(this).text('＞＞続きを読む');
+          } else {
+            $(this).data('open', true);
+            $desc.height(desc_height);
+            $(this).text('＞＞閉じる');
+          }
+        })
+    }
+  
+  }); //jquery#ready
+  
+  //commentshow = function() {
+  //  $("#comment_area").toggle();
+  //  if($("#showlink").text() == "表示") {
+  //    $("#showlink").text("非表示");
+  //  } else {
+  //    $("#showlink").text("表示");
+  //  }
+  //}
+
+
+.col-sm-10
+  .mb-50
+    = link_to 'アルバム一覧', albums_path, class: "btn btn-light"
+    = link_to '編集する', edit_album_path(@album), class: "btn btn-info"
+  = render partial: 'show_header'
+  - if @medias.size > 0
+    .page-header.mt-50
+      h3.normal
+        | このアルバムの写真・動画
+        small
+          | 写真をクリックするとスライドショーが開始されます
+    .mb-30.clearfix
+      - [["写真と動画", 1], ["写真のみ", 2], ["動画のみ", 3]].each do |n, i|
+        - if @media_filter == i
+          = link_to n, "javascript:void()", class: "btn btn-danger disabled"
+        - else
+          - sort_params = {id: @album.id, album: {media_filter: i}}
+          - sort_params[:album]["user_id"] = @album4sort.user_id if @album4sort.present?
+          - sort_params[:album]["sort_flg"] = @album4sort.sort_flg if @album4sort.present?
+          = link_to n, album_path(sort_params), class: "btn btn-danger"
+
+    / ソート機能
+    - #sort_list = [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]]
+    - sort_list = {"1" => "アップロード順", "2" => "撮影日時順", "3" => "コメント順", "4" => "イイネされた順"}
+    .input-append.mb30
+      = form_for @album4sort, url: album_path, :method => :get do |f|
+        = f.select :user_id, @uploader_list.map{|u| [u[1], u[0]]}, {include_blank: "＜アップロード者＞"}, {class: "form-control"}
+        = f.select :sort_flg, sort_list.map{|s| [s[1], s[0]]}, {include_blank: "＜並び替え順＞"}, {class: "form-control"}
+        = f.hidden_field :media_filter
+        = f.submit "並び替え", class: "btn btn-light"
+    .alert.alert-success
+      h4
+        = "#{@selected_uploader.dispname}がアップした#{@media_name}が" if @selected_uploader.present?
+        = sort_list[@sort_flg.to_s]
+        | で表示されています
+  .autopagerize_page_element
+    = paginate @medias, :window => 2, :outer_window => 2
+    br
+    = render 'movies/index', movies: @medias.select{|n| n.class == Movie}
+    = render 'photos/index', album: @album, photos: @medias.select{|n| n.class == Photo}
+    = paginate @medias, :window => 2, :outer_window => 2
+  #autopager_loading.btn.btn-warning.btn-block[style="display:none"]
+    | 次のページを読込中です

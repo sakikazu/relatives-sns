@@ -1,0 +1,14 @@
+.col-sm-10
+  = link_to '新規作成', new_album_path, class: "btn btn-info"
+  .page-header
+    h3
+      = fa_icon 'th-large', text: '最近更新されたアルバム'
+      small
+        = link_to 'アルバム一覧', albums_path
+  = render 'albums/index', albums: @albums
+  .page-header
+    h3
+      = fa_icon 'video-camera', text: '最近アップされた動画'
+      small
+        = link_to '動画一覧', movies_albums_path
+  = render 'movies/index', movies: @movies

@@ -1,0 +1,27 @@
+- if movies.present?
+  #medias.clearfix
+    - movies.each do |movie|
+      .thumb
+        .title
+          h4
+            span.badge.badge-success
+              = fa_icon 'video-camera'
+            = link_to movie.title, movie
+          .extra
+            = fa_icon 'comment', text: movie.mutter_comments.size
+            br
+            = nice_field_disp_only(movie)
+        .image.jthumbnails
+          = link_to image_tag(movie.thumb(:thumb)), movie_path(movie)
+        .info
+          div
+            = "投稿者：#{movie.user.dispname}"
+            br
+            = "投稿：#{time_shorter(movie.created_at)}".html_safe
+          - if movie.mutter_comments.last.try(:created_at)
+            div
+              = "最新コメント：#{time_shorter(movie.mutter_comments.last.created_at)}".html_safe
+        - if editable(current_user, movie.user)
+          .actions
+            = link_to '編集', edit_movie_path(movie)
+            = link_to '削除', movie, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'}
