@@ -5,12 +5,12 @@
       h3
         = fa_icon 'th-large', text: '最近更新されたアルバム'
         small
-          = link_to 'アルバム一覧', albums_path
+          = link_to '一覧', albums_path
     = render 'albums/index', albums: @albums
   .movie-wrapper
     .page-header
       h3
         = fa_icon 'video-camera', text: '最近アップされた動画'
         small
-          = link_to '動画一覧', movies_albums_path
+          = link_to '一覧', movies_path
     = render 'movies/index', movies: @movies

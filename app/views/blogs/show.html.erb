@@ -9,8 +9,8 @@
 
     <div class="once_content">
       <div class="info">
-        投稿者：<%= link_to @blog.user.dispname, blogs_path(user_id: @blog.user_id) %> | 
-        投稿日時：<%= @blog.created_at.to_s(:normal) if @blog.created_at %>
+        <%= link_to @blog.user.dispname, blogs_path(user_id: @blog.user_id) %> | 
+        <%= l @blog.created_at if @blog.created_at %>
       </div>
 
       <div class="description">

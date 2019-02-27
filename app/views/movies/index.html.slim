@@ -3,6 +3,8 @@
   .page-header
     h3
       | 動画一覧
+      small.badge.badge-warning
+        = @movies.total_count
   .select_menu.clearfix
     - [["編集なし動画", 1], ["編集動画", 2]].each do |n, i|
       - if @sort == i

@@ -87,7 +87,7 @@ javascript:
 
 .col-sm-10
   .mb-50
-    => link_to 'アルバム一覧', albums_path, class: "btn btn-light"
+    => link_to '戻る', :back, class: "btn btn-light"
     = link_to '編集する', edit_album_path(@album), class: "btn btn-info"
 
   = render partial: 'show_header'

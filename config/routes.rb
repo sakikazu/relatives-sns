@@ -54,7 +54,6 @@
 #                                   DELETE /movies/:id(.:format)                                                                    movies#destroy
 #                        top_albums GET    /albums/top(.:format)                                                                    albums#top
 #                title_index_albums GET    /albums/title_index(.:format)                                                            albums#title_index
-#                     movies_albums GET    /albums/movies(.:format)                                                                 albums#movies
 #                      users_albums GET    /albums/users(.:format)                                                                  albums#users
 #                    download_album GET    /albums/:id/download(.:format)                                                           albums#download
 #              create_comment_album POST   /albums/:id/create_comment(.:format)                                                     albums#create_comment
@@ -212,7 +211,6 @@ Rails.application.routes.draw do
     collection do
       get :top
       get :title_index
-      get :movies
       get :users
     end
     member do

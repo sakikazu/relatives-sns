@@ -31,8 +31,13 @@ html[lang="ja"]
           ul.navbar-nav.mr-auto
             li.nav-item[class='#{controller.controller_name == "nices" ? "active" : ""}']
               = link_to "人気", nices_path, class: 'nav-link'
-            li.nav-item[class='#{controller.controller_name =~ /albums|movies/ ? "active" : ""}']
-              = link_to "アルバム", top_albums_path, class: 'nav-link'
+            li.nav-item.dropdown[class='#{controller.controller_name =~ /albums|movies/ ? "active" : ""}']
+              a.nav-link.dropdown-toggle[href="#" data-toggle="dropdown"]
+                | アルバム
+              .dropdown-menu
+                = link_to '最近の更新', top_albums_path, class: 'dropdown-item'
+                = link_to 'アルバム一覧', albums_path, class: 'dropdown-item'
+                = link_to '動画一覧', movies_path, class: 'dropdown-item'
             li.nav-item[class='#{controller.controller_name == "blogs" ? "active" : ""}']
               = link_to "日記", blogs_path, class: 'nav-link'
             li.nav-item[class='#{controller.controller_name == "boards" ? "active" : ""}']

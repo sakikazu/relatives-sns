@@ -1,6 +1,6 @@
 <div class="col-sm-7">
 
-  <%= link_to "動画一覧へ", movies_path, class: "btn btn-light" %>
+  <%= link_to "戻る", :back, class: "btn btn-light" %>
   <%= link_to "アルバム:#{@movie.album.title}", album_path(@movie.album_id), class: "btn btn-light" if @movie.album_id.present? %>
   <%= link_to '編集する', edit_movie_path(@movie), class: "btn btn-info" if editable(current_user, @movie.user) %>
 
@@ -10,8 +10,8 @@
 
 <div class="once_content">
   <div class="info">
-    作成者:<%= @movie.user.dispname %> | 
-    作成日時:<%= @movie.created_at.to_s(:normal) if @movie.created_at %>
+    <%= @movie.user.dispname %> | 
+    <%= l @movie.created_at if @movie.created_at %>
   </div>
   <div class="description">
     <% if @movie.is_ready? %>

@@ -11,8 +11,8 @@
 
 <div class="once_content">
   <div class="info">
-    作成者：<%= @board.user.dispname %> | 
-    作成日時：<%= @board.created_at.to_s(:normal) if @board.created_at %>
+    <%= @board.user.dispname %> | 
+    <%= l @board.created_at if @board.created_at %>
   </div>
   <div class="description">
     <%= link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach? %>

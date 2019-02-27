@@ -42,12 +42,6 @@ class AlbumsController < ApplicationController
 
   end
 
-  def movies
-    @page_title = "動画一覧"
-    @movies = Movie.id_desc.page(params[:page]).per(15)
-    render 'movies/index'
-  end
-
   # GET /albums/1
   # GET /albums/1.json
   def show

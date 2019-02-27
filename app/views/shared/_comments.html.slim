@@ -2,7 +2,7 @@
   .well.well-small
     .d-flex.justify-content-between.text-secondary
       p.text-big = comment.user&.dispname
-      p 投稿日時：#{l comment.created_at}
+      p = l comment.created_at
     - if comment.respond_to?(:attach) && comment.attach?
       .image.mb20
         = link_to image_tag(comment.attach(:thumb)), comment.attach(:large), { class: colorbox_class }

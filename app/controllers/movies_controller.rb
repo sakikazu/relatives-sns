@@ -8,12 +8,13 @@ class MoviesController < ApplicationController
   # GET /movies.xml
   def index
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
-    case @sort
-    when 1
-      @movies = Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL).order('id DESC').page(params[:page]).per(20)
-    else
-      @movies = Movie.where(:movie_type => Movie::TYPE_MODIFY).order('id DESC').page(params[:page]).per(20)
-    end
+    @movies = case @sort
+              when 1
+                Movie.where("movie_type = ? or movie_type IS NULL", Movie::TYPE_NORMAL)
+              else
+                Movie.where(:movie_type => Movie::TYPE_MODIFY)
+              end
+    @movies = @movies.id_desc.page(params[:page]).per(15)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -34,7 +35,6 @@ class MoviesController < ApplicationController
   def edit
   end
 
-  # NOTE: 動画作成はアルバムからなので、これは使ってないような
   # POST /movies
   # POST /movies.xml
   def create
