@@ -1,9 +1,0 @@
-.img
-  = image_tag user[:image_path], class: 'img-thumbnail'
-.name
-  = user[:name]
-.info
-  %p.underline= "#{user[:birth_dead_h]} #{user[:blood_h]}"
-  %p.underline= user[:address]
-  - if current_user.editable(user)
-    %p= link_to "編集", edit_member_path(user[:id])
