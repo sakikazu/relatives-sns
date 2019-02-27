@@ -8,4 +8,11 @@
 </div>
 
 <%= render 'form' %>
+
+<% if editable(current_user, @album.user) %>
+  <div class="mt50 text-center alert alert-danger">
+    <%= link_to "削除", album_path(@album), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger" %>
+  </div>
+<% end %>
+
 </div>

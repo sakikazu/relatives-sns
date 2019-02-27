@@ -43,3 +43,21 @@ h1 > small, h2 > small, h3 > small {
   border-color: #ccc;
 }
 
+.card-deck-narrow {
+  .card {
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 10px;
+
+    h5.card-title {
+      font-size: 1.1rem;
+    }
+    .card-text {
+      font-size: 0.9rem;
+    }
+  }
+  .card-dummy {
+    border: none;
+  }
+}
+

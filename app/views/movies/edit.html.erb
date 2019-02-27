@@ -14,4 +14,10 @@
 
 <%= render :partial => 'form' %>
 
+<% if editable(current_user, @movie.user) %>
+  <div class="mt50 text-center alert alert-danger">
+    <%= link_to "削除", movie_path(@movie), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger" %>
+  </div>
+<% end %>
+
 </div>

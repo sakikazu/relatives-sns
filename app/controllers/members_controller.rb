@@ -147,7 +147,6 @@ class MembersController < ApplicationController
         format.html { redirect_to member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}のユーザー名とパスワードが設定されました." }
         format.json { head :no_content }
       else
-        p @user.errors
         format.html { render action: "edit_account" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -157,6 +156,11 @@ class MembersController < ApplicationController
   # DELETE /members/1
   # DELETE /members/1.json
   def destroy
+    unless current_user.admin?
+      redirect_back fallback_location: root_path, alert: '削除権限がありません。'
+      return
+    end
+
     name = @user.dispname(User::FULLNAME)
     @user.destroy
 

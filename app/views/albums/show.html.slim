@@ -87,9 +87,11 @@ javascript:
 
 .col-sm-10
   .mb-50
-    = link_to 'アルバム一覧', albums_path, class: "btn btn-light"
+    => link_to 'アルバム一覧', albums_path, class: "btn btn-light"
     = link_to '編集する', edit_album_path(@album), class: "btn btn-info"
+
   = render partial: 'show_header'
+
   - if @medias.size > 0
     .page-header.mt-50
       h3.normal
@@ -99,12 +101,12 @@ javascript:
     .mb-30.clearfix
       - [["写真と動画", 1], ["写真のみ", 2], ["動画のみ", 3]].each do |n, i|
         - if @media_filter == i
-          = link_to n, "javascript:void()", class: "btn btn-danger disabled"
+          => link_to n, "javascript:void(0)", class: "btn btn-danger disabled"
         - else
           - sort_params = {id: @album.id, album: {media_filter: i}}
           - sort_params[:album]["user_id"] = @album4sort.user_id if @album4sort.present?
           - sort_params[:album]["sort_flg"] = @album4sort.sort_flg if @album4sort.present?
-          = link_to n, album_path(sort_params), class: "btn btn-danger"
+          => link_to n, album_path(sort_params), class: "btn btn-danger"
 
     / ソート機能
     - #sort_list = [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]]

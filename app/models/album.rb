@@ -31,9 +31,12 @@ class Album < ApplicationRecord
 
   scope :without_owner, lambda {where("owner_id is NULL")}
   scope :with_owner, lambda {where("owner_id is not NULL")}
+  scope :id_desc, -> { order('id DESC') }
+
+  INDEX_COLUMNS = 5
 
   # 写真、動画がアップされた日時の降順でアルバムをソートする
-  def self.sort_upload
+  def self.sort_by_uploaded
     photo = Photo.group(:album_id).maximum(:created_at)
     movie = Movie.group(:album_id).maximum(:created_at)
     albums = Album.all.map do |a|
@@ -54,12 +57,13 @@ class Album < ApplicationRecord
   end
 
   # サムネイルが設定されていないものは、サムネイルがランダムで選択されるようにする
-  def self.set_thumb_if_noset(albums)
-    albums.each do |album|
+  def self.set_thumb(albums)
+    albums.map do |album|
       if album.thumb_id.blank?
         photo = album.photos.sample
         album.thumb_id = photo.id if photo.present?
       end
+      album
     end
   end
 end

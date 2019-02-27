@@ -1,6 +1,4 @@
 class MuttersController < ApplicationController
-  include ApplicationHelper
-
   after_action :update_request_at, only: [:index, :create]
 
   before_action :authenticate_user!, :except => :rss

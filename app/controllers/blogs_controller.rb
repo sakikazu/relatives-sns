@@ -117,6 +117,11 @@ class BlogsController < ApplicationController
   # DELETE /blogs/1
   # DELETE /blogs/1.xml
   def destroy
+    unless editable(current_user, @blog.user)
+      redirect_back fallback_location: root_path, alert: '削除権限がありません。'
+      return
+    end
+
     @blog.destroy
 
     redirect_to(blogs_url, notice: '日記を削除しました')

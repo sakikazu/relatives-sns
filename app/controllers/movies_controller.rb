@@ -80,10 +80,14 @@ class MoviesController < ApplicationController
   # DELETE /movies/1
   # DELETE /movies/1.xml
   def destroy
+    unless editable(current_user, @movie.user)
+      redirect_back fallback_location: root_path, alert: '削除権限がありません。'
+      return
+    end
     @movie.destroy
 
     respond_to do |format|
-      format.html { redirect_to(movies_url, notice: '削除しました') }
+      format.html { redirect_to(movies_url, notice: '動画を削除しました') }
       format.xml  { head :ok }
     end
   end

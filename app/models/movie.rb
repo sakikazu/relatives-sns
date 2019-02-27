@@ -37,6 +37,7 @@ class Movie < ApplicationRecord
 
   # default_scope {order('movies.id DESC')}
   scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
+  scope :id_desc, -> { order('id DESC') }
 
   attr_accessor :ffmp_obj, :is_update_thumb
 

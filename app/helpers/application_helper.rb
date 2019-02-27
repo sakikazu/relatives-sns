@@ -4,7 +4,7 @@ module ApplicationHelper
     return '' if time.blank?
     full_time_str = time.to_s(:normal)
     fmt = options[:noyear] ? '%m/%d' : '%Y/%m/%d'
-    link_to time.strftime(fmt), 'javascript:void()', data: { toggle: 'tooltip', trigger: 'click' }, title: full_time_str, class: 'text-info text-underline'
+    link_to time.strftime(fmt), 'javascript:void(0)', data: { toggle: 'tooltip', trigger: 'click' }, title: full_time_str, class: 'text-info text-underline'
   end
 
   def videojs(movie)
@@ -38,7 +38,7 @@ EOS
     full = useragent(ua)
     matched = full.match(/^\w+/)
     short = matched.present? ? matched[0] : full
-    link_to short, 'javascript:void()', class: 'badge badge-secondary', data: { toggle: 'tooltip' }, title: full
+    link_to short, 'javascript:void(0)', class: 'badge badge-secondary', data: { toggle: 'tooltip' }, title: full
   end
 
   #

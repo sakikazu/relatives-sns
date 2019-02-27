@@ -22,12 +22,12 @@
   .select_menu.clearfix.mb30
     - [["最新写真アップ順", 1], ["アルバム作成順", 2]].each do |n, i|
       - if @sort == i
-        = link_to n, "javascript:void()", class: "btn btn-danger disabled"
+        => link_to n, "javascript:void(0)", class: "btn btn-danger disabled"
       - else
-        = link_to n, albums_path(:sort => i), class: "btn btn-danger"
+        => link_to n, albums_path(:sort => i), class: "btn btn-danger"
   #album
-  = paginate @albums, :window => 2, :outer_window => 2
-  br
+  .mt20.mb30
+    = paginate @albums, :window => 2, :outer_window => 2
   = render 'albums/index', albums: @albums
-  = paginate @albums, :window => 2, :outer_window => 2
-  br
+  .mt20
+    = paginate @albums, :window => 2, :outer_window => 2

@@ -58,6 +58,8 @@ $(document).on('turbolinks:load', function() {
   colorbox_slideshow();
 
   myThumbnail();
+  hiddenImgHeight('.hidden_img_height');
+  makeBoxLink('.box-link');
 
   // bootstrap
   $('[data-toggle="popover"]').popover({
@@ -81,6 +83,33 @@ nice_member = (function(){
     });
   });
 });
+
+// flexで設定された幅に応じて、画像エリアの高さを計算する
+hiddenImgHeight = function(class_name) {
+  if (document.getElementsByClassName(class_name.slice(1))[0]) {
+    img_width = $(class_name).width();
+    img_height = img_width * 3/4
+    $(class_name).css({
+      'height': img_height + 'px',
+      'overflow': 'hidden',
+    });
+  }
+}
+
+// .box-link内にrailsの"method: delete"な削除リンクを置いた場合は
+// その削除リンクの機能が失われてしまうので置かないようにする
+makeBoxLink = function(class_name) {
+  if (document.getElementsByClassName(class_name.slice(1))[0]) {
+    $box_link = $(class_name);
+    $box_link.on('click', function() {
+      location.href = $(this).data('href');
+    })
+    // .box-link内のaタグクリック時は、親へのイベント伝播を止める
+    $('a', $box_link).on('click', function(e) {
+      e.stopPropagation();
+    });
+  }
+}
 
 myThumbnail = function(target_area) {
   if (!target_area) {
@@ -109,6 +138,8 @@ autopagerize = function() {
         nice_member();
         showMutterDeleteLink();
         myThumbnail(autopager_area);
+        hiddenImgHeight('.hidden_img_height');
+        makeBoxLink('.box-link');
         // autopagerize();
       })
       $("#autopager_loading").hide();

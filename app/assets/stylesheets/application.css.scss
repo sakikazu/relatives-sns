@@ -634,7 +634,11 @@ h2.normal3 {
   right: 0;
 }
 
+.box-link {
+  cursor: pointer;
+}
 
+// TODO: views/photos/_index.html.erbのを修正した後に削除する
 #medias {
   margin: 0px 0px 50px;
 }

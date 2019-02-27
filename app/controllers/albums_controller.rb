@@ -12,14 +12,14 @@ class AlbumsController < ApplicationController
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
     when 1
-      @albums = Album.without_owner.order("id DESC")
+      @albums = Album.without_owner.id_desc
     when 2
-      @albums = Album.without_owner.sort_upload
+      @albums = Album.without_owner.sort_by_uploaded
     else
-      @albums = Album.without_owner.order("id DESC")
+      @albums = Album.without_owner.id_desc
     end
 
-    Album.set_thumb_if_noset(@albums)
+    @albums = Album.set_thumb(@albums)
     @albums = Kaminari.paginate_array(@albums).page(params[:page])
 
     @album_users = []
@@ -31,10 +31,9 @@ class AlbumsController < ApplicationController
 
   def top
     @page_title = "アルバムトップ"
-    # @albums = Kaminari.paginate_array(Album.sort_upload).page(params[:page]).per(10)
-    @albums = Album.sort_upload[0..9]
-    Album.set_thumb_if_noset(@albums)
-    @movies = Movie.order("id DESC").limit(10)
+    @albums = Album.sort_by_uploaded[0..Album::INDEX_COLUMNS-1]
+    @albums = Album.set_thumb(@albums)
+    @movies = Movie.id_desc.limit(Album::INDEX_COLUMNS)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -45,7 +44,7 @@ class AlbumsController < ApplicationController
 
   def movies
     @page_title = "動画一覧"
-    @movies = Movie.order("id DESC").page(params[:page]).per(16)
+    @movies = Movie.id_desc.page(params[:page]).per(15)
     render 'movies/index'
   end
 
@@ -68,15 +67,15 @@ class AlbumsController < ApplicationController
     case @sort_flg
     when 1
       photos = @album.photos.order("id DESC")
-      movies = @album.movies.order("id DESC")
+      movies = @album.movies.id_desc
     when 2
       photos = @album.photos.order("exif_at ASC")
-      movies = @album.movies.order("id DESC")
+      movies = @album.movies.id_desc
       # movies = @album.movies.order("exif_at ASC") # todo exif取れないよね？対応しなくていっかなー
     when 3
       photos = @album.photos.order("last_comment_at DESC")
       # todo できてない
-      movies = @album.movies.order("id DESC")
+      movies = @album.movies.id_desc
     when 4
       photos = @album.photos.order("nices.created_at DESC").order("last_comment_at DESC")
       movies = @album.movies.order("nices.created_at DESC")
@@ -177,17 +176,21 @@ class AlbumsController < ApplicationController
   # DELETE /albums/1
   # DELETE /albums/1.json
   def destroy
+    unless editable(current_user, @album.user)
+      redirect_back fallback_location: root_path, alert: '削除権限がありません。'
+      return
+    end
     @album.destroy
 
     respond_to do |format|
-      format.html { redirect_to albums_url }
+      format.html { redirect_to albums_url, notice: 'アルバムを削除しました' }
       format.json { head :ok }
     end
   end
 
 
   def title_index
-    @albums = Album.sort_upload
+    @albums = Album.sort_by_uploaded
     @photo_count = Photo.group(:album_id).count
     @last_comment_at = Photo.group(:album_id).maximum(:last_comment_at)
   end

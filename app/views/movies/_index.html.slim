@@ -1,27 +1,30 @@
-- if movies.present?
-  #medias.clearfix
-    - movies.each do |movie|
-      .thumb
-        .title
-          h4
-            span.badge.badge-success
-              = fa_icon 'video-camera'
-            = link_to movie.title, movie
-          .extra
-            = fa_icon 'comment', text: movie.mutter_comments.size
-            br
-            = nice_field_disp_only(movie)
-        .image.jthumbnails
-          = link_to image_tag(movie.thumb(:thumb)), movie_path(movie)
-        .info
-          div
-            = "投稿者：#{movie.user.dispname}"
-            br
-            = "投稿：#{time_shorter(movie.created_at)}".html_safe
-          - if movie.mutter_comments.last.try(:created_at)
-            div
-              = "最新コメント：#{time_shorter(movie.mutter_comments.last.created_at)}".html_safe
-        - if editable(current_user, movie.user)
-          .actions
-            = link_to '編集', edit_movie_path(movie)
-            = link_to '削除', movie, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'}
+- if movies.blank?
+  p 動画は作られていません
+- else
+  - movies.each_slice(Album::INDEX_COLUMNS) do |sliced_movies|
+    - sliced_movies = Movie.fill_up_blank(sliced_movies, Album::INDEX_COLUMNS)
+    .card-deck.card-deck-narrow
+      - sliced_movies.each do |movie|
+        - if movie.blank?
+          .card.card-dummy
+        - else
+          .card.box-link[data-href="#{movie_path(movie)}"]
+            .hidden_img_height
+              = image_tag(movie.thumb(:thumb), class: 'card-img-top')
+            .card-body
+              h5.card-title
+                span.badge.badge-danger
+                  = fa_icon 'video-camera'
+                =< movie.title
+                small.pl-2
+                  span.badge.badge-info
+                    =< fa_icon 'comment', text: movie.mutter_comments.size
+                  =< nice_field_disp_only(movie)
+              .card-text.text-muted
+                = "投稿者：#{movie.user&.dispname}"
+                br
+                = "投稿：#{time_shorter(movie.created_at)}".html_safe
+                - if movie.mutter_comments.last.try(:created_at)
+                  br
+                    = "最新コメント：#{time_shorter(movie.mutter_comments.last.created_at)}".html_safe
+

@@ -6,9 +6,11 @@
   .select_menu.clearfix
     - [["編集なし動画", 1], ["編集動画", 2]].each do |n, i|
       - if @sort == i
-        = link_to n, "javascript:void()", class: "btn btn-danger disabled"
+        => link_to n, "javascript:void(0)", class: "btn btn-danger disabled"
       - else
-        = link_to n, movies_path(:sort => i), class: "btn btn-danger"
-  = paginate @movies, window: 2
+        => link_to n, movies_path(:sort => i), class: "btn btn-danger"
+  .mt30
+    = paginate @movies, window: 2, outer_window: 2
   = render 'movies/index', movies: @movies
-  = paginate @movies, window: 2
+  .mt20
+    = paginate @movies, window: 2, outer_window: 2
