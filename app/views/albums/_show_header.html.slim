@@ -1,3 +1,9 @@
+- content_for :add_js do
+  javascript:
+    $(document).on('turbolinks:load', function() {
+      ajaxFileUpload('photos-form');
+    });
+
 ul.nav.nav-tabs.mb15
   li.nav-item
     a.nav-link[href="#tab-description" data-toggle="tab"]
@@ -43,17 +49,17 @@ ul.nav.nav-tabs.mb15
             = f.submit "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"}
     #tab-photo-upload.tab-pane
       .page-header
-        h3
-          | このアルバムに写真をアップする
-          small
-            | 複数ファイル選択可能
-      #fileQueue
-      = hidden_field_tag :user_id
-      = hidden_field_tag :album_id
-      = file_field_tag :uploadify
-      br
-      strong.important
-        | ※スマホからはアップできません
+        h3 このアルバムに写真をアップする
+      = form_tag nil, { id: 'photos-form', multipart: true,
+        data: { upload_path: album_photos_path(@album.id), completed_path: album_path(@album.id) } } do
+        = file_field_tag "files[]", multiple: true
+        = submit_tag '投稿', class: 'btn btn-primary'
+
+      .mt10.important
+        | 複数ファイル選択可能（スマホでのファイル選択は戸惑うかも）
+
+      .photos-upload-progress.mt20.progress[style='display:none']
+        .progress-bar.progress-bar-striped
     #tab-movie-upload.tab-pane
       .page-header
         h3

@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-  before_action :authenticate_user!, :except => [:create]  #sakikazu これがないとcreateできない。 for uploadify
+  before_action :authenticate_user!
   before_action :set_photo, only: [:show, :edit, :update, :destroy, :slideshow, :update_from_slideshow]
   before_action :set_ups_data, only: [:show]
 
@@ -44,28 +44,26 @@ class PhotosController < ApplicationController
 
   # POST /photos
   # POST /photos.json
-  # todo 2014/05/17 Firefoxだと422エラーになる件
-  # 下記対策が有用そうだけど、大変ぽいので・・断念
-  # ref: Uploadify with Paperclip on Rails Tutorial | Old Blind Pew http://martinjhawkins.wordpress.com/2013/10/07/uploadify-with-paperclip-on-rails-tutorial/
-  # ref: Rails 4 + Uploadify + Paperclip | Vignesh's Blog http://vignesh.info/blog/rails-4-uploadify-paperclip/
   def create
-    params[:photo] = {}
-    params[:photo][:image] = params['Filedata'] #paperclip
-    params[:photo][:exif_at] = Photo::set_exif_at(params['Filedata'].path)
-    params[:photo][:user_id] = params['user_id']
-    params[:photo][:album_id] = params['album_id']
-    params[:photo][:title] = "[無題]"
-    @photo = Photo.new(photo_params)
+    if params[:files].blank?
+      render json: { message: 'ファイルを選択してください' }, status: 404
+      return
+    end
+
+    album = Album.find(params['album_id'])
+    # TODO: Transactionかけるとかエラーハンドリングしたい
+    params[:files].each do |file|
+      photo = Photo.new(image: file, title: '[無題]', album_id: album.id, user_id: current_user.id, exif_at: Photo::set_exif_at(file.path))
+      photo.save
+    end
 
     # memo Ajaxでのpostはsaveのエラーが画面には表示されないので、自分で出力してあげる
     # あと、pメソッドでログに出力されないため、loggerを使用する
     # logger.debug @photo.errors.full_messages.inspect
     # logger.debug @photo.errors.full_messages.to_sentence
 
-    @photo.save
-
-    # ここは認証を解除しているからcurrent_userは使えないので、@photo.userを使う
-    @photo.album.update_histories.create(user_id: @photo.user.id, action_type: UpdateHistory::ALBUMPHOTO_CREATE)
+    UpdateHistory.create_or_update(album, UpdateHistory::ALBUMPHOTO_CREATE, current_user.id)
+    render json: {}
   end
 
   # PCからはcolorboxで使用する前提。スマホからは一つのページとして表示する

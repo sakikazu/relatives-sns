@@ -1,5 +1,4 @@
 class AlbumsController < ApplicationController
-  before_action :login_after_uploadify # 多分、authenticate_userより先に実行する必要がある
   before_action :authenticate_user!
   before_action :set_album, only: [:show, :edit, :update, :destroy, :download]
   before_action :init
@@ -261,15 +260,5 @@ class AlbumsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:user_id, :parent_id, :parent_type, :content)
-  end
-
-  # user_idが入っていたら、Uploadifyでアップロードしてセッションが切れてしまった後に
-  # リダイレクトされてきたものと判断してログインする
-  # ※これやらないとログアウト状態なのでログイン画面に行ってしまう
-  def login_after_uploadify
-    if params[:user_id].present?
-      user = User.find_by_id(params[:user_id])
-      sign_in(user, :bypass => true)
-    end
   end
 end

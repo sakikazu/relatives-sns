@@ -16,7 +16,6 @@
 //= require turbolinks
 //= require popper
 //= require bootstrap-sprockets
-//= require_tree ./uploadify
 //= require video-js/video
 //= require jquery.colorbox-min
 // 日記でhtmlが使えるように
@@ -30,6 +29,7 @@
 //= require jquery.remotipart
 //= require jquery.MyThumbnail.js
 //= require mutters.js
+//= require albums.js
 //= require members.js
 //= require nices.js
 //= require cable

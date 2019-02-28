@@ -63,16 +63,22 @@ class Photo < ApplicationRecord
     photos
   end
 
+  require 'exifr/jpeg'
   # ファイルパスが必要なので、コールバック内ではなく、明示的に呼び出して処理するようにした
   def self.set_exif_at(filepath)
     #memo 「date_time」だと、写真の更新日付になってしまうことがあった。「exif.date_time_digitized」で取得すること
-    #memo 追記 EXIFがない画像への対処を入れた
-    e_data = EXIFR::JPEG.new(filepath) rescue err_flg = true
-    exif_at = nil
-    if err_flg.blank?
-      exif_at = ((e_data.exif && e_data.exif.date_time_digitized) || e_data.date_time) rescue nil
+    begin
+      exif_data = EXIFR::JPEG.new(filepath)
+    rescue => e
+      # EXIFR::のExceptionは、exifデータがない画像などの場合なので無視する
+      raise e unless e.class.name.start_with?('EXIFR::')
     end
-    exif_at
+
+    if exif_data.present?
+      ((exif_data.exif && exif_data.exif.date_time_digitized) || exif_data.date_time) rescue nil
+    else
+      nil
+    end
   end
 
   def self.valid_ext?(filename)

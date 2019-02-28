@@ -7,42 +7,11 @@ javascript:
             return false;
           }
       });
-  
-  
-      $('a[data-toggle="tab"]:<%= @tab_select_index %>').tab('show');
-  
-    //uploadify
-    $('#uploadify').uploadify({
-      'swf' : '/assets/uploadify/uploadify.swf',
-      'uploader' : '<%= album_photos_path(@album.id) %>',
-      'formData' : {'user_id': <%= current_user.id %>,
-        'authenticity_token' : '<%= form_authenticity_token if protect_against_forgery? %>'
-      },
-      'queueID' : 'fileQueue',
-      'auto' : true,
-      'multi' : true,
-      'buttonText' : 'ファイルを選択',
-      //'buttonImg'      : '/_images/browse-files.png',
-  //    '_http_accept': 'text/html',  //406error対策とかあったらがやっぱエラーになった
-      'onUploadStart' : function () {
-        $('body').data('in_upload_progress', 1);
-      },
-      'onQueueComplete': function (evt, data){
-        alert('ファイルのアップロードが完了しました。');
-        $('body').data('in_upload_progress', 0);
-        //albums#showにuser_id付きでリクエストすることで、セッションが切れてログアウトされてしまった状態から自動でログインするようにする
-        location.href = '<%= album_url(@album, "album[sort_flg]" => 1, "album[user_id]" => current_user.id) %>';
-        <%#= remote_function(:url => {:controller => :albums, :action => :upload_complete, :id => @album.id},
-          :complete => "alert(\" ファイルのアップロードが完了しました。\");location.reload()")
-          #:complete => "alert(data['filesUploaded']+\" ファイルのアップロードが完了しました。\");location.reload()")
-        %>
-      },
-  
-    });
-  
+      $('a[data-toggle="tab"]:#{@tab_select_index}').tab('show');
+
     //colorbox
     colorbox_slideshow();
-  
+
     // アルバム説明が長すぎたら開閉スイッチを挿入する
     var min_height = 200;
     var $desc = $('.description')
@@ -52,7 +21,7 @@ javascript:
         .height(min_height)
         .css({"overflow":"hidden"})
         .after('<div id="desc_open">＞＞続きを読む</div>');
-  
+
       $('#desc_open')
         .css({
           'font-size':'16px',
@@ -72,9 +41,8 @@ javascript:
           }
         })
     }
-  
   }); //jquery#ready
-  
+
   //commentshow = function() {
   //  $("#comment_area").toggle();
   //  if($("#showlink").text() == "表示") {

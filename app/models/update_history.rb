@@ -55,15 +55,19 @@ class UpdateHistory < ApplicationRecord
   }
 
 
-  # 各コンテンツに対するコメント作成時用
-  # 同じコンテンツへのコメントでは、UpdateHistoryは複数作られないようにする
-  def self.for_creating_comment(content, action_type, user_id)
+  def self.create_or_update(content, action_type, user_id)
     update_history = content.update_histories.where(user_id: user_id, action_type: action_type).first
     if update_history.present?
       update_history.update(updated_at: Time.now)
     else
       content.update_histories.create(user_id: user_id, action_type: action_type)
     end
+  end
+
+  # 各コンテンツに対するコメント作成時用
+  # 同じコンテンツへのコメントでは、UpdateHistoryは複数作られないようにする
+  def self.for_creating_comment(content, action_type, user_id)
+    self.create_or_update(content, action_type, user_id)
   end
 
   # 各コンテンツに対するコメント削除時用
