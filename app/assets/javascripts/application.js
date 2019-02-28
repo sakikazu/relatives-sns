@@ -43,7 +43,7 @@ $(document).on('turbolinks:load', function() {
   if (document.getElementsByClassName('autopagerize_page_element')[0]) {
     autopagerize();
   }
-  if (document.getElementsByClassName('carousel-demo2')[0]) {
+  if (document.getElementsByClassName('photos-slider')[0]) {
     slide_effect();
   }
   if (document.getElementById('tablesorter')) {
@@ -151,7 +151,7 @@ autopagerize = function() {
 }
 
 slide_effect = (function(){
-  jQuery(".carousel-demo2").sliderkit({
+  jQuery(".photos-slider").sliderkit({
     shownavitems:9,
     scroll:1,
     mousewheel:false,
