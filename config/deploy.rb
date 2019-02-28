@@ -24,7 +24,7 @@ set :linked_files, %w{.env config/mysqldump.ini .ruby-version .ruby-gemset}
 
 # memo jsライブラリで使用するcssやfontなど、assetUrl関連で問題となりそうなものは、コンパイルせずに直接参照できるように、shared配下に配置する
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/upload public/assets/font public/assets/CLEditor public/assets/colorbox public/assets/uploadify}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/upload}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
