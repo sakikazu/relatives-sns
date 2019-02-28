@@ -27,7 +27,6 @@
 //= require bgstretcher
 //= require_tree ./jqplot
 //= require jquery.remotipart
-//= require jquery.MyThumbnail.js
 //= require mutters.js
 //= require albums.js
 //= require members.js
@@ -57,9 +56,7 @@ $(document).on('turbolinks:load', function() {
   colorbox_fix_size();
   colorbox_slideshow();
 
-  myThumbnail();
   hiddenImgHeight('.hidden_img_height');
-  makeBoxLink('.box-link');
 
   // bootstrap
   $('[data-toggle="popover"]').popover({
@@ -96,6 +93,7 @@ hiddenImgHeight = function(class_name) {
   }
 }
 
+// NOTE: aタグの親に伝播を止めるのは何かと問題(colorboxなども)になるので、このメソッドは使わないようにする
 // .box-link内にrailsの"method: delete"な削除リンクを置いた場合は
 // その削除リンクの機能が失われてしまうので置かないようにする
 makeBoxLink = function(class_name) {
@@ -109,16 +107,6 @@ makeBoxLink = function(class_name) {
       e.stopPropagation();
     });
   }
-}
-
-myThumbnail = function(target_area) {
-  if (!target_area) {
-    target_area = $('body');
-  }
-  $(".jthumbnails img", target_area).MyThumbnail({
-    thumbWidth:  200,
-    thumbHeight: 200
-  });
 }
 
 // AutoPager
@@ -137,9 +125,7 @@ autopagerize = function() {
         colorbox_slideshow();
         nice_member();
         showMutterDeleteLink();
-        myThumbnail(autopager_area);
         hiddenImgHeight('.hidden_img_height');
-        makeBoxLink('.box-link');
         // autopagerize();
       })
       $("#autopager_loading").hide();

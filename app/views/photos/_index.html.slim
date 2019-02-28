@@ -1,0 +1,41 @@
+- if photos.blank?
+  p 写真はありません
+- else
+  - photos.each_slice(Album::INDEX_COLUMNS) do |sliced_photos|
+    - sliced_photos = Photo.fill_up_blank(sliced_photos, Album::INDEX_COLUMNS)
+    .card-deck.card-deck-narrow
+      - sliced_photos.each do |photo|
+        - if photo.blank?
+          .card.card-dummy
+        - else
+          .card
+            .hidden_img_height
+              - if request.smart_phone?
+                = link_to image_tag(photo.image(:thumb), class: 'card-img-top'), album_photo_path(album, photo)
+              - else
+                = link_to image_tag(photo.image(:thumb), class: 'card-img-top'), slideshow_album_photo_path(album, photo), { rel: 'colorbox' }
+            .card-body
+              h5.card-title
+                span.badge.badge-danger
+                  = fa_icon 'camera'
+                =< "#{photo.title || "[無題]"}"
+                small.pl-3
+                  span.badge.badge-info
+                    =< fa_icon 'comment', text: photo.mutter_comments.size
+                  =< nice_field_disp_only(photo)
+              .card-text.text-muted
+                = "投稿者：#{photo.user&.dispname}"
+                br
+                = "投稿：#{time_shorter(photo.created_at)}".html_safe
+                br
+                = "撮影：#{time_shorter(photo.exif_at)}".html_safe
+                - if photo.last_comment_at.present?
+                  br
+                    = "最新コメント：#{time_shorter(photo.last_comment_at)}".html_safe
+            .card-footer.text-right
+              - unless request.smart_phone?
+                = link_to fa_icon('toggle-right'), album_photo_path(album, photo)
+              - if editable(current_user, photo.user)
+                span.pl-2 = link_to fa_icon('pencil'), edit_album_photo_path(album, photo)
+                span.pl-2 = link_to fa_icon('trash'), album_photo_path(album, photo), :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'}
+

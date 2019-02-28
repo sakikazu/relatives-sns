@@ -47,13 +47,19 @@ h1 > small, h2 > small, h3 > small {
   .card {
     margin-left: 8px;
     margin-right: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 
     h5.card-title {
       font-size: 1.1rem;
     }
+    .card-body {
+      padding: 0.6rem 0.8rem;
+    }
     .card-text {
       font-size: 0.9rem;
+    }
+    .card-footer {
+      padding: 0.3rem 1rem;
     }
   }
   .card-dummy {

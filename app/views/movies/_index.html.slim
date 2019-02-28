@@ -1,5 +1,5 @@
 - if movies.blank?
-  p 動画は作られていません
+  p 動画はありません
 - else
   - movies.each_slice(Album::INDEX_COLUMNS) do |sliced_movies|
     - sliced_movies = Movie.fill_up_blank(sliced_movies, Album::INDEX_COLUMNS)
@@ -8,9 +8,9 @@
         - if movie.blank?
           .card.card-dummy
         - else
-          .card.box-link[data-href="#{movie_path(movie)}"]
+          .card
             .hidden_img_height
-              = image_tag(movie.thumb(:thumb), class: 'card-img-top')
+              = link_to image_tag(movie.thumb(:thumb), class: 'card-img-top'), movie_path(movie)
             .card-body
               h5.card-title
                 span.badge.badge-danger

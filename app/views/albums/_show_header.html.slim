@@ -23,11 +23,8 @@ ul.nav.nav-tabs.mb15
     #tab-description.tab-pane
       h3
         = "写真数(動画含む)：#{@medias_all_num}</small>".html_safe
-        small
-          |  作成者：
-          = @album.user.try(:dispname)
-          |  | 作成日時：
-          = l @album.created_at if @album.created_at
+        small.ml-3
+          = "#{@album.user.try(:dispname)} | #{l @album.created_at if @album.created_at}"
       .description
         = sani_custom_br(@album.description)
     #tab-comments.tab-pane

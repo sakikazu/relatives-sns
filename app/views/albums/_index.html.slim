@@ -12,10 +12,10 @@
         - if album.blank?
           .card.card-dummy
         - else
-          .card.box-link[data-href="#{album_path(album)}"]
+          .card
             - if album.thumb.present?
               .hidden_img_height
-                = image_tag(album.thumb.image(:thumb), class: 'card-img-top')
+                = link_to image_tag(album.thumb.image(:thumb), class: 'card-img-top'), album_path(album)
             .card-body
               h5.card-title
                 span.badge.badge-danger
