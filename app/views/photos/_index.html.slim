@@ -1,6 +1,4 @@
-- if photos.blank?
-  p 写真はありません
-- else
+- if photos.present?
   - photos.each_slice(Album::INDEX_COLUMNS) do |sliced_photos|
     - sliced_photos = Photo.fill_up_blank(sliced_photos, Album::INDEX_COLUMNS)
     .card-deck.card-deck-narrow

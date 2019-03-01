@@ -1,6 +1,4 @@
-- if albums.blank?
-  p アルバムは作られていません
-- else
+- if albums.present?
   - albums.each_slice(Album::INDEX_COLUMNS) do |sliced_albums|
     - sliced_albums = Album.fill_up_blank(sliced_albums, Album::INDEX_COLUMNS)
     / NOTE: .col-sm-*と.card-deckの選択について。.col-sm-*は12カラムを分割するので、データを5つ並べることができないし、

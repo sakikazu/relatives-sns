@@ -1,6 +1,4 @@
-- if movies.blank?
-  p 動画はありません
-- else
+- if movies.present?
   - movies.each_slice(Album::INDEX_COLUMNS) do |sliced_movies|
     - sliced_movies = Movie.fill_up_blank(sliced_movies, Album::INDEX_COLUMNS)
     .card-deck.card-deck-narrow
@@ -10,7 +8,10 @@
         - else
           .card
             .hidden_img_height
-              = link_to image_tag(movie.thumb(:thumb), class: 'card-img-top'), movie_path(movie)
+              = link_to movie_path(movie) do
+                .movie-thumb
+                  = image_tag(movie.thumb(:thumb), class: 'card-img-top')
+                .movie-play = fa_icon 'play-circle-o', class: 'fa-3x'
             .card-body
               h5.card-title
                 span.badge.badge-danger

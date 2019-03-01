@@ -44,20 +44,16 @@ class AlbumsController < ApplicationController
   # GET /albums/1
   # GET /albums/1.json
   def show
-    uploader = nil
-    @sort_flg = 2
-    @media_filter = 1
-    if params[:album].present?
-      uploader = params[:album][:user_id]
-      # 初期表示は「撮影日時順」
-      @sort_flg = params[:album][:sort_flg] =~ /1|2|3|4/ ? params[:album][:sort_flg].to_i : 2
-      # 写真か動画のフィルタリング
-      @media_filter = params[:album][:media_filter].blank? ? 1 : params[:album][:media_filter].to_i
-    end
-    @album4sort = Album.new(sort_flg: @sort_flg, user_id: uploader, media_filter: @media_filter)
+    # 初期表示は「写真と動画」「アップロード順」
+    default_sort_params = { sort_flg: 1, user_id: nil, media_filter: 1 }
+    @album4sort = if params[:album].present?
+                    Album.new(default_sort_params.merge(album_params))
+                  else
+                    Album.new(default_sort_params)
+                  end
 
     # ソート順
-    case @sort_flg
+    case @album4sort.sort_flg.to_i
     when 1
       photos = @album.photos.order("id DESC")
       movies = @album.movies.id_desc
@@ -75,13 +71,12 @@ class AlbumsController < ApplicationController
     end
 
     # アップロード者でフィルタリング
-    if uploader.present?
-      photos = photos.where(user_id: uploader)
-      movies = movies.where(user_id: uploader)
-      @selected_uploader = User.find_by_id(uploader)
+    if @album4sort.user_id.present?
+      photos = photos.where(user_id: @album4sort.user_id)
+      movies = movies.where(user_id: @album4sort.user_id)
     end
 
-    case @media_filter
+    case @album4sort.media_filter.to_i
     when 1
       @medias = movies.includes_all + photos.includes_all
       @media_name  = "写真と動画"
@@ -255,7 +250,7 @@ class AlbumsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def album_params
-    params.require(:album).permit(:title, :description, :thumb_id, :user_id, :sort_flg)
+    params.require(:album).permit(:title, :description, :thumb_id, :user_id, :sort_flg, :media_filter)
   end
 
   def comment_params

@@ -93,6 +93,38 @@ hiddenImgHeight = function(class_name) {
   }
 }
 
+// minHeightまで縮めておき、開閉リンクを設ける
+shortHeightByMin = function(class_name, minHeight) {
+  var $box = $(class_name);
+  var boxHeight = $box.height();
+  if(boxHeight <= minHeight) {
+    return
+  }
+  $box
+    .height(minHeight)
+    .css({"overflow":"hidden"})
+    .after('<div id="openBox">＞＞続きを読む</div>');
+
+  $('#openBox')
+    .css({
+      'font-size':'1em',
+      'color':'red',
+      'font-weight':'bold',
+      'cursor':'pointer'
+    })
+    .click(function(){
+      if ($(this).data('open') == true ) {
+        $(this).data('open', false);
+        $box.height(minHeight);
+        $(this).text('＞＞続きを読む');
+      } else {
+        $(this).data('open', true);
+        $box.height(boxHeight);
+        $(this).text('＞＞閉じる');
+      }
+    });
+}
+
 // NOTE: aタグの親に伝播を止めるのは何かと問題(colorboxなども)になるので、このメソッドは使わないようにする
 // .box-link内にrailsの"method: delete"な削除リンクを置いた場合は
 // その削除リンクの機能が失われてしまうので置かないようにする

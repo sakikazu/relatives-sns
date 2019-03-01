@@ -25,7 +25,7 @@ ul.nav.nav-tabs.mb15
         = "写真数(動画含む)：#{@medias_all_num}</small>".html_safe
         small.ml-3
           = "#{@album.user.try(:dispname)} | #{l @album.created_at if @album.created_at}"
-      .description
+      .description.short-height-if-need
         = sani_custom_br(@album.description)
     #tab-comments.tab-pane
       .page-header
@@ -48,7 +48,8 @@ ul.nav.nav-tabs.mb15
       .page-header
         h3 このアルバムに写真をアップする
       = form_tag nil, { id: 'photos-form', multipart: true,
-        data: { upload_path: album_photos_path(@album.id), completed_path: album_path(@album.id) } } do
+        data: { upload_path: album_photos_path(@album.id),
+        completed_path: album_path(@album.id, "album[user_id]" => current_user.id, "album[sort_flg]" => 1, "album[media_filter]" => 2) } } do
         = file_field_tag "files[]", multiple: true
         = submit_tag '投稿', class: 'btn btn-primary'
 

@@ -462,6 +462,29 @@ a.colorbox:hover img, a.colorbox_fix_size img {
   padding: 12px 20px;
 }
 
+
+/**********************************************
+ album
+**********************************************/
+.hidden_img_height {
+  position: relative;
+
+  .movie-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // opacity: 0.8;
+  }
+  .movie-play {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 2em;
+  }
+}
+
 .once_photo{
   float: left;
   margin-left: 8px;
@@ -589,61 +612,5 @@ h2.normal3 {
   border-radius:4px;
   text-shadow:1px 1px 2px #333;
   box-shadow:inset -1px -1px 2px rgba(0,0,0, 0.6),inset 1px 1px 2px rgba(255,255,255,0.8);
-}
-
-
-#movies {
-  margin: 15px 0px 50px;
-}
-
-#movies>.thumb {
-  width: 235px;
-  border: 1px solid #ddd;
-  margin-left: 18px;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  float: left;
-  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-  text-align:center;
-  position:relative;
-  height: 200px;
-}
-#movies>.thumb .image {
-  position:absolute;
-  top: 0;
-  left: 0;
-  padding: 7px;
-  box-sizing: border-box;
-  /* height: 200px; */
-}
-#movies>.thumb .info {
-  position:absolute;
-  bottom: 0px;
-  left: 0;
-  height: 80px;
-  opacity: 0.6;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px;
-  font-size: 90%;
-  background-color: black;
-  color: white;
-}
-#movies>.thumb .title {
-  font-weight:bold;
-  position:absolute;
-  top: -28px;
-}
-#movies>.thumb .actions {
-  position:absolute;
-  bottom: -20px;
-  right: 0;
-}
-
-.myPic
-{
-	/* margin:10px; */
-	/* border-radius:10px; */
-	border:1px solid #ccc;
 }
 
