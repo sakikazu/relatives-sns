@@ -78,7 +78,7 @@ class Movie < ApplicationRecord
     :convert_options => { :thumb => ['-quality 80', '-strip']}, #50じゃノイズきつい
     :url => "/upload/#{content_name}/:id/thumb/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/thumb/:style/:basename.:extension",
-    default_url: "/images/noimage.gif"
+    default_url: NO_IMAGE_PATH
 
   validates_attachment_content_type :thumb, :content_type => Photo::CONTENT_TYPE
 

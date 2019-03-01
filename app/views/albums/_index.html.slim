@@ -13,9 +13,8 @@
           .card.card-dummy
         - else
           .card
-            - if album.thumb.present?
-              .hidden_img_height
-                = link_to image_tag(album.thumb.image(:thumb), class: 'card-img-top'), album_path(album)
+            .hidden_img_height
+              = link_to image_tag(album.thumb_path, class: 'card-img-top'), album_path(album)
             .card-body
               h5.card-title
                 span.badge.badge-danger

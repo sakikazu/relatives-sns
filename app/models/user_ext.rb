@@ -69,7 +69,7 @@ class UserExt < ApplicationRecord
     },
     :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
     :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension",
-    default_url: "/images/noimage.gif"
+    default_url: NO_IMAGE_PATH
 
   validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
 

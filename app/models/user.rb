@@ -269,7 +269,7 @@ class User < ApplicationRecord
               address: user.user_ext.address,
               birth_dead_h: user.user_ext.birth_dead_h,
               is_dead: user.user_ext.dead_day.present?,
-              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : "/images/noimage.gif"
+              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : NO_IMAGE_PATH
     }
 
     children = users.select{|u| u.parent_id == user.id}

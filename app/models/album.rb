@@ -66,4 +66,8 @@ class Album < ApplicationRecord
       album
     end
   end
+
+  def thumb_path
+    self.thumb.present? ? self.thumb.image(:thumb) : NO_IMAGE_PATH
+  end
 end
