@@ -1,31 +1,28 @@
-.col-sm-2
+.col-sm-12
+  .mb15
+    = link_to "アルバムトップ", top_albums_path, class: "btn btn-light"
+    =< link_to "詳細一覧", detail_index_albums_path, class: "btn btn-light"
+
+.col-sm-2.order-1.order-sm-2
+  .card
+    .card-header.text-center
+      = toggle_link('個人のアルバム', '#collapsed_area')
+    #collapsed_area[class='#{"collapse" if request.smart_phone?}']
+      table.table.table-sm
+        - @album_users.each do |user|
+          tr
+            td = link_to "#{user[:name]}(#{user[:item_count]})", album_path(user[:album_id])
+
+.col-sm-10.order-2.order-sm-1
   .page-header
-    h3
-      | 個人のアルバム
-  .well.well-small
-    ul.unstyled
-      - @album_users.each do |user|
-        li
-          = link_to "#{user[:name]}(#{user[:item_count]})", album_path(user[:album_id])
-.col-sm-10
-  = link_to "アルバムトップへ", top_albums_path, class: "btn btn-light"
-  .page-header
-    h3
-      | アルバム詳細一覧
-      small
-        | 写真のダウンロードも可能
-  #title_index
-    = link_to "表示する", {:controller => :albums, :action => :title_index}, :remote => true, class: "btn btn-info"
-  .page-header
-    h3
-      | アルバム一覧
+    h3 アルバム一覧
   .select_menu.clearfix.mb30
     - [["最新写真アップ順", 1], ["アルバム作成順", 2]].each do |n, i|
       - if @sort == i
         => link_to n, "javascript:void(0)", class: "btn btn-danger disabled"
       - else
         => link_to n, albums_path(:sort => i), class: "btn btn-danger"
-  #album
+
   .mt20.mb30
     = paginate @albums, :window => 2, :outer_window => 2
   = render 'albums/index', albums: @albums

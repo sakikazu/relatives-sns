@@ -210,7 +210,7 @@ Rails.application.routes.draw do
   resources :albums do
     collection do
       get :top
-      get :title_index
+      get :detail_index
       get :users
     end
     member do

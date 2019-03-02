@@ -174,8 +174,7 @@ class AlbumsController < ApplicationController
     end
   end
 
-
-  def title_index
+  def detail_index
     @albums = Album.sort_by_uploaded
     @photo_count = Photo.group(:album_id).count
     @last_comment_at = Photo.group(:album_id).maximum(:last_comment_at)
