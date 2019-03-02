@@ -19,7 +19,7 @@ class AlbumsController < ApplicationController
     end
 
     @albums = Album.set_thumb(@albums)
-    @albums = Kaminari.paginate_array(@albums).page(params[:page])
+    @albums = Kaminari.paginate_array(@albums).page(params[:page]).per(Rails.env.production? ? 20 : 5)
 
     @album_users = []
     Album.with_owner.each do |album|
@@ -92,8 +92,6 @@ class AlbumsController < ApplicationController
 
     @new_comment = @album.comments.build
     @comments = @album.comments.select { |comment| comment.persisted? }
-
-    @medias_all_num = @album.photos.size + @album.movies.size
 
     # アップロード者リスト
     @uploader_list = @album.photos.includes(user: :user_ext).select('distinct user_id').map{|p| [p.user.id, p.user.dispname]}

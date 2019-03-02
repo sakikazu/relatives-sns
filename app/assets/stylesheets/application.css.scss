@@ -473,6 +473,7 @@ a.colorbox:hover img, a.colorbox_fix_size img {
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
     // opacity: 0.8;
   }
   .movie-play {
@@ -481,7 +482,7 @@ a.colorbox:hover img, a.colorbox_fix_size img {
     left: 0;
     width: 100%;
     text-align: center;
-    margin-top: 2em;
+    margin-top: 2.5em;
   }
 }
 

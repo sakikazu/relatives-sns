@@ -1,5 +1,5 @@
 $("#slideshow").html(
-  '<%= escape_javascript(render "slidecontent") %>'
+  '<%= escape_javascript(render partial: "slidecontent", locals: { photo: @photo }) %>'
 );
 $("#info").html(
   '情報が更新されました。'

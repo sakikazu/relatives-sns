@@ -21,16 +21,6 @@
       div[style="margin:20px;font-size:18px;color:gray"]
         |  アルバム：
         = link_to @photo.album.title, @photo.album
-  #slideshow
-    = render :partial => "slidecontent"
-  h3.normal.mt30
-    | コメント 
-    span#comment_area
-      = link_to "(上部に移動)", "#slideshow"
-  #photo_comments
-    = render partial: 'shared/comments', locals: { model_name: 'Photo', comments: @photo.mutter_comments, photo: @photo }
-  #photo_comment_form.mb20
-    = form_tag create_comment_album_photo_path(@photo.album, @photo), remote: true do |f|
-      = text_area_tag :content, nil, rows: 4, class: "form-control", placeholder: "コメントする"
-      br
-      = submit_tag "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"}
+
+  = render partial: 'show_content', locals: { photo: @photo }
+

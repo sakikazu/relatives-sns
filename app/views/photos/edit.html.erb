@@ -1,15 +1,16 @@
-<div class="col-sm-7">
+<div class="col-sm-6">
 
 <div class="form-actions">
   <%= link_to 'アルバムに戻る', album_path(@photo.album), class: "btn btn-light" %>
+  <%= link_to 'この写真を見る', album_photo_path(@photo.album, @photo), class: "btn btn-light" %>
 </div>
 
 <div class="page-header">
   <h3>写真情報を編集する</h3>
 </div>
 
-<div class="mgn-b20">
-<%= link_to image_tag(@photo.image(:large)), @photo.image(:original), class: "colorbox" %>
+<div class="mgn-b20 text-center">
+<%= image_tag(@photo.image(:large), class: 'img-thumbnail') %>
 </div>
 
 <%= simple_form_for [@photo.album, @photo] do |f| %>

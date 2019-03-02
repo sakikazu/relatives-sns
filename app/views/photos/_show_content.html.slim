@@ -1,0 +1,9 @@
+#slideshow
+  = render partial: "slidecontent", locals: { photo: photo }
+h3.normal.mt30 = fa_icon 'comments', text: 'コメント'
+#photo_comments
+  = render partial: 'shared/comments', locals: { model_name: 'Photo', comments: photo.mutter_comments, photo: photo }
+#photo_comment_form.mb20
+  = form_tag create_comment_album_photo_path(photo.album, photo), remote: true do |f|
+    = text_area_tag :content, nil, rows: 3, class: "form-control"
+    .mt10 = submit_tag "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"}

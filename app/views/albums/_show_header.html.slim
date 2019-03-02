@@ -22,7 +22,7 @@ ul.nav.nav-tabs.mb15
   .tab-content.col-sm-6.well.well-small
     #tab-description.tab-pane
       h3
-        = "写真数(動画含む)：#{@medias_all_num}</small>".html_safe
+        = "写真数(動画含む)：#{@medias.total_count}</small>".html_safe
         small.ml-3
           = "#{@album.user.try(:dispname)} | #{l @album.created_at if @album.created_at}"
       .description.short-height-if-need

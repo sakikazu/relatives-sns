@@ -1,0 +1,6 @@
+.col-sm-7
+  .actions.mb40
+    = link_to "アルバム：#{@photo.album.title}に戻る", @photo.album, class: "btn btn-light"
+    =< link_to '編集する', edit_album_photo_path(@photo.album, @photo), class: "btn btn-info"
+  = render partial: 'show_content', locals: { photo: @photo }
+
