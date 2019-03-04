@@ -229,3 +229,20 @@ desktopify = (function() {
     .trigger('click');
 });
 
+appendBlackBackground = function(id) {
+  $('body').prepend('<div id="' + id + '"></div>');
+  $('#' + id)
+    .css({
+      'display': 'block',
+      'z-index': '100',
+      'background-color': 'black',
+      'opacity': '0.8',
+      'cursor': 'pointer',
+      'position': 'fixed',
+      'overflow': 'hidden',
+      'top':'0px',
+      'left':'0px',
+      'width':'100%',
+      'height':'100%',
+    })
+}

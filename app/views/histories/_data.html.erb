@@ -1,28 +1,30 @@
-<table id="tablesorter" class="tablesorter" border="1" cellspacing="0" cellpadding="3" width="97%" style="word-break:break-all;">
+<table id="tablesorter" class="tablesorter" border="1" cellspacing="0" cellpadding="3" style="word-break:break-all;">
   <thead>
   <tr>
-    <th>日付</th>
-    <th>内容</th>
-    <th>情報源</th>
-    <th>投稿者</th>
-    <th>投稿日時</th>
-    <th colspan="3"></th>
+    <th class="w-15">日付</th>
+    <th class="w-40">内容</th>
+    <th class="w-10">情報源</th>
+    <th class="w-10">投稿者</th>
+    <th class="w-10">投稿日時</th>
+    <th class="w-10"></th>
   </tr>
   </thead>
 
   <tbody>
 <% @histories.each_with_index do |history, i| %>
   <tr <%= "class='odd'"if i%2==1 %>>
-    <td width="120px"><%= history.hist_date %></td>
-    <td width="400px"><%= truncate_120_link(history.content) %></td>
-    <td width="100px"><%= history.src_user_name %></td>
-    <td width="100px"><%= history.user.dispname %></td>
-    <td width="90px"><%= time_shorter(history.created_at) %></td>
-    <td width="45px"><%= link_to 'コメント', 'javascript:void(0)', data: { toggle: 'modal', target: '#historyFormModal', path: new_comment_histories_path(history_id: history.id) }, class: 'btn btn-link' %></td>
-    <% if editable(current_user, history.user) -%>
-           <td width="35px"><%= link_to '編集', 'javascript:void(0)', data: { toggle: 'modal', target: '#historyFormModal', path: edit_history_path(history) }, class: 'btn btn-link' %></td>
-      <td width="35px"><%= link_to '削除', history, data: {confirm: '本当に削除してもよろしいですか？'}, :method => :delete %></td>
-    <% end -%>
+    <td><%= history.hist_date %></td>
+    <td><%= truncate_120_link(history.content) %></td>
+    <td><%= history.src_user_name %></td>
+    <td><%= history.user.dispname %></td>
+    <td><%= time_shorter(history.created_at) %></td>
+    <td>
+      <%= link_to fa_icon('comment', class: 'fa-lg text-primary'), 'javascript:void(0)', data: { toggle: 'modal', target: '#historyFormModal', path: new_comment_histories_path(history_id: history.id) } %>
+      <% if editable(current_user, history.user) -%>
+        <%= link_to fa_icon('pencil', class: 'fa-lg text-primary ml-1'), 'javascript:void(0)', data: { toggle: 'modal', target: '#historyFormModal', path: edit_history_path(history) } %>
+        <%= link_to fa_icon('trash', class: 'fa-lg text-danger ml-1'), history, data: {confirm: '本当に削除してもよろしいですか？'}, :method => :delete %>
+      <% end -%>
+    </td>
   </tr>
   <%# TODO: コメントの表示方法をうまいことやりたいな。本文とつながるように %>
   <% history.comments.each do |co| -%>
@@ -32,10 +34,9 @@
       <td></td>
       <td><%= co.user.dispname %></td>
       <td><%= time_shorter(co.created_at) %></td>
-      <td colspan="2"></td>
       <td>
-        <% if editable(current_user, history.user) -%>
-          <%= link_to "削除", {:action => :destroy_comment, :id => co.id}, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
+        <% if editable(current_user, co.user) -%>
+          <%= link_to fa_icon('trash', class: 'fa-lg text-danger'), {:action => :destroy_comment, :id => co.id}, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
         <% end -%>
       </td>
     </tr>
