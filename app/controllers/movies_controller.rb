@@ -33,6 +33,10 @@ class MoviesController < ApplicationController
 
   # GET /movies/1/edit
   def edit
+    # NOTE: turbolinksのせいだと思うが、動画アップロードのform#idがnewとeditとで同じだと、
+    # head内の"turbolinks:load"で登録したsubmitイベントリスナーが、ページ遷移によって重複して登録されてしまった
+    # documentオブジェクトをキャッシュしてるが、違うURLだと、同じform#idでもイベントリスナーを再度登録しちゃう感じかなぁ
+    @movie_form_id = 'movie-form-edit'
   end
 
   # AjaxでのみPOSTされる

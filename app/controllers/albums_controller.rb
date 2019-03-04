@@ -98,6 +98,7 @@ class AlbumsController < ApplicationController
 
     # 動画アップロード用
     @movie = @album.movies.build
+    @movie_form_id = 'movie-form-new'
 
     if params["focus_comment"].present?
       @tab_select_index = "eq(1)"

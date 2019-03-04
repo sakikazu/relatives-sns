@@ -1,7 +1,8 @@
 - content_for :add_js do
   javascript:
     $(document).on('turbolinks:load', function() {
-      ajaxFileUpload('photos-form', null);
+      window.ajaxFileUpload = new AjaxFileUpload('photos-form');
+      ajaxFileUpload.listenSubmit();
     });
 
 ul.nav.nav-tabs.mb15

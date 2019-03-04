@@ -1,35 +1,14 @@
 - content_for :add_js do
   javascript:
     $(document).on('turbolinks:load', function() {
-      validateMovieFile = function() {
-        var maxMovieFileSize = #{Settings.MAX_MOVIE_MEGABYTES};
-        var isNew = #{@movie.new_record? ? 'true' : 'false'}
-
-        var form = document.getElementById('movie-form');
-        var formData = new FormData(form);
-        if (!formData.get('movie[title]')) {
-          alert('タイトルを入力してください');
-          return false;
-        }
-        var movieFile = formData.get('movie[movie]');
-        if (isNew && movieFile.size == 0) {
-          alert('動画を選択してください');
-          return false;
-        } else {
-          sizeMb = parseInt(movieFile.size / 1000 / 1000);
-          if (sizeMb > maxMovieFileSize) {
-            alert('動画ファイルサイズが[' + sizeMb + 'MB]です。' + maxMovieFileSize + 'MB以下にしてください');
-            return false;
-          } else if (sizeMb > 20) {
-            return confirm('動画ファイルのサイズは[' + sizeMb + 'MB]です。通信環境によっては、アップロードに時間がかかることがあります。\n続行してよろしいですか？');
-          }
-        }
-        return true;
-      };
-      ajaxFileUpload('movie-form', validateMovieFile);
+      window.ajaxFileUploadMovie = new AjaxFileUpload('#{@movie_form_id}');
+      var maxMovieFileSize = #{Settings.MAX_MOVIE_MEGABYTES};
+      var isNew = #{@movie.new_record? ? 'true' : 'false'};
+      ajaxFileUploadMovie.setMovieValidate(maxMovieFileSize, isNew);
+      ajaxFileUploadMovie.listenSubmit();
     });
 
-= simple_form_for(@movie, html: { id: 'movie-form', multipart: true,
+= simple_form_for(@movie, html: { id: @movie_form_id, multipart: true,
   data: { upload_path: @movie.new_record? ? movies_path : movie_path(@movie),
   completed_path: album_path(@movie.album.id, "album[user_id]" => current_user.id, "album[sort_flg]" => 1, "album[media_filter]" => 3) }}) do |f|
   - if @movie.errors.any?
