@@ -254,6 +254,10 @@ ja:
       comment:
         content: '内容'
 
+      movie:
+        title: 'タイトル'
+        movie: '動画'
+
   views:
     pagination:
       previous: "<< 前ページ"

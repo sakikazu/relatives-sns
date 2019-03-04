@@ -1,7 +1,7 @@
 - content_for :add_js do
   javascript:
     $(document).on('turbolinks:load', function() {
-      ajaxFileUpload('photos-form');
+      ajaxFileUpload('photos-form', null);
     });
 
 ul.nav.nav-tabs.mb15
@@ -55,9 +55,6 @@ ul.nav.nav-tabs.mb15
 
       .mt10.important
         | 複数ファイル選択可能（スマホでのファイル選択は戸惑うかも）
-
-      .photos-upload-progress.mt20.progress[style='display:none']
-        .progress-bar.progress-bar-striped
     #tab-movie-upload.tab-pane
       .page-header
         h3

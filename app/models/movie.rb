@@ -42,11 +42,7 @@ class Movie < ApplicationRecord
   attr_accessor :ffmp_obj, :is_update_thumb
 
   validates :title, presence: true
-
-
-  # [knowhow] フィールド名は「movie」だけど、エラー変数に設定されるのは「movie_file_name」になるので、こちらの方にメッセージを設定しておく
-  validates :movie, presence: true
-  validates :movie_file_name, presence: {message: "動画ファイルを選択してください"}
+  validates :movie, presence: { message: 'ファイルを選択してください。' }
 
   TYPE_NORMAL = 0
   TYPE_MODIFY = 1
@@ -89,6 +85,17 @@ class Movie < ApplicationRecord
     # EncodeWorker.perform_async self.id
   # end
 
+  def workered_encode
+    return if self.is_ready?
+    if Rails.env.production?
+      EncodeWorker.perform_async self.id
+    else
+      # TODO: 開発環境でffmpのlibaacが使えるようになったらencodeするようにする
+      # self.encode
+      self.save_with_available_movie
+    end
+  end
+
   # Classで分けたいな todo
   def encode
     generate_thumb(ffmp.rotation.to_i)
@@ -124,19 +131,16 @@ class Movie < ApplicationRecord
     transcode_options += profile_option
     ffmp.transcode(encoding_path, transcode_options)
     FileUtils.mv(encoding_path, encoded_path)
-    self.is_ready = true
-    self.movie = File.open("#{encoded_path}", "r")
-    self.original_movie_file_name = self.movie_file_name if self.original_movie_file_name.blank?
-    self.save
-    p self.errors.full_messages
+    self.save_with_available_movie(encoded_path)
   end
 
   # ffmpegでサムネイルを作成したいが、Herokuだとインストールがめんどくさそうでやっぱやめとこ
-  def without_encode
+  def save_with_available_movie(movie_path = original_path)
     self.is_ready = true
-    self.movie = File.open("#{original_path}", "r")
+    self.movie = File.open(movie_path, "r")
     self.original_movie_file_name = self.movie_file_name if self.original_movie_file_name.blank?
     self.save
+    p self.errors.full_messages
   end
 
   def is_ready?

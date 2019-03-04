@@ -35,45 +35,36 @@ class MoviesController < ApplicationController
   def edit
   end
 
+  # AjaxでのみPOSTされる
+  #
   # POST /movies
   # POST /movies.xml
   def create
-    params[:movie][:user_id] = current_user.id
-    params[:movie][:is_ready] = false
     @movie = Movie.new(movie_params)
+    @movie.user_id = current_user.id
+    @movie.is_ready = false
 
-    respond_to do |format|
-      if @movie.save and @movie.ffmp.valid?
-        EncodeWorker.perform_async @movie.id
-        @movie.update_histories.create(user_id: current_user.id, action_type: UpdateHistory::MOVIE_CREATE)
-        format.html { redirect_to @movie, notice: '動画をアップロードしました.' }
-        format.json { render :show, status: :created, location: @movie }
-      else
-        format.html { render :new }
-        format.json { render json: @movie.errors, status: :unprocessable_entity }
-      end
+    if @movie.save and @movie.ffmp.valid?
+      @movie.workered_encode
+      @movie.update_histories.create(user_id: current_user.id, action_type: UpdateHistory::MOVIE_CREATE)
+      render json: {}, status: :created
+    else
+      render json: @movie.errors.full_messages, status: :unprocessable_entity
     end
   end
 
+  # AjaxでのみPOSTされる
+  #
   # PUT /movies/1
   # PUT /movies/1.xml
   def update
     # 動画が指定されなかったら動画エンコードを行わない
-    selected_movie = params[:movie][:movie]
-    if selected_movie.present?
-      params[:movie][:is_ready] = false
-    end
-    respond_to do |format|
-      if @movie.update_attributes(movie_params) and @movie.ffmp.valid?
-        if selected_movie.present?
-          EncodeWorker.perform_async @movie.id
-        end
-        format.html { redirect_to(@movie, :notice => '更新しました') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @movie.errors, :status => :unprocessable_entity }
-      end
+    @movie.is_ready = false if movie_params[:movie].present?
+    if @movie.update(movie_params) and @movie.ffmp.valid?
+      @movie.workered_encode
+      render json: {}, status: :created
+    else
+      render json: @movie.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -127,7 +118,7 @@ class MoviesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def movie_params
-      params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb, :is_ready, :album_id)
+      params.require(:movie).permit(:title, :description, :movie_type, :user_id, :movie, :thumb, :album_id)
   end
 
   def comment_params

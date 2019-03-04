@@ -107,7 +107,7 @@ class Mutter < ApplicationRecord
           EncodeWorker.perform_async movie.id
         rescue Redis::CannotConnectError => e
           p "Redisが動いてないのでエンコードなしで保存します"
-          movie.without_encode
+          movie.save_with_available_movie
         end
       else
         # p movie.errors.full_messages

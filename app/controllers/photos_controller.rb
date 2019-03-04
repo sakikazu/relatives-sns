@@ -46,7 +46,7 @@ class PhotosController < ApplicationController
   # POST /photos.json
   def create
     if params[:files].blank?
-      render json: { message: 'ファイルを選択してください' }, status: 404
+      render json: [ 'ファイルを選択してください' ], status: :unprocessable_entity
       return
     end
 
@@ -63,7 +63,7 @@ class PhotosController < ApplicationController
     # logger.debug @photo.errors.full_messages.to_sentence
 
     UpdateHistory.create_or_update(album, UpdateHistory::ALBUMPHOTO_CREATE, current_user.id)
-    render json: {}
+    render json: {}, status: :created
   end
 
   # PCからはcolorboxで使用する前提。スマホからは一つのページとして表示する

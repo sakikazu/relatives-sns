@@ -1,15 +1,22 @@
-ajaxFileUpload = function(formId) {
-  $photos_form = $('form#' + formId);
-  $photos_upload_progress = $('.photos-upload-progress');
-  $progress_bar = $('.progress-bar', $photos_upload_progress);
-
-  uploadPath = $photos_form.data('upload-path');
-  completedPath = $photos_form.data('completed-path');
-
+ajaxFileUpload = function(formId, validate) {
+  var $photos_form = $('form#' + formId);
   $photos_form.on('submit', function(e) {
     e.preventDefault();
 
-    var photos_form = document.getElementById('photos-form');
+    if (validate != null) {
+      if (validate() == false) {
+        return false;
+      }
+    }
+
+    appendProgress();
+    var $photos_upload_progress = $('#progress-wrapper .progress');
+    var $progress_bar = $('.progress-bar', $photos_upload_progress);
+
+    var uploadPath = $photos_form.data('upload-path');
+    var completedPath = $photos_form.data('completed-path');
+
+    var photos_form = document.getElementById(formId);
     var formData = new FormData(photos_form);
     $.ajax({
       url: uploadPath,
@@ -21,26 +28,36 @@ ajaxFileUpload = function(formId) {
       xhr: controlProgress,
     })
     .done(function(res) {
-        alert('アップロードが完了しました');
-        location.href = completedPath;
+      alert('アップロードが完了しました');
+      location.href = completedPath;
     })
     .fail(function(xhr, textStatus, errorThrown) {
-        console.log(xhr);
-        console.log(textStatus);
-        console.log(errorThrown);
-        alert(xhr.responseJSON.message);
-        $("input[type='submit']", $photos_form).prop("disabled", false);
-        $photos_upload_progress.hide();
+      console.log(xhr);
+      console.log(xhr.responseJSON);
+      console.log(textStatus);
+      console.log(errorThrown);
+      if (xhr.responseJSON) {
+        alert(xhr.responseJSON.join('\n'));
+      } else {
+        alert(errorThrown);
+      }
+    })
+    .always(function() {
+      $("input[type='submit']", $photos_form).prop("disabled", false);
+      removeProgress();
     });
   });
 }
 
 controlProgress = function() {
-  XHR = $.ajaxSettings.xhr();
+  var $photos_upload_progress = $('#progress-wrapper .progress');
+  var $progress_bar = $('.progress-bar', $photos_upload_progress);
+
+  var XHR = $.ajaxSettings.xhr();
   if (XHR.upload) {
     XHR.upload.addEventListener('progress', function(e) {
       // 小数点第2位まで出してる
-      progre = parseInt(e.loaded/e.total*10000)/100;
+      var progre = parseInt(e.loaded/e.total*10000)/100;
       $photos_upload_progress.show();
       $progress_bar.width(progre+"%");
       $progress_bar.text(progre+"%");
@@ -55,3 +72,12 @@ controlProgress = function() {
   return XHR;
 }
 
+appendProgress = function() {
+  appendBlackBackground('background_black');
+  $('#background_black').append('<div id="progress-wrapper" class="row justify-content-center">');
+  $('#progress-wrapper').append('<div class="col-sm-4"><div class="progress"><div class="progress-bar progress-bar-striped">');
+}
+
+removeProgress = function() {
+  $('#background_black').remove();
+}
