@@ -1,14 +1,16 @@
 - content_for :add_js do
   javascript:
-    $('#anniversaryFormModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget);
-      var path = button.data('path');
-      $.ajax({
-        type: 'GET',
-        url: path,
-        success: function(html) {
-          $('.modal-content').html(html);
-        }
+    $(document).on('turbolinks:load', function() {
+      $('#anniversaryFormModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var path = button.data('path');
+        $.ajax({
+          type: 'GET',
+          url: path,
+          success: function(html) {
+            $('.modal-content').html(html);
+          }
+        });
       });
     });
 

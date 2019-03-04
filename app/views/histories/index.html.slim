@@ -4,15 +4,17 @@
 / そのレスポンスをJSテンプレートで処理し、そこでモーダル作って表示まで行う
 - content_for :add_js do
   javascript:
-    $('#historyFormModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget);
-      var path = button.data('path');
-      $.ajax({
-        type: 'GET',
-        url: path,
-        success: function(html) {
-          $('.modal-content').html(html);
-        }
+    $(document).on('turbolinks:load', function() {
+      $('#historyFormModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var path = button.data('path');
+        $.ajax({
+          type: 'GET',
+          url: path,
+          success: function(html) {
+            $('.modal-content').html(html);
+          }
+        });
       });
     });
 

@@ -21,6 +21,13 @@ html[lang="ja"]
       javascript:
         var current_user = null;
 
+    / NOTE: turbolinksの挙動で、戻る/進むのキャッシュを利用した遷移の場合、head内は初回のみ、body内は遷移の度に呼ばれる。
+    / つまり、documentオブジェクトに対して"turbolinks:load"イベントを登録すると、遷移の度に重複登録され、そこのJSが実行されることになる。
+    / そのため、turbolinks使用時はhead内にJSを書くこと。
+    / また、要素をappendする処理の場合は、head内に書いたとしても、"turbolinks:load"イベントは戻る遷移が起こる度に発生するので、そのための考慮が必要になる
+    / "javascript:"配下には置けないので、content_for内で"javascript:"から記述していくしかない
+    = yield :add_js
+
   body[id="#{controller.controller_name}_controller"]
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
       a.navbar-brand[href="/"] AdanHP
@@ -102,5 +109,3 @@ html[lang="ja"]
       p
         | - AdanHP ( 2006-#{Date.today.year} ) -
 
-    - #= javascript_include_tag "application"
-    = yield :add_js
