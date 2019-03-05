@@ -48,20 +48,21 @@ h1 > small, h2 > small, h3 > small {
   border-color: #ccc;
 }
 
-.card-deck-narrow {
+.cards-narrow {
   .card {
     margin-left: 8px;
     margin-right: 8px;
     margin-bottom: 20px;
 
     h5.card-title {
-      font-size: 1.1rem;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
     }
     .card-body {
-      padding: 0.6rem 0.8rem;
+      padding: 0.5rem 0.7rem;
     }
     .card-text {
-      font-size: 0.9rem;
+      font-size: 0.7rem;
     }
     .card-footer {
       padding: 0.3rem 1rem;
@@ -69,6 +70,36 @@ h1 > small, h2 > small, h3 > small {
   }
   .card-dummy {
     border: none;
+  }
+}
+.card-columns {
+  column-count: 5;
+}
+
+.smartphone {
+  .card-columns {
+    column-count: 2;
+    // スマホwidthのmedia-queryの場合、このinline-blockが解除されてしまっていた
+    .card {
+      display: inline-block;
+    }
+  }
+  .cards-narrow {
+    .card {
+      margin-left: 0px;
+      margin-right: 0px;
+
+      h5.card-title {
+        font-size: 0.7rem;
+        margin-bottom: 0.4rem;
+      }
+      .card-body {
+        padding: 0.5rem 0.4rem;
+      }
+      .card-text {
+        font-size: 0.5rem;
+      }
+    }
   }
 }
 

@@ -277,7 +277,7 @@ footer > p {
 .big, .text-big {
   font-size: 120%;
 }
-.text-small {
+.text-small, .text-sm {
   font-size: 85%;
 }
 .block {
@@ -385,6 +385,28 @@ a.colorbox:hover img, a.colorbox_fix_size img {
   border: 3px solid tomato;
 }
 
+.card.media-content {
+  display: block;
+
+  .card-header {
+    padding: 0.5rem 1.25rem;
+  }
+  .card-body {
+    padding: 0.5rem 0.5rem;
+  }
+  .card-footer {
+    padding: 0.5rem 1.25rem;
+  }
+  img {
+    max-width: 100%;
+  }
+  .text-content {
+    color: #333;
+    padding: 0.5rem;
+  }
+}
+
+// TODO: 今後廃止
 .once_content{
   background-color: white;
   clear: both;

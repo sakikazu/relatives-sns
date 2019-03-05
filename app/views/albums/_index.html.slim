@@ -5,7 +5,7 @@
     / 6つだと.col-sm-2を使うことになり、widthが小さすぎた。
     / .card-deckはデータ数に応じて等分してくれるが、wrapではないので、行ごとに.card-deckを置く必要があるのと、
     / データ数が1行目:5、2行目:3とかになると、2行目のデータの幅が3等分されてしまうので、空データを置くなどの対処が必要となる。
-    .card-deck.card-deck-narrow
+    .card-deck.cards-narrow
       - sliced_albums.each do |album|
         - if album.blank?
           .card.card-dummy

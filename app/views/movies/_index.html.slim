@@ -1,7 +1,7 @@
 - if movies.present?
   - movies.each_slice(Album::INDEX_COLUMNS) do |sliced_movies|
     - sliced_movies = Movie.fill_up_blank(sliced_movies, Album::INDEX_COLUMNS)
-    .card-deck.card-deck-narrow
+    .card-deck.cards-narrow
       - sliced_movies.each do |movie|
         - if movie.blank?
           .card.card-dummy
