@@ -97,32 +97,31 @@ hiddenImgHeight = function(class_name) {
 shortHeightByMin = function(class_name, minHeight) {
   var $box = $(class_name);
   var boxHeight = $box.height();
+  var $openBtn = $box.next('.short-height-open');
+  // turbolinksのページ戻り時のための制御：
+  // 高さを縮めた状態で別ページへ遷移して戻ってきた場合、その時のboxHeightはminHeightになっているので、下のreturn文より前に
+  // clickイベントを登録しておく必要がある。 TODO: turbolinksでのこういう場合でのベストプラクティスが知りたい。
+  $openBtn.off('click');
+  $openBtn.on('click', function() {
+    if ($(this).data('opened') == true ) {
+      $(this).data('opened', false);
+      $box.height(minHeight);
+      $(this).text('＞＞続きを読む');
+    } else {
+      $(this).data('opened', true);
+      $box.height('100%');
+      $(this).text('＞＞閉じる');
+    }
+  });
+
   if(boxHeight <= minHeight) {
-    return
+    return;
   }
+
   $box
     .height(minHeight)
     .css({"overflow":"hidden"})
-    .after('<div id="openBox">＞＞続きを読む</div>');
-
-  $('#openBox')
-    .css({
-      'font-size':'1em',
-      'color':'red',
-      'font-weight':'bold',
-      'cursor':'pointer'
-    })
-    .click(function(){
-      if ($(this).data('open') == true ) {
-        $(this).data('open', false);
-        $box.height(minHeight);
-        $(this).text('＞＞続きを読む');
-      } else {
-        $(this).data('open', true);
-        $box.height(boxHeight);
-        $(this).text('＞＞閉じる');
-      }
-    });
+  $openBtn.show()
 }
 
 // NOTE: aタグの親に伝播を止めるのは何かと問題(colorboxなども)になるので、このメソッドは使わないようにする

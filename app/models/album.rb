@@ -32,6 +32,7 @@ class Album < ApplicationRecord
   scope :without_owner, lambda {where("owner_id is NULL")}
   scope :with_owner, lambda {where("owner_id is not NULL")}
   scope :id_desc, -> { order('id DESC') }
+  scope :includes_general, -> { includes({user: :user_ext}, {owner: :user_ext}, :photos, :movies) }
 
   INDEX_COLUMNS = 5
 
@@ -69,5 +70,10 @@ class Album < ApplicationRecord
 
   def thumb_path
     self.thumb.present? ? self.thumb.image(:thumb) : NO_IMAGE_PATH
+  end
+
+  # photos, moviesをincludesしてから使う
+  def media_count
+    self.photos.size + self.movies.size
   end
 end

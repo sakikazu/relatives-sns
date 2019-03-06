@@ -9,22 +9,23 @@ class AlbumsController < ApplicationController
   def index
     @page_title = "アルバム一覧"
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
-    case @sort
-    when 1
-      @albums = Album.without_owner.id_desc
-    when 2
-      @albums = Album.without_owner.sort_by_uploaded
-    else
-      @albums = Album.without_owner.id_desc
-    end
+
+    @albums = Album.without_owner.includes_general
+    @albums = case @sort
+              when 1
+                @albums.id_desc
+              when 2
+                @albums.sort_by_uploaded
+              else
+                @albums.id_desc
+              end
 
     @albums = Album.set_thumb(@albums)
     @albums = Kaminari.paginate_array(@albums).page(params[:page]).per(Rails.env.production? ? 20 : 5)
 
     @album_users = []
-    Album.with_owner.each do |album|
-      item_count = album.photos.count + album.movies.count
-      @album_users << {name: album.owner.try(:dispname), item_count: item_count, album_id: album.id}
+    Album.with_owner.includes_general.each do |album|
+      @album_users << {name: album.owner&.dispname, item_count: album.media_count, album_id: album.id}
     end
   end
 

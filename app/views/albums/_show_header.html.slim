@@ -3,6 +3,9 @@
     $(document).on('turbolinks:load', function() {
       window.ajaxFileUpload = new AjaxFileUpload('photos-form');
       ajaxFileUpload.listenSubmit();
+
+      $('a[data-toggle="tab"]:#{@tab_select_index}').tab('show');
+      shortHeightByMin('.short-height', 100);
     });
 
 ul.nav.nav-tabs.mb15
@@ -26,8 +29,11 @@ ul.nav.nav-tabs.mb15
         = "写真数(動画含む)：#{@medias.total_count}</small>".html_safe
         small.ml-3
           = "#{@album.user.try(:dispname)} | #{l @album.created_at if @album.created_at}"
-      .description.short-height-if-need
-        = sani_custom_br(@album.description)
+      .description
+        .short-height
+          = sani_custom_br(@album.description)
+        .short-height-open[style="display:none"]
+          | ＞＞続きを読む
     #tab-comments.tab-pane
       .page-header
         h3

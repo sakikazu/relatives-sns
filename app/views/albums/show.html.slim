@@ -1,23 +1,6 @@
-- content_for :add_js do
-  javascript:
-    $(document).on('turbolinks:load', function() {
-      // todo 不要になりそう。でも別対応をしなきゃ。モーダルのプログレスバーとか
-      // 写真アップロード中に他のタブに移動してしまうと、アップロード処理が止まってしまうのでalertを出す
-      $('a[data-toggle="tab"]:not([href="#tab-photo-upload"]').on("click", function() {
-        if ($('body').data('in_upload_progress') == 1) {
-          alert('写真アップロード中のため移動できません。アップロードを中断する場合は、ページを再読み込みしてください。');
-            return false;
-          }
-      });
-      $('a[data-toggle="tab"]:#{@tab_select_index}').tab('show');
-
-      shortHeightByMin('.short-height-if-need', 100);
-    });
-
-
 .col-sm-10
   .mb-50
-    => link_to '戻る', :back, class: "btn btn-light"
+    => link_to 'アルバム一覧', albums_path, class: "btn btn-light"
     = link_to '編集する', edit_album_path(@album), class: "btn btn-info"
 
   = render partial: 'show_header'
