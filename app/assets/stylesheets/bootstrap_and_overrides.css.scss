@@ -76,6 +76,8 @@ h1 > small, h2 > small, h3 > small {
   column-count: 5;
 }
 
+// TODO: media queryに置き換えたいが、内容を逆にしなきゃいけないのでめんどくさい
+// @media (min-width: 576px) {
 .smartphone {
   .card-columns {
     column-count: 2;
@@ -99,6 +101,49 @@ h1 > small, h2 > small, h3 > small {
       .card-text {
         font-size: 0.5rem;
       }
+    }
+  }
+}
+
+.card.media-content {
+  display: block;
+
+  .card-header {
+    padding: 0.5rem 1.25rem;
+  }
+  .card-body {
+    padding: 0.5rem 0.5rem;
+  }
+  .card-footer {
+    padding: 0.5rem 1.25rem;
+  }
+  img {
+    max-width: 100%;
+  }
+  .text-content {
+    color: #333;
+    padding: 0.5rem;
+  }
+}
+
+.media-index {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+
+  .card {
+    display: flex;
+    flex: 0 0 45%;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+@media (min-width: 576px) {
+  .media-index {
+    .card {
+      flex: 0 0 18%;
+      margin-left: 8px;
+      margin-right: 8px;
     }
   }
 }

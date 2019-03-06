@@ -32,7 +32,7 @@ class Photo < ApplicationRecord
   has_many :update_histories, :as => :content, :dependent => :destroy
 
   scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
-
+  scope :id_desc, -> { order('id DESC') }
 
   # memo なんだろう「image/pjpeg」って。。Mutterにて投稿されていた
   CONTENT_TYPE = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream", "image/pjpeg", "image/bmp"]

@@ -31,15 +31,14 @@ class AlbumsController < ApplicationController
 
   def top
     @page_title = "アルバムトップ"
-    @albums = Album.sort_by_uploaded[0..Album::INDEX_COLUMNS-1]
-    @albums = Album.set_thumb(@albums)
-    @movies = Movie.id_desc.limit(Album::INDEX_COLUMNS)
+    album_count = Rails.env.production? ? 6 : 3
+    media_count = request.smart_phone? ? 2 : 5
+    @updated_albums = Album.updated_with_media(album_count, media_count)
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @albums }
     end
-
   end
 
   # GET /albums/1

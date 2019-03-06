@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
               else
                 Movie.where(:movie_type => Movie::TYPE_MODIFY)
               end
-    @movies = @movies.id_desc.page(params[:page]).per(15)
+    @movies = @movies.includes({user: :user_ext}, {nices: {user: :user_ext}}, {mutter: :children}).id_desc.page(params[:page]).per(15)
 
     respond_to do |format|
       format.html # index.html.erb

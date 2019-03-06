@@ -2,30 +2,5 @@
   - movies.each_slice(Album::INDEX_COLUMNS) do |sliced_movies|
     - sliced_movies = Movie.fill_up_blank(sliced_movies, Album::INDEX_COLUMNS)
     .card-deck.cards-narrow
-      - sliced_movies.each do |movie|
-        - if movie.blank?
-          .card.card-dummy
-        - else
-          .card
-            .hidden_img_height
-              = link_to movie_path(movie) do
-                .movie-thumb
-                  = image_tag(movie.thumb(:thumb), class: 'card-img-top')
-                .movie-play = fa_icon 'play-circle-o', class: 'fa-3x'
-            .card-body
-              h5.card-title
-                span.badge.badge-danger
-                  = fa_icon 'video-camera'
-                =< movie.title
-                small.pl-2
-                  span.badge.badge-info
-                    =< fa_icon 'comment', text: movie.mutter_comments.size
-                  =< nice_field_disp_only(movie)
-              .card-text.text-muted
-                = "投稿者：#{movie.user&.dispname}"
-                br
-                = "投稿：#{time_shorter(movie.created_at)}".html_safe
-                - if movie.mutter_comments.last.try(:created_at)
-                  br
-                    = "最新コメント：#{time_shorter(movie.mutter_comments.last.created_at)}".html_safe
+      = render partial: 'movies/boxed_movie', collection: sliced_movies, as: :movie
 

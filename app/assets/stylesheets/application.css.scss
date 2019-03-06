@@ -385,27 +385,6 @@ a.colorbox:hover img, a.colorbox_fix_size img {
   border: 3px solid tomato;
 }
 
-.card.media-content {
-  display: block;
-
-  .card-header {
-    padding: 0.5rem 1.25rem;
-  }
-  .card-body {
-    padding: 0.5rem 0.5rem;
-  }
-  .card-footer {
-    padding: 0.5rem 1.25rem;
-  }
-  img {
-    max-width: 100%;
-  }
-  .text-content {
-    color: #333;
-    padding: 0.5rem;
-  }
-}
-
 // TODO: 今後廃止
 .once_content{
   background-color: white;
@@ -515,86 +494,10 @@ a.colorbox:hover img, a.colorbox_fix_size img {
   }
 }
 
-.once_photo{
-  float: left;
-  margin-left: 8px;
-  margin-bottom: 4px;
-  height: 250px;
-  width: 220px;
-  border: 1px solid #CCCCCC;
-  background-color: white;
-  /* overflow-y: scroll; */
-  overflow: auto;
-}
-.once_photo .bar{
-  background-color: #E1E1E1;
-  font-weight: bold;
-}
-.once_photo .info{
-  /* background-color: #F2EEE8; */
-  font-size: 85%;
-  padding: 10px;
-}
-.once_photo .photo {
-  margin-top: 3px;
-  text-align: center;
-}
-.once_photo img{
-  border: solid 1px #161616;
-}
-.once_photo a:hover {
-   filter: alpha(opacity=80);
-  -moz-opacity:0.8;
-  opacity:0.8;
-}
-.once_photo a:hover img{
-  /* border: solid 2px #161616; */
-}
-
-
 /* history */
 #history_data td.comment{
   background-color: #DCEAF4;
 }
-/*action_history*/
-#action_history .list{
-  padding-top:7px;
-  font-size: 90%;  
-}
-
-#action_history .list .once_row:first-child {
-  border-top: 1px dotted DimGray;
-}
-#action_history .list .once_row {
-  padding: 7px 8px;
-  line-height: 18px;
-  border-bottom: 1px dotted DimGray;
-}
-#action_history .list .bar {
-  margin-bottom: 5px; 
-}
-#action_history .list .bar .name{
-  font-weight: bold;
-  background: lightgray;
-  padding: 3px;
-}
-#action_history .list .bar .time{
-  margin-left: 7px;
-  color: DimGray;
-}
-
-
-#action_history .summary {
-  margin:6px 0px 13px;
-  text-align:center;
-}
-#action_history .summary a {
-  font-weight:bold;
-  font-size:17px;
-  color:blue;
-  text-shadow: 1px 1px 0 lightgray;
-}
-
 
 /**********************************************
 見出し h1, h2, h3, h4
