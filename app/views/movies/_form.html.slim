@@ -1,10 +1,20 @@
 - content_for :add_js do
   javascript:
     $(document).on('turbolinks:load', function() {
-      window.ajaxFileUploadMovie = new AjaxFileUpload('#{@movie_form_id}');
+      window.ajaxFileUploadMovie = new AjaxFileUpload('#{@movie_form_id}', 'movie[movie]');
       var maxMovieFileSize = #{Settings.MAX_MOVIE_MEGABYTES};
-      var isNew = #{@movie.new_record? ? 'true' : 'false'};
-      ajaxFileUploadMovie.setMovieValidate(maxMovieFileSize, isNew);
+      var required = #{@movie.new_record? ? 'true' : 'false'};
+      ajaxFileUploadMovie.validate = function() {
+        if ($('#movie_title').val() == '') {
+          alert('タイトルを入力してください');
+          return false;
+        }
+        if (required && $('#movie_movie').val() == '') {
+          alert('動画を選択してください');
+          return false;
+        }
+      };
+      ajaxFileUploadMovie.setSizeValidate(maxMovieFileSize);
       ajaxFileUploadMovie.listenSubmit();
     });
 

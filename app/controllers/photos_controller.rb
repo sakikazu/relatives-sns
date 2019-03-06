@@ -45,14 +45,14 @@ class PhotosController < ApplicationController
   # POST /photos
   # POST /photos.json
   def create
-    if params[:files].blank?
+    if params[:photo_files].blank?
       render json: [ 'ファイルを選択してください' ], status: :unprocessable_entity
       return
     end
 
     album = Album.find(params['album_id'])
     # TODO: Transactionかけるとかエラーハンドリングしたい
-    params[:files].each do |file|
+    params[:photo_files].each do |file|
       photo = Photo.new(image: file, title: '[無題]', album_id: album.id, user_id: current_user.id, exif_at: Photo::set_exif_at(file.path))
       photo.save
     end

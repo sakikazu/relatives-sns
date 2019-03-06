@@ -187,16 +187,12 @@ class MuttersController < ApplicationController
 
   # NOTE: 作成後の画面更新は、MutterのコールバックでActionCableによって行っている
   def create
-    if params[:mutter][:content].blank?
-      @error_message = 'つぶやきを入力しないと投稿できません'
-      render 'shared/error_alert.js'
-      return
-    end
-
     params[:mutter].merge!(Mutter.extra_params(current_user, request))
     @mutter = Mutter.new(mutter_params)
-    unless @mutter.save
-      @error_message = @mutter.errors.full_messages.first
+    if @mutter.save
+      render json: {}, status: :created
+    else
+      render json: @mutter.errors.full_messages, status: :unprocessable_entity
     end
   end
 

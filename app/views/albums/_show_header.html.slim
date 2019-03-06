@@ -1,7 +1,7 @@
 - content_for :add_js do
   javascript:
     $(document).on('turbolinks:load', function() {
-      window.ajaxFileUpload = new AjaxFileUpload('photos-form');
+      window.ajaxFileUpload = new AjaxFileUpload('photos-form', 'photo_files[]');
       ajaxFileUpload.listenSubmit();
 
       $('a[data-toggle="tab"]:#{@tab_select_index}').tab('show');
@@ -57,7 +57,7 @@ ul.nav.nav-tabs.mb15
       = form_tag nil, { id: 'photos-form', multipart: true,
         data: { upload_path: album_photos_path(@album.id),
         completed_path: album_path(@album.id, "album[user_id]" => current_user.id, "album[sort_flg]" => 1, "album[media_filter]" => 2) } } do
-        = file_field_tag "files[]", multiple: true
+        = file_field_tag "photo_files[]", multiple: true
         = submit_tag '投稿', class: 'btn btn-primary'
 
       .mt10.important

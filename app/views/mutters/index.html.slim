@@ -1,3 +1,28 @@
+- content_for :add_js do
+  javascript:
+    $(document).on('turbolinks:load', function() {
+      window.ajaxFileUpload = new AjaxFileUpload('mutter_new_post', 'mutter[image]');
+      var maxMovieFileSize = #{Settings.MAX_MOVIE_MEGABYTES};
+      ajaxFileUpload.setSizeValidate(maxMovieFileSize);
+      ajaxFileUpload.validate = function() {
+        if ($('#mutter_content').val() == '') {
+          alert('つぶやきを入力してください');
+          return false;
+        }
+      };
+      ajaxFileUpload.ajaxDone = function() {};
+      ajaxFileUpload.ajaxAfterAlways = function() {
+        $('.modal-mutter-reply').modal('hide');
+        $("textarea[name='mutter[content]']").val('')
+        $("input[name='mutter[image]']").val('')
+        $("input[type='submit']").val('投稿する')
+        // TODO: toastrに置き換えたい
+        $("form#mutter_new_post").after('<div id="create_notification" class="alert alert-success text-center">つぶやきを投稿しました</div>');
+        $("#create_notification").fadeOut(3000);
+      };
+      ajaxFileUpload.listenSubmit();
+    });
+
 .col-sm-3
   = render 'top_left_sidebar'
 .col-sm-6
@@ -9,7 +34,7 @@
     li.nav-item
       = link_to "一覧", all_mutters_path, class: "nav-link"
 
-  = simple_form_for @mutter, html: { multipart: true, id: 'mutter_new_post', class: 'mb30' }, remote: true do |f|
+  = simple_form_for @mutter, html: { multipart: true, id: 'mutter_new_post', class: 'mb30', data: { upload_path: mutters_path } } do |f|
     .p-2.border.border-light.bg-light
       .row.no-gutters
         .col-sm-9
