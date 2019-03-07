@@ -40,7 +40,6 @@
         .col-sm-9
           .up-field.mb10
             = f.text_area :content, class: "form-control", placeholder: @leave_me.present? ? "ひとりごとをつぶやく" : "つぶやき", tabindex: 1
-          = f.hidden_field :user_id
           = f.hidden_field :leave_me, value: @leave_me.present?
           - if request.smart_phone?
             .mb20

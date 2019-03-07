@@ -185,6 +185,8 @@ class Mutter < ApplicationRecord
       self.create(user_id: current_user_id, invisible_in_timeline: true)
    end
 
+   # TODO: controllerのparamsにマージじゃなく、Mutterオブジェクトのattributesにマージすべき
+   # そしてstrong parametersから該当要素は削除。修正が面倒そうなのでとりあえず放置
    def self.extra_params(current_user, request = nil, celebration_id = nil)
      params = {}
      params[:user_id] = current_user.id

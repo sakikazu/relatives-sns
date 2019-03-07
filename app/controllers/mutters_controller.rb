@@ -313,7 +313,8 @@ class MuttersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def mutter_params
-      params.require(:mutter).permit(:user_id, :content, :reply_id, :created_at, :updated_at, :celebration_id, :image, :for_sort_at, :year, :month, :search_word, :action_flg, :ua, :leave_me)
+    # TODO: remove user_id, ua, and so on.
+    params.require(:mutter).permit(:user_id, :content, :reply_id, :created_at, :updated_at, :celebration_id, :image, :for_sort_at, :year, :month, :search_word, :action_flg, :ua, :leave_me)
   end
 
   def celebration_params
