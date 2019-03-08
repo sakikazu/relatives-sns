@@ -1,0 +1,24 @@
+- content_for :add_js do
+  javascript:
+    $(document).on('turbolinks:load', function() {
+      $('#blog_content').cleditor({
+        width: 650,
+        height: 500,
+        fonts: "メイリオ, ＭＳ Ｐゴシック, Helvetica, Arial,Arial Black,Comic Sans MS, Georgia,Impact,Tahoma",
+        bodyStyle: "margin:6px; font:14px メイリオ,Helvetica; cursor:text"
+      });
+    });
+
+= simple_form_for(@blog, :html => form_html_option) do |f|
+  - if @blog.errors.any?
+    .alert.alert-danger
+      p
+        | 入力エラーがあります。下記のエラー内容を確認してください。
+
+  = f.input :title, label: "タイトル", input_html: {class: "form-control"}
+  br
+  = f.input :content, label: "本文", input_html: {class: "form-control", rows: 17}
+  br
+  = file_field :image, :image, class: 'form-control'
+  .form-actionsm.mt20
+    = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "投稿しています"}

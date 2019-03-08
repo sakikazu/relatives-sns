@@ -1,0 +1,32 @@
+.col-sm-6
+  .form-actions
+    => link_to "掲示板一覧へ", boards_path, class: "btn btn-light"
+    = link_to "編集する", edit_board_path(@board), class: "btn btn-info" if editable(current_user, @board.user)
+  .page-header
+    h3
+      = @board.title
+      small
+        = link_to "(コメント数：#{@board.board_comments.size}）", "#comments"
+  .once_content
+    .info
+      = @board.user.dispname
+      |  | 
+      = l @board.created_at if @board.created_at
+    .description
+      = link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach?
+      p.text
+        = sani_custom_br(@board.description)
+  .clearfix
+  = link_to fa_icon('arrow-down') + " 最新コメントへ", "#comment_form", class: "btn btn-warning btn-block"
+  h3.mt30
+    = fa_icon 'comments', text: 'コメント'
+  #comments.clearfix
+    = render partial: 'shared/comments', locals: { model_name: 'Board', comments: @board.board_comments }
+  #comment_form
+    = form_tag({:action => :create_comment, :board_id => @board.id}, form_html_option) do
+      = text_area_tag :comment, nil, class: "form-control", rows: "5", placeholder: "コメントする"
+      br
+      = file_field_tag :attach, class: 'form-control'
+      br
+      .form-actions
+        = submit_tag "投稿する", class: "btn btn-primary"

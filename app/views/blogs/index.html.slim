@@ -1,0 +1,45 @@
+.col-sm-6
+  - if @user.present?
+    = link_to "自分の日記", blogs_path, class: "btn btn-light"
+  = link_to "日記を書く", new_blog_path, class: "btn btn-info"
+  .page-header.ver2
+    h3
+      = @page_title
+      = "<small>#{@page_desc}</small>" if @page_desc.present?
+  .autopagerize_page_element
+    - @blogs.each do |blog|
+      .once_content
+        h5.title.for_index
+          => link_to blog.title, blog
+          span.badge.badge-info
+            = fa_icon 'comments', text: blog.comments.size
+        .info
+          = link_to "投稿者：#{blog.user.try(:dispname)}", blogs_by_user_path(blog.user.username)
+          |  | 
+          = "投稿：#{time_shorter(blog.created_at)}".html_safe
+          = " | 最新コメント：#{time_shorter(blog.comments.last.created_at) if blog.comments.present?}".html_safe
+        - blog.blog_images.each do |image|
+          = link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image?
+        p.text
+          | (本文抜粋)
+          = truncate_120_link(blog.content)
+        - if editable(current_user, blog.user)
+          .text-right.mt20
+            = link_to '編集', edit_blog_path(blog)
+    .mt20
+      = paginate @blogs, :window => 2, :outer_window => 1
+  #autopager_loading.btn.btn-warning.btn-block[style="display:none"]
+    | 次のページを読込中です
+.col-sm-2
+  .page-header.ver2
+    h3
+      | 人ごと(更新日順)
+  - @blog_count_by_user.each do |user, cnt, created_at|
+    .blog
+      p.normal
+        strong
+          = link_to "#{user.dispname}(#{cnt})", blogs_by_user_path(user.username)
+      p.normal.desc
+        | 最終更新日：
+        = time_shorter(created_at)
+    hr

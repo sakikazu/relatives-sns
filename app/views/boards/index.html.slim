@@ -1,0 +1,33 @@
+.col-sm-6
+  = link_to "新規作成", new_board_path, class: "btn btn-info"
+  .page-header
+    h3
+      | 掲示板一覧
+  ul.nav.nav-pills.nav-fill.mt20.mb20
+    li.nav-item
+      = link_to '最新コメント順', boards_path(sort: 1), class: "nav-link #{'active' if @sort == 1}"
+    li.nav-item
+      = link_to '作成日時順', boards_path(sort: 2), class: "nav-link #{'active' if @sort == 2}"
+  .autopagerize_page_element
+    = paginate @boards, window: 2, outer_window: 1
+    - @boards.each do |board|
+      .well.well-small
+        h5
+          => link_to board.title, board
+          span.badge.badge-info
+            = fa_icon 'comments', text: board.board_comments.size
+        - if board.attach?
+          = link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => colorbox_class}
+          br
+        .bar
+          = "作成者：#{board.user.dispname}"
+          |  | 
+          = "作成日時：#{time_shorter(board.created_at)}".html_safe
+          = " | 最新コメント日時：#{time_shorter(board.board_comments.last.created_at)}".html_safe if board.board_comments.present?
+          br
+          - if editable(current_user, board.user)
+            .text-right.mt20
+              = link_to '編集', edit_board_path(board)
+    = paginate @boards, window: 2, outer_window: 1
+  #autopager_loading.btn.btn-warning.btn-block[style="display:none"]
+    | 次のページを読込中です
