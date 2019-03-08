@@ -22,7 +22,8 @@ class BoardsController < ApplicationController
       @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
       @boards = Kaminari.paginate_array(@boards)
     end
-    @boards = @boards.page(params[:page]).per(10)
+    page_per = Rails.env.production? ? 10 : 3
+    @boards = @boards.page(params[:page]).per(page_per)
 
     respond_to do |format|
       format.html # index.html.erb

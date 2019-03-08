@@ -170,14 +170,19 @@ EOS
   end
 
   #※マルチバイト文字対応(utf8)
-  def truncate_120_link(text)
+  def truncate_link(text, length)
+    return '' if text.blank?
     text2 = strip_tags(text)
-    if text2.split(//u).length > 120
-      ret = sani_br(text2.truncate(120, :omission => ""))
-      ret += link_to " ...(続き)", "javascript:void(0)", :title => '', data: {toggle: 'popover', html: true, trigger: 'hover', placement: 'right', content: sani_br(text2)}
+    if text2.split(//u).length > length
+      ret = sani_switching(text2.truncate(length, :omission => ""), length)
+      ret += link_to " ...(続き)", "javascript:void(0)", data: { toggle: 'popover', html: true, trigger: 'click', placement: 'right', content: sani_br(text2) }
     else
-      ret = sani_br(text2)
+      ret = sani_switching(text2, length)
     end
     ret.html_safe
+  end
+
+  def sani_switching(text, length)
+    length > 100 ? sani_br(text) : sani(text)
   end
 end

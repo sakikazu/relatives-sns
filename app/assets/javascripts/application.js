@@ -58,15 +58,16 @@ $(document).on('turbolinks:load', function() {
 
   hiddenImgHeight('.hidden_img_height');
 
-  // bootstrap
+  bootstrap_js();
+});
+
+bootstrap_js = function() {
   $('[data-toggle="popover"]').popover({
     // trigger: 'click', // html要素で設定するようにする
     html: true,
   });
-
   $('[data-toggle="tooltip"]').tooltip();
-});
-
+}
 
 //イイネしたメンバーをクリックで表示する
 nice_member = (function(){
@@ -157,6 +158,7 @@ autopagerize = function() {
         nice_member();
         showMutterDeleteLink();
         hiddenImgHeight('.hidden_img_height');
+        bootstrap_js();
         // autopagerize();
       })
       $("#autopager_loading").hide();

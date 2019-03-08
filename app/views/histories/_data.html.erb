@@ -14,7 +14,7 @@
 <% @histories.each_with_index do |history, i| %>
   <tr <%= "class='odd'"if i%2==1 %>>
     <td><%= history.hist_date %></td>
-    <td><%= truncate_120_link(history.content) %></td>
+    <td><%= truncate_link(history.content, 100) %></td>
     <td><%= history.src_user_name %></td>
     <td><%= history.user.dispname %></td>
     <td><%= time_shorter(history.created_at) %></td>

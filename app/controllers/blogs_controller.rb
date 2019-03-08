@@ -16,7 +16,8 @@ class BlogsController < ApplicationController
       user_id = current_user.id
       @page_title = "自分の日記"
     end
-    @blogs = Blog.joins(:user).where(user_id: user_id).page(params[:page]).per(10)
+    page_per = Rails.env.production? ? 10 : 3
+    @blogs = Blog.joins(:user).where(user_id: user_id).page(params[:page]).per(page_per)
 
     # ブログの最終作成日が直近の人の順に、ブログ記事のカウントとともにデータをセットする
     counts = Blog.group(:user_id).count
