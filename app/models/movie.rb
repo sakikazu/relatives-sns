@@ -103,23 +103,6 @@ class Movie < ApplicationRecord
     encoded_path = "#{Rails.root}/public/upload/movie/#{id}/original/encoded.mp4"
     # p "rotation: #{ffmp.rotation}"
     transpose = "transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
-
-    max_video_wid_hei = 720
-    p "original size: width: #{ffmp.width} / height: #{ffmp.height}"
-    if ffmp.width.present? and ffmp.height.present? and (ffmp.width > max_video_wid_hei || ffmp.height > max_video_wid_hei)
-      if ffmp.height > ffmp.width
-        ratio = max_video_wid_hei.to_f / ffmp.height
-        height = max_video_wid_hei
-        width = (ffmp.width * ratio).to_i
-      else
-        ratio = max_video_wid_hei.to_f / ffmp.width
-        width = max_video_wid_hei 
-        height = fix_height((ffmp.height * ratio).to_i)
-      end
-      size = "#{width}x#{height}"
-      p "computed size: #{size}"
-    end
-
     max_video_bitrate = 1000
     vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
 
@@ -127,7 +110,9 @@ class Movie < ApplicationRecord
     profile_option = %w(-profile:v baseline -level:v 3.1)
     # note: 既にエンコードされた「encoded.mp4」を再エンコードする場合、同じファイルをエンコード、出力するとおかしくなるので、テンポラリファイルにエンコード出力する
     encoding_path = "encoding_#{Time.now.to_i}.mp4"
-    transcode_options = %W(-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k -s #{size})
+    transcode_options = %W(-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k)
+    size = calc_size
+    transcode_options += %W(-s #{size}) if size.present?
     transcode_options += %W(-vf #{transpose}) if transpose.present?
     transcode_options += profile_option
     begin
@@ -194,8 +179,28 @@ class Movie < ApplicationRecord
 
   private
 
-  # note: mp4動画をリサイズするときにheightが2で割り切れないときは「height not divisible by 2」というエラーが出るので、偶数にする
-  def fix_height height
-    return (height % 2 == 1) ? height + 1 : height
+  def calc_size
+    size = nil
+    max_video_wid_hei = 720
+    p "original size: width: #{ffmp.width} / height: #{ffmp.height}"
+    if ffmp.width.present? and ffmp.height.present? and (ffmp.width > max_video_wid_hei || ffmp.height > max_video_wid_hei)
+      if ffmp.height > ffmp.width
+        ratio = max_video_wid_hei.to_f / ffmp.height
+        height = max_video_wid_hei
+        width = (ffmp.width * ratio).to_i
+      else
+        ratio = max_video_wid_hei.to_f / ffmp.width
+        width = max_video_wid_hei
+        height = (ffmp.height * ratio).to_i
+      end
+      size = "#{divisible_size(width)}x#{divisible_size(height)}"
+      p "computed size: #{size}"
+    end
+    size
+  end
+
+  # NOTE: ffmpeg encode時にheightかwidthが2で割り切れないときは「[height|width] not divisible by 2」というエラーが出るので偶数にする
+  def divisible_size size
+    return (size % 2 == 1) ? size + 1 : size
   end
 end
