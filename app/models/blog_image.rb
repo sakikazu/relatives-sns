@@ -13,7 +13,6 @@
 #
 
 class BlogImage < ApplicationRecord
-  belongs_to :user
   belongs_to :blog
 
   content_name = "blog"

@@ -44,6 +44,7 @@ class User < ApplicationRecord
   has_one :my_album, class_name: "Album", foreign_key: "owner_id"
   belongs_to :parent, class_name: "User", foreign_key: "parent_id", optional: true
   has_many :children, class_name: "User", foreign_key: "parent_id"
+  has_many :blogs
 
   accepts_nested_attributes_for :user_ext
 

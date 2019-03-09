@@ -1,23 +1,23 @@
 class BlogsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_blog, only: [:show, :edit, :update, :destroy]
+  before_action :set_blog, only: [:show, :edit, :update, :destroy, :create_comment]
   before_action :init
   before_action :set_ups_data, only: [:show]
 
   # GET /blogs
   # GET /blogs.xml
   def index
-    user_id = nil
+    user = nil
     if params[:username] && (params[:username] != current_user.username)
-      @user = User.find_by_username(params[:username])
-      user_id = @user.id
-      @page_title = "#{@user.dispname}の日記"
+      @user_selected = true
+      user = User.find_by_username(params[:username])
+      @page_title = "#{user.dispname}の日記"
     else
-      user_id = current_user.id
+      user = current_user
       @page_title = "自分の日記"
     end
     page_per = Rails.env.production? ? 10 : 3
-    @blogs = Blog.joins(:user).where(user_id: user_id).page(params[:page]).per(page_per)
+    @blogs = user.blogs.recent.page(params[:page]).per(page_per)
 
     # ブログの最終作成日が直近の人の順に、ブログ記事のカウントとともにデータをセットする
     counts = Blog.group(:user_id).count
@@ -64,24 +64,18 @@ class BlogsController < ApplicationController
   # POST /blogs
   # POST /blogs.json
   def create
-    params[:blog][:user_id] = current_user.id
     @blog = Blog.new(blog_params)
+    @blog.user_id = current_user.id
 
     respond_to do |format|
       if @blog.save
-        # todo imageの持ち方を変えたい
         if params[:image]
-          image = BlogImage.new(blog_image_params)
-          @blog.blog_images << image
+          @blog.blog_images.create(blog_image_params)
         end
 
         @blog.update_histories.create(user_id: current_user.id, action_type: UpdateHistory::BLOG_CREATE)
 
-        if request.mobile?
-          format.html { redirect_to({:action => :show_mobile, :id => @blog.id}, notice: '日記を投稿しました。') }
-        else
-          format.html { redirect_to @blog, notice: '日記を投稿しました。' }
-        end
+        format.html { redirect_to @blog, notice: '日記を投稿しました。' }
         format.json { render json: @blog, status: :created, location: @blog }
       else
         format.html { render action: "new" }
@@ -93,17 +87,10 @@ class BlogsController < ApplicationController
   # PUT /blogs/1
   # PUT /blogs/1.xml
   def update
-    if request.mobile?
-      @blog.update_attributes(blog_params)
-      redirect_to :action => :show_mobile, :id => @blog.id
-      return
-    end
-
     respond_to do |format|
       if @blog.update_attributes(blog_params)
         if params[:image]
-          image = BlogImage.new(blog_image_params)
-          @blog.blog_images << image
+          @blog.blog_images.create(blog_image_params)
         end
 
         format.html { redirect_to(@blog, :notice => '更新しました') }
@@ -135,17 +122,8 @@ class BlogsController < ApplicationController
       return
     end
 
-    @comment = Comment.new(comment_params)
-    @comment.user_id = current_user.id
-    @comment.save
-    @blog = @comment.parent
-
+    @blog.comments.create(comment_params.merge(user_id: current_user.id))
     UpdateHistory.for_creating_comment(@blog, UpdateHistory::BLOG_COMMENT, current_user.id)
-
-    # PCの場合はAjaxなのでcreate.jsが呼ばれる
-    if request.mobile?
-      redirect_to @blog, notice: 'コメントしました。'
-    end
   end
 
   def destroy_comment
@@ -161,7 +139,7 @@ class BlogsController < ApplicationController
     @bi = BlogImage.find(params[:id])
     blog = @bi.blog
     @bi.destroy
-    redirect_to :action => :show, :id => blog.id
+    redirect_to blog_path(blog)
   end
 
 
@@ -178,7 +156,7 @@ class BlogsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def blog_params
-    params.require(:blog).permit(:title, :content, :user_id)
+    params.require(:blog).permit(:title, :content)
   end
 
   def blog_image_params
@@ -186,7 +164,7 @@ class BlogsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:user_id, :parent_id, :parent_type, :content)
+    params.require(:comment).permit(:content)
   end
 
 end

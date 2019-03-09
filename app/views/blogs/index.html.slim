@@ -1,5 +1,5 @@
 .col-sm-6.order-2.order-sm-1
-  - if @user.present?
+  - if @user_selected.present?
     => link_to "自分の日記", blogs_path, class: "btn btn-light"
   = link_to "日記を書く", new_blog_path, class: "btn btn-info"
   .page-header.ver2

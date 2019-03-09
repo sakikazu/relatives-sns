@@ -26,7 +26,7 @@ class Board < ApplicationRecord
   has_many :board_comments
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  default_scope {order("created_at DESC")}
+  scope :recent, lambda { order('created_at DESC') }
 
   validates :title, presence: true
 

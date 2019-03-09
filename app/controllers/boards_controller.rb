@@ -9,13 +9,8 @@ class BoardsController < ApplicationController
   def index
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
     case @sort
-    when 1
-      buf = BoardComment.group(:board_id).maximum(:created_at)
-      boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
-      @boards = boards_mod.sort{|a,b| b.sort_at <=> a.sort_at}
-      @boards = Kaminari.paginate_array(@boards)
     when 2
-      @boards = Board.all
+      @boards = Board.recent
     else
       buf = BoardComment.group(:board_id).maximum(:created_at)
       boards_mod = Board.all.map{|b| b.sort_at = (buf[b.id] || b.created_at); b}
@@ -58,8 +53,8 @@ class BoardsController < ApplicationController
   # POST /boards
   # POST /boards.xml
   def create
-    params[:board][:user_id] = current_user.id
     @board = Board.new(board_params)
+    @board.user_id = current_user.id
 
     respond_to do |format|
       if @board.save
@@ -125,7 +120,7 @@ class BoardsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def board_params
-      params.require(:board).permit(:title, :description, :attach, :user_id)
+      params.require(:board).permit(:title, :description, :attach)
   end
 
   def page_title

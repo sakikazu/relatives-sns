@@ -22,5 +22,8 @@ class Blog < ApplicationRecord
   has_many :nices, :as => :asset
   has_many :update_histories, :as => :content, :dependent => :destroy
 
-  default_scope {order("created_at DESC")}
+  scope :recent, lambda { order('created_at DESC') }
+
+  validates :title, presence: true
+  validates :content, presence: true
 end
