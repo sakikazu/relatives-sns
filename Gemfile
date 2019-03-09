@@ -59,6 +59,7 @@ gem 'streamio-ffmpeg'
 gem 'rmagick'
 gem 'sidekiq'
 gem 'font-awesome-rails'
+gem 'redcarpet' # markdown
 
 # Ajaxでファイルアップロード
 gem 'remotipart', '~> 1.2'

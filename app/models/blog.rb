@@ -2,14 +2,15 @@
 #
 # Table name: blogs
 #
-#  id         :integer          not null, primary key
-#  content    :text(65535)
-#  deleted_at :datetime
-#  title      :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  mutter_id  :integer
-#  user_id    :integer
+#  id              :integer          not null, primary key
+#  content         :text(65535)
+#  deleted_at      :datetime
+#  title           :string(255)
+#  wysiwyg_written :boolean          default(FALSE)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  mutter_id       :integer
+#  user_id         :integer
 #
 
 class Blog < ApplicationRecord

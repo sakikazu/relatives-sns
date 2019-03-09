@@ -18,8 +18,12 @@
           = link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image?
           = link_to "削除", {:action => :destroy_image, :id => image.id}, method: "delete", data: {confirm: "画像を削除してもいいですか？"} if image.image? && editable(current_user, @blog.user)
       = "<hr>".html_safe if @blog.blog_images.present?
-      p.text
-        = @blog.content.html_safe
+      - if @blog.wysiwyg_written?
+        p.text
+          = @blog.content.html_safe
+      - else
+        .markdown
+          = markdown(@blog.content)
     .nice
       span#update_nice
         = nice_field(@blog, "blog", "#update_nice")

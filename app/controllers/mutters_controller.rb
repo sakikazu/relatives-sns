@@ -1,4 +1,6 @@
 class MuttersController < ApplicationController
+  # NOTE: beforeではない理由はcurrent_userが作られてないタイミングを避けるためだった？
+  # afterでは、自分の画面では前回リクエスト時間になるが、他の人からは正しく最終アクセス時間になっているので問題はない
   after_action :update_request_at, only: [:index, :create]
 
   before_action :authenticate_user!, :except => :rss
