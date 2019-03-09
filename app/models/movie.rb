@@ -86,7 +86,8 @@ class Movie < ApplicationRecord
   # end
 
   def workered_encode
-    return if self.is_ready?
+    # 「エンコード中」状態にしておく
+    self.update(is_ready: false)
     if Rails.env.production?
       EncodeWorker.perform_async self.id
     else
@@ -129,7 +130,11 @@ class Movie < ApplicationRecord
     transcode_options = %W(-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k -s #{size})
     transcode_options += %W(-vf #{transpose}) if transpose.present?
     transcode_options += profile_option
-    ffmp.transcode(encoding_path, transcode_options)
+    begin
+      ffmp.transcode(encoding_path, transcode_options)
+    rescue => e
+      ExceptionNotifier.notify_exception(e)
+    end
     FileUtils.mv(encoding_path, encoded_path)
     self.save_with_available_movie(encoded_path)
   end

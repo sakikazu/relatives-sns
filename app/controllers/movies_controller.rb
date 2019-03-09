@@ -46,7 +46,6 @@ class MoviesController < ApplicationController
   def create
     @movie = Movie.new(movie_params)
     @movie.user_id = current_user.id
-    @movie.is_ready = false
 
     if @movie.save and @movie.ffmp.valid?
       @movie.workered_encode
@@ -62,10 +61,12 @@ class MoviesController < ApplicationController
   # PUT /movies/1
   # PUT /movies/1.xml
   def update
-    # 動画が指定されなかったら動画エンコードを行わない
-    @movie.is_ready = false if movie_params[:movie].present?
     if @movie.update(movie_params) and @movie.ffmp.valid?
-      @movie.workered_encode
+      # TODO: is_readyでエンコードを行うかどうかを判定してはいけない。あくまで表示時用
+      # 理由は、is_ready:falseの状態で動画を選択しない更新をした場合に、再度エンコードが走ってしまうのを防ぐため
+      if movie_params[:movie].present?
+        @movie.workered_encode
+      end
       render json: {}, status: :created
     else
       render json: @movie.errors.full_messages, status: :unprocessable_entity

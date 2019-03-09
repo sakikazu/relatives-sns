@@ -16,10 +16,10 @@
       - if @movie.is_ready?
         = videojs(@movie).html_safe
       - else
-        .well
-          |  ただいま動画準備中（エンコード）です。
-          br
-          |  しばらくしてから更新してみてください。 
+        .alert.alert-danger.m-3
+          p.important
+            | ただいま動画準備中（エンコード）です。
+            | しばらくしてから更新してみてください。
     .card-body
       .card-text
         / .text-right.mb10

@@ -128,7 +128,8 @@ AjaxFileUpload.prototype = {
     }
     appendBlackBackground('background_black');
     $('#background_black').append('<div id="progress-wrapper" class="row justify-content-center">');
-    $('#progress-wrapper').append('<div class="col-sm-4"><div class="progress"><div class="progress-bar progress-bar-striped">');
+    $('#progress-wrapper').append('<div class="col-sm-5"><div class="progress"><div class="progress-bar progress-bar-striped">');
+    $('#progress-wrapper .progress').height('2rem');
   },
   _removeProgress: function() {
     $('#background_black').remove();
