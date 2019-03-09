@@ -13,11 +13,11 @@
       |  | 
       = l @blog.created_at if @blog.created_at
     .description
-      #blog_images.cf
-        - @blog.blog_images.each do |image|
-          = link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image?
-          = link_to "削除", {:action => :destroy_image, :id => image.id}, method: "delete", data: {confirm: "画像を削除してもいいですか？"} if image.image? && editable(current_user, @blog.user)
-      = "<hr>".html_safe if @blog.blog_images.present?
+      - if @blog.blog_images.present?
+        #blog_images.cf.well
+          - @blog.blog_images.each do |image|
+            = link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image?
+            = link_to "削除", {:action => :destroy_image, :id => image.id}, method: "delete", data: {confirm: "画像を削除してもいいですか？"} if image.image? && editable(current_user, @blog.user)
       - if @blog.wysiwyg_written?
         p.text
           = @blog.content.html_safe
