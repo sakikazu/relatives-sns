@@ -102,7 +102,7 @@ class Movie < ApplicationRecord
     generate_thumb(ffmp.rotation.to_i)
     encoded_path = "#{Rails.root}/public/upload/movie/#{id}/original/encoded.mp4"
     # p "rotation: #{ffmp.rotation}"
-    transpose = "transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
+    # transpose = "transpose=#{ROTATION[ffmp.rotation.to_s].to_i}" if ffmp.rotation.present?
     max_video_bitrate = 1000
     vbitrate = ffmp.bitrate < max_video_bitrate ? ffmp.bitrate : max_video_bitrate
 
@@ -113,7 +113,11 @@ class Movie < ApplicationRecord
     transcode_options = %W(-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k)
     size = calc_size
     transcode_options += %W(-s #{size}) if size.present?
-    transcode_options += %W(-vf #{transpose}) if transpose.present?
+    # NOTE: rotation:90の動画をエンコードした際、縦動画が横動画として表示されてしまった
+    # Chromeだとrotationを意識した回転をやってくれるのでとりあえず不要
+    # 一番問題ないのは回転させた上でrotation情報を削除することなはず。ref: https://qiita.com/naga3/items/639da87ad56c67549eee
+    # あと、heightとwidthの長辺を指定のサイズにしたとしても、transcodeで回転させると逆になるかもなので注意。例：長辺720にして、h:720, w:450にしたのに、回転されることでh:720, w:1280みたいな。詳細は未調査
+    # transcode_options += %W(-vf #{transpose}) if transpose.present?
     transcode_options += profile_option
     begin
       ffmp.transcode(encoding_path, transcode_options)
