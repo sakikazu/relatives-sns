@@ -33,7 +33,7 @@ html[lang="ja"]
       a.navbar-brand[href="/"] AdanHP
       - if current_user.present?
         button.navbar-toggler[type="button" data-toggle="collapse" data-target="#navbarSupportedContent"]
-          span[clas="navbar-toggler-icon"]
+          span.navbar-toggler-icon
         #navbarSupportedContent.collapse.navbar-collapse
           ul.navbar-nav.mr-auto
             li.nav-item[class='#{controller.controller_name == "nices" ? "active" : ""}']
