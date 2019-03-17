@@ -15,6 +15,7 @@ AdanHP
 * 年表
 * メンバーの管理、Google Mapsで住所、家系図機能
 * レスポンシブデザインによるスマホView対応
+* turbolinksによる高速表示
 * capistranoによるデプロイ
 
 
@@ -26,7 +27,7 @@ AdanHP
 
 ### ライブラリ
 * Twitter bootstrap 4
-* colorboxは、サムネイル画像のリンクからリンク先の大きな画像を取得してモーダルで表示するというbootstrapでは実現できない機能を持つので使っていきたい
+* colorboxは、サムネイル画像のリンクからリンク先の大きな画像を取得してモーダルで表示機能と、スライドショー機能のために使っている。できれば自作して使わないようにしたい
 * Font Awesome: https://fontawesome.com/v4.7.0/icons/#
 * テンプレートエンジン: slim
 * altCSS: scss
@@ -48,7 +49,7 @@ AdanHP
 * ffmpegを使用して動画エンコード、サムネイル用画像の切り出しを行っている
 * 各所にCSS flexboxを用いてレイアウト
 * Ajaxによるファイルアップロード（プログレスバー付き）
-* turbolinksを使う上で、JSの記述に注意している（ソース参照）
+* turbolinksを意識したJSの記述方法（ソース参照）
 * スマホでのUIを意識したViewにしている（特にトップページ、アルバム機能）
 * ruby-gmailを使用してGmailにIMAPで接続し、メール検索や取得などの操作を行う[6b15bcd23cafd96ba10a67a2a26e996d629bf7c3]
     * ref: ruby-gmailを使ってRubyからGmailのメールを受信して本文を取得 * Shoken OpenSource Society http://shoken.hatenablog.com/entry/20120401/p1
@@ -74,7 +75,7 @@ $ heroku logs --tail
 
 ## Backup
 サーバー側のcronでDBのdumpを行い、
-MacBook ProのcronでDB dumpとアップロードファイルをMac内部に保存している
+ローカルPCのcronでDB dumpとアップロードファイルをローカルPC内部に保存している
 
 
 ## Issues
@@ -104,12 +105,17 @@ Mutterの画像あり検索で最後の方を見れば確認できる。
 ## よく使うコマンド
 
 ### unicorn再起動
+```
+# 本番サーバーのRVMの問題か、unicorn:restartでは再起動できない場合がある
 $ cap production unicorn:stop
 $ cap production unicorn:start
+```
 
 ### cron
+```
 TODO なにこれ？詳細追記して〜
 create_ranking_total.sh
+```
 
 ### sidekiq
 [todo] capistranoで再起動できるようにしたい <- できてるはずだが。確認
@@ -140,6 +146,12 @@ bundle exec whenever -i
 rootユーザーで
 $ nginx -s reload
 
+
+## OTHER
+
 ### bitbucket's README.md
 https://bitbucket.org/tutorials/markdowndemo/src/master/
+
+### エラー処理
+* エラー時はexception_notificationによって、sakikazuのGmailにExceptionメールが送信される
 
