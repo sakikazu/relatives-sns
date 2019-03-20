@@ -59,6 +59,12 @@ AdanHP
 
 ## heroku
 https://a-dan.herokuapp.com/
+
+### test login
+| email            | password  |
+| ---------------- | --------- |
+| test@example.com | password  |
+
 ```
 $ git push heroku master
 $ heroku run rake db:migrate
@@ -154,4 +160,5 @@ https://bitbucket.org/tutorials/markdowndemo/src/master/
 
 ### エラー処理
 * エラー時はexception_notificationによって、sakikazuのGmailにExceptionメールが送信される
+* Exceptionメールが正しく動作しているかの確認は、「ActionController::InvalidAuthenticityToken」を出すのが手軽
 
