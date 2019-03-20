@@ -38,7 +38,7 @@ class UserExtension < ApplicationRecord
 
   def self.send_gcm(name, message)
     registration_ids = self.gcm_tokens["gcm"]
-    gcm = GCM.new(Settings.GCM_API_KEY)
+    gcm = GCM.new(ENV['GCM_API_KEY'])
     # todo 「collapse_key」って？
     options = {data: {message: name + " : " + message.truncate(10)}, collapse_key: "updated_score"}
     response = gcm.send_notification(registration_ids, options)
