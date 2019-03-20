@@ -1,0 +1,13 @@
+= simple_form_for(@board, :html => form_html_option) do |f|
+  - if @board.errors.any?
+    p.alert.alert-danger
+      | 入力エラーがあります。下記のエラー内容を確認してください。
+  = f.input :title, label: "タイトル", input_html: {class: "form-control"}
+  = f.input :description, label: "内容", input_html: {class: "form-control", rows: 7}
+  .mt15 = f.label :attach, '画像'
+  - if @board.attach?
+    = image_tag(@board.attach(:thumb))
+  = f.input :attach, label: false, input_html: {class: "form-control"}
+
+  .form-actions.mt20
+    = f.button :submit, class: "btn btn-primary"

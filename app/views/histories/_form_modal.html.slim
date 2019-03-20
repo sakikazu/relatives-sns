@@ -1,0 +1,40 @@
+/ modalのコンテンツの部分のみ
+.modal-header
+  h5.modal-title
+    = @history.new_record? ? 'できごとを追加' : 'できごとを更新'
+  button.close[type="button" data-dismiss="modal"]
+    span &times;
+.modal-body
+  #his_form
+    = form_for @history, remote: true do |f|
+      #error_message.alert.alert-danger[style="display:none;"]
+        p
+          | 入力エラーがあります。下記のエラー内容を確認してください。
+        ul.pl-3
+
+      .form-group
+        = f.label :episode_year, 'できごとの時期'
+        .form-row.align-items-end
+          = f.select :episode_year, (1901..Date.today.year).to_a.reverse, {:include_blank => true}, class: "form-control col-sm-2"
+          | 年
+          = f.select :episode_month, 1..12, {:include_blank => true}, class: "form-control col-sm-2 ml-1"
+          | 月
+          = f.select :episode_day, 1..31, {:include_blank => true}, class: "form-control col-sm-2 ml-1"
+          | 日
+
+      .form-check
+        = f.check_box :about_flg, class: 'form-check-input'
+        = f.label :about_flg, "時期不確定", class: 'form-check-label'
+      ul.well.well-narrow.text-muted.text-small.pl-4
+        li 年を選択しなかった場合は、[時期不明]と表示される
+        li 「時期不確定」にチェックした場合は、年月日のあとに「くらい」と表示される
+
+      .form-group
+        = f.label :content, '<abbr title="required">*</abbr> 内容'.html_safe
+        = f.text_area :content, class: "form-control", rows: 4
+
+      .form-group
+        = f.label :src_user_name, '情報源(提供者、文書など)'
+        = f.text_field :src_user_name, class: "form-control"
+      = f.hidden_field :user_id
+      = f.submit class: "btn btn-primary", data: { disable_with: '処理中..' }

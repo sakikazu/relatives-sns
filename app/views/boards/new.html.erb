@@ -1,0 +1,19 @@
+<div class="col-sm-6">
+
+<div class="form-actions">
+<%= link_to "掲示板一覧へ", boards_path, class: "btn btn-light" %>
+</div>
+
+<div class="page-header">
+  <h3>新規作成</h3>
+</div>
+
+<div class="alert alert-info">
+  <h5><%= fa_icon 'exclamation-circle' %> 日記との使い分け</h5>
+  ある程度の期間に渡って書き込みしたいことや、みんなに意見を聞きたいときは、掲示板で作成するのがいいです。<br>
+  また、コメントに画像をつけられるのは掲示板だけなので、そこも考慮するといいでしょう。
+</div>
+
+<%= render :partial => 'form' %>
+
+</div>

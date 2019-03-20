@@ -1,0 +1,13 @@
+<%= simple_form_for @album do |f| %>
+  <% if @album.errors.any? %>
+    <div class="alert alert-danger"><p>入力エラーがあります。下記のエラー内容を確認してください。</p></div>
+  <% end %>
+
+  <%= f.input :title, label: "タイトル", input_html: {class: 'form-control'} %>
+  <%= f.input :description, label: "説明", input_html: {class: 'form-control', rows: 8} %>
+  <%= f.input :thumb_id, as: :select, collection: @album.photos.map{|p| ["#{p.id}(#{p.title})", p.id]}, label: "アルバムトップに表示する写真", input_html: {class: 'form-control'} %>
+
+  <div class="form-actions mt20">
+    <%= f.button :submit, class: "btn btn-primary", :data => {:disable_with => "投稿しています"} %>
+  </div>
+<% end %>

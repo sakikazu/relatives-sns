@@ -1,0 +1,29 @@
+.col-sm-10
+  .mb40
+    = link_to "アルバム一覧", albums_path, class: "btn btn-light"
+
+  .page-header
+    h3 アルバム詳細一覧
+  p.text-muted アルバム写真のダウンロードも可能
+
+  table.table.table-striped.table-bordered.table-hover.table-condensed
+    thead
+      tr
+        th[style="width:15rem"] タイトル
+        th 写真数
+        th 作成者
+        th 作成日時
+        th 最新アップ日時
+        th 最新コメント日時
+        th ダウンロード
+    tbody
+      - @albums.each do |album|
+        tr
+          td = link_to album.title, album
+          td = @photo_count[album.id] || "0"
+          td = album.user.try(:dispname)
+          td = l album.created_at if album.created_at
+          td = l album.sort_at if album.sort_at
+          td = l @last_comment_at[album.id] if @last_comment_at[album.id]
+          td = link_to "ダウンロードする", action: :download, id: album.id
+

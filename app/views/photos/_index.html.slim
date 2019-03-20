@@ -1,0 +1,5 @@
+- if photos.present?
+  div[class='#{request.smart_phone? ? 'smartphone' : ''}']
+    .cards-narrow.card-columns
+      = render partial: 'photos/boxed_photo', collection: photos, as: :photo, locals: { album: album }
+

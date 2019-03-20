@@ -1,0 +1,18 @@
+<% @photo_data.each_with_index do |data, idx| -%>
+  <% content = data.content -%>
+  <div class="nice_rank">
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:nice_count] %> イイネ
+  </div>
+  <div class="mb10">
+    <%= nicing_user_names(data.content) %>
+  </div>
+  <% if content.present? -%>
+    <%= link_to(image_tag(content.image(:thumb)), slideshow_album_photo_path(content.album, content), {:class => colorbox_fix_size}) if content.image?  %><br>
+    写真タイトル：<%= content.title %> / アルバム：<%= link_to content.album.title, content.album %>
+  <% else -%>
+    削除されました.
+  <% end -%>
+  <hr>
+<% end -%>
+<%= paginate @photo_data, remote: true, params: {action: 'ranking', content_type: 2} %>

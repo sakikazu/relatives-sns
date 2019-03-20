@@ -1,0 +1,26 @@
+.card.media-content
+  .card-header
+    = photo.title
+    span.badge.badge-info.ml-3 = fa_icon 'comment', text: photo.mutter_comments.size
+  .card-body
+    .text-sm.text-muted.text-right
+      = photo.user&.dispname
+      span.ml-2 = "投稿：#{l photo.created_at if photo.created_at}"
+      span.ml-2 = "撮影：#{l photo.exif_at if photo.exif_at}"
+      span.ml-2 = "最新コメント：#{l photo.last_comment_at if photo.last_comment_at.present?}"
+  .text-center
+    = image_tag(photo.image(:large)) if photo.image?
+  .card-body
+    .card-text
+      .text-right.mb10
+        - if photo.mutter.present?
+          = link_to mutter_path(photo.mutter, anchor: "mutter#{photo.mutter.id}") do
+            span.badge.badge-success 元つぶやき
+        span.pl-2 = link_to "元画像", photo.image(:original) if photo.image?
+      .text-content
+        = sani_custom_br(photo.description)
+  .card-footer
+    .text-center
+      span#update_nice
+        = nice_field(photo, "photo", "#update_nice")
+

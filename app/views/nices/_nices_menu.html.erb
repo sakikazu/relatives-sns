@@ -1,0 +1,7 @@
+<ul class="nav nav-tabs mt20 mb20">
+  <% [["最近", 1, recent_nices_path], ["ランキング", 2, ranking_nices_path], ["イイネしたもの", 3, donice_nices_path], ["イイネされたもの", 4, wasnice_nices_path]].each do |n, i, path| -%>
+    <% activable = @sort == i ? 'active' : '' -%>
+	<li class="nav-item"><%= link_to n, path, class: "nav-link #{activable}" %></li>
+  <% end -%>
+</ul>
+

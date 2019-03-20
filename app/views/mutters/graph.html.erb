@@ -1,0 +1,39 @@
+<script>
+$(document).ready(function() {
+<% if @mutters_count.present? %>
+  var data = [
+<% @mutters_count.each do |data| -%>
+  <%= "['#{data[0]}', #{data[1]}],".html_safe %>
+<% end -%>
+  ];
+  generate_mutter_grapth('chart', data, 'つぶやき数(<%= @range_for_title %>)', '<%= @format %>', '<%= @min %>', '<%= @interval %>');
+<% end -%>
+}); //jquery#ready
+</script>
+
+<div class='col-sm-10'>
+  <div class='mb30'>
+    <%= link_to 'つぶやき一覧へ', all_mutters_path, class: 'btn btn-light' %>
+  </div>
+
+<div>
+<ul class="nav nav-tabs mt10 mb40">
+  <li class="nav-item"><%= link_to '期間選択', graph_mutters_path, class: "nav-link #{'active' unless @all_mode}" %></li>
+  <li class="nav-item"><%= link_to '全期間', graph_mutters_path(all: 1), class: "nav-link #{'active' if @all_mode}" %></li>
+</ul>
+
+<% unless @all_mode %>
+<%= simple_form_for @mutter, url: graph_mutters_path, :method => "get", html: { class: 'form-inline' } do |f| %>
+  <%= f.select "year", (2008..Date.today.year).map{|y| [y, y]}, {}, {class: "form-control"} %>
+  <%= f.select "month", (1..12).map{|m| [m, m]}, {:include_blank => true}, {class: "form-control"} %>
+  <%= f.submit "期間を選択して表示", :class => "btn btn-light" %>
+<% end -%>
+</div>
+<% end -%>
+
+<div id="chart">
+<% if @mutters_count.blank? %>
+  <p class='mt30 text-danger'>この期間のデータはありません。</p>
+<% end %>
+</div>
+</div>

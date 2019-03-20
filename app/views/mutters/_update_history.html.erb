@@ -1,0 +1,16 @@
+<% @updates.each do |up| -%>
+  <tr>
+    <td>
+      <strong class="left" style="color:gray"><%= up.user.dispname if up.user.present? %></strong>
+      <div class="right" style="color:gray"><%= time_shorter(up.updated_at) %></div>
+      <br>
+      <% ai = action_info(up) -%>
+      <% if ai.blank? -%>
+        ＜コンテンツが削除されました＞
+      <% else -%>
+        <span class='badge badge-dark'><%= ai[:content_name] %></span>　<%= ai[:link] %>
+        <br /><%= ai[:info] %>
+      <% end -%>
+    </td>
+  </tr>
+<% end -%>

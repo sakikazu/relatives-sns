@@ -1,0 +1,70 @@
+appendBlackBackground('background_black');
+var $background = $('#' + 'background_black');
+$background.on('click', function() {
+  $(this).remove();
+});
+
+<% if @celeb_mutters.size > 0 -%>
+  <% j = 0; toppoint = 0; -%>
+  fontsize = 40;
+  fontsize2 = 50;
+
+  // TODO: ここはデータをJS配列にして、それを回すようにしたいなぁ。生成されたソースが汚い
+  <% @celeb_mutters.each_with_index do |m, i| -%>
+    $background
+      .append('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= m.user.dispname(User::FULLNICK) %></span><br /><span class="moji"><%= sani_for_js(m.content) %></span></div>');
+      //## 画像がうまく表示できない(image_tag)
+      //sakikazu memo ここで「content」に改行（\r\n）が入っていたら、実際のJSで改行が入ってスクリプトエラーになった。これを事前に回避するの難しいな。。
+      //→どこの環境かわからんけど、(\n\n)が入ったことがあった。なので/[\r\n]+/で、スペース変換するようにした→「sani_for_js」
+
+    <%# j=0 if toppoint > 250 -%>
+    <% j = rand(4) -%>
+    <% toppoint = 20 + j * 120 -%>
+    <%# j+=1 -%>
+    $msg = $('#celebration_msg<%= i %>');
+    //文字長に、フォントサイズをかけたものを、widthにする
+    len_max = (len1 = $msg.find("span.moji").text().length) > (len2 = $msg.find("span.name").text().length) ? len1 : len2
+    len = fontsize2 * (len_max);
+    $msg
+      .css({
+        'position': 'fixed',
+        'z-index': '101',
+        'top':'<%= toppoint %>px',
+        'left':$(window).width()+'px',
+        'line-height': '70px',
+        'width': len+'px',
+      })
+      .delay(<%= i*3000 %>)
+      .animate({'left':'-'+len+'px', 'top':'<%= rand(500) %>'}, <%= 5000 + rand(10000) %>);
+  <% end -%>
+
+  $('.celebration_msg>.name').css({
+    'color': 'white',
+    'font-size': fontsize+'px',
+  });
+
+  $('.celebration_msg>.moji').css({
+    'color': 'yellow',
+    'font-size': fontsize2+'px',
+  });
+
+  //最後のメッセージのキューに、メッセージモードを終了させる処理を入れる
+  $msg.queue(function(){
+    $background.remove();
+  });
+
+<% else -%>
+  $background
+    .append('<div class="celebration_msg">まだお祝いなし。<br />本人でも祝えるよ＞＜</div>');
+  $('.celebration_msg')
+    .css({
+      'position': 'fixed',
+      'z-index': '101',
+      'width': '100%',
+      'margin-top': '50px',
+      'text-align':'center',
+      'line-height': '50px',
+      'font-size': '35px',
+      'color': 'white',
+    });
+<% end -%>

@@ -1,0 +1,10 @@
+<div class="col-sm-6">
+<%= link_to 'アルバム一覧', albums_path, class: "btn btn-light" %>
+
+<div class="page-header">
+  <h2>アルバムを作成する</h2>
+  <%= "<p>#{@page_desc}</p>" if @page_desc.present? %>
+</div>
+
+<%= render 'form' %>
+</div>

@@ -1,0 +1,4 @@
+$('#photo_comment_form #content').val('');
+$('#photo_comments').html(
+    '<%= escape_javascript(render partial: "shared/comments", locals: { model_name: 'Photo', comments: @photo.mutter_comments, photo: @photo } ) %>'
+);

@@ -1,0 +1,28 @@
+- if albums.present?
+  - albums.each_slice(Album::INDEX_COLUMNS) do |sliced_albums|
+    - sliced_albums = Album.fill_up_blank(sliced_albums, Album::INDEX_COLUMNS)
+    / NOTE: .col-sm-*と.card-deckの選択について。.col-sm-*は12カラムを分割するので、データを5つ並べることができないし、
+    / 6つだと.col-sm-2を使うことになり、widthが小さすぎた。
+    / .card-deckはデータ数に応じて等分してくれるが、wrapではないので、行ごとに.card-deckを置く必要があるのと、
+    / データ数が1行目:5、2行目:3とかになると、2行目のデータの幅が3等分されてしまうので、空データを置くなどの対処が必要となる。
+    .card-deck.cards-narrow
+      - sliced_albums.each do |album|
+        - if album.blank?
+          .card.card-dummy
+        - else
+          .card
+            .hidden_img_height
+              = link_to image_tag(album.thumb_path, class: 'card-img-top'), album_path(album)
+            .card-body
+              h5.card-title
+                span.badge.badge-danger
+                  = fa_icon 'th-large'
+                =< album.title
+                .ml-2.badge.badge-secondary = album.media_count
+              .card-text.text-muted
+                = "作成者：#{album.user.try(:dispname)}"
+                br
+                = "作成：#{time_shorter(album.created_at)}".html_safe
+                br
+                = "最新アップ：#{time_shorter(album.sort_at)}".html_safe
+

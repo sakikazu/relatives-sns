@@ -1,0 +1,38 @@
+- content_for :add_js do
+  javascript:
+    $(document).on('turbolinks:load', function() {
+      window.ajaxFileUploadMovie = new AjaxFileUpload('#{@movie_form_id}', 'movie[movie]');
+      var maxMovieFileSize = #{Settings.MAX_MOVIE_MEGABYTES};
+      var required = #{@movie.new_record? ? 'true' : 'false'};
+      ajaxFileUploadMovie.validate = function() {
+        if ($('#movie_title').val() == '') {
+          alert('タイトルを入力してください');
+          return false;
+        }
+        if (required && $('#movie_movie').val() == '') {
+          alert('動画を選択してください');
+          return false;
+        }
+      };
+      ajaxFileUploadMovie.setSizeValidate(maxMovieFileSize);
+      ajaxFileUploadMovie.listenSubmit();
+    });
+
+= simple_form_for(@movie, html: { id: @movie_form_id, multipart: true,
+  data: { upload_path: @movie.new_record? ? movies_path : movie_path(@movie),
+  completed_path: album_path(@movie.album.id, "album[user_id]" => current_user.id, "album[sort_flg]" => 1, "album[media_filter]" => 3) }}) do |f|
+  - if @movie.errors.any?
+    .alert.alert-danger
+      p 入力エラーがあります。下記のエラー内容を確認してください。
+  = f.input :title, label: "タイトル", input_html: {class: 'form-control'}
+  = f.input :description, label: "説明", input_html: {class: "form-control", rows: 6}
+  = f.input :movie, label: "動画", label_html: {class: "mgn-t20"}, input_html: {class: 'form-control'}
+  = f.error :movie_file_name, class: 'form-control important big'
+  = f.input :thumb, label: "サムネイル(未指定の場合は自動作成されます)", label_html: {class: "mgn-t20"}, input_html: {class: 'form-control'}
+  - # todo やっぱ面倒くさい。やめた！動画更新時に、サムネイルは更新されないけど、まあ、ね。面倒くさいのは、今非同期でサムネイル作成やっていて、作成するかどうかの判断をMovieモデルに保存して、その処理に渡す必要あるし、、まあサムネイル作成だけ非同期じゃなくすれば良いだけかもだけど、なんかファイルが存在するしないのタイミングがあったらと思って怖い
+  - #if @movie.id.present?
+  - #= f.input :is_update_thumb, as: "radio_buttons", collection: [['はい', '1'] ,['いいえ', '0']], label: "動画からサムネイルを再作成", label_html: {class: "mgn-t20"}
+  = f.input :movie_type, as: "radio_buttons", label: "編集された動画かどうか", label_html: {class: "mgn-t20"}, collection: [['はい', '1'] ,['いいえ', '0']], input_html: {class: 'form-control'}
+  = f.input :album_id, as: "hidden"
+  .form-actions
+    = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "アップロード中..."}

@@ -1,0 +1,46 @@
+.col-sm-7
+  .mb30
+    = link_to fa_icon('th-large', text: @movie.album.title), album_path(@movie.album_id), class: "btn btn-light" if @movie.album_id.present?
+    =< link_to "動画一覧", movies_path, class: "btn btn-light"
+    =< link_to '編集する', edit_movie_path(@movie), class: "btn btn-info" if editable(current_user, @movie.user)
+
+  .card.media-content
+    .card-header
+      = @movie.title
+      span.badge.badge-info.ml-3 = fa_icon 'comment', text: @movie.mutter_comments.size
+    .card-body
+      .text-sm.text-muted.text-right
+        = @movie.user&.dispname
+        span.ml-2 = "投稿：#{l @movie.created_at if @movie.created_at}"
+    .text-center
+      - if @movie.is_ready?
+        = videojs(@movie).html_safe
+      - else
+        .alert.alert-danger.m-3
+          p.important
+            | ただいま動画準備中（エンコード）です。
+            | しばらくしてから更新してみてください。
+    .card-body
+      .card-text
+        / .text-right.mb10
+          / TODO: 元つぶやきを表示するにはつぶやきから投稿されたかどうかを判断しなきゃだが？
+          / - if @movie.mutter.present?
+            / = link_to mutter_path(@movie.mutter, anchor: "mutter#{@movie.mutter.id}") do
+              / span.badge.badge-success 元つぶやき
+        .text-content
+          = sani_custom_br(@movie.description)
+    .card-footer
+      .text-center
+        span#update_nice
+          = nice_field(@movie, "movie", "#update_nice")
+
+  .row.justify-content-center
+    .col-sm-8
+      h3.mt30 = fa_icon 'comments', text: 'コメント'
+      #comments
+        = render partial: 'shared/comments', locals: { model_name: 'Movie', comments: @movie.mutter_comments, movie: @movie }
+      .mb20
+        = form_tag create_comment_movie_path(@movie), remote: true do |f|
+          = text_area_tag :content, nil, rows: 3, class: "form-control"
+          .mt10 = submit_tag "コメントを投稿", class: "btn btn-primary", :data => {:disable_with => "投稿しています"}
+

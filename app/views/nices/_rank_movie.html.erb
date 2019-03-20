@@ -1,0 +1,19 @@
+<% @movie_data.each_with_index do |data, idx| -%>
+  <% content = data.content -%>
+  <div class="nice_rank">
+    <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
+    <%= data[:nice_count] %> イイネ
+  </div>
+  <div class="mb10">
+    <%= nicing_user_names(data.content) %>
+  </div>
+  <% if content.present? -%>
+    動画：<%= link_to content.title, movie_path(content) %><br>
+    <%= image_tag(content.thumb(:thumb)) + '<br>' if content.thumb?  %>
+    <%= nice_author_and_created_at(content) %>
+  <% else -%>
+    削除されました.
+  <% end -%>
+  <hr>
+<% end -%>
+<%= paginate @movie_data, remote: true, params: {action: 'ranking', content_type: 4} %>

@@ -1,0 +1,17 @@
+<div class='alert alert-success mb30'>
+  <ul class='ml20 mb0'>
+    <% if controller.action_name == 'index' %>
+      <li>自分の家族のアカウント情報は、詳細ボタンで閲覧、編集ボタンで編集が行えます</li>
+    <% end %>
+    <li>メンバーの追加は家系図の「家族追加」ボタンから行えます</li>
+    <li>自分の情報は<%= link_to 'こちら', edit_me_members_path %>で変更が行えます</li>
+  </ul>
+</div>
+
+<ul class="nav nav-tabs mt10 mb40">
+  <li class="nav-item"><%= link_to '家系図', relation_members_path, class: "nav-link #{'active' if controller.action_name == 'relation'}" %></li>
+  <li class="nav-item"><%= link_to '一覧', members_path, class: "nav-link #{'active' if controller.action_name == 'index'}" %></li>
+  <li class="nav-item"><%= link_to '住所マップ', map_members_path, class: "nav-link #{'active' if controller.action_name == 'map'}" %></li>
+  <li class="nav-item"><%= link_to '詳細一覧', all_members_path, class: "nav-link #{'active' if controller.action_name == 'all'}" %></li>
+</ul>
+

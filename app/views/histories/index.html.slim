@@ -1,0 +1,32 @@
+/ NOTE: サーバーサイドでレンダリングしたものをbootstrapのmodalで表示する例
+/ colorboxであれば、hrefの先を取得してモーダルに表示までしてくれるが、別のモーダルを使う場合は、
+/ 今回のようにモーダル表示時に内容をAjaxで取ってくるか、ボタンクリック時にAjaxリクエストをして、
+/ そのレスポンスをJSテンプレートで処理し、そこでモーダル作って表示まで行う
+- content_for :add_js do
+  javascript:
+    $(document).on('turbolinks:load', function() {
+      $('#historyFormModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var path = button.data('path');
+        $.ajax({
+          type: 'GET',
+          url: path,
+          success: function(html) {
+            $('.modal-content').html(html);
+          }
+        });
+      });
+    });
+
+.col-sm-8
+  = button_tag "できごとを追加する", data: { toggle: 'modal', target: '#historyFormModal', path: new_history_path }, class: 'btn btn-info'
+  .page-header
+    h3 できごと一覧
+  #history_data
+    = render "data"
+
+/ モーダルフォームのラッパー
+.modal.fade[id="historyFormModal" tabindex="-1"]
+  .modal-dialog
+    .modal-content
+      / 配下にコンテンツが挿入される

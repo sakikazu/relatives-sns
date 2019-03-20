@@ -1,0 +1,17 @@
+<div class="col-sm-6">
+<div class="form-actions">
+<%= link_to "掲示板一覧", boards_path, class: "btn btn-light" %>
+<%= link_to 'この掲示板を見る', @board, class: "btn btn-light" %>
+</div>
+
+<div class="page-header">
+  <h3>編集する</h3>
+</div>
+
+<%= render :partial => 'form' %>
+
+<div class="mt50 text-center alert alert-danger">
+  <%= link_to '削除', @board, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @board.user) %>
+</div>
+
+</div>

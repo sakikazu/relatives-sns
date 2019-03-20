@@ -1,0 +1,200 @@
+/**********************************************
+ mutter and top page
+**********************************************/
+
+form#mutter_new_post {
+  .up-field {
+    height: 5em;
+
+    textarea {
+      font-size: 1.3em;
+      height: 100%;
+    }
+    input[type='submit'] {
+      height:100%;
+      width:100%;
+      font-size:1.4em;
+    }
+  }
+}
+
+.mutter_rows {
+  padding: 0px;
+  /* width: 620px; */
+  margin-left: 0px;
+
+  li{
+    list-style: none;
+    padding: 8px;
+    margin-top: 15px;
+    /* border-radius: 7px 7px 7px 7px; */
+    /* box-shadow: 1px 1px 3px #999999; */
+    background-color: white;
+    /* border: 1px outset gray; */
+    border: 2px solid lightgray;
+    border-radius: 8px;
+  }
+
+  li.even{
+    background-color: MistyRose;
+  }
+}
+
+.mutter_content {
+  position:relative;
+
+  .delete > p {
+    text-align: right;
+    margin-bottom: 0;
+  }
+
+  .mutter-media {
+    margin-top: 18px;
+  }
+}
+
+// PC版
+.mutter_content {
+  .icon {
+    margin-left: 6px;
+    position:absolute;
+    top: 5px;
+    left: 0px;
+
+    p {
+      margin: 4px 0px;
+    }
+  }
+
+  .content-area {
+    margin-left: 75px;
+
+    .content {
+      padding: 10px 4px;
+    }
+  }
+
+  .info-area {
+    padding-bottom: 3px;
+    border-bottom: 1px dotted gray;
+    margin-bottom: 5px;
+    height: 30px;
+
+    .info-left {
+      position:absolute;
+      top: 0px;
+      left: 80px;
+      .time {
+        margin-left: 15px;
+        color: DimGray;
+      }
+      .name a{
+        font-weight: bold;
+        /* color: blue; */
+      }
+    }
+    .info-right {
+      position:absolute;
+      top: 0px;
+      right: 0px;
+      .nice {
+      }
+    }
+  }
+}
+
+// スマホ版
+.mutter_content {
+  .info-area-smp {
+    border-bottom: 1px dotted gray;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+
+    .icon {
+      margin-left: 6px;
+      position:absolute;
+      top: 5px;
+      left: 0px;
+
+      p {
+        margin: 4px 0px;
+      }
+    }
+    .info-area-right {
+      margin-left: 70px
+    }
+  }
+  .content-area-smp {
+    padding: 5px;
+    .content {
+      padding: 4px;
+    }
+  }
+}
+
+ul.children {
+  // background: #DCEAF4;
+  /* width: 550px; */
+  /* margin-left: 80px; */
+  padding-left: 0;
+  margin: 15px;
+
+  li {
+    background-color: #DCEAF4;
+    border: 1px solid lightblue;
+    border-radius: 4px 4px 4px 4px;
+    margin-top: 0px;
+  }
+}
+
+#nichirei {
+  /* padding: 5px 0px 5px; */
+  text-align:center;
+  .main {
+    font-size:150%;
+    font-weight:bold;
+    color:red;
+  }
+}
+
+#kinenbi {
+  padding: 5px 0px 15px;
+  text-align:left;
+
+  table {
+    margin: auto;
+    tr {
+      height: 35px;
+    }
+    tr.exist-border td {
+      border-bottom:1px gray solid;
+    }
+
+    tr.anniversary {
+      height: 30px;
+      text-align: center;
+      td {
+        padding-bottom:15px;
+        border-bottom:1px gray solid;
+      }
+      input {
+        height: 33px;
+        width: 90px;
+      }
+    }
+  }
+
+  .honzitu {
+    font-size:150%;
+    margin: 5px;
+    font-weight:bold;
+    color: Orange;
+  }
+  .main {
+    font-size:130%;
+    margin: 5px;
+    font-weight:bold;
+    color:red;
+  }
+}
+

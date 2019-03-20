@@ -1,0 +1,6 @@
+- if movies.present?
+  - movies.each_slice(Album::INDEX_COLUMNS) do |sliced_movies|
+    - sliced_movies = Movie.fill_up_blank(sliced_movies, Album::INDEX_COLUMNS)
+    .card-deck.cards-narrow
+      = render partial: 'movies/boxed_movie', collection: sliced_movies, as: :movie
+

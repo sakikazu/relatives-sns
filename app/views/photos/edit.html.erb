@@ -1,0 +1,27 @@
+<div class="col-sm-6">
+
+<div class="form-actions">
+  <%= link_to 'アルバムに戻る', album_path(@photo.album), class: "btn btn-light" %>
+  <%= link_to 'この写真を見る', album_photo_path(@photo.album, @photo), class: "btn btn-light" %>
+</div>
+
+<div class="page-header">
+  <h3>写真情報を編集する</h3>
+</div>
+
+<div class="mgn-b20 text-center">
+<%= image_tag(@photo.image(:large), class: 'img-thumbnail') %>
+</div>
+
+<%= simple_form_for [@photo.album, @photo] do |f| %>
+	<%= f.input :title, label: "タイトル", input_html: {class: 'form-control'} %>
+  <%= f.input :description, label: "概要", input_html: {class: 'form-control', rows: 4} %>
+  <%= f.input :image, as: :file, label: "写真を変更する", input_html: {class: 'form-control'} %>
+  <%#= f.input :exif_at %>
+  <%#= f.input :last_comment_at %>
+
+  <div class="form-actions mt20">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
+<% end %>
+</div>

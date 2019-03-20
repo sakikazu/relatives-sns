@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>A団HP | <%= "#{@page_title || controller.controller_name} > #{controller.action_name}" %></title>
+    <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
+</head>
+<body>
+
+<%= "<p class='notice'>#{flash[:notice]}</p>".html_safe if flash[:notice].present? %>
+
+<%= yield  %>
+
+</body>
+</html>

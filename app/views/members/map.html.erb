@@ -1,0 +1,79 @@
+<% # TODO: JS的なリファクタリングをしたいところ %>
+<% content_for :add_js do %>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_API_KEY'] %>&callback=initMap" async defer></script>
+
+<script>
+function initMap() {
+  var gmap = new google.maps.Map(document.getElementById('gmap'), {
+    center: {lat: 34.985458, lng: 135.757755},
+    zoom: 6
+  });
+
+  var marker = [];
+  var infowindow = [];
+  var sidebar_html = "";
+  $.sidebar_click = function(idx){
+    google.maps.event.trigger(marker[idx], "click");
+  };
+
+  var udats = [
+  <% @user_exts.each_with_index do |user_x, idx| %>
+    {
+      "name": '<%= user_x.user&.dispname %>',
+      "lat": <%= user_x.lat %>,
+      "lng": <%= user_x.lng %>,
+      "address": '<%= user_x.address %>',
+      "image": '<%= image_tag(user_x.image(:thumb)) if user_x.image? %>'
+    },
+  <% end -%>
+  ];
+
+  // sakikazu memo [javascript] ↓のfunctionでスコープをなんちゃらしてるらしいけど、これがないと、マーカークリックしても「infowindow[i]が定義されてない」って出る。ブロックスコープ？
+  for(var i=0; i<udats.length; i++)(function(i){
+    // マーカー作成
+    marker[i] = new google.maps.Marker({
+      position: new google.maps.LatLng(udats[i].lat, udats[i].lng),
+      map: gmap,
+      title: udats[i].name,
+      content: udats[i].name
+    });
+    // 情報ウィンドウ作成
+    infowindow[i] = new google.maps.InfoWindow({
+      content: '<div style="font-size : 125%;">' + udats[i].name + '</div><div>[' + udats[i].address + ']</div>' + udats[i].image,
+      size: new google.maps.Size(150, 50)
+    });
+    google.maps.event.addListener(marker[i], 'click', function(){
+      for(var j=0; j<udats.length; j++){
+        infowindow[j].close();
+      }
+      infowindow[i].open(gmap,marker[i]);
+    });
+
+    // サイドバー情報
+    sidebar_html += "<div><a href='javascript:$.sidebar_click(" + i + ")'>" + udats[i].name + "</a></div>"
+  })(i);
+
+  // ジオコードが取得できなかったユーザー
+  <% @user_exts_err.each_with_index do |user_x, idx| -%>
+    <% if idx == 0 -%>
+      sidebar_html += "<br /><b style='background-color:yellow'>(登録されている住所から経度緯度が取得できませんでした)</b>"
+    <% end -%>
+    sidebar_html += "<div><%= user_x.user&.dispname %></div>"
+  <% end -%>
+
+  $('#gmap_sidebar').append(sidebar_html);
+}
+</script>
+
+<% end %>
+
+<div class='col-sm-10'>
+  <%= render 'menu' %>
+
+  <div id='gmap'></div>
+  <div id='gmap_sidebar'>
+    <b style="color:limeGreen">(県名が登録されている方のみ)</b><br />
+  </div>
+  <div style='clear:both'></div>
+</div>
+

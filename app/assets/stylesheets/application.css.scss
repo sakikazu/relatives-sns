@@ -1,0 +1,549 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require font-awesome
+ *= require_self
+ *= require_tree .
+ */
+
+// Custom bootstrap variables must be set or imported *before* bootstrap.
+@import "bootstrap";
+
+/**********************************************
+ from scaffold.css
+**********************************************/
+
+/* 現在エラーは、各フォームフィールドの横に出す形式にしている */
+
+/* .field_with_errors { */
+  /* padding: 2px; */
+  /* background-color: red; */
+  /* display: table; */
+/* } */
+
+/* #error_explanation { */
+  /* width: 450px; */
+  /* border: 2px solid red; */
+  /* padding: 7px; */
+  /* padding-bottom: 0; */
+  /* margin-bottom: 20px; */
+  /* background-color: #f0f0f0; */
+/* } */
+/* #error_explanation h2 { */
+  /* text-align: left; */
+  /* font-weight: bold; */
+  /* padding: 5px 5px 5px 15px; */
+  /* font-size: 12px; */
+  /* margin: -7px; */
+  /* margin-bottom: 0px; */
+  /* background-color: #c00; */
+  /* color: #fff; */
+/* } */
+/* #error_explanation ul li { */
+  /* font-size: 12px; */
+  /* list-style: square; */
+/* } */
+
+
+/**********************************************
+ page common
+**********************************************/
+
+#slider_photo {
+  position: relative;
+
+  #slider_update_info {
+    z-index: 100;
+    background-color: black;
+    opacity: 0.8;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    font-size: 2em;
+    padding: 20px;
+    text-align: center;
+    color: yellow;
+  }
+}
+
+/* slider-kit */
+.photos-slider {
+  width:100%;
+  height:130px;
+  background:black;
+
+  /* Navbar */
+  .sliderkit-nav {
+    left:0;bottom:0;width:100%;height:132px;padding:10px;
+
+    /* Navbar buttons */
+    .sliderkit-nav-btn{position:absolute;top:0;background:white;opacity:0.3;}
+    .sliderkit-nav-btn span{display:none;}
+    .sliderkit-nav-btn a{display:block;width:18px;height:130px;background:transparent url("/images/sliderkit/arrows-h.png") no-repeat center 0;}
+    .sliderkit-nav-prev{left:20px;}
+    .sliderkit-nav-next{right:30px;}
+    .sliderkit-nav-prev a{background-position:-89px center;}
+    .sliderkit-nav-next a{background-position:-108px center;}
+    .sliderkit-nav-prev a:hover,
+    .sliderkit-nav-prev a:focus{background-position:-126px center;}
+    .sliderkit-nav-next a:hover,
+    .sliderkit-nav-next a:focus{background-position:-145px center;}
+
+    /* Buttons > Disable */
+    .sliderkit-btn-disable{opacity:0.3/*can be set to any value until 1*/;cursor:default;}
+  }
+  .sliderkit-nav-clip ul li{float:left;margin:0 10px 0 0;}
+  .sliderkit-nav-clip ul li a{display:block;width:152px;height:115px;overflow:hidden;margin:0;opacity:1;}
+  .sliderkit-nav-clip ul li a:hover{opacity:0.7;}
+  .sliderkit-nav-clip ul li a img {
+    border: 1px solid #fff;
+  }
+}
+
+
+/*footer*/
+footer {
+  margin-top: 70px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 6px 0px;
+  width: 100%;
+  filter: alpha(opacity=80);
+  -moz-opacity:0.8;
+  opacity:0.8;
+}
+footer > p {
+  margin: 1px 0;
+  font-size: 90%;
+}
+
+.view_updated_contents {
+  padding: 7px 8px;
+
+  .message {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+  .buttons {
+    text-align: right;
+    a {
+      color: white;
+      padding-right: 5px
+    }
+  }
+}
+
+/**********************************************
+ error page
+**********************************************/
+#error {
+  .alert {
+    margin: 50px 0 30px;
+    padding: 0 30px 45px;
+  }
+}
+
+/**********************************************
+ other
+**********************************************/
+#about_contents {
+  padding: 15px;
+  background-color: black;
+  opacity: 0.8;
+  color: white;
+  border-radius: 15px;
+
+  ul {
+    padding-left: 2em;
+  }
+}
+
+/* 地図(members#map) */
+#gmap {
+  width: 800px;
+  height: 550px;
+  float: left;
+}
+#gmap_sidebar {
+  margin-left: 30px;
+  width: 200px;
+  float: left;
+}
+
+
+/*------------------------
+ * nices
+ *-----------------------*/
+/* #nice_show { */
+  /* width: 650px; */
+  /* margin: auto; */
+/* } */
+/* #nice_show .nice_content { */
+  /* padding: 4px 4px 0px; */
+/* } */
+/* #nice_show .nice_content .mutter_rows { */
+  /* width:100%; */
+  /* margin-left:10px; */
+/* } */
+/* #nice_show .nice_content .mutter_rows .content { */
+  /* background:#E7E7DA; */
+  /* padding:5px; */
+  /* line-height:20px; */
+/* } */
+/* #nice_show_left { */
+  /* width: 650px; */
+  /* float: left; */
+/* } */
+.nice_rank {
+  font-weight:bold;
+  font-size: 120%;
+  color:red;
+  margin:25px 0px 5px;
+}
+
+
+/**********************************************
+ base
+**********************************************/
+
+/* 今後は使わない */
+.mt-15 { margin-top: 15px; }
+.mt-30 { margin-top: 30px; }
+.mt-50 { margin-top: 50px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-30 { margin-bottom: 30px; }
+.mb-50 { margin-bottom: 50px; }
+.mgn-t20 { margin-top: 20px; }
+.mgn-t40 { margin-top: 40px; }
+.mgn-b20 { margin-bottom: 20px; }
+.mgn-b40 { margin-bottom: 40px; }
+
+
+/* 以後はこちらを使う */
+.mt0 { margin-top: 0px !important; }
+.mb0 { margin-bottom: 0px !important; }
+.mr0 { margin-right: 0px !important; }
+.ml0 { margin-left: 0px !important; }
+
+.mt5 { margin-top: 5px !important; }
+.mb5 { margin-bottom: 5px !important; }
+.mr5 { margin-right: 5px !important; }
+.ml5 { margin-left: 5px !important; }
+
+.mt10 { margin-top: 10px !important; }
+.mb10 { margin-bottom: 10px !important; }
+.mr10 { margin-right: 10px !important; }
+.ml10 { margin-left: 10px !important; }
+.mt15 { margin-top: 15px !important; }
+.mb15 { margin-bottom: 15px !important; }
+.mt20 { margin-top: 20px !important; }
+.mb20 { margin-bottom: 20px !important; }
+.mr20 { margin-right: 20px !important; }
+.ml20 { margin-left: 20px !important; }
+.mt25 { margin-top: 25px !important; }
+.mb25 { margin-bottom: 25px !important; }
+.mr25 { margin-right: 25px !important; }
+.ml25 { margin-left: 25px !important; }
+.mt30 { margin-top: 30px !important; }
+.mb30 { margin-bottom: 30px !important; }
+.mt35 { margin-top: 35px !important; }
+.mb35 { margin-bottom: 35px !important; }
+.mt40 { margin-top: 40px !important; }
+.mb40 { margin-bottom: 40px !important; }
+.mt45 { margin-top: 45px !important; }
+.mb45 { margin-bottom: 45px !important; }
+.mt50 { margin-top: 50px !important; }
+.mb50 { margin-bottom: 50px !important; }
+.mt55 { margin-top: 55px !important; }
+.mb55 { margin-bottom: 55px !important; }
+.mt60 { margin-top: 60px !important; }
+.mb60 { margin-bottom: 60px !important; }
+
+.important {
+  font-weight: bold;
+  color: red;
+}
+.big, .text-big {
+  font-size: 120%;
+}
+.text-small, .text-sm {
+  font-size: 85%;
+}
+.block {
+  display: block;
+}
+.right {
+  float: right;
+}
+.left {
+  float: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-underline {
+  text-decoration: underline !important;
+}
+ul {
+  padding-left: 0;
+}
+
+table.th-vertical-top th {
+  vertical-align: top;
+}
+
+.desc {
+  color: #999;
+}
+.well .desc {
+  color: #6C6767;
+}
+
+/* tableでURLなど一単語のものが改行されずレイアウトが崩れてしまう問題の対処 */
+td {
+  word-break: break-all;
+}
+
+.page-header {
+  padding-bottom: 0px;
+  margin: 25px 0 25px;
+  border-bottom: 1px solid #eeeeee;
+}
+.page-header h3, .page-header h2 {
+  // color: #003F8E;
+}
+.page-header.ver2 h3, .page-header.ver2 h2 {
+  text-shadow: 1px 1px 0px white, 2px 2px 1px #B0D3FF;
+}
+.page-header small {
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+abbr {
+  font-weight: bold;
+  color: red;
+  font-size: 25px;
+}
+.require_check {
+  font-size: 20px;
+  color: red;
+  font-weight: bold;
+}
+h3 {
+  font-size: 22px;
+  line-height: 25px;
+}
+a > i[class^="fa-"], a > i[class*=" fa-"] {
+  color: #3A3838;
+}
+
+/* form error */
+.field_with_errors input {
+  border: 2px solid red;
+}
+.field_with_errors .error {
+  color: red;
+  font-weight: bold;
+  margin-left: 10px;
+}
+/* hidden要素に対するエラーメッセージは非表示にする */
+.input.hidden.field_with_errors {
+  span.error {
+    display: none;
+  }
+}
+
+.form-date-select-wrapper {
+  label {
+    display: block;
+  }
+  .form-control {
+    display: inline-block !important;
+    width: auto !important;
+  }
+}
+
+a.colorbox:hover, a.colorbox_fix_size:hover {
+  opacity: 0.8;
+}
+a.colorbox img, a.colorbox_fix_size img{
+  border: 2px solid tomato;
+}
+a.colorbox:hover img, a.colorbox_fix_size img {
+  border: 3px solid tomato;
+}
+
+// TODO: 今後廃止
+.once_content{
+  background-color: white;
+  clear: both;
+  border: 1px solid #CCCCCC;
+}
+.once_content .title{
+  background-color: #7D3E62;
+  color: white;
+  /* background-color: #E1E1E1; */
+  padding: 5px;
+  font-weight: bold;
+  font-size: 115%;
+  margin-bottom: 8px;
+}
+.once_content .title a, .once_content .title a:hover {
+  color: white;
+}
+.once_content .for_index {
+  font-size: 105%;
+  background-color: #DFDFDF;
+  color: black;
+}
+.once_content .for_index a {
+  color: blueviolet;
+ }
+.once_content .info{
+  text-align: right;
+  margin-right: 15px;
+  color: gray;
+}
+.once_content .description{
+  padding: 12px 20px;
+}
+.once_content .description .text{
+  margin-top: 10px;
+  padding: 4px;
+}
+.once_content .nice{
+  background:whiteSmoke;
+  text-align:center;
+  padding:3px;
+  font-size:120%;
+}
+.once_content p.text{
+  padding: 15px;
+}
+
+.once_comment{
+  background-color: white;
+  clear: both;
+  margin: 5px 10px 15px;
+  width: 95%;
+  border: 1px solid #CCCCCC;
+}
+.once_comment .info{
+  border-top: 1px solid black;
+  background-color: #DFDFDF;
+  color: black;
+  /* background-color: #E1E1E1; */
+  padding: 4px;
+  font-size: 100%;
+  margin-bottom: 8px;
+  height: 18px;
+}
+.once_comment .info .name{
+  float: left;
+  font-weight: bold;
+}
+.once_comment .info .time{
+  float: right;
+  width: 180px;
+}
+.once_comment .content{
+  clear: both;
+  padding: 12px 20px;
+}
+
+
+.short-height-open {
+  font-size: 1rem;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/**********************************************
+ album
+**********************************************/
+.hidden_img_height {
+  position: relative;
+
+  .movie-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    // opacity: 0.8;
+  }
+  .movie-play {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 2.5em;
+  }
+}
+
+/* history */
+#history_data td.comment{
+  background-color: #DCEAF4;
+}
+
+/**********************************************
+見出し h1, h2, h3, h4
+**********************************************/
+
+h1.title {
+  margin: 20px 0px;
+}
+
+h2.normal {
+  border-bottom: 4px solid #003F8E;
+  margin-top: 40px;
+
+  font-size: 25px;
+  color: #003F8E;
+  text-shadow: 1px 1px 0px white, 2px 2px 1px #B0D3FF;
+}
+
+/* 真面目系 */
+h2.normal2 {
+  margin-top: 40px;
+  font-size: 20px;
+  background: #F8F8F8;
+  border-left: 11px double #CCC;
+  padding: 0px 10px;
+}
+
+h2.normal3 {
+  color: #19417F;
+  border-bottom: 1px solid #19417F;
+  margin-top: 40px;
+  font-size: 20px;
+  border-left: 5px solid #19417F;
+  padding: 0px 10px;
+}
+
+/* AdanHPには合わない。つまりTwitterBootstrapには合わない */
+.headding04 {
+  margin:0 0 30px 0;
+  padding:12px 10px;
+  background: #1D8ADE;
+  color:#FFF;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  text-shadow:1px 1px 2px #333;
+  box-shadow:inset -1px -1px 2px rgba(0,0,0, 0.6),inset 1px 1px 2px rgba(255,255,255,0.8);
+}
+

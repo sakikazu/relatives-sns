@@ -1,0 +1,29 @@
+- comments.each do |comment|
+  .well.well-small.pb-0
+    .d-flex.justify-content-between.text-secondary
+      p = comment.user&.dispname
+      p.text-sm = l comment.created_at
+    - if comment.respond_to?(:attach) && comment.attach?
+      .image.mb20
+        = link_to image_tag(comment.attach(:thumb)), comment.attach(:large), { class: colorbox_class }
+    p
+      = sani_custom_br(comment.content)
+    - if editable(current_user, comment.user)
+      .delete-link.text-right
+        - remote = false
+        - case model_name
+        - when 'Board'
+          - delete_path = destroy_comment_board_path(:id => comment.id)
+        - when 'Blog'
+          - delete_path = destroy_comment_blog_path(comment)
+          - remote = true
+        - when 'Album'
+          - delete_path = destroy_comment_album_path(comment)
+          - remote = true
+        - when 'Movie'
+          - delete_path = destroy_comment_movie_path(movie.id, mutter_id: comment.id)
+          - remote = true
+        - when 'Photo'
+          - delete_path = destroy_comment_album_photo_path(photo.album.id, photo.id, mutter_id: comment.id)
+          - remote = true
+        = link_to "削除する", delete_path, method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, remote: remote

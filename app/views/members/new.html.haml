@@ -1,0 +1,32 @@
+.col-sm-6
+  .mb20
+    = link_to "戻る", relation_members_path, class: "btn btn-light"
+
+  .page-header
+    %h3 ＜#{@user.parent.dispname(User::FULLNAME)}＞の家族追加
+
+  .well
+    = simple_form_for @user, url: members_path, html: {multipart: true} do |f|
+      - if @user.errors.any?
+        %p.alert.alert-danger 入力エラーがあります。下記のエラー内容を確認してください。
+
+      = f.input :parent_id, label: "家族", collection: @users.map{|u| ["#{u.dispname(User::FULLNAME)}の家族", u.id]}, input_html: {class: 'form-control'}
+      = f.input :familyname, label: "姓", input_html: {class: 'form-control'}
+      = f.input :givenname, label: "名", input_html: {class: 'form-control'}
+      = f.simple_fields_for :user_ext do |ff|
+        = ff.input :nickname, label: "ニックネーム", input_html: {class: 'form-control'}
+        = image_tag @user.user_ext.image(:thumb) if @user.user_ext.image?
+        = ff.input :image, label: "プロフィール画像", as: :file, wrapper_html: {class: "mt20"}, input_html: {class: 'form-control'}
+        = ff.input :sex, label: "性別", collection: UserExt::SEX_LIST, include_blank: true, input_html: {class: 'form-control'}
+        = ff.input :blood, label: "血液型", collection: UserExt::BLOOD_LIST, include_blank: true, input_html: {class: 'form-control'}
+        = ff.input :addr1, label: "住所(都道府県)", input_html: {class: 'form-control'}
+        = ff.input :addr2, label: "住所(市区町村)", input_html: {class: 'form-control'}
+        -# = ff.input :addr3, label: "住所(地区、番地)", input_html: {class: 'form-control'}
+        -# = ff.input :addr4, label: "住所(アパート名など)", input_html: {class: 'form-control'}
+        = ff.input :addr_from, label: "出身地", input_html: {class: 'form-control'}
+        = ff.input :birth_day, label: "誕生日", as: :date, start_year: 1910, end_year: Date.today.year, include_blank: true, input_html: {class: 'form-control'}, wrapper_html: {class: 'form-date-select-wrapper'}
+        = ff.input :dead_day, label: "亡くなった日", as: :date, start_year: 1980, end_year: Date.today.year, include_blank: true, input_html: {class: 'form-control'}, wrapper_html: {class: 'form-date-select-wrapper'}
+
+      .form-actions.mt20
+        = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "処理中.."}
+

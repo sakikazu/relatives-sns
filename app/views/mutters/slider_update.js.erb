@@ -1,0 +1,13 @@
+$('#slider_photo').html(
+  '<%= escape_javascript(render "slider") %>'
+);
+
+//再度jQueryのプラグインを実行する
+colorbox_fix_size();
+slide_effect();
+
+$div = $('<div id="slider_update_info">変更しました</div>');
+$('#slider_photo').append($div);
+$("#slider_update_info")
+  .show()
+  .fadeOut(5000);

@@ -1,0 +1,10 @@
+$('#<%= @content_name %>_area').html(
+    '<%= escape_javascript(render :partial => "rank_#{@content_name}") %>'
+);
+// エリアのトップ位置に移動
+location.href = '#<%= @content_name %>_area';
+
+// 多分、DOM構築を待つようにしたほうがいいかと思って$(functionで囲んだ
+$(function(){
+  $(".colorbox").colorbox();
+});

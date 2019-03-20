@@ -1,0 +1,4 @@
+$('#comment_content').val('');
+$('#comments').html(
+  '<%= escape_javascript(render partial: 'shared/comments', locals: { model_name: 'Blog', comments: @blog.comments }) %>'
+);

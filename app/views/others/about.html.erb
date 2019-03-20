@@ -1,0 +1,96 @@
+<script>
+  jQuery(document).ready(function(){
+
+    <%
+      # bgStretcher用の画像パスの、JSの配列用文字列を作る
+      images = []
+      Dir.glob("public/images/other/bgstretcher/*").each{|fn|
+        if fn =~ /\.jpg$/
+          images << fn
+        end
+      }
+      images = images.sort_by{rand}  # 配列の中身をランダムにする
+      list = ""
+      images.each do|i|
+        list += "\'#{i.sub("public", "")}\', "
+      end
+    %>
+
+    // [todo] 前後へのボタンがまだ動いてない
+    $('body').bgStretcher({
+      images: [<%= list.html_safe %>],
+      slideShowSpeed: 'slow',
+      nextSlideDelay: 8000,
+      buttonPrev: '#prev-btn',
+      buttonNext: '#next-btn',
+      imageWidth: 1600,
+      imageHeight: 1064
+    });
+
+  }); // jQuery(document).ready
+</script>
+
+  <div class="col-sm-5 offset-sm-6" id="about_contents">
+      <a href="javascript:;" id="prev-btn" class="btn btn-dark"> << </a>
+      <a href="javascript:;" id="next-btn" class="btn btn-dark"> >> </a>
+
+
+    <div class="page-header">
+      <h3 style="color:white">サイトを使ってもらう上で伝えたいこと</h3>
+    </div>
+    <p>
+    あなたがアクション(日記、コメントなど)すれば<br />
+    他の人が楽しめてアクションしたくなります。<br />
+    そのアクションによって、またあなたも楽しめるでしょう。<br />
+    そういうサイクルができたら最高です。
+    </p>
+
+    <div class="page-header"><h3 style="color:white">以前のサイト</h3></div>
+    <h3 class="normal"><%= link_to "Version1", "http://a-dan.com:2000/a-dan_v1/", {target: '_blank'} %></h3>
+    <ul>
+      <li>ウェブマスターのみが変更できる完全Web1.0サイト</li>
+      <li>開発期間は(多分)2006年7月の週末とか。その後ちょこちょこ修正など。公開は2006年8月</li>
+      <li>サーバはFC2の無料プラン</li>
+      <li>サーバサイド言語はなく、html、CSS、JavaScriptはほぼホームページビルダーで作成</li>
+      <li>掲示板システムはレンタル</li>
+    </ul>
+
+    <h3 class="normal"><%= link_to "Version2", "http://a-dan.com:2000/a-dan_v2/", {target: '_blank'} %></h3>
+    <ul>
+      <li>＜ ログイン: testuser/0000 ＞</li>
+      <li>認証システムを導入し、ユーザ管理、ユーザによる更新が可能なWeb2.0サイト</li>
+      <li>開発期間は(多分)2008年1月から4月の無職期間。その後ちょこちょこバージョンアップ。公開は2008年4月</li>
+      <li>サーバはXREAの月300円のプラン、webサーバはApache</li>
+      <li>サーバサイド言語はPHP。PEARやSmartyなどを使用</li>
+      <li>(和孝スキル)html、CSS、PHPがまともに使えるようになる。JavaScriptはちょっとだけ</li>
+      <li>主要機能：チャット、動画、掲示板、日記、アルバム、年表、記念日、ユーザデータ(地図なども)</li>
+      <li>掲示板、チャット、アルバムは無料のシステムを採用</li>
+      <li>まだ手作業での更新や使いにくい機能があった</li>
+    </ul>
+
+    <h3 class="normal"><%= link_to "Version3", "http://182.163.58.103:3005/", {target: '_blank'} %></h3>
+    <ul>
+      <li>＜ ログイン: testuser/0000 ＞</li>
+      <li>認証システム、ユーザによる更新が可能なWeb2.0サイト。携帯版あり</li>
+      <li>開発期間は2010年7月下旬から8月中旬の無職期間。その後ちょこちょこバージョンアップ、旧データ復元。公開は2010年8月</li>
+      <li>サーバはServersman@VPSの月1000円のプラン</li>
+      <li>webサーバはApache、アプリサーバはPassenger</li>
+      <li>サーバサイド言語はフレームワークのRuby on Rails、クライアントサイドではjQueryプラグインを多用</li>
+      <li>バージョン管理システムgitを導入</li>
+      <li>主要機能：つぶやき、動画、掲示板、日記、アルバム、年表、記念日、コンテンツ評価、ユーザデータ(地図なども)</li>
+      <li>主要機能はすべて自作</li>
+    </ul>
+
+    <h3 class="normal"><%= link_to "Version4", "http://a-dan.com" %></h3>
+    <ul>
+      <!-- <li>＜ ログイン: testuser/0000 ＞</li> -->
+      <li>開発の経緯：機能、デザインをスマホに対応するため／就職活動に使えるサイトを作るため(笑)</li>
+      <li>開発期間は2012年9月の週末が主。公開は2012年9月21日</li>
+      <li>内容は、Railsのバージョンアップ、ミドルウェアの入れ替え、他サービスでの機能をマージ</li>
+      <li>（さらに）TwitterBootstrapを使用したデザイン、その他、各機能の洗練</li>
+      <li>webサーバはNginx、アプリサーバはUnicorn</li>
+      <li>今後：TDD、リファクタリング、高速化、Github公開</li>
+    </ul>
+
+  </div>
+

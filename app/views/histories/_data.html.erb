@@ -1,0 +1,47 @@
+<table id="tablesorter" class="tablesorter" border="1" cellspacing="0" cellpadding="3" style="word-break:break-all;">
+  <thead>
+  <tr>
+    <th class="w-15">日付</th>
+    <th class="w-40">内容</th>
+    <th class="w-10">情報源</th>
+    <th class="w-10">投稿者</th>
+    <th class="w-10">投稿日時</th>
+    <th class="w-10"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+<% @histories.each_with_index do |history, i| %>
+  <tr <%= "class='odd'"if i%2==1 %>>
+    <td><%= history.hist_date %></td>
+    <td><%= truncate_link(history.content, 100) %></td>
+    <td><%= history.src_user_name %></td>
+    <td><%= history.user.dispname %></td>
+    <td><%= time_shorter(history.created_at) %></td>
+    <td>
+      <%= link_to fa_icon('comment', class: 'fa-lg text-primary'), 'javascript:void(0)', data: { toggle: 'modal', target: '#historyFormModal', path: new_comment_histories_path(history_id: history.id) } %>
+      <% if editable(current_user, history.user) -%>
+        <%= link_to fa_icon('pencil', class: 'fa-lg text-primary ml-1'), 'javascript:void(0)', data: { toggle: 'modal', target: '#historyFormModal', path: edit_history_path(history) } %>
+        <%= link_to fa_icon('trash', class: 'fa-lg text-danger ml-1'), history, data: {confirm: '本当に削除してもよろしいですか？'}, :method => :delete %>
+      <% end -%>
+    </td>
+  </tr>
+  <%# TODO: コメントの表示方法をうまいことやりたいな。本文とつながるように %>
+  <% history.comments.each do |co| -%>
+    <tr>
+      <td class="comment text-right">コメント</td>
+      <td><%= sani_custom_br(co.content) %></td>
+      <td></td>
+      <td><%= co.user.dispname %></td>
+      <td><%= time_shorter(co.created_at) %></td>
+      <td>
+        <% if editable(current_user, co.user) -%>
+          <%= link_to fa_icon('trash', class: 'fa-lg text-danger'), {:action => :destroy_comment, :id => co.id}, :method => :delete, data: {confirm: '本当に削除してもよろしいですか？'} %>
+        <% end -%>
+      </td>
+    </tr>
+  <% end %>
+<% end %>
+  </tbody>
+</table>
+

@@ -1,0 +1,24 @@
+<div class="col-sm-6">
+
+<%= link_to "動画一覧へ", movies_path, class: "btn btn-light" %>
+<%= link_to "この動画", movie_path(@movie), class: "btn btn-light" %>
+
+<div class="page-header">
+  <h3>編集</h3>
+</div>
+
+<% if @movie.thumb? %>
+<div class="thumbnail">
+<%= image_tag @movie.thumb(:thumb) %>
+</div>
+<% end %>
+
+<%= render :partial => 'form' %>
+
+<% if editable(current_user, @movie.user) %>
+  <div class="mt50 text-center alert alert-danger">
+    <%= link_to "削除", movie_path(@movie), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger" %>
+  </div>
+<% end %>
+
+</div>

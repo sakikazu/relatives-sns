@@ -1,0 +1,15 @@
+<div class="col-sm-5">
+
+<%= link_to '自分の日記', blogs_path, class: "btn btn-light" %>
+<%= link_to 'この日記を見る', @blog, class: "btn btn-light" %>
+<div class="page-header">
+  <h3>日記を編集する<%= "<small>#{@page_desc}</small>" if @page_desc.present? %></h3>
+</div>
+
+<%= render 'form' %>
+
+  <div class="mt50 text-center alert alert-danger">
+    <%= link_to '削除', @blog, method: :delete, class: "btn btn-danger", data: {confirm: '本当に削除してもよろしいですか？'} if editable(current_user, @blog.user) %>
+  </div>
+
+</div>

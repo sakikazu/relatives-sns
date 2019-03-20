@@ -1,0 +1,85 @@
+#nice_show.col-sm-7
+  = render :partial => 'nices_menu'
+  .alert.alert-info.mt30.mb30
+    h3 ＜#{@user.dispname}＞がイイネされたもの
+  #mokuji[data-mokuji-summary="false"]
+  h2.normal 人気のつぶやき
+  .well.well-small
+    .h2normal_content
+      - @mutter_data.each_with_index do |data, idx|
+        - obj = Mutter.find_by_id(data[:id])
+        .nice_rank
+          | #{idx + 1}位：#{data[:count]} イイネ
+        .mb10 = nicing_user_names(obj)
+        - if obj.present?
+          ul.mutter_rows
+            = render :partial => 'mutters/mutter_with_comments', :locals => {:mutter_with_comments => obj}
+        - else
+          |  削除されました. 
+        hr
+
+  h2.normal 人気の写真
+  .well.well-small
+    .h2normal_content
+      - @photo_data.each_with_index do |data, idx|
+        - obj = Photo.find_by_id(data[:id])
+        .nice_rank
+          | #{idx + 1}位：#{data[:count]} イイネ
+        .mb10 = nicing_user_names(obj)
+        - if obj.present?
+          = link_to(image_tag(obj.image(:thumb)), slideshow_album_photo_path(obj.album, obj), {:class => colorbox_fix_size}) if obj.image?
+          br
+          |  写真タイトル：
+          = obj.title
+          |  / アルバム：
+          = link_to obj.album.title, obj.album
+        - else
+          |  削除されました. 
+        hr
+
+  h2.normal 人気の日記
+  .well.well-small
+    .h2normal_content
+      - @blog_data.each_with_index do |data, idx|
+        - obj = Blog.find_by_id(data[:id])
+        .nice_rank
+          | #{idx + 1}位：#{data[:count]} イイネ
+        .mb10 = nicing_user_names(obj)
+        - if obj.present?
+          - if obj.blog_images.size > 0
+            - b_image = obj.blog_images.first
+            = image_tag(b_image.image(:thumb)) if b_image.image?
+            br
+          |  日記：
+          = link_to obj.title, blog_path(obj)
+          br
+          = nice_author_and_created_at(obj)
+        - else
+          |  削除されました. 
+        hr
+
+  h2.normal 人気の動画
+  .well.well-small
+    .h2normal_content
+      - @movie_data.each_with_index do |data, idx|
+        - obj = Movie.find_by_id(data[:id])
+        .nice_rank
+          | #{idx + 1}位：#{data[:count]} イイネ
+        .mb10 = nicing_user_names(obj)
+        - if obj.present?
+          |  動画：
+          = link_to obj.title, movie_path(obj)
+          br
+          = image_tag(obj.thumb(:thumb)) + '<br>' if obj.thumb?
+          = nice_author_and_created_at(obj)
+        - else
+          |  削除されました. 
+        hr
+
+.right_side_bar.col-sm-2
+  .page-header
+    h3 イイネされたことがある人
+  ul.pl-3
+    - @users.each do |user|
+      li
+        = link_to user.dispname(User::FULLNAME), wasnice_nices_path(:user_id => user.id)

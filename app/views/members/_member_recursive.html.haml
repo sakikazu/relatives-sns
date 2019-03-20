@@ -1,0 +1,30 @@
+%li.list{id: "id#{user[:id]}", class: (user[:is_dead] ? "dead" : "alive")}
+  .img
+    = image_tag user[:image_path], class: 'img-thumbnail'
+  .name
+    = user[:name]
+  .info.text-muted
+    %p.underline= "#{user[:sex_h]}"
+    %p.underline= user[:age_h]
+    %p= "属#{user[:has_members_num]}人"
+
+%div{style: "display:none"}
+  %ul.members.child{id: "id#{user[:id]}-family"}
+    %li.zoom{id: "id#{user[:id]}", class: (user[:is_dead] ? "dead" : "alive")}
+      .img
+        = image_tag user[:image_path], class: 'img-thumbnail'
+      .name
+        = user[:name]
+      .info.text-muted
+        %p.underline= "#{user[:birth_dead_h]} #{user[:blood_h]}"
+        %p.underline= user[:address]
+        - if current_user.editable(user)
+          %p= link_to "編集", edit_member_path(user[:id])
+
+    - if current_user.editable(user)
+      %li.add_user
+        = link_to "家族追加", new_member_path(parent_user_id: user[:id]), class: "btn btn-warning btn-block"
+
+    - if user[:family].present?
+      - user[:family].each do |user_child|
+        = render 'member_recursive', user: user_child

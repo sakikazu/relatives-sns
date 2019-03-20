@@ -1,0 +1,18 @@
+<div class="col-sm-6">
+<%= link_to 'アルバム一覧', albums_path, class: "btn btn-light" %>
+<%= link_to 'このアルバムを見る', @album, class: "btn btn-light" %>
+
+<div class="page-header">
+  <h2><%= @page_title %></h2>
+  <%= "<p>#{@page_desc}</p>" if @page_desc.present? %>
+</div>
+
+<%= render 'form' %>
+
+<% if editable(current_user, @album.user) %>
+  <div class="mt50 text-center alert alert-danger">
+    <%= link_to "削除", album_path(@album), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger" %>
+  </div>
+<% end %>
+
+</div>

@@ -1,0 +1,40 @@
+.col-sm-10
+  .mb-50
+    => link_to 'アルバム一覧', albums_path, class: "btn btn-light"
+    = link_to '編集する', edit_album_path(@album), class: "btn btn-info"
+
+  = render partial: 'show_header'
+
+  - #sort_list = [["アップロード順", 1], ["撮影日時順", 2], ["コメント順", 3], ["イイネされた順", 4]]
+  - sort_list = {"1" => "アップロード順", "2" => "撮影日時順", "3" => "コメント順", "4" => "イイネされた順"}
+
+  .alert.alert-success.mb30
+    / ソート機能
+    = form_for @album4sort, url: album_path, method: :get, class: 'mb20' do |f|
+      .form-row
+        .col-auto
+          = f.select :media_filter, [["写真と動画", 1], ["写真のみ", 2], ["動画のみ", 3]], {}, {class: "form-control"}
+        .col-auto
+          = f.select :user_id, @uploader_list.map{|u| [u[1], u[0]]}, {include_blank: "＜アップロード者＞"}, {class: "form-control"}
+        .col-auto
+          = f.select :sort_flg, sort_list.map{|s| [s[1], s[0]]}, {include_blank: "＜並び替え順＞"}, {class: "form-control"}
+        .col-auto
+          = f.submit "検索", class: "btn btn-success"
+        .col-auto
+          = link_to "リセット", album_path(@album), class: "btn btn-light"
+
+    .text-muted.mt10
+      = "#{@album4sort.user.dispname}がアップした" if @album4sort.user.present?
+      = "#{@media_name}が"
+      = sort_list[@album4sort.sort_flg.to_s]
+      | で表示されています
+
+  .autopagerize_page_element
+    = paginate @medias, :window => 2, :outer_window => 2
+    br
+    = render 'movies/index', movies: @medias.select{|n| n.class == Movie}
+    = render 'photos/index', album: @album, photos: @medias.select{|n| n.class == Photo}
+    = paginate @medias, :window => 2, :outer_window => 2
+  #autopager_loading.btn.btn-warning.btn-block[style="display:none"]
+    | 次のページを読込中です
+

@@ -1,0 +1,53 @@
+<div class="col-sm-10">
+
+<%= render 'menu' %>
+
+<b>※最近更新した順に並んでいます※</b><br />
+
+<ul>
+<% @users.each do |user| -%>
+  <li><%= link_to "#{user.dispname(User::FULLNICK)} (更新日：#{time_shorter(user.user_ext.updated_at)})".html_safe, "##{user.username}" %></li>
+<% end -%>
+</ul>
+
+<% @users.each do |user| -%>
+<div id=<%= user.username %>>
+<div class="page-header"><h3><%= user.dispname(User::FULLNICK) %></h3></div>
+<%= link_to((image_tag user.user_ext.image(:thumb)), user.user_ext.image.url(:large), {:class => colorbox_class}) if  user.user_ext.image? %>
+
+<table class="table table-striped table-bordered table-hover table-condensed">
+  <tr><th width="200">性別</th><td><%= user.user_ext.sex_name %></td></tr>
+  <tr><th>血液型</th><td><%= user.user_ext.blood_name %></td></tr>
+  <tr><th>メールアドレス</th><td><%= user.user_ext.email %></td></tr>
+  <tr><th>住所</th><td><%= "#{user.user_ext.addr1} #{user.user_ext.addr2} #{user.user_ext.addr3} #{user.user_ext.addr4}" %></td></tr>
+  <tr><th>出身地</th><td><%= user.user_ext.addr_from %></td></tr>
+  <tr><th>誕生日</th><td><%= user.user_ext.birth_day.to_s(:date) if user.user_ext.birth_day %></td></tr>
+  <tr><th>仕事</th><td><%= user.user_ext.job %></td></tr>
+  <tr><th>趣味</th><td><%= user.user_ext.hobby %></td></tr>
+  <tr><th>特技</th><td><%= user.user_ext.skill %></td></tr>
+  <tr><th>アピールとか</th><td><%= sani_custom_br(user.user_ext.free_text) %></td></tr>
+  <tr><th>関係する11兄弟</th><td><%= user.root11_name %></td></tr>
+  <tr><th>generation</th><td></td></tr> <!--t.integer  "generation"-->
+  <tr><th>性格</th><td><%= user.user_ext.character %></td></tr>
+  <tr><th>自慢</th><td><%= user.user_ext.jiman %></td></tr>
+  <tr><th>夢</th><td><%= user.user_ext.dream %></td></tr>
+  <tr><th>尊敬する人</th><td><%= user.user_ext.sonkei %></td></tr>
+  <tr><th>休日の過ごし方</th><td><%= user.user_ext.kyujitsu %></td></tr>
+  <tr><th>マイブーム</th><td><%= user.user_ext.myboom %></td></tr>
+  <tr><th>好きな食べ物</th><td><%= user.user_ext.fav_food %></td></tr>
+  <tr><th>嫌いな食べ物</th><td><%= user.user_ext.unfav_food %></td></tr>
+  <tr><th>好きな映画</th><td><%= user.user_ext.fav_movie %></td></tr>
+  <tr><th>好きな本</th><td><%= user.user_ext.fav_book %></td></tr>
+  <tr><th>好きなスポーツ</th><td><%= user.user_ext.fav_sports %></td></tr>
+  <tr><th>好きな音楽</th><td><%= user.user_ext.fav_music %></td></tr>
+  <tr><th>好きなゲーム</th><td><%= user.user_ext.fav_game %></td></tr>
+  <tr><th>好きなブランド</th><td><%= user.user_ext.fav_brand %></td></tr>
+  <tr><th>今欲しいもの</th><td><%= user.user_ext.hosii %></td></tr>
+  <tr><th>今行きたいところ</th><td><%= user.user_ext.ikitai %></td></tr>
+  <tr><th>今やりたいこと</th><td><%= user.user_ext.yaritai %></td></tr>
+</table>
+
+</div>
+<% end -%>
+
+</div>

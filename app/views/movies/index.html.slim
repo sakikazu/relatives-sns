@@ -1,0 +1,18 @@
+.col-sm-10
+  = link_to "アルバムトップへ", top_albums_path, class: "btn btn-light"
+  .page-header
+    h3
+      | 動画一覧
+      small.badge.badge-warning
+        = @movies.total_count
+  .select_menu.clearfix
+    - [["編集なし動画", 1], ["編集動画", 2]].each do |n, i|
+      - if @sort == i
+        => link_to n, "javascript:void(0)", class: "btn btn-danger disabled"
+      - else
+        => link_to n, movies_path(:sort => i), class: "btn btn-danger"
+  .mt30
+    = paginate @movies, window: 2, outer_window: 2
+  = render 'movies/index', movies: @movies
+  .mt20
+    = paginate @movies, window: 2, outer_window: 2

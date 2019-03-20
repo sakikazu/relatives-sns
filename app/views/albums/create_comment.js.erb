@@ -1,0 +1,12 @@
+<% if @destroy_flg.blank? -%>
+  if($('#comment_content').val() != ''){
+    $('#comment_content').val('');
+    $('#comments').html(
+        '<%= escape_javascript(render partial: "shared/comments", locals: { model_name: 'Album', comments: @comments }) %>'
+    );
+  }
+<% else -%>
+  $('#comments').html(
+    '<%= escape_javascript(render partial: "shared/comments", locals: { model_name: 'Album', comments: @comments }) %>'
+  );
+<% end -%>
