@@ -33,7 +33,7 @@
             =< fa_icon 'music'
           p
             = button_tag "祝う", data: { toggle: 'modal', target: '#anniversaryFormModal', path: celebration_new_mutters_path(user_id: k[:user].id) }, class: 'btn btn-info'
-            =< link_to 'お祝いを見る', {:action => :celebration, :user_id => k[:user].id}, :remote => true, :class => "btn btn-warning"
+            =< link_to 'お祝いを見る', celebration_mutters_path(user_id: k[:user].id), :remote => true, :class => "btn btn-warning"
         - else
           => fa_icon 'music'
           = "#{k[:user].dispname}さん" if k[:user].present?

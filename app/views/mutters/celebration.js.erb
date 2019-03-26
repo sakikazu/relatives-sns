@@ -4,6 +4,7 @@ $background.on('click', function() {
   $(this).remove();
 });
 
+// TODO: この時点から配列使ってJSコードを整理したい
 <% if @celeb_mutters.size > 0 -%>
   <% j = 0; toppoint = 0; -%>
   fontsize = 40;
@@ -12,10 +13,11 @@ $background.on('click', function() {
   // TODO: ここはデータをJS配列にして、それを回すようにしたいなぁ。生成されたソースが汚い
   <% @celeb_mutters.each_with_index do |m, i| -%>
     $background
-      .append('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= m.user.dispname(User::FULLNICK) %></span><br /><span class="moji"><%= sani_for_js(m.content) %></span></div>');
+      .append('<div id="celebration_msg<%= i %>" class="celebration_msg"><span class="name"><%= escape_javascript(m.user.dispname(User::FULLNICK)) %></span><br /><span class="moji"><%= escape_javascript(sani_for_js(m.content)) %></span></div>');
       //## 画像がうまく表示できない(image_tag)
       //sakikazu memo ここで「content」に改行（\r\n）が入っていたら、実際のJSで改行が入ってスクリプトエラーになった。これを事前に回避するの難しいな。。
       //→どこの環境かわからんけど、(\n\n)が入ったことがあった。なので/[\r\n]+/で、スペース変換するようにした→「sani_for_js」
+      // 2019-03-26: escape_javascriptで回避できたのでは？次回リファクタリング時に検証して修正
 
     <%# j=0 if toppoint > 250 -%>
     <% j = rand(4) -%>

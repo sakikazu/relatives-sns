@@ -48,11 +48,10 @@
   <tr><th>自由欄</th><td><%= sani_custom_br(@user.user_ext.free_text) %></td></tr>
   <tr><th>お祝い履歴</th><td>
     <% @user.celebrations.each do |c| %>
-      <%= c.anniversary_at %>
-      <%= form_tag({:controller => :mutters, :action => :celebration, :celebration_id => c.id}, :remote => true, method: :get) do %> 
-        <%= submit_tag 'お祝いを見る' %>
-      <% end -%> 
-      <br />
+      <div class="mt10">
+        <%= c.anniversary_at %><br>
+        <%= link_to 'お祝いを見る', celebration_mutters_path(celebration_id: c.id), :remote => true, :class => "btn btn-warning" %>
+      </div>
     <% end -%>
   </td></tr>
 </table>
