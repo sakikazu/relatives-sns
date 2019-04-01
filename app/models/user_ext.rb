@@ -87,6 +87,7 @@ class UserExt < ApplicationRecord
   end
 
   def sex_name
+    return "不明" if self.sex.blank?
     Hash[*SEX_LIST.flatten.reverse][self.sex]
   end
 

@@ -27,7 +27,6 @@
   }
   ul.members>li.zoom {
     padding: 5px;
-    height: 250px;
     cursor: default;
 
     .img {
@@ -46,8 +45,7 @@
     }
     .info {
       text-align:center;
-      font-weight:bold;
-      margin-top: 5px;
+      margin-top: 10px;
 
       p {
         margin-bottom: 0;
@@ -55,6 +53,9 @@
       }
       p.underline {
         border-bottom: 1px dotted #666;
+      }
+      p.topline {
+        border-top: 1px dotted #666;
       }
     }
   }

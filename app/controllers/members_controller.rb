@@ -5,7 +5,12 @@ class MembersController < ApplicationController
   before_action :restrict_other_family, only: [:edit, :update, :edit_account, :update_account, :destroy]
 
   # 家系図
+  # NOTE: ログインなしでも見れるようにしている。理由は、集まりの席などでこのページを共有することが多いが、
+  # そこで誰でも見れるようにしておくと、他のページにも興味が出た場合にログイン情報登録のモチベーションになるため。
+  # 外部の人間も見る可能性はあるが、本名や生年月日は許容するとして、住所は非表示とする
   def relation
+    # TODO: current_user.present?を改めて変数にし、明確にして使うというやり方はどうなのか、うまいやり方ある？
+    @logined = current_user.present? ? true : false
     @relationed_users = User.build_relationed_users
     @count_by_generation = User.count_by_generation(@relationed_users)
   end

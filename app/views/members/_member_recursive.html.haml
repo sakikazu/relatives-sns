@@ -16,12 +16,13 @@
       .name
         = user[:name]
       .info.text-muted
-        %p.underline= "#{user[:birth_dead_h]} #{user[:blood_h]}"
-        %p.underline= user[:address]
-        - if current_user.editable(user)
-          %p= link_to "編集", edit_member_path(user[:id])
+        %p= "#{user[:birth_dead_h]} #{user[:blood_h]}"
+        - if @logined
+          %p.topline= user[:address]
+        - if current_user.present? && current_user.editable(user)
+          %p.topline= link_to "編集", edit_member_path(user[:id])
 
-    - if current_user.editable(user)
+    - if current_user.present? && current_user.editable(user)
       %li.add_user
         = link_to "家族追加", new_member_path(parent_user_id: user[:id]), class: "btn btn-warning btn-block"
 
