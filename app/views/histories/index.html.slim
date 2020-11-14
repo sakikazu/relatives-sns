@@ -2,6 +2,7 @@
 / colorboxであれば、hrefの先を取得してモーダルに表示までしてくれるが、別のモーダルを使う場合は、
 / 今回のようにモーダル表示時に内容をAjaxで取ってくるか、ボタンクリック時にAjaxリクエストをして、
 / そのレスポンスをJSテンプレートで処理し、そこでモーダル作って表示まで行う
+/ TODO: HMのshowCurrentSenses()のようにmodalコンテンツまるごと取得してmodal('show')した方がいいな
 - content_for :add_js do
   javascript:
     $(document).on('turbolinks:load', function() {

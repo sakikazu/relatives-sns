@@ -3,6 +3,9 @@ AdanHP
 
 宮崎県の田舎にあるA団に集った者たちのSNS
 
+## tmp todo
+動画エンコードについて書く。下にsidekiqの項目はあるが。
+あと、現在、本番サーバーでsidekiqが自動で実行されないはず。
 
 ## Features
 
