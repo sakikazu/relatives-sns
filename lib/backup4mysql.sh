@@ -27,3 +27,6 @@ mysqldump --defaults-extra-file=$password_file -u $user $db | gzip -c > $dirpath
 # 古いバックアップファイルを削除
 oldfile="$db"_`date --date "$period days ago" +%y%m%d`
 rm -f $dirpath/$oldfile.sql.gz
+
+# このシェルを実行したプログラムでバックアップファイル名を取得したいときのために、標準出力する
+echo $dirpath/$filename.sql.gz
