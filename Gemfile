@@ -101,8 +101,8 @@ group :development do
   # gem 'rack-mini-profiler'        # 処理時間を表示
 
   # Use Capistrano for deployment
-  gem 'capistrano'
-  gem 'capistrano-bundler'
+  gem 'capistrano', '~> 3.6'
+  gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-rails'
   gem 'capistrano3-unicorn'
   gem 'capistrano-sidekiq'

@@ -28,6 +28,7 @@ set :linked_files, %w{.env config/mysqldump.ini .ruby-version .ruby-gemset}
 # memo jsライブラリで使用するcssやfontなど、assetUrl関連で問題となりそうなものは、コンパイルせずに直接参照できるように、shared配下に配置する
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/upload}
+append :linked_dirs, '.bundle'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -35,9 +36,6 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/upl
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-
-# RVM
-set :rvm1_ruby_version, '2.7.1'
 
 # unicorn
 set :unicorn_config_path, "#{current_path}/config/unicorn.conf.rb"
