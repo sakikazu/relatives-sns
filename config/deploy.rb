@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.2.1
-lock '3.11.0'
+lock '3.17.0'
 
 require 'dotenv/load'
 Dotenv.load
@@ -37,7 +37,7 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/upl
 
 
 # RVM
-set :rvm1_ruby_version, '2.5.1'
+set :rvm1_ruby_version, '2.7.1'
 
 # unicorn
 set :unicorn_config_path, "#{current_path}/config/unicorn.conf.rb"

@@ -8,6 +8,7 @@ role :app, %W(#{ENV['DEPLOY_SERVER']})
 role :web, %W(#{ENV['DEPLOY_SERVER']})
 role :db,  %W(#{ENV['DEPLOY_SERVER']})
 
+set :branch, "master"
 
 # Extended Server Syntax
 # ======================
@@ -26,7 +27,7 @@ server ENV['DEPLOY_SERVER'], user: 'sakikazu', roles: %w{web app db}, my_propert
 # Global options
 # --------------
  set :ssh_options, {
-   keys: %w(/Users/sakikazu/.ssh/id_rsa.my_sakura),
+   keys: %w(~/.ssh/id_rsa.my_sakura),
    auth_methods: %w(publickey),
    port: 30022
  }
