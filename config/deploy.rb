@@ -36,9 +36,6 @@ append :linked_dirs, '.bundle'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :rvm1_type, :system
-set :rvm1_ruby_version, '2.7.1'
-
 # unicorn
 set :unicorn_config_path, "#{current_path}/config/unicorn.conf.rb"
 # set :unicorn_pid, 'default'

@@ -25,7 +25,7 @@ require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano3/unicorn'
 require 'rvm1/capistrano3'
-# TODO: コメントアウトすると、capistranoのdeployでbundle installまで進んだ
+# TODO: 有効になってると、deployのbundle install時に `no such file to load -- rubygems` エラー
 # require 'capistrano/sidekiq'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
