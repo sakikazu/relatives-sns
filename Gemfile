@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.5.1'
+ruby '2.7.1'
 gem 'rails', '~> 5.2.0'
 gem 'bootsnap' # railsの起動を速くする
 
@@ -14,8 +14,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 # gem 'coffee-rails', '~> 4.0.0'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'mini_racer'
 gem 'bootstrap', '~> 4.1.3' # twitter bootstrap4
 
 # Use jquery as the JavaScript library
