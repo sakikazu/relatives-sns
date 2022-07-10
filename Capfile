@@ -25,7 +25,8 @@ require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano3/unicorn'
 require 'rvm1/capistrano3'
-require 'capistrano/sidekiq'
+# TODO: コメントアウトすると、capistranoのdeployでbundle installまで進んだ
+# require 'capistrano/sidekiq'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
