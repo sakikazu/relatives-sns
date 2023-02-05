@@ -70,7 +70,7 @@ gem 'apns'
 gem 'rails_admin'
 gem 'faker'
 
-gem 'jpmobile'
+gem 'browser'
 
 # Uploadifyでflashによってセッションが切れてログアウトしてしまう問題の対応のため
 # todo これだけじゃダメだった

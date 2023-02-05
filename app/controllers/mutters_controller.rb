@@ -326,14 +326,14 @@ class MuttersController < ApplicationController
   def top_page_valiables
     @page_title = "トップ"
 
-    updates_count = request.smart_phone? ? 5 : 10
+    updates_count = browser.device.mobile? ? 5 : 10
     @updates = UpdateHistory.view_normal.limit(updates_count)
 
     login_users_count = 40
     @login_users = User.requested_users(login_users_count)
     @login_users_hidden_cnt = 10
 
-    set_slide_photos unless request.smart_phone?
+    set_slide_photos unless browser.device.mobile?
 
     ###日齢
     @nichirei, @nichirei_future = current_user.user_ext.nichirei

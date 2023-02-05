@@ -34,7 +34,7 @@
   .card.mb20
     .card-header
       = toggle_link('人ごと(更新日順)', '#collapsed-area')
-    #collapsed-area[class='#{"collapse" if request.smart_phone?}']
+    #collapsed-area[class='#{"collapse" if browser.device.mobile?}']
       table.table.table-striped
         - @blog_count_by_user.each do |user, cnt, created_at|
           tr

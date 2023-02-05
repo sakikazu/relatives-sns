@@ -1,6 +1,6 @@
 module MutterHelper
   def toggle_link(label, content_anchor)
-    if request.smart_phone?
+    if browser.device.mobile?
       link_to fa_icon('caret-down lg', text: label, right: true), content_anchor, data: { toggle: 'collapse' }
     else
       label
@@ -11,7 +11,7 @@ module MutterHelper
     out = sani_org(mutter.view_content)
     media_src = ""
     if mutter.photo.present?
-      media_src = if request.smart_phone?
+      media_src = if browser.device.mobile?
                     link_to(image_tag(mutter.photo.image(:thumb), class: 'img-thumbnail'), mutter.photo.image(:large))
                   else
                     image_tag(mutter.photo.image(:large), class: 'img-thumbnail')
