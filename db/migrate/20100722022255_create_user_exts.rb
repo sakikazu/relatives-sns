@@ -1,4 +1,4 @@
-class CreateUserExts < ActiveRecord::Migration
+class CreateUserExts < ActiveRecord::Migration[4.2]
   def self.up
     create_table :user_exts do |t|
       t.integer :user_id

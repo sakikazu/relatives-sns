@@ -1,4 +1,4 @@
-class CreateLoginHistories < ActiveRecord::Migration
+class CreateLoginHistories < ActiveRecord::Migration[4.2]
   def self.up
     create_table :login_histories do |t|
       t.integer :user_id

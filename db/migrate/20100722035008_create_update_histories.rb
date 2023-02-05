@@ -1,4 +1,4 @@
-class CreateUpdateHistories < ActiveRecord::Migration
+class CreateUpdateHistories < ActiveRecord::Migration[4.2]
   def self.up
     create_table :update_histories do |t|
       t.integer :user_id

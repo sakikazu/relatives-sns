@@ -1,4 +1,4 @@
-class CreateHistories < ActiveRecord::Migration
+class CreateHistories < ActiveRecord::Migration[4.2]
   def self.up
     create_table :histories do |t|
       t.integer :episode_year

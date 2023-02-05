@@ -1,4 +1,4 @@
-class AddMutterIdToSomeModel < ActiveRecord::Migration
+class AddMutterIdToSomeModel < ActiveRecord::Migration[4.2]
   def change
     add_column :movies, :mutter_id, :integer
     add_column :boards, :mutter_id, :integer

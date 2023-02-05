@@ -1,4 +1,4 @@
-class CreateNices < ActiveRecord::Migration
+class CreateNices < ActiveRecord::Migration[4.2]
   def self.up
     create_table :nices do |t|
       t.integer :user_id
