@@ -165,8 +165,8 @@ Rails.application.routes.draw do
     passwords: 'users/passwords'
   }
   devise_for :admin_users
-  mount RailsAdmin::Engine => '/adamin', as: 'rails_admin'
-  mount API => "/"
+  # mount RailsAdmin::Engine => '/adamin', as: 'rails_admin'
+  # mount API => "/"
 
   resources :members do
     member do
