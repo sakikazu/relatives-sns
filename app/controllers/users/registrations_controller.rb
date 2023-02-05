@@ -21,7 +21,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     elsif pass != pass2
       emsg = '確認用パスワードが一致しません。'
     else
-      user.update_attributes(password: pass, password_confirmation: pass2)
+      user.update(password: pass, password_confirmation: pass2)
     end
 
     if emsg.blank?

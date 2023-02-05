@@ -42,7 +42,7 @@ class HistoriesController < ApplicationController
   # PUT /histories/1
   # PUT /histories/1.xml
   def update
-    if @history.update_attributes(history_params)
+    if @history.update(history_params)
       @histories = History.includes_all
       @success_message = '更新しました'
     else

@@ -88,7 +88,7 @@ class BlogsController < ApplicationController
   # PUT /blogs/1.xml
   def update
     respond_to do |format|
-      if @blog.update_attributes(blog_params)
+      if @blog.update(blog_params)
         if params[:image]
           @blog.blog_images.create(blog_image_params)
         end

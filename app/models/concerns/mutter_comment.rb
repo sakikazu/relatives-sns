@@ -10,7 +10,7 @@ module MutterComment
     # なければ、関連mutterとして、タイムラインには表示されないmutterを作成し、そのchildrenを作成
     else
       invisible_mutter = Mutter.create_with_invisible(self.user_id)
-      self.update_attributes(mutter_id: invisible_mutter.id)
+      self.update(mutter_id: invisible_mutter.id)
       invisible_mutter.children.create(params)
     end
 

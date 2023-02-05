@@ -42,7 +42,7 @@ private
 
   # ログインユーザーの最終リクエスト時間を更新する
   def update_request_at
-    # [memo] update_attributeだと、validateなしで更新することができる。update_attributesはvalidateあり。
+    # [memo] update_attributeだと、validateなしで更新することができる。updateはvalidateあり。
     current_user.update_attribute(:last_request_at, Time.now) if current_user.present?
   end
 

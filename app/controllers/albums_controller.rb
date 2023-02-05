@@ -150,7 +150,7 @@ class AlbumsController < ApplicationController
   # PUT /albums/1.json
   def update
     respond_to do |format|
-      if @album.update_attributes(album_params)
+      if @album.update(album_params)
         format.html { redirect_to @album, notice: 'アルバム情報を更新しました。' }
         format.json { head :ok }
       else
