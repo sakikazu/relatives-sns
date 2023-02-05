@@ -84,12 +84,6 @@ gem 'config'
 # NOTE: View handlerの設定で使用されるのでどの環境でも必要
 gem 'slim'
 
-# for API
-gem 'grape'
-# gem 'rabl'
-# gem 'oj'
-
-
 group :development do
   gem 'rb-readline'
   gem 'listen'
