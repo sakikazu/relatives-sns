@@ -14,7 +14,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 # gem 'coffee-rails', '~> 4.0.0'
-gem 'bootstrap', '~> 4.1.3' # twitter bootstrap4
+gem 'bootstrap', '~> 4.3' # twitter bootstrap4
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
