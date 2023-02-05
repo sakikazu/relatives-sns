@@ -102,7 +102,7 @@ class UpdateHistory < ApplicationRecord
       history = current
     else
       history = self.offset_one(0)
-      history.next_page = 1
+      history.next_page = 1 if history.present?
     end
     history
   end
