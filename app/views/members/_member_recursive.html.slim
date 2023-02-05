@@ -1,29 +1,29 @@
-%li.list{id: "id#{user[:id]}", class: (user[:is_dead] ? "dead" : "alive")}
+li.list[id="id#{user[:id]}"  class="#{(user[:is_dead] ? 'dead' : 'alive')}"]
   .img
     = image_tag user[:image_path], class: 'img-thumbnail'
   .name
     = user[:name]
   .info.text-muted
-    %p.underline= "#{user[:sex_h]}"
-    %p.underline= user[:age_h]
-    %p= "属#{user[:has_members_num]}人"
+    p.underline= "#{user[:sex_h]}"
+    p.underline= user[:age_h]
+    p= "属#{user[:has_members_num]}人"
 
-%div{style: "display:none"}
-  %ul.members.child{id: "id#{user[:id]}-family"}
-    %li.zoom{id: "id#{user[:id]}", class: (user[:is_dead] ? "dead" : "alive")}
+div[style="display:none"]
+  ul.members.child[id="id#{user[:id]}-family"]
+    li.zoom[id="id#{user[:id]}" class="#{(user[:is_dead] ? 'dead' : 'alive')}"]
       .img
         = image_tag user[:image_path], class: 'img-thumbnail'
       .name
         = user[:name]
       .info.text-muted
-        %p= "#{user[:birth_dead_h]} #{user[:blood_h]}"
+        p= "#{user[:birth_dead_h]} #{user[:blood_h]}"
         - if @logined
-          %p.topline= user[:address]
+          p.topline= user[:address]
         - if current_user.present? && current_user.editable(user)
-          %p.topline= link_to "編集", edit_member_path(user[:id])
+          p.topline= link_to "編集", edit_member_path(user[:id])
 
     - if current_user.present? && current_user.editable(user)
-      %li.add_user
+      li.add_user
         = link_to "家族追加", new_member_path(parent_user_id: user[:id]), class: "btn btn-warning btn-block"
 
     - if user[:family].present?

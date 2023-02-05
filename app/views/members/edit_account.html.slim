@@ -3,25 +3,25 @@
     = link_to "戻る", edit_member_path(@user), class: "btn btn-light"
 
   .page-header
-    %h3 ＜#{@user.dispname(User::FULLNAME)}＞のログイン情報を編集
+    h3 ＜#{@user.dispname(User::FULLNAME)}＞のログイン情報を編集
 
   .well
     = simple_form_for @user, url: update_account_member_path(@user) do |f|
       - if @user.errors.any?
-        %p.alert.alert-danger
+        p.alert.alert-danger
           = fa_icon('exclamation-triangle', text: '入力エラーがあります。下記のエラー内容を確認してください。')
 
       <div class='alert alert-success' style='margin:20px 0 30px'>
-      %ul.ml20.mt15
-        %li AdanHPのログインでは、メールアドレスかユーザー名のどちらかと、パスワードが必要です
-        %li メールアドレスの方が忘れにくいのでオススメです。また、パスワードを忘れた際の救済機能でも必要になります。その他の用途には一切使用しません。
+      ul.ml20.mt15
+        li AdanHPのログインでは、メールアドレスかユーザー名のどちらかと、パスワードが必要です
+        li メールアドレスの方が忘れにくいのでオススメです。また、パスワードを忘れた際の救済機能でも必要になります。その他の用途には一切使用しません。
       </div>
 
       = f.input :username, label: "ユーザー名（英数字のみ）", input_html: {class: 'form-control'}
       = f.input :email, label: 'メールアドレス', input_html: {class: 'form-control'}
-      %p{class: 'mt10 mb5'}
+      p[class='mt10 mb5']
         パスワード
-        %span{class: 'important'}
+        span[class='important']
           - if @user.errors.blank?
             - if @user.encrypted_password.blank?
               未設定です。ログインするためには設定が必要です。
@@ -34,7 +34,7 @@
 
       - if current_user.admin?
         .alert.alert-danger.mt30
-          %p.important 管理者のみ
+          p.important 管理者のみ
           = f.input :root11, label: "関連する11兄弟" do
             = f.select :root11, User::ROOT_LIST, include_blank: true, required: false
           = f.input :generation, label: "世代数" do
