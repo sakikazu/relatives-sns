@@ -121,9 +121,9 @@ class Mutter < ApplicationRecord
   # ソート用の日時カラムを更新。レスされた親のも更新する。
   def update_sort_at
     # memo 2014/06/12、Mutter.create時にfor_sort_atも設定するようにしたので、ここでは、子Mutterの場合だけ、その親のものを更新するようにした
-    # self.update_attributes(for_sort_at: Time.now)
+    # self.update(for_sort_at: Time.now)
     if self.parent.present? and !self.parent.invisible?
-      self.parent.update_attributes(for_sort_at: Time.now)
+      self.parent.update(for_sort_at: Time.now)
     end
   end
 

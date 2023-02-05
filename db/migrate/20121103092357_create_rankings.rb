@@ -1,4 +1,4 @@
-class CreateRankings < ActiveRecord::Migration
+class CreateRankings < ActiveRecord::Migration[4.2]
   def change
     create_table :rankings do |t|
       t.integer :classification

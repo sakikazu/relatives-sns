@@ -1,4 +1,4 @@
-class CreateBlogImages < ActiveRecord::Migration
+class CreateBlogImages < ActiveRecord::Migration[4.2]
   def self.up
     create_table :blog_images do |t|
       t.integer :blog_id

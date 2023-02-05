@@ -1,4 +1,4 @@
-class CreateMovieComments < ActiveRecord::Migration
+class CreateMovieComments < ActiveRecord::Migration[4.2]
   def self.up
     create_table :movie_comments do |t|
       t.integer :movie_id

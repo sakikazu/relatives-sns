@@ -1,4 +1,4 @@
-class CreateHistoryComments < ActiveRecord::Migration
+class CreateHistoryComments < ActiveRecord::Migration[4.2]
   def self.up
     create_table :history_comments do |t|
       t.integer :history_id

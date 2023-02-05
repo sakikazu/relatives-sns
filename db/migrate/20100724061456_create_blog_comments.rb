@@ -1,4 +1,4 @@
-class CreateBlogComments < ActiveRecord::Migration
+class CreateBlogComments < ActiveRecord::Migration[4.2]
   def self.up
     create_table :blog_comments do |t|
       t.integer :blog_id

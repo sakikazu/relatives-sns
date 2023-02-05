@@ -54,6 +54,7 @@ class Photo < ApplicationRecord
 
   #全写真からただランダムに抽出する
   def self.rnd_photos
+    return [] if Album.last.blank?
     return Album.last.photos if Rails.env.development?
 
     photos = self.includes(:album).order("RAND()").limit(15).map{|photo| photo if photo.album.present?}

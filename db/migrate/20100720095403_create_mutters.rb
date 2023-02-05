@@ -1,4 +1,4 @@
-class CreateMutters < ActiveRecord::Migration
+class CreateMutters < ActiveRecord::Migration[4.2]
   def self.up
     create_table :mutters do |t|
       t.integer :user_id

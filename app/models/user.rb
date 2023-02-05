@@ -165,7 +165,7 @@ class User < ApplicationRecord
   def save_extension(key, value)
     ext = UserExtension.where(user_id: self.id, key: key).first
     if ext.present?
-      ext.update_attributes(value: value)
+      ext.update(value: value)
     else
       UserExtension.create(user_id: self.id, key: key, value: value)
     end

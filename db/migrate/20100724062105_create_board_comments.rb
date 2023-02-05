@@ -1,4 +1,4 @@
-class CreateBoardComments < ActiveRecord::Migration
+class CreateBoardComments < ActiveRecord::Migration[4.2]
   def self.up
     create_table :board_comments do |t|
       t.integer :board_id

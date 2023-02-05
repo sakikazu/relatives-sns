@@ -1,4 +1,4 @@
-class CreateAlbumComments < ActiveRecord::Migration
+class CreateAlbumComments < ActiveRecord::Migration[4.2]
   def change
     create_table :album_comments do |t|
       t.integer :user_id

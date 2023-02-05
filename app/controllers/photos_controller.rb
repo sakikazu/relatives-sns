@@ -76,7 +76,7 @@ class PhotosController < ApplicationController
   end
 
   def update_from_slideshow
-    @photo.update_attributes(photo_params)
+    @photo.update(photo_params)
   end
 
 
@@ -84,7 +84,7 @@ class PhotosController < ApplicationController
   # PUT /photos/1.json
   def update
     respond_to do |format|
-      if @photo.update_attributes(photo_params)
+      if @photo.update(photo_params)
         format.html { redirect_to [@photo.album, @photo], notice: '写真情報を変更しました。' }
         format.json { head :ok }
       else
@@ -117,7 +117,7 @@ class PhotosController < ApplicationController
     @photo = Photo.find(params[:id])
 
     @photo.create_comment_by_mutter(comment_params)
-    @photo.update_attributes(:last_comment_at => Time.now)
+    @photo.update(:last_comment_at => Time.now)
 
     UpdateHistory.for_creating_comment(@photo.album, UpdateHistory::ALBUMPHOTO_COMMENT, current_user.id)
 

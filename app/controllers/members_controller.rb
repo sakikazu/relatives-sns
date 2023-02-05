@@ -130,7 +130,7 @@ class MembersController < ApplicationController
   def update
     respond_to do |format|
       # NOTE: 現在更新してるのはUserExtであることに注意。Userと合わせて更新するように変更するかもだが
-      if @user.user_ext.update_attributes(user_ext_params)
+      if @user.user_ext.update(user_ext_params)
         format.html { redirect_to member_path(@user), notice: "#{@user.dispname(User::FULLNAME)}の情報を更新しました." }
         format.json { head :no_content }
       else

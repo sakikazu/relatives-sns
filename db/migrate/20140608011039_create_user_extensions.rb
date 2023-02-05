@@ -1,4 +1,4 @@
-class CreateUserExtensions < ActiveRecord::Migration
+class CreateUserExtensions < ActiveRecord::Migration[4.2]
   def change
     create_table :user_extensions do |t|
       t.integer :user_id

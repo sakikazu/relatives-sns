@@ -72,7 +72,7 @@ class BoardsController < ApplicationController
   # PUT /boards/1.xml
   def update
     respond_to do |format|
-      if @board.update_attributes(board_params)
+      if @board.update(board_params)
         format.html { redirect_to(@board, :notice => '更新しました') }
         format.xml  { head :ok }
       else
