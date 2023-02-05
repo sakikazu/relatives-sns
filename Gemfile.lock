@@ -507,7 +507,7 @@ DEPENDENCIES
   pry-byebug
   pry-doc
   pry-rails
-  puma (~> 3.7)
+  puma
   rails (~> 6.0)
   rails-erd
   rails_12factor
