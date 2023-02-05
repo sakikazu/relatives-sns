@@ -4,7 +4,7 @@
 .card.mb30
   .card-header.text-center
     = toggle_link('― 日齢 ― 生まれて何日？', '#collapsed_nichirei_area')
-  #collapsed_nichirei_area[class='#{"collapse" if request.smart_phone?}']
+  #collapsed_nichirei_area[class='#{"collapse" if browser.device.mobile?}']
     .card-body
       #nichirei
         - if @nichirei
@@ -31,7 +31,7 @@
     = toggle_link('みんなのアクセス情報', '#collapsed_accesses_area')
     br
     .badge.badge-warning.text-center #{User::recent_request_count} 人がログイン中
-  #collapsed_accesses_area[class='#{"collapse" if request.smart_phone?}']
+  #collapsed_accesses_area[class='#{"collapse" if browser.device.mobile?}']
     table.table.table-striped.table-sm
       - @login_users.each_with_index do |user, idx|
         - tr_options = idx > @login_users_hidden_cnt ? { class: 'hide_row', style: 'display:none' } : {}

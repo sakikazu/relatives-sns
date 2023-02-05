@@ -70,7 +70,7 @@ class PhotosController < ApplicationController
   def slideshow
     @from_top_flg = true if params[:top].present?
     #sakikazu PCからはJSをincludeしないようにレイアウトをオフにして、Ajaxの多重書き込みを防ぐ(※スマホからは見づらいのでcolorboxは使用しない)
-    unless request.smart_phone?
+    unless browser.device.mobile?
       render layout: false
     end
   end

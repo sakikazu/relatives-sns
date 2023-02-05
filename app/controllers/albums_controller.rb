@@ -32,7 +32,7 @@ class AlbumsController < ApplicationController
   def top
     @page_title = "アルバムトップ"
     album_count = Rails.env.production? ? 6 : 3
-    media_count = request.smart_phone? ? 2 : 5
+    media_count = browser.device.mobile? ? 2 : 5
     @updated_albums = Album.updated_with_media(album_count, media_count)
 
     respond_to do |format|

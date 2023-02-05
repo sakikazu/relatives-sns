@@ -86,11 +86,11 @@ EOS
   end
 
   def colorbox_class
-    request.smart_phone? ? "" : "colorbox"
+    browser.device.mobile? ? "" : "colorbox"
   end
 
   def colorbox_fix_size
-    request.smart_phone? ? "" : "colorbox_fix_size"
+    browser.device.mobile? ? "" : "colorbox_fix_size"
   end
 
   def form_html_option

@@ -1,5 +1,5 @@
 .mutter_content[id="mutter#{mutter.id}"]
-  - if request.smart_phone?
+  - if browser.device.mobile?
     .info-area-smp
       .icon
         p = image_tag mutter.user_image_path, :size => "50x50", alt: "プロフィール画像", class: 'img-thumbnail'

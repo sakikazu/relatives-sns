@@ -7,7 +7,7 @@
   .card
     .card-header.text-center
       = toggle_link('個人のアルバム', '#collapsed_area')
-    #collapsed_area[class='#{"collapse" if request.smart_phone?}']
+    #collapsed_area[class='#{"collapse" if browser.device.mobile?}']
       table.table.table-sm
         - @album_users.each do |user|
           tr
