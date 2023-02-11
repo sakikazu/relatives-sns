@@ -3,12 +3,15 @@ AdanHP
 
 宮崎県の田舎にあるA団に集った者たちのSNS
 
-## tmp todo
-動画エンコードについて書く。下にsidekiqの項目はあるが。
-あと、現在、本番サーバーでsidekiqが自動で実行されないはず。
+## TODO
+* 動画エンコードについてまとめる（下にsidekiqの項目はある）
+* 現在、本番サーバーでsidekiqが自動で実行されてないはず
+
+## Updates
+* 2023/02: grapeとそれによるAPIを削除した
+    * スマホアプリは稼働してないのと、Rails6にした際に、本番環境でエラーが出たため
 
 ## Features
-
 * クローズドSNS
 * Twitterライクなつぶやき投稿、ActionCableによるPUSH更新対応
 * アルバム機能。動画エンコード、複数画像ファイルアップロード
@@ -20,13 +23,13 @@ AdanHP
 * レスポンシブデザインによるスマホView対応
 * turbolinksによる高速表示
 * capistranoによるデプロイ
-
+* 管理画面
 
 ## System dependencies
 
 ### Ruby version
-* ruby 2.5
-* rails 5.2
+* ruby 2.7
+* rails 6.1
 
 ### ライブラリ
 * Twitter bootstrap 4
