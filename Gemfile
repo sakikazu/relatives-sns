@@ -66,7 +66,7 @@ gem 'apns'
 
 # jquery-railsをバージョン指定するとこれがエラーになるぞ？？（2014/05/12）
 # rails6にすると can't frozen AdminUser みたいなエラーが出るので、ひとまずコメントアウト
-# gem 'rails_admin'
+gem 'rails_admin'
 gem 'faker'
 
 gem 'browser'
