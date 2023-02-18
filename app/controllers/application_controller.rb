@@ -4,9 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   include ApplicationHelper
-
   class Forbidden < ActionController::ActionControllerError; end
-  include ErrorHandlers if Rails.env.production?
 
   # 発行されたSQLを取得する
   # todo 何やってるかさぱりわからん
