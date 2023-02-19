@@ -25,6 +25,11 @@ AdanHP
 * capistranoによるデプロイ
 * 管理画面
 
+## スクリーンキャプチャ
+### TOPページ
+<img width="1106" alt="2023-02-19_AdanHPキャプチャ（Github用）" src="https://user-images.githubusercontent.com/745130/219922609-9b153640-2759-4e42-b74a-183806c32dd9.png">
+
+
 ## System dependencies
 
 ### Ruby version
