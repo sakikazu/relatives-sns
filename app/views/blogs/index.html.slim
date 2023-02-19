@@ -1,4 +1,4 @@
-.col-sm-6.order-2.order-sm-1
+.col-sm-8.order-2.order-sm-1
   - if @user_selected.present?
     => link_to "自分の日記", blogs_path, class: "btn btn-light"
   = link_to "日記を書く", new_blog_path, class: "btn btn-info"
@@ -30,7 +30,7 @@
   #autopager_loading.btn.btn-warning.btn-block[style="display:none"]
     | 次のページを読込中です
 
-.col-sm-2.order-1.order-sm-2
+.col-sm-4.order-1.order-sm-2
   .card.mb20
     .card-header
       = toggle_link('人ごと(更新日順)', '#collapsed-area')

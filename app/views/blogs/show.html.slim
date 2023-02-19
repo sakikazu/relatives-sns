@@ -1,4 +1,4 @@
-.col-sm-6
+.col-sm-8
   => link_to '自分の日記', blogs_path, class: "btn btn-light"
   => link_to "#{@blog.user.dispname}の日記一覧", blogs_path(:username => @blog.user.username), class: "btn btn-light" if @blog.user != current_user
   = link_to "編集する", edit_blog_path(@blog), class: "btn btn-info" if editable(current_user, @blog.user)

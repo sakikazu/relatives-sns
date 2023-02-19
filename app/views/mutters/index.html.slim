@@ -23,9 +23,9 @@
       ajaxFileUpload.listenSubmit();
     });
 
-.col-sm-3
+.col-sm-4
   = render 'top_left_sidebar'
-.col-sm-6
+.col-sm-8
   ul#mutters_nav.nav.nav-tabs.mb15
     li.nav-item
       = link_to "みんなの", mutters_path(anchor: 'mutters_nav'), class: "nav-link #{'active' if @leave_me.blank?}"

@@ -7,6 +7,7 @@ class AlbumsController < ApplicationController
   # GET /albums
   # GET /albums.json
   def index
+    @wide_layout = true
     @page_title = "アルバム一覧"
     @sort = params[:sort].blank? ? 1 : params[:sort].to_i
 
@@ -44,6 +45,7 @@ class AlbumsController < ApplicationController
   # GET /albums/1
   # GET /albums/1.json
   def show
+    @wide_layout = true
     # 初期表示は「写真と動画」「アップロード順」
     default_sort_params = { sort_flg: 1, user_id: nil, media_filter: 1 }
     @album4sort = if params[:album].present?

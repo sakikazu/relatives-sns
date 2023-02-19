@@ -10,7 +10,7 @@
       });
     });
 
-.col-sm-6
+.col-sm-8
   .form-actions
     => link_to "掲示板一覧", boards_path, class: "btn btn-light"
     = link_to "編集する", edit_board_path(@board), class: "btn btn-info" if editable(current_user, @board.user)

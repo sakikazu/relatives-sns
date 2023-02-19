@@ -95,7 +95,7 @@ html[lang="ja"]
       #slider_photo
         = render "mutters/slider"
 
-    .container-fluid.mt30
+    .container-fluid.mt30[style="#{'max-width: 1200px' unless @wide_layout}"]
       = bootstrap_flash
       .row.justify-content-center
         = yield
