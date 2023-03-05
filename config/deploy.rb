@@ -11,7 +11,7 @@ set :repo_url, ENV['BITBUCKET_URL']
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/usr/local/site/adan'
+set :deploy_to, '/home/ubuntu/web/adan'
 
 # Default value for :format is :pretty
 # set :format, :pretty
@@ -23,15 +23,16 @@ set :deploy_to, '/usr/local/site/adan'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{.env config/mysqldump.ini .ruby-version .ruby-gemset}
+set :linked_files, %w{.env}
 
 # memo jsライブラリで使用するcssやfontなど、assetUrl関連で問題となりそうなものは、コンパイルせずに直接参照できるように、shared配下に配置する
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/upload}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets bundle public/upload}
 append :linked_dirs, '.bundle'
 
 # Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+# NOTE: asdf global 設定にしたrubyを使わない場合は、これだとダメかも
+set :default_env, { path: "/home/ubuntu/.asdf/shims:$PATH" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
@@ -48,7 +49,6 @@ SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
 
 
 namespace :deploy do
-
   desc 'Restart application'
   task :restart do
     invoke 'unicorn:restart'
@@ -64,5 +64,4 @@ namespace :deploy do
       # end
     end
   end
-
 end
