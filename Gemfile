@@ -10,6 +10,9 @@ gem 'mysql2'
 gem 'puma'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+# for scss; NOTE: 2.4にすると、VPSでbundle installが終わらなくなる
+gem 'sassc', '2.1.0'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
