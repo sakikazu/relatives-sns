@@ -10,5 +10,4 @@ class ApplicationRecord < ActiveRecord::Base
     fill_up_size = column - surplus
     return records + Array.new(fill_up_size, nil)
   end
-
 end
