@@ -16,8 +16,7 @@ set :branch, "master"
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server ENV['DEPLOY_SERVER'], user: 'sakikazu', roles: %w{web app db}, my_property: :my_value
-
+server ENV['DEPLOY_SERVER'], user: 'ubuntu', roles: %w{web app db}, my_property: :my_value
 
 # Custom SSH Options
 # ==================
@@ -26,11 +25,11 @@ server ENV['DEPLOY_SERVER'], user: 'sakikazu', roles: %w{web app db}, my_propert
 #
 # Global options
 # --------------
- set :ssh_options, {
-   keys: %w(~/.ssh/id_rsa.my_sakura),
-   auth_methods: %w(publickey),
-   port: 30022
- }
+set :ssh_options, {
+  keys: %w(~/.ssh/general_in_thinkpad),
+  forward_agent: false,
+  auth_methods: %w(publickey)
+}
 #
 # And/or per server (overrides global)
 # ------------------------------------
