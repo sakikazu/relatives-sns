@@ -104,13 +104,16 @@ group :development do
   gem 'capistrano-sidekiq'
   gem 'capistrano3-nginx'
   gem 'capistrano3-puma'
-  gem 'rvm1-capistrano3', require: false
 
   # エラー画面をわかりやすく整形してくれる
   gem 'better_errors'
 
   # better_errorsの画面上にirb/pry(PERL)を表示する
   gem 'binding_of_caller'
+
+  # NOTE: deploy時の `fingerprint xxx does not match` エラー対策
+  gem 'bcrypt_pbkdf'
+  gem 'ed25519'
 end
 
 group :development, :test do

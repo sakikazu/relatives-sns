@@ -47,7 +47,6 @@ set :sidekiq_role, :web
 SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
 SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
 
-
 namespace :deploy do
   desc 'Restart application'
   task :restart do
