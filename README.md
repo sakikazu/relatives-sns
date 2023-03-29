@@ -6,6 +6,7 @@ AdanHP
 ## TODO
 * 動画エンコードについてまとめる（下にsidekiqの項目はある）
 * 現在、本番サーバーでsidekiqが自動で実行されてないはず
+* 本番環境で log/production.log が出力されず、 log/unicorn.log にまとめられているが、原因不明なので無視する
 
 ## Updates
 * 2023/02: grapeとそれによるAPIを削除した
@@ -44,11 +45,11 @@ AdanHP
 * altCSS: scss
 
 ### ミドルウェア
-* メール送信: postfix（死活監視はしていない）
 * Redis, sidekiq: 動画エンコードをジョブキューで行っている
     * ActionCableでは本番でもRedisを使わずasync設定（Rubyのスレッドで処理かな？）にしている
 
 ### サービス
+* メール送信: Gmail
 * Google Maps API: メンバーの住所の地図機能
     * 使っているのは多分「Maps JavaScript API」のみ。月の無料枠内で収まるはず。
     * https://cloud.google.com/maps-platform/
