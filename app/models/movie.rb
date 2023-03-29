@@ -91,8 +91,7 @@ class Movie < ApplicationRecord
     if Rails.env.production?
       EncodeWorker.perform_async self.id
     else
-      # TODO: 開発環境でffmpのlibaacが使えるようになったらencodeするようにする
-      # self.encode
+      self.encode
       self.save_with_available_movie
     end
   end
@@ -110,7 +109,7 @@ class Movie < ApplicationRecord
     profile_option = %w(-profile:v baseline -level:v 3.1)
     # note: 既にエンコードされた「encoded.mp4」を再エンコードする場合、同じファイルをエンコード、出力するとおかしくなるので、テンポラリファイルにエンコード出力する
     encoding_path = "encoding_#{Time.now.to_i}.mp4"
-    transcode_options = %W(-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec libfaac -b:a 96k)
+    transcode_options = %W(-r 30 -vcodec libx264 -b:v #{vbitrate}k -acodec aac -strict experimental -b:a 96k)
     size = calc_size
     transcode_options += %W(-s #{size}) if size.present?
     # NOTE: rotation:90の動画をエンコードした際、縦動画が横動画として表示されてしまった
