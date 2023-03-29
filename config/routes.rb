@@ -167,6 +167,9 @@ Rails.application.routes.draw do
   devise_for :admin_users
   mount RailsAdmin::Engine => '/adamin', as: 'rails_admin'
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq_manage'
+
   resources :members do
     member do
       get :edit_account
