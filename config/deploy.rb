@@ -41,12 +41,6 @@ set :default_env, { path: "/home/ubuntu/.asdf/shims:$PATH" }
 set :unicorn_config_path, "#{current_path}/config/unicorn.conf.rb"
 # set :unicorn_pid, 'default'
 
-# sidekiq
-set :sidekiq_config, 'config/sidekiq.yml'
-set :sidekiq_role, :web
-SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
-SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
-
 namespace :deploy do
   desc 'Restart application'
   task :restart do

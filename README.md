@@ -5,7 +5,6 @@ AdanHP
 
 ## TODO
 * 動画エンコードについてまとめる（下にsidekiqの項目はある）
-* 現在、本番サーバーでsidekiqが自動で実行されてないはず
 * 本番環境で log/production.log が出力されず、 log/unicorn.log にまとめられているが、原因不明なので無視する
 
 ## Updates
@@ -136,12 +135,14 @@ create_ranking_total.sh
 ```
 
 ### sidekiq
-[todo] capistranoで再起動できるようにしたい <- できてるはずだが。確認
+* capistranoで起動するのを断念。 see: Capifile
+
 ```
-$ bundle exec sidekiq -C config/sidekiq.yml -e production -d
+* production
+$ sudo systemctl start sidekiq
 
 * dev
-$ bundle exec sidekiq -C config/sidekiq.yml
+$ bundle exec sidekiq
 ```
 
 ### メール

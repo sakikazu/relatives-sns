@@ -23,10 +23,12 @@ require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano3/unicorn'
 
-# sidekiq
-# TODO: やることは sidekiq の再起動？設定が他にも面倒そうなので、一旦無効
+# sidekiq起動
+# NOTE: https://zenn.dev/ryouzi/articles/d340173eb0386d を参考に sidekiq.serviceを作る必要があったが、
+# capistrano実行時はそれがNot foundになるので結局、手動で `sudo systemctl start sidekiq` をしている
 # require 'capistrano/sidekiq'
 # install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
+# # Then select your service manager
 # install_plugin Capistrano::Sidekiq::Systemd
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
