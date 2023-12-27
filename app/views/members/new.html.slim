@@ -25,7 +25,6 @@
         -# = ff.input :addr4, label: "住所(アパート名など)", input_html: {class: 'form-control'}
         = ff.input :addr_from, label: "出身地", input_html: {class: 'form-control'}
         = ff.input :birth_day, label: "誕生日", as: :date, start_year: 1910, end_year: Date.today.year, include_blank: true, input_html: {class: 'form-control'}, wrapper_html: {class: 'form-date-select-wrapper'}
-        = ff.input :dead_day, label: "亡くなった日", as: :date, start_year: 1980, end_year: Date.today.year, include_blank: true, input_html: {class: 'form-control'}, wrapper_html: {class: 'form-date-select-wrapper'}
 
       .form-actions.mt20
         = f.button :submit, class: "btn btn-primary", :data => {:disable_with => "処理中.."}

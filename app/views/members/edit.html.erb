@@ -66,6 +66,13 @@
   <tr><th>今行きたいところ</th><td><%= f.text_field :ikitai, class: 'form-control' %></td></tr>
   <tr><th>今やりたいこと</th><td><%= f.text_field :yaritai, class: 'form-control' %></td></tr>
   <tr><th>自由欄</th><td><%= f.text_area :free_text, class: 'form-control', rows: 7 %></td></tr>
+  <tr><th>亡くなった日</th>
+    <td>
+      <div class='form-date-select-wrapper'>
+        <%= f.date_select :dead_day, {start_year: 1980, end_year: Date.today.year, use_month_numbers: true, include_blank: true}, class: 'form-control' %>
+      </div>
+    </td>
+  </tr>
 </table>
 
   <%= f.hidden_field :user_id %>
