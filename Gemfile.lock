@@ -135,7 +135,7 @@ GEM
     config (4.1.0)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
-    connection_pool (2.4.0)
+    connection_pool (2.4.1)
     crass (1.0.6)
     database_rewinder (0.9.8)
     date (3.4.1)
@@ -237,6 +237,7 @@ GEM
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    logger (1.6.4)
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -365,7 +366,7 @@ GEM
       ffi (~> 1.0)
     rb-readline (0.5.5)
     redcarpet (3.6.0)
-    redis-client (0.14.0)
+    redis-client (0.23.0)
       connection_pool
     regexp_parser (2.10.0)
     remotipart (1.4.4)
@@ -429,11 +430,11 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sidekiq (7.0.7)
-      concurrent-ruby (< 2)
+    sidekiq (7.3.7)
       connection_pool (>= 2.3.0)
+      logger
       rack (>= 2.2.4)
-      redis-client (>= 0.11.0)
+      redis-client (>= 0.22.2)
     simple_form (5.2.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
