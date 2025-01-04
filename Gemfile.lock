@@ -479,7 +479,6 @@ GEM
       rails (>= 5)
     warden (1.2.9)
       rack (>= 2.0.9)
-    webrick (1.7.0)
     websocket-driver (0.7.7)
       base64
       websocket-extensions (>= 0.1.0)
@@ -488,8 +487,7 @@ GEM
       chronic (>= 0.6.3)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yard (0.9.28)
-      webrick (~> 1.7.0)
+    yard (0.9.37)
     zeitwerk (2.6.18)
 
 PLATFORMS
