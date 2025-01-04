@@ -139,7 +139,7 @@ create_ranking_total.sh
 
 ```
 * production
-$ sudo systemctl start sidekiq
+$ cap production sidekiq:restart
 
 * dev
 $ bundle exec sidekiq

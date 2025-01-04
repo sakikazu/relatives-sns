@@ -25,7 +25,7 @@ require 'capistrano3/unicorn'
 
 # sidekiq起動
 # NOTE: https://zenn.dev/ryouzi/articles/d340173eb0386d を参考に sidekiq.serviceを作る必要があったが、
-# capistrano実行時はそれがNot foundになるので結局、手動で `sudo systemctl start sidekiq` をしている
+# capistrano実行時はそれがNot foundになるので、cap production sidekiq:restartで再起動している
 # require 'capistrano/sidekiq'
 # install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
 # # Then select your service manager

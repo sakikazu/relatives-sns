@@ -58,3 +58,16 @@ namespace :deploy do
     end
   end
 end
+
+### sidekiq起動
+# NOTE: sidekiq起動ユーザーはデプロイユーザーと同じにしておかないと、エンコードされた動画がrootになって削除不可になってしまう
+#       /lib/systemd/system/sidekiq.serviceファイルにてユーザーを指定している
+#       また、sudoのパスワード入力を回避するため、visudoでNOPASSWD設定を行っている
+namespace :sidekiq do
+  desc 'Restart Sidekiq'
+  task :restart do
+    on roles(:app) do
+      execute :sudo, "systemctl restart sidekiq"
+    end
+  end
+end
