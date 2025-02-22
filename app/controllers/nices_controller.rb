@@ -54,6 +54,7 @@ class NicesController < ApplicationController
 
   def ranking
     # TODO: ランキングページの各コンテンツごとにページネーションできるようになっているが、ページネーションはコンテンツごとにページ分けるほうがいいな
+    # NOTE: コンテンツ指定の場合はAjax、指定しない場合は非Ajax
     ct = params[:content_type].to_i
     if ct == 1 || ct == 0
       @mutter_data = Ranking.total.mutter.page(params[:page]).per(10)

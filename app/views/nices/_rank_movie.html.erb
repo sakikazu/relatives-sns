@@ -1,11 +1,12 @@
 <% @movie_data.each_with_index do |data, idx| -%>
   <% content = data.content -%>
+  <% next if content.blank? -%>
   <div class="nice_rank">
     <%= image_tag("rank-icon-middle/icon-rank-tk02_m#{sprintf("%02d", idx+1)}.png") %>
     <%= data[:nice_count] %> イイネ
   </div>
   <div class="mb10">
-    <%= nicing_user_names(data.content) %>
+    <%= nicing_user_names(content) %>
   </div>
   <% if content.present? -%>
     動画：<%= link_to content.title, movie_path(content) %><br>
