@@ -10,7 +10,6 @@ class NicesController < ApplicationController
       # @nices[type.downcase] = Nice.where(:asset_type => type).order("id DESC").page(:page => params[:page]).per(10)
       @nices[type.downcase] = Nice.joins(:user).where(:asset_type => type).order("id DESC").limit(10)
     end
-    @sort = 1
     @mutter = Mutter.new(:user_id => current_user.id) # Mutterのレス用
   end
 
@@ -36,8 +35,6 @@ class NicesController < ApplicationController
     @blog_data = contents["Blog"] || []
 
     @users = Nice.niced_users
-
-    @sort = 4
     @mutter = Mutter.new(:user_id => current_user.id) # Mutterのレス用
   end
 
@@ -53,11 +50,10 @@ class NicesController < ApplicationController
     end
 
     @users = Nice.nicing_users
-
-    @sort = 3
   end
 
   def ranking
+    # TODO: ランキングページの各コンテンツごとにページネーションできるようになっているが、ページネーションはコンテンツごとにページ分けるほうがいいな
     ct = params[:content_type].to_i
     if ct == 1 || ct == 0
       @mutter_data = Ranking.total.mutter.page(params[:page]).per(10)
@@ -75,8 +71,6 @@ class NicesController < ApplicationController
       @movie_data = Ranking.total.movie.page(params[:page]).per(10)
       @content_name = "movie"
     end
-
-    @sort = 2
 
     respond_to do |format|
       format.html
