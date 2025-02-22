@@ -47,7 +47,7 @@ class Ranking < ApplicationRecord
 
     # todo トランザクションの使い方合ってるかな？あとdelete_allはトランザクション対応しているかとか
     ActiveRecord::Base.transaction do
-      self.delete_all(classification: 1)
+      self.where(classification: 1).delete_all
       contents.each do |content_data|
         content_data[1].each do |rank|
           self.create(classification: 1, content_type: rank[:type], content_id: rank[:id], nice_count: rank[:count])
