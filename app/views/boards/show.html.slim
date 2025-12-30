@@ -25,7 +25,7 @@
       |  | 
       = l @board.created_at if @board.created_at
     .description
-      = link_to image_tag(@board.attach(:thumb)), @board.attach(:large), {:class => colorbox_class} if @board.attach?
+      = link_to image_tag(@board.image_variant(:thumb)), @board.image_variant(:large), {:class => colorbox_class} if @board.image.attached?
       p.text
         = sani_custom_br(@board.description)
   .clearfix
@@ -38,6 +38,6 @@
     = form_tag({:action => :create_comment, :board_id => @board.id}, {id: 'comment-form', multipart: true}) do
       = text_area_tag :comment, nil, class: "form-control", rows: "3", placeholder: "コメントする"
       .mt10
-        = file_field_tag :attach, class: 'form-control'
+        = file_field_tag :image, class: 'form-control'
       .form-actions.mt10
         = submit_tag "投稿する", class: "btn btn-primary"

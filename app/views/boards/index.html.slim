@@ -22,8 +22,8 @@
               = board.user.dispname
               = " | 作成：#{time_shorter(board.created_at)}".html_safe
               = " | 最新コメント：#{time_shorter(board.board_comments.last.created_at)}".html_safe if board.board_comments.present?
-            - if board.attach?
-              div = link_to image_tag(board.attach(:thumb)), board.attach(:large), {:class => colorbox_class}
+            - if board.image.attached?
+              div = link_to image_tag(board.image_variant(:thumb)), board.image_variant(:large), {:class => colorbox_class}
             = truncate_link(board.description, 50)
             - if editable(current_user, board.user)
               .text-right.mt10

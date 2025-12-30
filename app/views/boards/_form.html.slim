@@ -4,10 +4,10 @@
       | 入力エラーがあります。下記のエラー内容を確認してください。
   = f.input :title, label: "タイトル", input_html: {class: "form-control"}
   = f.input :description, label: "内容", input_html: {class: "form-control", rows: 7}
-  .mt15 = f.label :attach, '画像'
-  - if @board.attach?
-    = image_tag(@board.attach(:thumb))
-  = f.input :attach, label: false, input_html: {class: "form-control"}
+  .mt15 = f.label :image, '画像'
+  - if @board.image.attached?
+    = image_tag(@board.image_variant(:thumb))
+  = f.input :image, label: false, input_html: {class: "form-control"}
 
   .form-actions.mt20
     = f.button :submit, class: "btn btn-primary"

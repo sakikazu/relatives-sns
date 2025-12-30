@@ -3,9 +3,9 @@
     .d-flex.justify-content-between.text-secondary
       p = comment.user&.dispname
       p.text-sm = l comment.created_at
-    - if comment.respond_to?(:attach) && comment.attach?
+    - if comment.respond_to?(:image) && comment.image.attached?
       .image.mb20
-        = link_to image_tag(comment.attach(:thumb)), comment.attach(:large), { class: colorbox_class }
+        = link_to image_tag(comment.image_variant(:thumb)), comment.image_variant(:large), { class: colorbox_class }
     p
       = sani_custom_br(comment.content)
     - if editable(current_user, comment.user)

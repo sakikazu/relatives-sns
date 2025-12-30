@@ -95,7 +95,10 @@ class BoardsController < ApplicationController
 
   def create_comment
     @board = Board.find(params[:board_id])
-    @board.board_comments.create(:user_id => current_user.id, :content => params[:comment], :attach => params[:attach])
+    comment = @board.board_comments.create(user_id: current_user.id, content: params[:comment])
+    if comment.persisted? && params[:image].present?
+      comment.image.attach(params[:image])
+    end
 
     UpdateHistory.for_creating_comment(@board, UpdateHistory::BOARD_COMMENT, current_user.id)
 
@@ -120,7 +123,7 @@ class BoardsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def board_params
-      params.require(:board).permit(:title, :description, :attach)
+      params.require(:board).permit(:title, :description, :image)
   end
 
   def page_title
