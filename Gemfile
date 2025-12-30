@@ -40,7 +40,7 @@ gem 'spring',        group: :development
 gem 'rails_12factor', group: :production
 
 
-gem 'devise'
+gem 'devise', '~> 4.9'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
 gem "paranoia", "~> 3.0"
 gem 'exception_notification'
@@ -94,7 +94,6 @@ group :development do
   gem 'slim-rails'                # generator時にslim対応可能になる
   gem 'view_source_map'           # webページ中に使用されているviewファイル名が見れる
   gem 'annotate'
-  gem 'bullet'                    # n+1検出
   gem 'rubocop', require: false
   # 邪魔なことが多いから無効に
   # gem 'rack-mini-profiler'        # 処理時間を表示
