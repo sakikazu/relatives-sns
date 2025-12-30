@@ -261,6 +261,7 @@ class User < ApplicationRecord
   end
 
   def self.recursive_relation(user, users)
+    image_variant = user.user_ext&.image_variant(:thumb)
     user_h = {id: user.id,
               root11: user.root11,
               name: user.dispname(User::FULLNICK),
@@ -270,7 +271,7 @@ class User < ApplicationRecord
               address: user.user_ext.address,
               birth_dead_h: user.user_ext.birth_dead_h,
               is_dead: user.user_ext.dead_day.present?,
-              image_path: user.user_ext.image? ? user.user_ext.image(:thumb) : NO_IMAGE_PATH
+              image_path: image_variant || NO_IMAGE_PATH
     }
 
     children = users.select{|u| u.parent_id == user.id}

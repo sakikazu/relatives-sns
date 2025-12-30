@@ -197,7 +197,9 @@ class Mutter < ApplicationRecord
    end
 
   def user_image_path
-    user.present? ? user.user_ext.image(:small) : NO_IMAGE_PATH
+    return NO_IMAGE_PATH unless user&.user_ext&.image&.attached?
+
+    user.user_ext.image_variant(:small) || NO_IMAGE_PATH
   end
 
   def self.count_unread_leave_me_mutters(user, shown_leave_me)

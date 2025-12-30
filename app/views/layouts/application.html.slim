@@ -58,7 +58,10 @@ html[lang="ja"]
             - # プロフィールメニュー
             li.nav-item.dropdown
               a.nav-link.dropdown-toggle[href="#" data-toggle="dropdown"]
-                = image_tag current_user.user_ext.image(:small), class: 'rounded-circle', size: '35x35', style: 'margin:-8px 0 -8px;'
+                - if current_user.user_ext.image.attached?
+                  = image_tag current_user.user_ext.image_variant(:small), class: 'rounded-circle', size: '35x35', style: 'margin:-8px 0 -8px;'
+                - else
+                  = image_tag ApplicationRecord::NO_IMAGE_PATH, class: 'rounded-circle', size: '35x35', style: 'margin:-8px 0 -8px;'
                 =< current_user.dispname(User::FULLNAME)
               .dropdown-menu
                 = link_to 'プロフィール編集', edit_me_members_path, class: 'dropdown-item'
@@ -108,4 +111,3 @@ html[lang="ja"]
       #desktopnotification
       p
         | - AdanHP ( 2006-#{Date.today.year} ) -
-

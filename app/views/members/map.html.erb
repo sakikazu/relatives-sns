@@ -23,7 +23,7 @@ function initMap() {
       "lat": <%= user_x.lat %>,
       "lng": <%= user_x.lng %>,
       "address": '<%= user_x.address %>',
-      "image": '<%= image_tag(user_x.image(:thumb)) if user_x.image? %>'
+      "image": '<%= image_tag(user_x.image_variant(:thumb)) if user_x.image.attached? %>'
     },
   <% end -%>
   ];
@@ -76,4 +76,3 @@ function initMap() {
   </div>
   <div style='clear:both'></div>
 </div>
-

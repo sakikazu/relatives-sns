@@ -28,7 +28,13 @@
   <tbody>
 <% @users.each_with_index do |user, idx| -%>
   <tr>
-    <td><%= link_to image_tag(user.user_ext.image(:small)), user.user_ext.image(:large), {:class => colorbox_class} if user.user_ext.image? %></td>
+    <td>
+      <% if user.user_ext.image.attached? %>
+        <%= link_to image_tag(user.user_ext.image_variant(:small)), user.user_ext.image_variant(:large), {:class => colorbox_class} %>
+      <% else %>
+        <%= image_tag ApplicationRecord::NO_IMAGE_PATH %>
+      <% end %>
+    </td>
     <td><%= user.dispname(User::FULLNICK,true) %></td>
     <td><%= user.root11_name %></td>
     <td><%= user.user_ext.sex_name %></td>

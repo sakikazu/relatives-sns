@@ -24,7 +24,11 @@
   <tr><th>プロフィール画像</th>
     <td>
       <div class='mb20'>
-        <%= link_to(image_tag(@user.user_ext.image(:thumb), class: "img-polaroid"), @user.user_ext.image.url(:large), {:class => colorbox_class}) %>
+        <% if @user.user_ext.image.attached? %>
+          <%= link_to(image_tag(@user.user_ext.image_variant(:thumb), class: "img-polaroid"), @user.user_ext.image_variant(:large), {:class => colorbox_class}) %>
+        <% else %>
+          <%= image_tag ApplicationRecord::NO_IMAGE_PATH, class: "img-polaroid" %>
+        <% end %>
       </div>
       <%= f.file_field :image, class: 'form-control' %>
     </td>
@@ -87,5 +91,3 @@
 <% end %>
 
 </div>
-
-

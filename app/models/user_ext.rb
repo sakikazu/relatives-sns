@@ -58,22 +58,15 @@ class UserExt < ApplicationRecord
 
   has_one_attached :image
 
-  content_name = "profile"
-  has_attached_file :image,
-    :styles => {
-      :small => "50x50#",
-      :thumb => "250x250>",
-      :large => "800x800>"
-    },
-    :convert_options => {
-      :small => ['-quality 70', '-strip'],
-      :thumb => ['-quality 80', '-strip'],
-    },
-    :url => "/upload/#{content_name}/:id/:style/:basename.:extension",
-    :path => ":rails_root/public/upload/#{content_name}/:id/:style/:basename.:extension",
-    default_url: NO_IMAGE_PATH
+  IMAGE_VARIANTS = {
+    small: { resize_to_fill: [50, 50] },
+    thumb: { resize_to_limit: [250, 250] },
+    large: { resize_to_limit: [800, 800] }
+  }.freeze
 
-  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"]
+  IMAGE_CONTENT_TYPES = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream"].freeze
+
+  validate :image_content_type
 
   SEX_LIST = [["男", 0], ["女", 1]]
 
@@ -82,6 +75,20 @@ class UserExt < ApplicationRecord
   BLOOD_O = 2
   BLOOD_AB = 3
   BLOOD_LIST = [["A型", BLOOD_A], ["B型", BLOOD_B], ["O型", BLOOD_O], ["AB型", BLOOD_AB]]
+
+  def image_variant(name)
+    return nil unless image.attached?
+    option = IMAGE_VARIANTS[name]
+    return nil if option.blank?
+    image.variant(**option)
+  end
+
+  def image_content_type
+    return unless image.attached?
+    return if IMAGE_CONTENT_TYPES.include?(image.content_type)
+
+    errors.add(:image, "の形式が不正です")
+  end
 
 
   def blood_name
