@@ -45,7 +45,6 @@ gem 'devise-encryptable' # for authlogic encrypt algorithm
 gem "paranoia", "~> 3.0"
 gem 'exception_notification'
 gem "sanitize"
-gem 'paperclip'
 gem 'exifr'
 gem "rails_autolink"
 gem 'kaminari'
