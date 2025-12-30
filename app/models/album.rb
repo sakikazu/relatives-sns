@@ -113,7 +113,9 @@ class Album < ApplicationRecord
   end
 
   def thumb_path
-    self.thumb.present? ? self.thumb.image(:thumb) : NO_IMAGE_PATH
+    return ApplicationRecord::NO_IMAGE_PATH unless thumb&.image&.attached?
+
+    thumb.image_variant(:thumb)
   end
 
   # photos, moviesをincludesしてから使う

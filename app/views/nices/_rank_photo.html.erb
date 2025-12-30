@@ -9,7 +9,9 @@
     <%= nicing_user_names(content) %>
   </div>
   <% if content.present? -%>
-    <%= link_to(image_tag(content.image(:thumb)), slideshow_album_photo_path(content.album, content), {:class => colorbox_fix_size}) if content.image?  %><br>
+    <% if content.image.attached? %>
+      <%= link_to(image_tag(content.image_variant(:thumb)), slideshow_album_photo_path(content.album, content), {:class => colorbox_fix_size}) %><br>
+    <% end %>
     写真タイトル：<%= content.title %> / アルバム：<%= link_to content.album.title, content.album %>
   <% else -%>
     削除されました.

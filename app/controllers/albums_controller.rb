@@ -188,10 +188,11 @@ class AlbumsController < ApplicationController
     tmp_dir = tmp.path + '.dir'
     FileUtils.mkdir(tmp_dir)
     @album.photos.each do |photo|
-      if File.exist?(photo.image.path)
-        FileUtils.cp photo.image.path, tmp_dir
-      elsif File.exist?(photo.image.path(:large))
-        FileUtils.cp photo.image.path(:large), tmp_dir
+      next unless photo.image.attached?
+
+      photo.image.blob.open do |file|
+        filename = photo.image.filename.to_s
+        FileUtils.cp file.path, File.join(tmp_dir, filename)
       end
     end
 

@@ -37,21 +37,29 @@ class Photo < ApplicationRecord
   has_one_attached :image
 
   # memo なんだろう「image/pjpeg」って。。Mutterにて投稿されていた
-  CONTENT_TYPE = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream", "image/pjpeg", "image/bmp"]
+  CONTENT_TYPE = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream", "image/pjpeg", "image/bmp"].freeze
   EXTS = ["jpg", "jpeg", "png", "gif", "bmp"]
 
-  content_name = "album"
-  has_attached_file :image,
-    :styles => {
-      :thumb => "250x250>",
-      :large => "800x800>"
-    },
-    :convert_options => { :thumb => ['-quality 70', '-strip']}, #50じゃノイズきつい
-    :url => "/upload/#{content_name}/:album/:id/:style/:hash.:extension",
-    :path => ":rails_root/public/upload/#{content_name}/:album/:id/:style/:hash.:extension",
-    default_url: NO_IMAGE_PATH
+  IMAGE_VARIANTS = {
+    thumb: { resize_to_limit: [250, 250] },
+    large: { resize_to_limit: [800, 800] }
+  }.freeze
 
-  validates_attachment_content_type :image, content_type: CONTENT_TYPE
+  validate :image_content_type
+
+  def image_variant(name)
+    return nil unless image.attached?
+    option = IMAGE_VARIANTS[name]
+    return nil if option.blank?
+    image.variant(**option)
+  end
+
+  def image_content_type
+    return unless image.attached?
+    return if CONTENT_TYPE.include?(image.content_type)
+
+    errors.add(:image, "の形式が不正です")
+  end
 
 
   #全写真からただランダムに抽出する

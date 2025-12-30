@@ -7,9 +7,9 @@
   <h3>編集</h3>
 </div>
 
-<% if @movie.thumb? %>
+<% if @movie.thumb.attached? %>
 <div class="thumbnail">
-<%= image_tag @movie.thumb(:thumb) %>
+<%= image_tag @movie.thumb_variant(:thumb) %>
 </div>
 <% end %>
 

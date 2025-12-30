@@ -10,11 +10,11 @@ module MutterHelper
   def draw_content(mutter)
     out = sani_org(mutter.view_content)
     media_src = ""
-    if mutter.photo.present?
+    if mutter.photo.present? && mutter.photo.image.attached?
       media_src = if browser.device.mobile?
-                    link_to(image_tag(mutter.photo.image(:thumb), class: 'img-thumbnail'), mutter.photo.image(:large))
+                    link_to(image_tag(mutter.photo.image_variant(:thumb), class: 'img-thumbnail'), mutter.photo.image_variant(:large))
                   else
-                    image_tag(mutter.photo.image(:large), class: 'img-thumbnail')
+                    image_tag(mutter.photo.image_variant(:large), class: 'img-thumbnail')
                   end
       media_src = "<div class='thumbnail text-center'>\n#{media_src}\n</div>\n".html_safe
       media_src += "<br>\n".html_safe + link_to("(#{mutter.photo.album.title})", album_path(mutter.photo.album_id)) if mutter.photo.album.present?

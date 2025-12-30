@@ -10,7 +10,11 @@
 </div>
 
 <div class="mgn-b20 text-center">
-<%= image_tag(@photo.image(:large), class: 'img-thumbnail') %>
+<% if @photo.image.attached? %>
+<%= image_tag(@photo.image_variant(:large), class: 'img-thumbnail') %>
+<% else %>
+<%= image_tag ApplicationRecord::NO_IMAGE_PATH, class: 'img-thumbnail' %>
+<% end %>
 </div>
 
 <%= simple_form_for [@photo.album, @photo] do |f| %>

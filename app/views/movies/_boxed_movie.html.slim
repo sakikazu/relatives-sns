@@ -5,7 +5,10 @@
     .hidden_img_height
       = link_to movie_path(movie) do
         .movie-thumb
-          = image_tag(movie.thumb(:thumb), class: 'card-img-top')
+          - if movie.thumb.attached?
+            = image_tag(movie.thumb_variant(:thumb), class: 'card-img-top')
+          - else
+            = image_tag("/images/movie_thumb.jpg", class: 'card-img-top')
         .movie-play = fa_icon 'play-circle-o', class: 'fa-3x'
     .card-body
       h5.card-title
@@ -23,4 +26,3 @@
         - if movie.mutter_comments.last.try(:created_at)
           br
             = "最新コメント：#{time_shorter(movie.mutter_comments.last.created_at)}".html_safe
-

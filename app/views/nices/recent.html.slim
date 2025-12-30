@@ -29,7 +29,8 @@
             |  削除されました. 
           - else
             - p obj
-            = link_to(image_tag(obj.image(:thumb)), slideshow_album_photo_path(obj.album, obj), {:class => colorbox_fix_size}) if obj.image?
+            - if obj.image.attached?
+              = link_to(image_tag(obj.image_variant(:thumb)), slideshow_album_photo_path(obj.album, obj), {:class => colorbox_fix_size})
             br
             |  写真タイトル：
             = obj.title
@@ -73,6 +74,7 @@
             |  動画：
             = link_to obj.title, movie_path(obj)
             br
-            = image_tag(obj.thumb(:thumb)) + '<br>' if obj.thumb?
+            - if obj.thumb.attached?
+              = image_tag(obj.thumb_variant(:thumb)) + '<br>'
             = nice_author_and_created_at(obj)
           hr

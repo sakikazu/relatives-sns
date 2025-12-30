@@ -27,7 +27,6 @@
   = f.input :title, label: "タイトル", input_html: {class: 'form-control'}
   = f.input :description, label: "説明", input_html: {class: "form-control", rows: 6}
   = f.input :movie, label: "動画", label_html: {class: "mgn-t20"}, input_html: {class: 'form-control'}
-  = f.error :movie_file_name, class: 'form-control important big'
   = f.input :thumb, label: "サムネイル(未指定の場合は自動作成されます)", label_html: {class: "mgn-t20"}, input_html: {class: 'form-control'}
   - # todo やっぱ面倒くさい。やめた！動画更新時に、サムネイルは更新されないけど、まあ、ね。面倒くさいのは、今非同期でサムネイル作成やっていて、作成するかどうかの判断をMovieモデルに保存して、その処理に渡す必要あるし、、まあサムネイル作成だけ非同期じゃなくすれば良いだけかもだけど、なんかファイルが存在するしないのタイミングがあったらと思って怖い
   - #if @movie.id.present?

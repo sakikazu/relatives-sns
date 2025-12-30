@@ -10,7 +10,9 @@
   </div>
   <% if content.present? -%>
     動画：<%= link_to content.title, movie_path(content) %><br>
-    <%= image_tag(content.thumb(:thumb)) + '<br>' if content.thumb?  %>
+    <% if content.thumb.attached? %>
+      <%= image_tag(content.thumb_variant(:thumb)) + '<br>' %>
+    <% end %>
     <%= nice_author_and_created_at(content) %>
   <% else -%>
     削除されました.

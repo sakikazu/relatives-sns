@@ -96,18 +96,25 @@ class Mutter < ApplicationRecord
     if Photo::valid_ext?(self.image.original_filename)
       photo = Photo.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       photo.exif_at = Photo::set_exif_at(self.image.path)
-      photo.image = self.image
+      photo.image.attach(self.image)
       photo.save
       saved_content = photo
     elsif Movie::valid_ext?(self.image.original_filename)
       movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
-      movie.movie = self.image
-      if movie.save and movie.ffmp.valid?
+      movie.movie.attach(self.image)
+      if movie.save && movie.ffmpeg_valid?(file: self.image)
         begin
           EncodeWorker.perform_async movie.id
-        rescue Redis::CannotConnectError => e
-          p "Redisが動いてないのでエンコードなしで保存します"
-          movie.save_with_available_movie
+        rescue StandardError => e
+          redis_missing = e.is_a?(NameError) && e.name.to_s == "Redis"
+          cannot_connect = defined?(::Redis::CannotConnectError) && e.is_a?(::Redis::CannotConnectError)
+          cannot_connect ||= defined?(::RedisClient::CannotConnectError) && e.is_a?(::RedisClient::CannotConnectError)
+          if redis_missing || cannot_connect
+            p "Redisが動いてないのでエンコードなしで保存します"
+            movie.save_with_available_movie
+          else
+            raise
+          end
         end
       else
         # p movie.errors.full_messages

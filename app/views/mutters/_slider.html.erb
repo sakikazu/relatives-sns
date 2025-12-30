@@ -4,9 +4,9 @@
       <ul>
         <% @slide_photos.each do |thumb| -%>
           <li>
-          <%= link_to image_tag(thumb.image(:thumb), :alt => thumb.album.title),
+          <%= link_to image_tag(thumb.image_variant(:thumb), :alt => thumb.album.title),
             slideshow_album_photo_path(thumb.album, thumb, top: 1),
-            {rel: colorbox_class, :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? %>
+            {rel: colorbox_class, :title => "上のリンク先からアルバムが見れます"} if thumb.album.present? && thumb.image.attached? %>
           </li>
         <% end -%>
       </ul>
@@ -15,4 +15,3 @@
     <div class="sliderkit-btn sliderkit-nav-btn sliderkit-nav-next"><a href="#" title="Scroll to the right"><span>Next</span></a></div>
   </div>
 </div>
-
