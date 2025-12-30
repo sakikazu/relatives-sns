@@ -48,7 +48,8 @@
         - else
           - if obj.blog_images.size > 0
             - b_image = obj.blog_images.first
-            = image_tag(b_image.image(:thumb)) if b_image.image?
+            - if b_image.image.attached?
+              = image_tag(b_image.image_variant(:thumb))
             br
           |  日記：
           = link_to obj.title, blog_path(obj)

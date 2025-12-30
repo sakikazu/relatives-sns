@@ -18,7 +18,8 @@
           = " | 投稿：#{time_shorter(blog.created_at)}".html_safe
           = " | 最新コメント：#{time_shorter(blog.comments.last.created_at) if blog.comments.present?}".html_safe
         - blog.blog_images.each do |image|
-          = link_to image_tag(image.image(:thumb)), image.image(:large), {:class => colorbox_class} if image.image?
+          - if image.image.attached?
+            = link_to image_tag(image.image_variant(:thumb)), image.image_variant(:large), {:class => colorbox_class}
         p.text
           | (本文抜粋)
           = truncate_link(blog.content, 100)
@@ -41,4 +42,3 @@
             td
               strong = link_to "#{user.dispname}(#{cnt})", blogs_by_user_path(user.username)
               .text-muted.text-sm = "最終更新日：#{time_shorter(created_at)}".html_safe
-

@@ -26,7 +26,8 @@
     .well.well-narrow.mt20
       p.text-info アップロード済み画像
       - @blog.blog_images.each do |image|
-        = image_tag(image.image(:thumb), class: 'img-thumbnail')
+        - if image.image.attached?
+          = image_tag(image.image_variant(:thumb), class: 'img-thumbnail')
   = file_field :image, :image, class: 'form-control'
   p.text-muted.text-sm ※複数載せる場合は、その分だけ編集でファイルを選択して更新してください
   .form-actionsm.mt20

@@ -14,7 +14,8 @@ TARGETS = [
   { model: Board, paperclip: :attach, active_storage: :image },
   { model: BoardComment, paperclip: :attach, active_storage: :image },
   { model: Movie, paperclip: :movie, active_storage: :movie },
-  { model: Movie, paperclip: :thumb, active_storage: :thumb }
+  { model: Movie, paperclip: :thumb, active_storage: :thumb },
+  { model: BlogImage, paperclip: :image, active_storage: :image }
 ].freeze
 
 def filename_for(record, paperclip_name, fallback_path)
