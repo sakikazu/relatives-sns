@@ -60,6 +60,9 @@ gem 'sidekiq'
 gem 'font-awesome-rails'
 gem 'redcarpet' # markdown
 
+# ActiveStorage variants
+gem 'image_processing', '~> 1.12'
+
 # Ajaxでファイルアップロード
 gem 'remotipart', '~> 1.2'
 
@@ -146,4 +149,3 @@ end
 # Use unicorn as the app server
 gem 'unicorn'
 gem 'foreman'
-
