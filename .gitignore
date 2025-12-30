@@ -18,6 +18,7 @@
 !/tmp/pids/.gitignore
 
 # my setting
+/storage
 public/upload
 public/upload_dev/
 public/assets
