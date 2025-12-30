@@ -23,5 +23,11 @@ module Adan4
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.i18n.default_locale = :ja
+    config.time_zone = "Asia/Tokyo"
+
+    # エラーページにlayoutを適用させたいため
+    # see. https://qiita.com/mr-myself/items/c2f4fb2e5dcee6a336f3#comment-23298b703d75b7d27487
+    config.exceptions_app = ->(env) { ErrorsController.action(:show).call(env) }
   end
 end
