@@ -32,6 +32,8 @@ class Board < ApplicationRecord
 
   attr_accessor :sort_at
 
+  has_one_attached :image
+
   content_name = "board"
   has_attached_file :attach,
     :styles => {

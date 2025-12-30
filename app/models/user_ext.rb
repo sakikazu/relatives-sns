@@ -56,6 +56,8 @@ class UserExt < ApplicationRecord
 
   scope :alive, lambda { where("dead_day IS NULL") }
 
+  has_one_attached :image
+
   content_name = "profile"
   has_attached_file :image,
     :styles => {

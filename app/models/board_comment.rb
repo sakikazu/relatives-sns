@@ -18,6 +18,8 @@ class BoardComment < ApplicationRecord
   belongs_to :user
   belongs_to :board
 
+  has_one_attached :image
+
   content_name = "board"
   has_attached_file :attach,
     :styles => {

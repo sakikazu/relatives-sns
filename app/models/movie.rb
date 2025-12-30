@@ -41,6 +41,9 @@ class Movie < ApplicationRecord
 
   attr_accessor :ffmp_obj, :is_update_thumb
 
+  has_one_attached :movie
+  has_one_attached :thumb
+
   validates :title, presence: true
   validates :movie, presence: { message: 'ファイルを選択してください。' }
 

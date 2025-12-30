@@ -34,6 +34,8 @@ class Photo < ApplicationRecord
   scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
   scope :id_desc, -> { order('id DESC') }
 
+  has_one_attached :image
+
   # memo なんだろう「image/pjpeg」って。。Mutterにて投稿されていた
   CONTENT_TYPE = ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/octet-stream", "image/pjpeg", "image/bmp"]
   EXTS = ["jpg", "jpeg", "png", "gif", "bmp"]
