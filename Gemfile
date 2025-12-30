@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.7.7'
-gem 'rails', '~> 6.0'
+ruby '3.2.6'
+gem 'rails', '~> 7.2'
 gem 'bootsnap' # railsの起動を速くする
 
 # Use mysql as the database for Active Record
@@ -42,7 +42,7 @@ gem 'rails_12factor', group: :production
 
 gem 'devise'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
-gem "paranoia", "~> 2.0"
+gem "paranoia", "~> 3.0"
 gem 'exception_notification'
 gem "sanitize"
 gem 'paperclip'
