@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_12_13_130205) do
-
+ActiveRecord::Schema[7.2].define(version: 2025_12_30_124045) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -29,8 +28,8 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.text "metadata"
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -44,15 +43,15 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
     t.integer "sign_in_count", default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
@@ -61,8 +60,8 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "user_id"
     t.integer "album_id"
     t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "albums", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -70,9 +69,9 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "title"
     t.text "description"
     t.integer "thumb_id"
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "mutter_id"
     t.integer "owner_id"
   end
@@ -81,8 +80,8 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "blog_id"
     t.integer "user_id"
     t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "blog_images", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -90,18 +89,18 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
-    t.datetime "image_updated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "image_updated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "blogs", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "title"
     t.text "content"
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "mutter_id"
     t.boolean "wysiwyg_written", default: false
   end
@@ -113,9 +112,9 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "attach_file_name"
     t.string "attach_content_type"
     t.integer "attach_file_size"
-    t.datetime "attach_updated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "attach_updated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "boards", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -125,18 +124,18 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "attach_file_name"
     t.string "attach_content_type"
     t.integer "attach_file_size"
-    t.datetime "attach_updated_at"
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "attach_updated_at", precision: nil
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "mutter_id"
   end
 
   create_table "celebrations", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
     t.date "anniversary_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "comments", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -146,16 +145,16 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "parent_id"
     t.string "parent_type"
     t.text "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "geocodes", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.string "address"
     t.float "lat"
     t.float "lng"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "histories", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -166,8 +165,8 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.text "content"
     t.integer "user_id"
     t.string "src_user_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "mutter_id"
   end
 
@@ -175,22 +174,22 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "history_id"
     t.integer "user_id"
     t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "login_histories", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "movie_comments", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.integer "movie_id"
     t.integer "user_id"
     t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "movies", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -200,14 +199,14 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "movie_file_name"
     t.string "movie_content_type"
     t.integer "movie_file_size"
-    t.datetime "movie_updated_at"
+    t.datetime "movie_updated_at", precision: nil
     t.string "thumb_file_name"
     t.string "thumb_content_type"
     t.integer "thumb_file_size"
-    t.datetime "thumb_updated_at"
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "thumb_updated_at", precision: nil
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "movie_type"
     t.integer "is_ready", default: 0
     t.string "original_movie_file_name"
@@ -220,15 +219,15 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.text "content"
     t.integer "reply_id"
     t.integer "celebration_id"
-    t.datetime "for_sort_at"
+    t.datetime "for_sort_at", precision: nil
     t.string "ua"
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
-    t.datetime "image_updated_at"
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "image_updated_at", precision: nil
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "leave_me", default: false
     t.boolean "invisible_in_timeline", default: false
   end
@@ -237,8 +236,8 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "user_id"
     t.integer "asset_id"
     t.string "asset_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "comment"
     t.integer "niced_user_id"
   end
@@ -247,8 +246,8 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "user_id"
     t.text "content"
     t.integer "photo_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "photos", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -256,15 +255,15 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "title"
     t.text "description"
     t.integer "album_id"
-    t.datetime "exif_at"
-    t.datetime "last_comment_at"
-    t.datetime "deleted_at"
+    t.datetime "exif_at", precision: nil
+    t.datetime "last_comment_at", precision: nil
+    t.datetime "deleted_at", precision: nil
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
-    t.datetime "image_updated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "image_updated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "mutter_id"
     t.integer "comment_id"
   end
@@ -276,8 +275,8 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "table"
     t.integer "month", limit: 2
     t.bigint "year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["item", "table", "month", "year"], name: "index_rails_admin_histories"
   end
 
@@ -286,15 +285,15 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "content_id"
     t.string "content_type"
     t.integer "nice_count"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "sessions", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["session_id"], name: "index_sessions_on_session_id"
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
@@ -304,16 +303,16 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.integer "action_type"
     t.integer "content_id"
     t.string "content_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "user_extensions", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "key"
     t.text "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "user_exts", id: :integer, charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
@@ -333,7 +332,7 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
-    t.datetime "image_updated_at"
+    t.datetime "image_updated_at", precision: nil
     t.string "job"
     t.string "hobby"
     t.string "skill"
@@ -355,9 +354,9 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "ikitai"
     t.string "yaritai"
     t.text "free_text"
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.date "dead_day"
   end
 
@@ -370,19 +369,19 @@ ActiveRecord::Schema.define(version: 2025_12_13_130205) do
     t.string "givenname"
     t.integer "root11"
     t.integer "generation"
-    t.datetime "deleted_at"
-    t.datetime "last_request_at"
+    t.datetime "deleted_at", precision: nil
+    t.datetime "last_request_at", precision: nil
     t.string "password_salt"
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
     t.integer "sign_in_count", default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "authentication_token"
     t.integer "parent_id"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
