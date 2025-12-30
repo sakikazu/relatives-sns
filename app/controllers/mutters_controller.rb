@@ -112,14 +112,14 @@ class MuttersController < ApplicationController
     @contents = []
     @mutters = Mutter.id_desc.limit(5)
     @mutters.each do |obj|
-      @contents << {:title => "[#{obj.created_at.to_s(:short3)}] つぶやき(#{obj.user.dispname})", :description => obj.content, :updated_at => obj.created_at}
+      @contents << {:title => "[#{obj.created_at.to_fs(:short3)}] つぶやき(#{obj.user.dispname})", :description => obj.content, :updated_at => obj.created_at}
     end
     @uhs = UpdateHistory.view_normal.limit(5)
     @uhs.each do |obj|
       ai = UpdateHistory::ACTION_INFO[obj.action_type]
       time = obj.updated_at || obj.created_at
       @contents << {
-        :title => "[#{time.to_s(:short3)}] [#{ai[:content_name]}]#{obj.user.dispname}が「#{obj.content.title}」#{ai[:info]}",
+        :title => "[#{time.to_fs(:short3)}] [#{ai[:content_name]}]#{obj.user.dispname}が「#{obj.content.title}」#{ai[:info]}",
         :description => obj.content.title,
         :updated_at => time}
     end

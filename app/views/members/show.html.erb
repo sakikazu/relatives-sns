@@ -30,7 +30,7 @@
   <tr><th>血液型</th><td><%= @user.user_ext.blood_name %></td></tr>
   <tr><th>住所</th><td><%= "#{@user.user_ext.addr1} #{@user.user_ext.addr2} #{@user.user_ext.addr3} #{@user.user_ext.addr4}" %></td></tr>
   <tr><th>出身地</th><td><%= @user.user_ext.addr_from %></td></tr>
-  <tr><th>誕生日</th><td><%= @user.user_ext.birth_day&.to_s(:date) %></td></tr>
+  <tr><th>誕生日</th><td><%= @user.user_ext.birth_day&.to_fs(:date) %></td></tr>
   <tr><th>仕事</th><td><%= @user.user_ext.job %></td></tr>
   <tr><th>趣味</th><td><%= @user.user_ext.hobby %></td></tr>
   <tr><th>特技</th><td><%= @user.user_ext.skill %></td></tr>
@@ -52,7 +52,7 @@
   <tr><th>今行きたいところ</th><td><%= @user.user_ext.ikitai %></td></tr>
   <tr><th>今やりたいこと</th><td><%= @user.user_ext.yaritai %></td></tr>
   <tr><th>自由欄</th><td><%= sani_custom_br(@user.user_ext.free_text) %></td></tr>
-  <tr><th>亡くなった日</th><td><%= @user.user_ext.dead_day&.to_s(:date) %></td></tr>
+  <tr><th>亡くなった日</th><td><%= @user.user_ext.dead_day&.to_fs(:date) %></td></tr>
   <tr><th>お祝い履歴</th><td>
     <% @user.celebrations.each do |c| %>
       <div class="mt10">

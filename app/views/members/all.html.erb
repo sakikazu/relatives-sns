@@ -25,7 +25,7 @@
   <tr><th>メールアドレス</th><td><%= user.user_ext.email %></td></tr>
   <tr><th>住所</th><td><%= "#{user.user_ext.addr1} #{user.user_ext.addr2} #{user.user_ext.addr3} #{user.user_ext.addr4}" %></td></tr>
   <tr><th>出身地</th><td><%= user.user_ext.addr_from %></td></tr>
-  <tr><th>誕生日</th><td><%= user.user_ext.birth_day.to_s(:date) if user.user_ext.birth_day %></td></tr>
+  <tr><th>誕生日</th><td><%= user.user_ext.birth_day.to_fs(:date) if user.user_ext.birth_day %></td></tr>
   <tr><th>仕事</th><td><%= user.user_ext.job %></td></tr>
   <tr><th>趣味</th><td><%= user.user_ext.hobby %></td></tr>
   <tr><th>特技</th><td><%= user.user_ext.skill %></td></tr>

@@ -121,9 +121,9 @@ class UserExt < ApplicationRecord
 
   def birth_dead_h
     if self.birth_day.present? && self.dead_day.present?
-      "#{self.birth_day.to_s(:normal)}生 - #{self.dead_day.to_s(:normal)}没"
+      "#{self.birth_day.to_fs(:normal)}生 - #{self.dead_day.to_fs(:normal)}没"
     elsif self.birth_day.present?
-      "#{self.birth_day.to_s(:normal)}生まれ"
+      "#{self.birth_day.to_fs(:normal)}生まれ"
     else
       "(生年月日)"
     end

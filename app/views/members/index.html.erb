@@ -39,7 +39,7 @@
     <td><%= user.root11_name %></td>
     <td><%= user.user_ext.sex_name %></td>
     <td><%= user.user_ext.age_to_s %></td>
-    <td><%= user.user_ext.birth_day.to_s(:date) if user.user_ext.birth_day %></td>
+    <td><%= user.user_ext.birth_day.to_fs(:date) if user.user_ext.birth_day %></td>
     <td><%= user.user_ext.blood_name %></td>
     <td><%= time_shorter(user.current_sign_in_at) %></td>
 <% if current_user.admin? -%>

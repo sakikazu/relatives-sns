@@ -2,7 +2,7 @@ module ApplicationHelper
 
   def time_shorter(time, options = {})
     return '' if time.blank?
-    full_time_str = time.to_s(:normal)
+    full_time_str = time.to_fs(:normal)
     fmt = options[:noyear] ? '%m/%d' : '%Y/%m/%d'
     link_to time.strftime(fmt), 'javascript:void(0)', data: { toggle: 'tooltip', trigger: 'click' }, title: full_time_str, class: 'text-info text-underline'
   end
