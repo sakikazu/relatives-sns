@@ -159,13 +159,14 @@ class Movie < ApplicationRecord
 
   # ffmpegでサムネイルを作成したいが、Herokuだとインストールがめんどくさそうでやっぱやめとこ
   def save_with_available_movie(movie_path = nil)
-    self.is_ready = true
-    self.original_movie_file_name ||= movie.filename.to_s if movie.attached?
+    original_name = movie.filename.to_s if movie.attached?
     if movie_path.present?
       File.open(movie_path, "rb") do |io|
         movie.attach(io: io, filename: File.basename(movie_path), content_type: "video/mp4")
       end
     end
+    self.is_ready = true
+    self.original_movie_file_name ||= original_name
     self.save
     p self.errors.full_messages
   end
