@@ -10,6 +10,9 @@ AdanHP
 ## Updates
 * 2023/02: grapeとそれによるAPIを削除した
     * スマホアプリは稼働してないのと、Rails6にした際に、本番環境でエラーが出たため
+* 2025/12/31: paperclipからActiveStorage移行
+    * 移行スクリプトではすべて成功せず、20個ほど手作業で移行するなど
+    * すべて正しく移行できているか不安なので、paperclipのDBカラム、public/uploadディレクトリはしばらく残しておく方針
 
 ## Features
 * クローズドSNS
