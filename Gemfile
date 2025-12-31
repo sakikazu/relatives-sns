@@ -36,10 +36,6 @@ gem 'spring',        group: :development
 
 # --- above defaults ---
 
-# for heroku
-gem 'rails_12factor', group: :production
-
-
 gem 'devise', '~> 4.9'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
 gem "paranoia", "~> 3.0"
@@ -66,13 +62,11 @@ gem 'image_processing', '~> 1.12'
 gem 'remotipart', '~> 1.2'
 
 gem 'gcm'
-gem 'apns'
 
 
 # jquery-railsをバージョン指定するとこれがエラーになるぞ？？（2014/05/12）
 # rails6にすると can't frozen AdminUser みたいなエラーが出るので、ひとまずコメントアウト
 gem 'rails_admin'
-gem 'faker'
 
 gem 'browser'
 
