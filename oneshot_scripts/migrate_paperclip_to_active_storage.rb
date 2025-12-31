@@ -10,6 +10,8 @@ require "digest/sha1"
 
 DRY_RUN = ENV["DRY_RUN"].present?
 BATCH_SIZE = (ENV["BATCH_SIZE"] || 200).to_i
+ORIGINAL_MISSING = Hash.new { |hash, key| hash[key] = [] }
+ORIGINAL_AMBIGUOUS = Hash.new { |hash, key| hash[key] = [] }
 
 TARGETS = [
   { model: UserExt, paperclip: :image, active_storage: :image },
@@ -77,51 +79,56 @@ def paperclip_hash(record, paperclip_name)
   Digest::SHA1.hexdigest("#{data}#{PAPERCLIP_HASH_SECRET}")
 end
 
-def paperclip_relative_paths(record, paperclip_name)
+def paperclip_relative_paths(record, paperclip_name, styles: %w[original])
   case [record.class.name, paperclip_name.to_sym]
   when ["UserExt", :image]
     basename, ext = basename_and_ext(record, paperclip_name)
     return [] if basename.blank? || ext.blank?
-    %w[original large thumb small].map do |style|
+    styles = (styles + %w[small]).uniq
+    styles.map do |style|
       File.join("upload", "profile", record.id.to_s, style, "#{basename}.#{ext}")
     end
   when ["Photo", :image]
     return [] if record.album_id.blank?
-    _basename, ext = basename_and_ext(record, paperclip_name)
+    basename, ext = basename_and_ext(record, paperclip_name)
     return [] if ext.blank?
     hash = paperclip_hash(record, paperclip_name)
-    %w[original large thumb].map do |style|
-      File.join("upload", "album", record.album_id.to_s, record.id.to_s, style, "#{hash}.#{ext}")
+    filenames = ["#{hash}.#{ext}"]
+    filenames << "#{basename}.#{ext}" if basename.present? && "#{basename}.#{ext}" != "#{hash}.#{ext}"
+    styles.flat_map do |style|
+      filenames.map do |filename|
+        File.join("upload", "album", record.album_id.to_s, record.id.to_s, style, filename)
+      end
     end
   when ["Board", :attach]
     basename, ext = basename_and_ext(record, paperclip_name)
     return [] if basename.blank? || ext.blank?
-    %w[original large thumb].map do |style|
+    styles.map do |style|
       File.join("upload", "board", record.id.to_s, style, "#{basename}.#{ext}")
     end
   when ["BoardComment", :attach]
     return [] if record.board_id.blank?
     basename, ext = basename_and_ext(record, paperclip_name)
     return [] if basename.blank? || ext.blank?
-    %w[original large thumb].map do |style|
+    styles.map do |style|
       File.join("upload", "board", record.board_id.to_s, "_res", record.id.to_s, style, "#{basename}.#{ext}")
     end
   when ["Movie", :movie]
     basename, ext = basename_and_ext(record, paperclip_name)
     return [] if basename.blank? || ext.blank?
-    %w[original].map do |style|
+    styles.map do |style|
       File.join("upload", "movie", record.id.to_s, style, "#{basename}.#{ext}")
     end
   when ["Movie", :thumb]
     basename, ext = basename_and_ext(record, paperclip_name)
     return [] if basename.blank? || ext.blank?
-    %w[thumb large].map do |style|
+    styles.map do |style|
       File.join("upload", "movie", record.id.to_s, "thumb", style, "#{basename}.#{ext}")
     end
   when ["BlogImage", :image]
     basename, ext = basename_and_ext(record, paperclip_name)
     return [] if basename.blank? || ext.blank?
-    %w[original large thumb].map do |style|
+    styles.map do |style|
       File.join("upload", "blog", record.id.to_s, style, "#{basename}.#{ext}")
     end
   else
@@ -129,17 +136,59 @@ def paperclip_relative_paths(record, paperclip_name)
   end
 end
 
-def legacy_path_for(record, paperclip_name)
-  relative_paths = paperclip_relative_paths(record, paperclip_name)
-  return nil if relative_paths.empty?
+def original_dir_candidates(record, paperclip_name)
+  case [record.class.name, paperclip_name.to_sym]
+  when ["UserExt", :image]
+    [File.join("upload", "profile", record.id.to_s, "original")]
+  when ["Photo", :image]
+    return [] if record.album_id.blank?
+    [File.join("upload", "album", record.album_id.to_s, record.id.to_s, "original")]
+  when ["Board", :attach]
+    [File.join("upload", "board", record.id.to_s, "original")]
+  when ["BoardComment", :attach]
+    return [] if record.board_id.blank?
+    [File.join("upload", "board", record.board_id.to_s, "_res", record.id.to_s, "original")]
+  when ["Movie", :movie]
+    [File.join("upload", "movie", record.id.to_s, "original")]
+  when ["Movie", :thumb]
+    [File.join("upload", "movie", record.id.to_s, "thumb", "original")]
+  when ["BlogImage", :image]
+    [File.join("upload", "blog", record.id.to_s, "original")]
+  else
+    []
+  end
+end
 
-  base_public_paths.each do |base|
-    relative_paths.each do |relative|
-      path = base.join(relative)
-      return path.to_s if File.exist?(path)
+def resolve_from_original_dir(record, paperclip_name)
+  basename, ext = basename_and_ext(record, paperclip_name)
+  expected_filename = "#{basename}.#{ext}" if basename.present? && ext.present?
+
+  original_dir_candidates(record, paperclip_name).each do |relative|
+    base_public_paths.each do |base|
+      dir = base.join(relative)
+      next unless Dir.exist?(dir)
+
+      entries = Dir.children(dir).select { |name| File.file?(dir.join(name)) }
+      next if entries.empty?
+
+      if entries.size == 1
+        return [:ok, dir.join(entries.first).to_s]
+      end
+
+      if expected_filename && entries.include?(expected_filename)
+        return [:ok, dir.join(expected_filename).to_s]
+      end
+
+      return [:ambiguous, entries.map { |name| dir.join(name).to_s }]
     end
   end
 
+  [:missing, nil]
+end
+
+def legacy_path_for(record, paperclip_name)
+  state, detail = resolve_from_original_dir(record, paperclip_name)
+  return detail if state == :ok
   nil
 end
 
@@ -148,6 +197,13 @@ def migrate_attachment(record, paperclip_name, active_storage_name)
 
   if ActiveStorage::Attachment.exists?(record: record, name: active_storage_name.to_s)
     return [:already, nil]
+  end
+
+  original_state, original_detail = resolve_from_original_dir(record, paperclip_name)
+  if original_state == :missing
+    ORIGINAL_MISSING[record.class.name] << record.id
+  elsif original_state == :ambiguous
+    ORIGINAL_AMBIGUOUS[record.class.name] << { id: record.id, paths: original_detail }
   end
 
   if paperclip&.respond_to?(:path)
@@ -196,5 +252,19 @@ TARGETS.each do |target|
   puts "---- result #{model.name}##{paperclip_name} -> #{active_storage_name} ----"
   counters.sort_by { |k, _| k.to_s }.each do |key, count|
     puts "#{key}: #{count}"
+  end
+
+  if ORIGINAL_MISSING[model.name].any?
+    puts "---- original missing #{model.name} ----"
+    ORIGINAL_MISSING[model.name].each do |id|
+      puts "id=#{id}"
+    end
+  end
+
+  if ORIGINAL_AMBIGUOUS[model.name].any?
+    puts "---- original ambiguous #{model.name} ----"
+    ORIGINAL_AMBIGUOUS[model.name].each do |entry|
+      puts "id=#{entry[:id]} paths=#{entry[:paths].join(',')}"
+    end
   end
 end
