@@ -114,7 +114,7 @@ class NicesController < ApplicationController
     @content = nice.asset
     nice.destroy
     destroy_related_content_nice(@content)
-    render "create.js"
+    render :create
   end
 
 
