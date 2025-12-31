@@ -224,18 +224,26 @@ class Mutter < ApplicationRecord
 
   def broadcast_mutter_channel
     return if self.invisible? || self.parent&.invisible?
-    ActionCable.server.broadcast 'mutter_channel', deleted: false, mutter_id: self.id, mutter_html: render_mutter, parent_mutter_id: self.reply_id
+    ActionCable.server.broadcast("mutter_channel", {
+      deleted: false,
+      mutter_id: self.id,
+      mutter_html: render_mutter,
+      parent_mutter_id: self.reply_id
+    })
   end
 
   def broadcast_mutter_channel_on_destroy
-    ActionCable.server.broadcast 'mutter_channel', deleted: true, mutter_id: self.id
+    ActionCable.server.broadcast("mutter_channel", {
+      deleted: true,
+      mutter_id: self.id
+    })
   end
 
   def render_mutter
-    if self.parent?
-      ApplicationController.renderer.render(partial: 'mutters/mutter_with_comments', locals: { mutter_with_comments: self })
+    if parent?
+      ApplicationController.renderer.render(partial: "mutters/mutter_with_comments", locals: { mutter_with_comments: self })
     else
-      ApplicationController.renderer.render(partial: 'mutters/mutter', locals: { mutter: self })
+      ApplicationController.renderer.render(partial: "mutters/mutter", locals: { mutter: self })
     end
   end
 end
