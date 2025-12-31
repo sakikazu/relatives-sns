@@ -36,4 +36,10 @@ module ActiveStorageXAccelRedirect
     end
 end
 
-ActiveStorage::DiskController.prepend(ActiveStorageXAccelRedirect)
+begin
+  require "active_storage/disk_controller"
+rescue LoadError
+  # noop
+end
+
+ActiveStorage::DiskController.prepend(ActiveStorageXAccelRedirect) if defined?(ActiveStorage::DiskController)
