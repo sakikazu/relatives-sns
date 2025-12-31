@@ -103,19 +103,7 @@ class Mutter < ApplicationRecord
       movie = Movie.new(title: truncated_title, mutter_id: self.id, user_id: self.user_id, album_id: current_user.my_album.id, description: description_for_media, created_at: self.created_at)
       movie.movie.attach(self.image)
       if movie.save && movie.ffmpeg_valid?(file: self.image)
-        begin
-          EncodeWorker.perform_async movie.id
-        rescue StandardError => e
-          redis_missing = e.is_a?(NameError) && e.name.to_s == "Redis"
-          cannot_connect = defined?(::Redis::CannotConnectError) && e.is_a?(::Redis::CannotConnectError)
-          cannot_connect ||= defined?(::RedisClient::CannotConnectError) && e.is_a?(::RedisClient::CannotConnectError)
-          if redis_missing || cannot_connect
-            p "Redisが動いてないのでエンコードなしで保存します"
-            movie.save_with_available_movie
-          else
-            raise
-          end
-        end
+        movie.workered_encode
       else
         # p movie.errors.full_messages
       end

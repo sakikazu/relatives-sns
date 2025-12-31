@@ -39,7 +39,7 @@ class Movie < ApplicationRecord
   scope :includes_all, lambda {includes({user: :user_ext}, {nices: {user: :user_ext}})}
   scope :id_desc, -> { order('id DESC') }
 
-  attr_accessor :ffmp_obj, :is_update_thumb
+  attr_accessor :ffmp_obj, :is_update_thumb, :enqueue_encode
 
   has_one_attached :movie
   has_one_attached :thumb
@@ -68,6 +68,8 @@ class Movie < ApplicationRecord
   validate :movie_content_type
   validate :movie_size
   validate :thumb_content_type
+
+  after_commit :enqueue_encode_worker, on: [:create, :update]
 
   def thumb_variant(name)
     return nil unless thumb.attached?
@@ -112,9 +114,10 @@ class Movie < ApplicationRecord
 
   def workered_encode
     # 「エンコード中」状態にしておく
+    self.enqueue_encode = Rails.env.production?
     self.update(is_ready: false)
     if Rails.env.production?
-      EncodeWorker.perform_async self.id
+      # after_commit で enqueue
     else
       self.encode
       self.save_with_available_movie
@@ -223,6 +226,23 @@ class Movie < ApplicationRecord
   def with_ffmpeg
     with_movie_file do |path|
       yield FFMPEG::Movie.new(path)
+    end
+  end
+
+  def enqueue_encode_worker
+    return unless enqueue_encode
+
+    self.enqueue_encode = false
+    EncodeWorker.perform_async(id)
+  rescue StandardError => e
+    cannot_connect = defined?(::Redis::CannotConnectError) && e.is_a?(::Redis::CannotConnectError)
+    cannot_connect ||= defined?(::RedisClient::CannotConnectError) && e.is_a?(::RedisClient::CannotConnectError)
+    if cannot_connect
+      Rails.logger.warn("redis unavailable, encoding inline id=#{id}")
+      encode
+      save_with_available_movie
+    else
+      raise
     end
   end
 
