@@ -19,7 +19,7 @@ li.bg-light
     .modal-dialog
       .modal-content
         - mutter = Mutter.new(reply_id: mutter_with_comments.id)
-        = form_for mutter, html: {multi_part: true}, remote: true do |f|
+        = form_for mutter, html: { multipart: true, class: "mutter-reply-form" }, remote: true do |f|
           .modal-header
             h3.modal-title 返信
             button.close[type="button" data-dismiss="modal"]
@@ -37,4 +37,3 @@ li.bg-light
             button.btn.btn-light[type="button" data-dismiss="modal"]
               | キャンセル
             = f.submit "返信する", class: "btn btn-primary", :data => {:disable_with => "投稿中..."}, tabindex: 21
-

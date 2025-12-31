@@ -12,6 +12,14 @@ $(document).on('turbolinks:load', function() {
     return false;
   });
 
+  // レス投稿後にモーダルを閉じる
+  $(document).on('ajax:success', 'form.mutter-reply-form', function() {
+    var $form = $(this);
+    $form.closest('.modal').modal('hide');
+    $form.find("textarea[name='mutter[content]']").val('');
+    $form.find("input[name='mutter[image]']").val('');
+  });
+
 // Ajax用エラーハンドリング
 //$("form#new_mutter:first").bind('ajax:error', function(XMLHttpRequest, textStatus, errorThrown) {
 //  console.log("XMLHttpRequest :");
