@@ -12,6 +12,7 @@ gem 'puma'
 gem 'sass-rails', '~> 5.0'
 # for scss; NOTE: 2.4にすると、VPSでbundle installが終わらなくなる
 gem 'sassc', '2.1.0'
+gem 'sassc-rails'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
