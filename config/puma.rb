@@ -26,9 +26,6 @@ threads threads_count, threads_count
 # Specifies the `environment` that Puma will run in.
 environment ENV.fetch("RAILS_ENV", "development")
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT", 3000)
-
 on_worker_boot do
   ActiveRecord::Base.establish_connection
 end
@@ -45,4 +42,7 @@ if ENV.fetch("RAILS_ENV", "development") == "production"
   bind "unix:///home/ubuntu/web/adan/shared/tmp/sockets/puma.sock"
   pidfile "/home/ubuntu/web/adan/shared/tmp/pids/puma.pid"
   state_path "/home/ubuntu/web/adan/shared/tmp/pids/puma.state"
+else
+  # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
+  port ENV.fetch("PORT", 3000)
 end

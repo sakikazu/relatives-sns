@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.2.1
-lock '3.19.2'
+lock '3.20'
 
 require 'dotenv/load'
 Dotenv.load
@@ -36,6 +36,7 @@ set :default_env, {
   path: "/home/ubuntu/.asdf/shims:/home/ubuntu/.asdf/bin:$PATH",
   "ASDF_DIR" => "/home/ubuntu/.asdf"
 }
+set :puma_enable_lingering, false
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5

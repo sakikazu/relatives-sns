@@ -5,7 +5,6 @@ threads threads_count, threads_count
 preload_app!
 
 rackup DefaultRackup if defined?(DefaultRackup)
-port ENV.fetch("PORT", 3000)
 environment ENV.fetch("RAILS_ENV", "production")
 
 on_worker_boot do
