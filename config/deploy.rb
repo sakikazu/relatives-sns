@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.2.1
-lock '3.17.0'
+lock '3.19.2'
 
 require 'dotenv/load'
 Dotenv.load
@@ -31,20 +31,20 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets bundle public/upload sto
 append :linked_dirs, '.bundle'
 
 # Default value for default_env is {}
-# NOTE: asdf global 設定にしたrubyを使わない場合は、これだとダメかも
-set :default_env, { path: "/home/ubuntu/.asdf/shims:$PATH" }
+set :default_env, {
+  # NOTE: asdf global 設定にしたrubyを使わない場合は、これだとダメかも
+  path: "/home/ubuntu/.asdf/shims:/home/ubuntu/.asdf/bin:$PATH",
+  "ASDF_DIR" => "/home/ubuntu/.asdf"
+}
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-# unicorn
-set :unicorn_config_path, "#{current_path}/config/unicorn.conf.rb"
-# set :unicorn_pid, 'default'
 
 namespace :deploy do
   desc 'Restart application'
   task :restart do
-    invoke 'unicorn:restart'
+    invoke "puma:restart"
   end
 
   after :publishing, :restart
@@ -58,6 +58,18 @@ namespace :deploy do
     end
   end
 end
+
+namespace :deploy do
+  task :set_ruby_version do
+    on roles(:app) do
+      within release_path do
+        execute :asdf, "install"
+      end
+    end
+  end
+end
+
+before "deploy:updated", "deploy:set_ruby_version"
 
 ### sidekiq起動
 # NOTE: sidekiq起動ユーザーはデプロイユーザーと同じにしておかないと、エンコードされた動画がrootになって削除不可になってしまう

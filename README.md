@@ -5,7 +5,7 @@ AdanHP
 
 ## TODO
 * 動画エンコードについてまとめる（下にsidekiqの項目はある）
-* 本番環境で log/production.log が出力されず、 log/unicorn.log にまとめられているが、原因不明なので無視する
+* 本番環境で log/production.log が出力されず、 log/puma.log にまとめられているが、原因不明なので無視する
 
 ## Updates
 * 2023/02: grapeとそれによるAPIを削除した
@@ -121,11 +121,9 @@ Mutterの画像あり検索で最後の方を見れば確認できる。
 
 ## よく使うコマンド
 
-### unicorn再起動
+### puma再起動
 ```
-# 本番サーバーのRVMの問題か、unicorn:restartでは再起動できない場合がある
-$ cap production unicorn:stop
-$ cap production unicorn:start
+$ cap production puma:restart
 ```
 
 ### cron
@@ -174,4 +172,3 @@ https://bitbucket.org/tutorials/markdowndemo/src/master/
 ### エラー処理
 * エラー時はexception_notificationによって、sakikazuのGmailにExceptionメールが送信される
 * Exceptionメールが正しく動作しているかの確認は、「ActionController::InvalidAuthenticityToken」を出すのが手軽
-

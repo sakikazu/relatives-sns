@@ -101,9 +101,9 @@ group :development do
   gem 'capistrano', '~> 3.6'
   gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-rails'
-  gem 'capistrano3-unicorn'
   gem 'capistrano-sidekiq'
   gem 'capistrano3-nginx'
+  gem 'capistrano-asdf'
   gem 'capistrano3-puma'
 
   # エラー画面をわかりやすく整形してくれる
@@ -144,6 +144,4 @@ end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use unicorn as the app server
-gem 'unicorn'
 gem 'foreman'
