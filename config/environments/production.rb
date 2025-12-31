@@ -23,6 +23,9 @@ Rails.application.configure do
   # 静的ファイルはNginxで配信するためRails側では配信しない
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   config.public_file_server.enabled = false
+  # ActiveStorageをX-Accel-RedirectでNginx直配信する場合は、Nginx側の
+  # /internal/active_storage と /rails/active_storage のlocation設定が必須。
+  config.x.active_storage.use_x_accel_redirect = true
 
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
