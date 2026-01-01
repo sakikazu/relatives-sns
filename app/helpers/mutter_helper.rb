@@ -11,11 +11,9 @@ module MutterHelper
     out = sani_org(mutter.view_content)
     media_src = ""
     if mutter.photo.present? && mutter.photo.image.attached?
-      media_src = if browser.device.mobile?
-                    link_to(image_tag(mutter.photo.image_variant(:thumb), class: 'img-thumbnail'), mutter.photo.image_variant(:large))
-                  else
-                    image_tag(mutter.photo.image_variant(:large), class: 'img-thumbnail')
-                  end
+      image_variant = browser.device.mobile? ? :thumb : :large
+      image_tag_src = image_tag(mutter.photo.image_variant(image_variant), class: 'img-thumbnail')
+      media_src = link_to(image_tag_src, mutter.photo.image_variant(:large))
       media_src = "<div class='thumbnail text-center'>\n#{media_src}\n</div>\n".html_safe
       media_src += "<br>\n".html_safe + link_to("(#{mutter.photo.album.title})", album_path(mutter.photo.album_id)) if mutter.photo.album.present?
     elsif mutter.movie.present?

@@ -50,6 +50,13 @@ form#mutter_new_post {
 
   .mutter-media {
     margin-top: 18px;
+
+    img {
+      max-height: 400px;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+    }
   }
 }
 
@@ -197,4 +204,3 @@ ul.children {
     color:red;
   }
 }
-
