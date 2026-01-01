@@ -42,7 +42,7 @@ class Photo < ApplicationRecord
 
   IMAGE_VARIANTS = {
     thumb: { resize_to_limit: [250, 250] },
-    large: { resize_to_limit: [800, 800] }
+    large: { resize_to_limit: [1000, 1000] }
   }.freeze
 
   validate :image_content_type
