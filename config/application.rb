@@ -27,6 +27,9 @@ module Adan4
     config.time_zone = "Asia/Tokyo"
     config.x.active_storage.use_x_accel_redirect = false
 
+    # Active Storageの画像変換には導入済みのImageMagickを使用する
+    config.active_storage.variant_processor = :mini_magick
+
     # エラーページにlayoutを適用させたいため
     # see. https://qiita.com/mr-myself/items/c2f4fb2e5dcee6a336f3#comment-23298b703d75b7d27487
     config.exceptions_app = ->(env) { ErrorsController.action(:show).call(env) }

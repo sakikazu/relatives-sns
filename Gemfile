@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '3.2.6'
-gem 'rails', '~> 7.2'
+gem 'rails', '~> 7.2.4'
 gem 'bootsnap' # railsの起動を速くする
 
 # Use mysql as the database for Active Record
@@ -50,7 +50,8 @@ gem 'font-awesome-rails'
 gem 'redcarpet' # markdown
 
 # ActiveStorage variants
-gem 'image_processing', '~> 1.12'
+gem 'image_processing', '~> 2.2'
+gem 'mini_magick', '~> 5.0'
 
 # Ajaxでファイルアップロード
 gem 'remotipart', '~> 1.2'
