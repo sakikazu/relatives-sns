@@ -8,14 +8,10 @@ gem 'bootsnap' # railsの起動を速くする
 gem 'mysql2'
 # Use Puma as the app server
 gem 'puma'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
 # for scss; NOTE: 2.4にすると、VPSでbundle installが終わらなくなる
 gem 'sassc', '2.1.0'
 gem 'sassc-rails'
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 # gem 'coffee-rails', '~> 4.0.0'
 gem 'bootstrap', '~> 4.3' # twitter bootstrap4
@@ -26,9 +22,6 @@ gem 'jquery-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
-
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
@@ -83,7 +76,6 @@ gem 'config'
 gem 'slim'
 
 group :development do
-  gem 'rb-readline'
   gem 'listen'
   gem 'slim-rails'                # generator時にslim対応可能になる
   gem 'view_source_map'           # webページ中に使用されているviewファイル名が見れる
@@ -121,12 +113,6 @@ group :development, :test do
 
   # Pryでの便利コマンド
   gem 'pry-doc'
-
-  # PryでのSQLの結果を綺麗に表示
-  gem 'hirb'
-
-  # テスト環境のテーブルをきれいにする
-  gem 'database_rewinder'
 
   gem 'rails-erd'
 
