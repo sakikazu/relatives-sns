@@ -12,8 +12,9 @@ module MutterHelper
     media_src = ""
     if mutter.photo.present? && mutter.photo.image.attached?
       image_variant = browser.device.mobile? ? :thumb : :large
-      image_tag_src = image_tag(mutter.photo.image_variant(image_variant), class: 'img-thumbnail')
-      media_src = link_to(image_tag_src, mutter.photo.image_variant(:large))
+      # ActionCable経由でもアクセス元のホストで画像を取得できるよう相対パスにする
+      image_tag_src = image_tag(rails_storage_proxy_path(mutter.photo.image_variant(image_variant)), class: 'img-thumbnail')
+      media_src = link_to(image_tag_src, rails_storage_proxy_path(mutter.photo.image_variant(:large)))
       media_src = "<div class='thumbnail text-center'>\n#{media_src}\n</div>\n".html_safe
       media_src += "<br>\n".html_safe + link_to("(#{mutter.photo.album.title})", album_path(mutter.photo.album_id)) if mutter.photo.album.present?
     elsif mutter.movie.present?

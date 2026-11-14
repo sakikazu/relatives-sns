@@ -194,7 +194,11 @@ class Mutter < ApplicationRecord
   def user_image_path
     return NO_IMAGE_PATH unless user&.user_ext&.image&.attached?
 
-    user.user_ext.image_variant(:small) || NO_IMAGE_PATH
+    image_variant = user.user_ext.image_variant(:small)
+    return NO_IMAGE_PATH unless image_variant
+
+    # ActionCable描画ではリクエストのホストを取得できないため、相対パスで返す
+    Rails.application.routes.url_helpers.rails_storage_proxy_path(image_variant)
   end
 
   def self.count_unread_leave_me_mutters(user, shown_leave_me)
