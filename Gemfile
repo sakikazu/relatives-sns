@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '3.4.12'
-gem 'rails', '~> 7.2.4'
+gem 'rails', '~> 8.1.4'
 gem 'bootsnap' # railsの起動を速くする
 
 # Use mysql as the database for Active Record
