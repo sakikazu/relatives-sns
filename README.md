@@ -36,8 +36,8 @@ AdanHP
 ## System dependencies
 
 ### Ruby version
-* ruby 2.7
-* rails 6.1
+* ruby 3.4.12
+* rails 7.2
 
 ### ライブラリ
 * Twitter bootstrap 4
