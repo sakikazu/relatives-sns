@@ -30,7 +30,7 @@ gem 'spring',        group: :development
 
 # --- above defaults ---
 
-gem 'devise', '~> 4.9'
+gem 'devise', '~> 5.0'
 gem 'devise-encryptable' # for authlogic encrypt algorithm
 gem "paranoia", "~> 3.0"
 gem 'exception_notification'
